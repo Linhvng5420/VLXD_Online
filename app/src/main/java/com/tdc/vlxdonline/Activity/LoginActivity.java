@@ -114,17 +114,6 @@ public class LoginActivity extends AppCompatActivity {
             }
         });
 
-        // Sign Up
-        /*
-        binding.tvSignup.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View v) {
-                Intent intent = new Intent(LoginActivity.this, RegisterActivity.class);
-                startActivity(intent);
-            }
-        });
-        */
-
         // Show-Hide pass
         binding.cbDisPass.setOnClickListener(new View.OnClickListener() {
             @Override

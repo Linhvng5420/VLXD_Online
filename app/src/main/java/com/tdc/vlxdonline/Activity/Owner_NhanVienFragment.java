@@ -155,6 +155,10 @@ public class Owner_NhanVienFragment extends Fragment {
                     .replace(R.id.fragment_owner, nhanVienDetailFragment) // Thay thế fragment_owner hiện tại bằng fragment chi tiết
                     .addToBackStack(null) // Cho phép quay lại màn hình trước khi nhấn nút Back
                     .commit(); // Thực hiện chuyển đổi
+
+            // Xóa văn bản tìm kiếm khi một nhân viên được chọn
+            ownerNhanvienBinding.searchView.setQuery("", false); // Xóa văn bản tìm kiếm
+            ownerNhanvienBinding.searchView.clearFocus(); // Ẩn con trỏ
         });
     }
 
@@ -168,6 +172,10 @@ public class Owner_NhanVienFragment extends Fragment {
                         .replace(R.id.fragment_owner, new Owner_NhanVienAddFragment())
                         .addToBackStack(null)
                         .commit();
+
+                // Xóa văn bản tìm kiếm khi một nhân viên được chọn
+                ownerNhanvienBinding.searchView.setQuery("", false); // Xóa văn bản tìm kiếm
+                ownerNhanvienBinding.searchView.clearFocus(); // Ẩn con trỏ
             }
         });
     }
