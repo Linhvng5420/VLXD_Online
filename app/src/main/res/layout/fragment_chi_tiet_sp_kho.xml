@@ -1,0 +1,228 @@
+<?xml version="1.0" encoding="utf-8"?>
+<FrameLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:tools="http://schemas.android.com/tools"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    android:id="@+id/fragment_container1"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    tools:context=".Activity.ChiTietSPKho_Fragment">
+
+
+    <LinearLayout
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        android:orientation="vertical">
+        <LinearLayout
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:gravity="center"
+            android:orientation="horizontal">
+            <Button
+                android:id="@+id/btn_Back"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:background="@drawable/back"
+                android:layout_marginRight="25dp" />
+            <TextView
+                android:id="@+id/tv_chiTiet"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:text="Chi Tiết Sản Phẩm"
+                android:backgroundTint="#0DF"
+                android:textSize="25sp"
+                android:textStyle="bold" />
+
+        </LinearLayout>
+
+
+        <LinearLayout
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:orientation="vertical">
+
+            <ImageView
+                android:id="@+id/img_detail"
+                android:layout_width="match_parent"
+                android:layout_height="250dp" />
+
+            <androidx.recyclerview.widget.RecyclerView
+                android:id="@+id/rc_anh_sp"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_marginTop="10dp"
+                android:layout_marginBottom="5dp"
+
+                android:background="@drawable/bg_img_detail"
+                android:paddingVertical="5dp" />
+
+            <LinearLayout
+                android:layout_width="match_parent"
+                android:layout_height="0dp"
+                android:layout_weight="8"
+                android:orientation="vertical"
+                android:paddingHorizontal="10dp">
+
+                <LinearLayout
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:layout_marginTop="10dp"
+                    android:background="@drawable/bg_detail"
+                    android:orientation="vertical">
+
+                    <LinearLayout
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content"
+                        android:orientation="horizontal">
+
+                        <ImageView
+                            android:id="@+id/iv_anh_chinh"
+                            android:layout_width="120dp"
+                            android:layout_height="120dp"
+                            android:background="@drawable/bg_img_detail"
+                            android:src="@drawable/star" />
+
+                        <LinearLayout
+                            android:layout_width="match_parent"
+                            android:layout_height="wrap_content"
+                            android:orientation="vertical"
+                            android:paddingHorizontal="5dp">
+
+                            <TextView
+                                android:id="@+id/tv_tenSp_detail"
+                                android:layout_width="match_parent"
+                                android:layout_height="30dp"
+                                android:gravity="center_vertical"
+                                android:paddingHorizontal="5dp"
+                                android:text="Thép Hòa Phát"
+                                android:textSize="15dp"
+                                android:textStyle="bold" />
+
+                            <TextView
+                                android:id="@+id/tv_giaSp_detail"
+                                android:layout_width="match_parent"
+                                android:layout_height="30dp"
+                                android:gravity="center_vertical"
+                                android:paddingHorizontal="5dp"
+                                android:text="13.640 VND"
+                                android:textSize="15dp"
+                                android:textStyle="bold" />
+
+                            <LinearLayout
+                                android:layout_width="match_parent"
+                                android:layout_height="30dp"
+                                android:paddingHorizontal="5dp">
+
+                                <TextView
+                                    android:id="@+id/tv_ton_kho_detail"
+                                    android:layout_width="120dp"
+                                    android:layout_height="30dp"
+                                    android:gravity="center_vertical"
+                                    android:text="Kho: 500"
+                                    android:textSize="15dp" />
+
+                                <TextView
+                                    android:id="@+id/tv_daBan_detail"
+                                    android:layout_width="match_parent"
+                                    android:layout_height="30dp"
+                                    android:gravity="center_vertical"
+                                    android:text="Đã Bán: 150"
+                                    android:textSize="15dp" />
+                            </LinearLayout>
+
+                            <LinearLayout
+                                android:layout_width="match_parent"
+                                android:layout_height="30dp">
+
+                                <TextView
+                                    android:layout_width="wrap_content"
+                                    android:layout_height="30dp"
+                                    android:gravity="center_vertical"
+                                    android:paddingLeft="5dp"
+                                    android:text="Đơn vị tính: "
+                                    android:textSize="15dp"
+                                    android:textStyle="bold" />
+
+                                <TextView
+                                    android:id="@+id/tv_donVi_detail"
+                                    android:layout_width="match_parent"
+                                    android:layout_height="30dp"
+                                    android:gravity="center_vertical"
+                                    android:text="Tấm"
+                                    android:textSize="15dp"
+                                    android:textStyle="bold" />
+                            </LinearLayout>
+                        </LinearLayout>
+                    </LinearLayout>
+
+                    <LinearLayout
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content"
+                        android:orientation="vertical">
+
+                        <TextView
+                            android:layout_width="match_parent"
+                            android:layout_height="wrap_content"
+                            android:layout_marginBottom="-2dp"
+                            android:paddingHorizontal="5dp"
+                            android:text="Mô tả:"
+                            android:textSize="16dp" />
+
+                        <TextView
+                            android:id="@+id/tv_moTa_detail"
+                            android:layout_width="match_parent"
+                            android:layout_height="wrap_content"
+                            android:paddingHorizontal="5dp"
+                            android:paddingBottom="5dp"
+                            android:text="Thép cuộn CB240 chất lượng cao, độ dày 1mm, đàn hồi tốt, cứng cáp, chắc chắn."
+                            android:textSize="15dp" />
+                    </LinearLayout>
+
+                </LinearLayout>
+                <EditText
+                    android:id="@+id/edt_nhapsoluong"
+                    android:layout_width="match_parent"
+                    android:layout_height="50dp"
+                    android:hint="Nhập số lượng"
+                    android:gravity="center"
+                    android:inputType="number"
+                    />
+
+                <Button
+                    android:id="@+id/btn_themSoLuong"
+                    android:layout_width="match_parent"
+                    android:layout_height="50dp"
+                    android:layout_marginVertical="5dp"
+                    android:backgroundTint="#0DF"
+                    android:text="Nhập Thêm Số Lượng"
+                    android:textSize="21dp"
+                    android:textStyle="bold" />
+
+                <Button
+                    android:id="@+id/btn_anSanPham"
+                    android:layout_width="match_parent"
+                    android:layout_height="50dp"
+                    android:layout_marginVertical="5dp"
+                    android:backgroundTint="#0DF"
+                    android:text="Ẩn Sản Phẩm Khỏi Trang Bán Hàng"
+                    android:textSize="21dp"
+                    android:textStyle="bold" />
+
+                <Button
+                    android:id="@+id/btn_thayDoiThongTin"
+                    android:layout_width="match_parent"
+                    android:layout_height="50dp"
+                    android:layout_marginVertical="5dp"
+                    android:backgroundTint="#0DF"
+                    android:text="Thay Đổi Thông Tin"
+                    android:textSize="21dp"
+                    android:textStyle="bold" />
+
+            </LinearLayout>
+
+        </LinearLayout>
+
+
+    </LinearLayout>
+
+
+</FrameLayout>
