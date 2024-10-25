@@ -176,6 +176,7 @@
                                 android:background="@drawable/bg_img_detail"
                                 android:gravity="center"
                                 android:text="1000"
+                                android:inputType="number"
                                 android:textSize="16dp" />
 
                             <TextView

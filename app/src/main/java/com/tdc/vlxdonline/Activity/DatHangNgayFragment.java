@@ -79,17 +79,6 @@ public class DatHangNgayFragment extends Fragment {
 
             @Override
             public void onTextChanged(CharSequence s, int start, int before, int count) {
-                String chuoi = binding.edtSlDat.getText().toString();
-                if (!chuoi.isEmpty()) {
-                    for (int i = 0; i < chuoi.length(); i++) {
-                        if (chuoi.charAt(i) < '0' || chuoi.charAt(i) > '9') {
-                            binding.edtSlDat.setText("");
-                            Toast.makeText(getActivity(), "Chỉ được nhập số!", Toast.LENGTH_SHORT).show();
-                        }
-                    }
-                }else{
-                    binding.edtSlDat.setText("1");
-                }
                 int tong = Integer.parseInt(product.getGia()) * Integer.parseInt(binding.edtSlDat.getText().toString());
                 binding.tvTongDatNgay.setText(chuyenChuoi(tong));
             }

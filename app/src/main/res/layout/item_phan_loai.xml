@@ -19,7 +19,8 @@
                 android:layout_width="60dp"
                 android:layout_height="60dp"
                 android:src="@drawable/tc"
-                android:background="@drawable/bg_img_item"/>
+                android:background="@drawable/bg_img_item"
+                android:scaleType="centerCrop"/>
         </androidx.cardview.widget.CardView>
         <TextView
             android:id="@+id/tvNameCa"

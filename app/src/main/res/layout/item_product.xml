@@ -22,7 +22,8 @@
                 android:id="@+id/imgItem"
                 android:layout_width="160dp"
                 android:layout_height="160dp"
-                android:src="@drawable/search"/>
+                android:src="@drawable/search"
+                android:scaleType="centerCrop"/>
         </androidx.cardview.widget.CardView>
         <TextView
             android:id="@+id/tvNameItem"

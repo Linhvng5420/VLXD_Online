@@ -142,32 +142,6 @@ public class ProdDetailCustomerFragment extends Fragment {
                 binding.edtSoLuong.setText(String.format("%d", so + 1));
             }
         });
-        // Su kien nhap so luong
-        binding.edtSoLuong.addTextChangedListener(new TextWatcher() {
-            @Override
-            public void beforeTextChanged(CharSequence s, int start, int count, int after) {
-
-            }
-
-            @Override
-            public void onTextChanged(CharSequence s, int start, int before, int count) {
-                String chuoi = binding.edtSoLuong.getText().toString();
-                if (!chuoi.isEmpty()) {
-                    for (int i = 0; i < chuoi.length(); i++) {
-                        if (chuoi.charAt(i) < '0' || chuoi.charAt(i) > '9') {
-                            binding.edtSoLuong.setText("");
-                            Toast.makeText(getActivity(), "Chỉ được nhập số!", Toast.LENGTH_SHORT).show();
-                        }
-                    }
-                }else{
-                    binding.edtSoLuong.setText("1");
-                }
-            }
-
-            @Override
-            public void afterTextChanged(Editable s) {
-            }
-        });
         // Su kien Add Cart
         binding.btnAddToCart.setOnClickListener(new View.OnClickListener() {
             @Override

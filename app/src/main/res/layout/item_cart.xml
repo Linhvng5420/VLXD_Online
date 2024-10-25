@@ -39,7 +39,8 @@
                         android:layout_width="90dp"
                         android:layout_height="90dp"
                         android:background="@drawable/bg_img_detail"
-                        android:src="@drawable/tc" />
+                        android:src="@drawable/tc"
+                        android:scaleType="centerCrop"/>
                 </androidx.cardview.widget.CardView>
 
                 <LinearLayout
