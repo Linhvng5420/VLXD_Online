@@ -29,7 +29,7 @@ public class Customer_HomeActivity extends AppCompatActivity {
         customerHomeBinding = ActivityCustomerHomeBinding.inflate(getLayoutInflater());
         setContentView(customerHomeBinding.getRoot());
 
-        String email = getIntent().getStringExtra("email");
+        String email = getIntent().getStringExtra("emailUser");
         Toast.makeText(this, email, Toast.LENGTH_SHORT).show();
 
 		// Bắt sự kiện

@@ -15,7 +15,13 @@ import android.view.ViewGroup;
 import android.widget.AdapterView;
 import android.widget.ArrayAdapter;
 import android.widget.SearchView;
+import android.widget.Toast;
 
+import com.google.firebase.database.DataSnapshot;
+import com.google.firebase.database.DatabaseError;
+import com.google.firebase.database.DatabaseReference;
+import com.google.firebase.database.FirebaseDatabase;
+import com.google.firebase.database.ValueEventListener;
 import com.tdc.vlxdonline.Adapter.AdapterCenterDrop;
 import com.tdc.vlxdonline.Adapter.CategoryAdapter;
 import com.tdc.vlxdonline.Adapter.ProductAdapter;
@@ -40,6 +46,8 @@ public class CustomerHomeFragment extends Fragment {
     ArrayList<String> dataSapXep = new ArrayList<>();
     AdapterCenterDrop adapterSX;
     private int category = -1;
+    DatabaseReference mDatabase;
+    private int typeSort = 0;
 
     @Override
     public void onCreate(Bundle savedInstanceState) {
@@ -70,19 +78,6 @@ public class CustomerHomeFragment extends Fragment {
                 return false;
             }
         });
-        // Category Adapter
-        categoryAdapter = new CategoryAdapter(getActivity(), dataCategorys);
-        categoryAdapter.setOnItemCategoryClickListener(new CategoryAdapter.OnItemCategoryClickListener() {
-            @Override
-            public void OnItemClick(View view, int position) {
-                category = Integer.parseInt(dataCategorys.get(position).getId());
-                setHienThiSanPham();
-            }
-        });
-        LinearLayoutManager linearLayoutManager = new LinearLayoutManager(getActivity());
-        linearLayoutManager.setOrientation(RecyclerView.HORIZONTAL);
-        binding.rcDanhMuc.setLayoutManager(linearLayoutManager);
-        binding.rcDanhMuc.setAdapter(categoryAdapter);
         // Su kien loc
         binding.spLoc.setOnItemSelectedListener(new AdapterView.OnItemSelectedListener() {
             @Override
@@ -99,7 +94,8 @@ public class CustomerHomeFragment extends Fragment {
         binding.spXapSep.setOnItemSelectedListener(new AdapterView.OnItemSelectedListener() {
             @Override
             public void onItemSelected(AdapterView<?> parent, View view, int position, long id) {
-                SapXepDanhSach(position);
+                typeSort = position;
+                setHienThiSanPham();
             }
 
             @Override
@@ -107,22 +103,7 @@ public class CustomerHomeFragment extends Fragment {
 
             }
         });
-        // Event Click Product
-        productAdapter = new ProductAdapter(getActivity(), dataProds, View.VISIBLE);
-        productAdapter.setOnItemProductClickListener(new ProductAdapter.OnItemProductClickListener() {
-            @Override
-            public void OnItemClick(View view, int position) {
-                Products product = dataProds.get(position);
-                ((Customer_HomeActivity) getActivity()).ReplaceFragment(new ProdDetailCustomerFragment(product));
-            }
 
-            @Override
-            public void OnBtnBuyClick(View view, int position) {
-                ((Customer_HomeActivity) getActivity()).ReplaceFragment(new DatHangNgayFragment(dataProds.get(position), 1));
-            }
-        });
-        binding.rcProdCustomerHome.setLayoutManager(new GridLayoutManager(getActivity(), 2));
-        binding.rcProdCustomerHome.setAdapter(productAdapter);
 
     }
 
@@ -131,6 +112,7 @@ public class CustomerHomeFragment extends Fragment {
         dataLoc.clear();
         dataSapXep.clear();
         dataCategorys.clear();
+        mDatabase = FirebaseDatabase.getInstance().getReference();
 
         dataLoc.add("Lọc Theo");
         dataLoc.add("Số sao từ 1 - 3");
@@ -148,27 +130,86 @@ public class CustomerHomeFragment extends Fragment {
         adapterSX = new AdapterCenterDrop(getActivity(), R.layout.item_center_drop, dataSapXep);
         binding.spXapSep.setAdapter(adapterSX);
 
-        dataCategorys.add(new Categorys("Cate 1", "1", "https://th.bing.com/th?id=OIF.0yfM4yF7hYIDB6%2bmwxU4GQ&w=172&h=180&c=7&r=0&o=5&dpr=1.3&pid=1.7"));
-        dataCategorys.add(new Categorys("Cate 2", "2", "https://th.bing.com/th/id/OIF.lf4QHwb4DMz5wHZ84QYJmQ?w=183&h=183&c=7&r=0&o=5&dpr=1.3&pid=1.7"));
-        dataCategorys.add(new Categorys("Cate 3", "3", "https://th.bing.com/th/id/OIP.UWORqopZEI954B5G-Z4sbgHaHQ?w=169&h=180&c=7&r=0&o=5&dpr=1.3&pid=1.7"));
-        dataCategorys.add(new Categorys("Cate 4", "4", "https://th.bing.com/th/id/OIP.BO1VNjeGOUGcGRWQNUVCZQHaHa?w=1024&h=1024&rs=1&pid=ImgDetMain"));
+        readcategorysFromDatabase();
 
         setHienThiSanPham();
     }
 
     private void setHienThiSanPham() {
+        mDatabase.child("products").addValueEventListener(new ValueEventListener() {
+            @Override
+            public void onDataChange(DataSnapshot dataSnapshot) {
+                dataProds.clear(); // Xóa danh sách cũ trước khi cập nhật
 
-        dataProds.clear();
-        dataProds.add(new Products("A", "A", "A", "1", "1", "https://th.bing.com/th/id/OIP.UWORqopZEI954B5G-Z4sbgHaHQ?w=169&h=180&c=7&r=0&o=5&dpr=1.3&pid=1.7", "100000", "0.0", "1", "1000", "580"));
-        dataProds.add(new Products("B", "B", "B", "1", "2", "https://th.bing.com/th/id/OIP.BO1VNjeGOUGcGRWQNUVCZQHaHa?w=1024&h=1024&rs=1&pid=ImgDetMain", "200000", "4.0", "1", "1000", "580"));
-        dataProds.add(new Products("C", "C", "C", "1", "3", "https://th.bing.com/th/id/OIP.vyMrfzra1TPcklie3-GA9gHaH9?w=180&h=183&c=7&r=0&o=5&dpr=1.3&pid=1.7", "300000", "5.0", "1", "1000", "580"));
-        dataProds.add(new Products("D", "D", "D", "1", "4", "https://th.bing.com/th?id=OIF.EGFQW6dgdgP%2fL6l2yvVChg&rs=1&pid=ImgDetMain", "400000", "3.5", "1", "1000", "580"));
+                // Duyệt qua từng User trong DataSnapshot
+                for (DataSnapshot snapshot : dataSnapshot.getChildren()) {
+                    Products product = snapshot.getValue(Products.class);
+                    dataProds.add(product); // Thêm User vào danh sách
+                }
 
-        if (productAdapter != null) productAdapter.notifyDataSetChanged();
+                SapXepDanhSach();
 
+                // Xử lý danh sách userList (ví dụ: hiển thị trong RecyclerView)
+                // Event Click Product
+                productAdapter = new ProductAdapter(getActivity(), dataProds, View.VISIBLE);
+                productAdapter.setOnItemProductClickListener(new ProductAdapter.OnItemProductClickListener() {
+                    @Override
+                    public void OnItemClick(View view, int position) {
+                        Products product = dataProds.get(position);
+                        ((Customer_HomeActivity) getActivity()).ReplaceFragment(new ProdDetailCustomerFragment(product));
+                    }
+
+                    @Override
+                    public void OnBtnBuyClick(View view, int position) {
+                        ((Customer_HomeActivity) getActivity()).ReplaceFragment(new DatHangNgayFragment(dataProds.get(position), 1));
+                    }
+                });
+                binding.rcProdCustomerHome.setLayoutManager(new GridLayoutManager(getActivity(), 2));
+                binding.rcProdCustomerHome.setAdapter(productAdapter);
+            }
+
+            @Override
+            public void onCancelled(DatabaseError databaseError) {
+                Toast.makeText(getActivity(), "Lỗi Rồi Nè Má!", Toast.LENGTH_SHORT).show();
+            }
+        });
     }
 
-    private void SapXepDanhSach(int type){
+    private void readcategorysFromDatabase() {
+        mDatabase.child("categorys").addValueEventListener(new ValueEventListener() {
+            @Override
+            public void onDataChange(DataSnapshot dataSnapshot) {
+                dataCategorys.clear(); // Xóa danh sách cũ trước khi cập nhật
+
+                // Duyệt qua từng User trong DataSnapshot
+                for (DataSnapshot snapshot : dataSnapshot.getChildren()) {
+                    Categorys category = snapshot.getValue(Categorys.class);
+                    dataCategorys.add(category); // Thêm User vào danh sách
+                }
+                // Xử lý danh sách userList (ví dụ: hiển thị trong RecyclerView)
+                // Category Adapter
+                categoryAdapter = new CategoryAdapter(getActivity(), dataCategorys);
+                categoryAdapter.setOnItemCategoryClickListener(new CategoryAdapter.OnItemCategoryClickListener() {
+                    @Override
+                    public void OnItemClick(View view, int position) {
+                        category = Integer.parseInt(dataCategorys.get(position).getId());
+                        setHienThiSanPham();
+                    }
+                });
+                LinearLayoutManager linearLayoutManager = new LinearLayoutManager(getActivity());
+                linearLayoutManager.setOrientation(RecyclerView.HORIZONTAL);
+                binding.rcDanhMuc.setLayoutManager(linearLayoutManager);
+                binding.rcDanhMuc.setAdapter(categoryAdapter);
+            }
+
+            @Override
+            public void onCancelled(DatabaseError databaseError) {
+                Toast.makeText(getActivity(), "Lỗi Rồi Nè Má!", Toast.LENGTH_SHORT).show();
+            }
+        });
+    }
+
+    private void SapXepDanhSach(){
         Collections.sort(dataProds, new Comparator<Products>() {
             @Override
             public int compare(Products p1, Products p2) {
@@ -176,19 +217,18 @@ public class CustomerHomeFragment extends Fragment {
                 int gia2 = Integer.parseInt(p2.getGia());
                 double sao1 = Double.parseDouble(p1.getSoSao());
                 double sao2 = Double.parseDouble(p2.getSoSao());
-                if (type == 1) {
+                if (typeSort == 1) {
                     return Double.compare(sao1, sao2);
-                } else if (type == 2) {
+                } else if (typeSort == 2) {
                     return Double.compare(sao2, sao1);
-                } else if (type == 3) {
+                } else if (typeSort == 3) {
                     return Integer.compare(gia1, gia2);
-                } else if (type == 4) {
+                } else if (typeSort == 4) {
                     return Integer.compare(gia2, gia1);
                 }
                 return 0;
             }
         });
-        productAdapter.notifyDataSetChanged();
     }
 
     @Override

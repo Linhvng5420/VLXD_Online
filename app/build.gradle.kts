@@ -37,6 +37,10 @@ android {
 
 dependencies {
 
+    implementation(libs.firebase.database.ktx)
+    implementation(platform(libs.firebase.bom))
+    implementation(libs.firebase.analytics)
+
 //    implementation(libs.android.mail)
 //    implementation(libs.android.activation)
     implementation(libs.glide)
@@ -50,3 +54,4 @@ dependencies {
     androidTestImplementation(libs.ext.junit)
     androidTestImplementation(libs.espresso.core)
 }
+apply(plugin = "com.google.gms.google-services")
