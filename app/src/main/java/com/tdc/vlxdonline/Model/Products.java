@@ -109,4 +109,21 @@ public class Products {
     public void setDaBan(String daBan) {
         this.daBan = daBan;
     }
+
+    @Override
+    public String toString() {
+        return "Products{" +
+                "ten='" + ten + '\'' +
+                ", moTa='" + moTa + '\'' +
+                ", donVi='" + donVi + '\'' +
+                ", anh='" + anh + '\'' +
+                ", id='" + id + '\'' +
+                ", idChu='" + idChu + '\'' +
+                ", gia='" + gia + '\'' +
+                ", danhMuc='" + danhMuc + '\'' +
+                ", tonKho='" + tonKho + '\'' +
+                ", daBan='" + daBan + '\'' +
+                ", soSao='" + soSao + '\'' +
+                '}';
+    }
 }

@@ -31,13 +31,14 @@
             app:cardElevation="10dp">
 
             <androidx.recyclerview.widget.RecyclerView
-                android:id="@+id/rcv_sanphamkho"
+                android:id="@+id/rcv_category"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
                 android:background="@drawable/bg_img_item" />
         </androidx.cardview.widget.CardView>
 
         <androidx.recyclerview.widget.RecyclerView
+            android:id="@+id/rcv_sanpham1"
             android:layout_width="match_parent"
             android:layout_height="match_parent"
             android:layout_marginHorizontal="10dp" />
