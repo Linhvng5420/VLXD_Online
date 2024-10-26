@@ -37,8 +37,8 @@ public class Owner_NhanVienFragment extends Fragment {
     // FIREBASE: Khai báo DatabaseReference
     private DatabaseReference databaseReference;
 
-    // Login Data
-    String emailUser = null;
+    // Email mà tài khoản quản lý đang đăng nhập
+    String emailLogin = null;
 
     // Lưu lại danh sách nhân viên ban đầu trước khi tìm kiếm
     private List<NhanVien> originalList = new ArrayList<>();
@@ -60,8 +60,8 @@ public class Owner_NhanVienFragment extends Fragment {
 
         // Nhận emailUser từ Bundle
         if (getArguments() != null) {
-            emailUser = getArguments().getString("emailUser");
-            Log.d("l.e", "onViewCreated: emailUser = " + emailUser);
+            emailLogin = getArguments().getString("emailUser");
+            Log.d("l.e", "onViewCreated: emailUser = " + emailLogin);
         } else Log.d("l.e", "Nhận emailUser từ Bundle: getArguments() = null");
 
         //RecycleView: Thiết lập layout cho RecyclerView, sử dụng LinearLayoutManager để hiển thị danh sách theo chiều dọc
@@ -111,10 +111,10 @@ public class Owner_NhanVienFragment extends Fragment {
 
                         // Lọc theo email chu
                         // Nếu emailUser là admin, thêm tất cả nhân viên mà không kiểm tra điều kiện khác
-                        if ("admin@tdc.com".equals(emailUser)) {
+                        if ("admin@tdc.com".equals(emailLogin)) {
                             nhanVienAdapter.getNhanVienList().add(nhanVien);
                             originalList.add(nhanVien); // Lưu vào danh sách gốc
-                        } else if (emailUser != null && nhanVien.getEmailchu().equals(emailUser)) {
+                        } else if (emailLogin != null && nhanVien.getEmailchu().equals(emailLogin)) {
                             // Điều kiện email chủ thông thường
                             nhanVienAdapter.getNhanVienList().add(nhanVien);
                             originalList.add(nhanVien); // Lưu vào danh sách gốc
@@ -146,7 +146,6 @@ public class Owner_NhanVienFragment extends Fragment {
 
             // Tạo một instance, nó giúp chúng ta chuyển đổi dữ liệu từ Fragment này sang Fragment khác
             Owner_NhanVienDetailFragment nhanVienDetailFragment = new Owner_NhanVienDetailFragment();
-
             // Gán Bundle (chứa thông tin id nhân viên) vào cho Fragment chi tiết
             nhanVienDetailFragment.setArguments(bundleIDNhanVien);
 
@@ -167,13 +166,21 @@ public class Owner_NhanVienFragment extends Fragment {
         ownerNhanvienBinding.btnThemNhanVien.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
+                // Bundle email
+                Bundle bundle = new Bundle();
+                bundle.putSerializable("emailLogin", emailLogin);
+
+                // Instance
+                Owner_NhanVienAddFragment nhanVienFragment = new Owner_NhanVienAddFragment();
+                nhanVienFragment.setArguments(bundle);
+
                 // chuyển sang fragment thêm nhân viên
                 getParentFragmentManager().beginTransaction()
-                        .replace(R.id.fragment_owner, new Owner_NhanVienAddFragment())
+                        .replace(R.id.fragment_owner, nhanVienFragment)
                         .addToBackStack(null)
                         .commit();
 
-                // Xóa văn bản tìm kiếm khi một nhân viên được chọn
+                // Xóa văn bản tìm kiếm khi một sự kiện khác xảy ra
                 ownerNhanvienBinding.searchView.setQuery("", false); // Xóa văn bản tìm kiếm
                 ownerNhanvienBinding.searchView.clearFocus(); // Ẩn con trỏ
             }

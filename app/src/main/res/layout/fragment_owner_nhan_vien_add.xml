@@ -144,30 +144,6 @@
             android:textStyle="bold" />
     </com.google.android.material.textfield.TextInputLayout>
 
-    <com.google.android.material.textfield.TextInputLayout
-        android:id="@+id/tilPass"
-        android:layout_width="match_parent"
-        android:layout_height="wrap_content"
-        android:layout_margin="10dp"
-        android:background="@color/white"
-        android:textColorHint="#F44336"
-        app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toBottomOf="@+id/tilCCCD">
-
-        <com.google.android.material.textfield.TextInputEditText
-            android:id="@+id/etPass"
-            android:layout_width="match_parent"
-            android:layout_height="match_parent"
-            android:hint="PassWord"
-            android:inputType="text"
-            android:maxLength="20"
-            android:textColor="#1EA323"
-            android:textStyle="bold"
-            app:layout_constraintEnd_toEndOf="parent"
-            app:layout_constraintStart_toStartOf="parent" />
-    </com.google.android.material.textfield.TextInputLayout>
-
     <com.google.android.material.floatingactionbutton.ExtendedFloatingActionButton
         android:id="@+id/btnThemNhanVien"
         android:layout_width="wrap_content"
@@ -175,18 +151,18 @@
         android:layout_marginBottom="44dp"
         android:contentDescription="Thêm"
         android:drawableRight="@drawable/people_add"
-        android:drawableTint="#16721D"
+        android:drawableTint="@color/white"
+        android:enabled="false"
         android:text="Thêm"
-        android:textColor="#338337"
+        android:textColor="@color/white"
         android:textSize="22sp"
         android:textStyle="bold"
         android:visibility="visible"
-        app:backgroundTint="#FFFFFF"
+        app:backgroundTint="#2E7D32"
         app:layout_constraintBottom_toBottomOf="parent"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintHorizontal_bias="0.5"
         app:layout_constraintStart_toStartOf="parent"
-        app:maxImageSize="40dp"
-        app:tint="#0ABB13" />
+        app:maxImageSize="40dp" />
 
 </androidx.constraintlayout.widget.ConstraintLayout>

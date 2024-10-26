@@ -1,6 +1,8 @@
 package com.tdc.vlxdonline.Activity;
 
 import android.os.Bundle;
+import android.text.Editable;
+import android.text.TextWatcher;
 import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
@@ -33,8 +35,7 @@ import java.util.List;
 public class Owner_NhanVienAddFragment extends Fragment {
     FragmentOwnerNhanVienAddBinding addBinding;
 
-    //Khai báo DatabaseReference để kết nối với Firebase
-    private DatabaseReference databaseReference;
+    private String loginUser;
     private NhanVien nhanVien;
 
     //Danh sách chức vụ từ Firebase
@@ -43,12 +44,25 @@ public class Owner_NhanVienAddFragment extends Fragment {
     //Spinner và list item chức vụ
     private Spinner spinnerChucVu;
     private ArrayAdapter<String> chucVuAdapter;
-    private ArrayList<String> listChucVuSpinner = new ArrayList<>();
+    private ArrayList<String> listChucVuSpinner;
 
     @Override
     public void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
 
+        // Lấy instance loginUser
+        if (getArguments() != null) {
+            loginUser = getArguments().getString("loginUser");
+        } else Log.d("l.d", "onCreate: Lấy Instance thất bại");
+
+        // Khởi tạo đối tượng nhân viên dùng chung và duy nhất trong toàn bộ Fragment
+        nhanVien = new NhanVien();
+
+        // Khởi tạo danh sách chức vụ
+        listChucVuSpinner = new ArrayList<>();
+
+        // Lấy danh sách chức vụ từ Firebase và cập nhật vào Spinner
+        layTatCaDSChucVuTuFirebase();
     }
 
     @Override
@@ -65,20 +79,94 @@ public class Owner_NhanVienAddFragment extends Fragment {
         //Thiết lập Toolbar cho Fragment
         setupToolbar(view);
 
-        // Khởi tạo đối tượng nhân viên dùng chung và duy nhất trong toàn bộ Fragment
-        nhanVien = new NhanVien();
-
         // Khởi tạo Spinner và Adapter
         chucVuAdapter = new ArrayAdapter<>(getContext(), android.R.layout.simple_spinner_item, listChucVuSpinner);
         chucVuAdapter.setDropDownViewResource(android.R.layout.simple_spinner_dropdown_item);
         addBinding.spinnerChucVu.setAdapter(chucVuAdapter);
 
         // Lấy danh sách chức vụ từ Firebase và cập nhật vào Spinner
-        layTatCaDSChucVuTuFirebase();
+        //layTatCaDSChucVuTuFirebase();
         setEventSpinner();
 
         // Bắt sự kiện các Button
         setupSaveButton();
+
+        // Bắt lỗi trong khi nhập email
+        addBinding.etEmail.addTextChangedListener(new TextWatcher() {
+            @Override
+            public void beforeTextChanged(CharSequence s, int start, int count, int after) {
+            }
+
+            @Override
+            public void onTextChanged(CharSequence s, int start, int before, int count) {
+                addBinding.btnThemNhanVien.setEnabled(false);
+
+                // Kiểm tra định dạng email mỗi khi có thay đổi
+                String email = s.toString();
+                if (android.util.Patterns.EMAIL_ADDRESS.matcher(email).matches() == true) // Kiểm tra định dạng Email
+                {
+                    // Bắt đầu kiểm tra tính duy nhất nếu email hợp lệ
+                    checkEmailUniqueness(email);
+                } else {
+                    addBinding.btnThemNhanVien.setEnabled(false);
+                    addBinding.etEmail.setError("Email không hợp lệ");
+                }
+            }
+
+            @Override
+            public void afterTextChanged(Editable s) {
+            }
+        });
+
+        // Bắt lỗi trong khi nhập SDT
+        addBinding.etSDT.addTextChangedListener(new TextWatcher() {
+            @Override
+            public void beforeTextChanged(CharSequence s, int start, int count, int after) {
+            }
+
+            @Override
+            public void onTextChanged(CharSequence s, int start, int before, int count) {
+                addBinding.btnThemNhanVien.setEnabled(false);
+                String vietnamPhoneRegex = "^(0?)(3[2-9]|5[6|8|9]|7[0|6-9]|8[1-5]|9[0-9])[0-9]{7}$";
+
+                // Kiểm tra định dạng sdt mỗi khi có thay đổi
+                String phone = s.toString();
+                if (phone.matches(vietnamPhoneRegex) == true) // Kiểm tra định dạng phone
+                {
+                    // Bắt đầu kiểm tra tính duy nhất nếu phone hợp lệ
+                    checkEmailUniqueness(phone);
+                } else {
+                    addBinding.btnThemNhanVien.setEnabled(false);
+                    addBinding.etSDT.setError("Phone không hợp lệ");
+                }
+            }
+
+            @Override
+            public void afterTextChanged(Editable s) {
+            }
+        });
+
+        addBinding.etTenNhanVien.addTextChangedListener(new TextWatcher() {
+            @Override
+            public void beforeTextChanged(CharSequence charSequence, int i, int i1, int i2) {
+
+            }
+
+            @Override
+            public void onTextChanged(CharSequence charSequence, int i, int i1, int i2) {
+                if (addBinding.etTenNhanVien.getText().toString().isEmpty()) {
+                    addBinding.btnThemNhanVien.setEnabled(false);
+                    addBinding.etTenNhanVien.setError("Vui lòng nhập đủ họ tên nhân viên");
+                } else addBinding.btnThemNhanVien.setEnabled(true);
+            }
+
+            @Override
+            public void afterTextChanged(Editable editable) {
+
+            }
+        });
+
+
     }
 
     // LẤY TẤT CẢ DANH SÁCH CHỨC VỤ TỪ FIREBASE THEO THỜI GIAN THỰC
@@ -152,11 +240,11 @@ public class Owner_NhanVienAddFragment extends Fragment {
                         Log.d("l.e", "setupSaveButton: tenChucVuMoi Spinner = " + tenChucVuMoi);
 
                         docIDChucVuBangTen(tenChucVuMoi);
+//                        kiemTraEmailNhanVien(addBinding.etEmail.getText().toString());
 
                         nhanVien.setTennv(addBinding.etTenNhanVien.getText().toString());
                         nhanVien.setSdt(addBinding.etSDT.getText().toString());
-                        nhanVien.setEmailnv(addBinding.etEmail.getText().toString());
-                        nhanVien.setEmailchu("Test@m.c");
+                        nhanVien.setEmailchu(loginUser);
                         nhanVien.setCccd(addBinding.etCCCD.getText().toString());
 
                         // Tạo mã nhân viên mới bằng timestamp
@@ -164,8 +252,7 @@ public class Owner_NhanVienAddFragment extends Fragment {
                         String maNhanVien = "nv" + timestamp;
 
                         // Lưu nhân viên vào Firebase với key
-                        databaseReference = FirebaseDatabase.getInstance().getReference("nhanvien");
-
+                        DatabaseReference databaseReference = FirebaseDatabase.getInstance().getReference("nhanvien");
                         databaseReference.child(maNhanVien).setValue(nhanVien) //Thêm nv mới vào firebase với Key(document)=idnv, các value còn lại tự thêm.
                                 .addOnSuccessListener(aVoid -> {
                                     Toast.makeText(getContext(), "Thêm nhân viên thành công", Toast.LENGTH_SHORT).show();
@@ -182,7 +269,50 @@ public class Owner_NhanVienAddFragment extends Fragment {
         });
     }
 
-    // TÌM VÀ ĐỌC ID CHỨC VỤ TRONG listChucVuFireBase BẰNG TÊN CHỨC VỤ TRUYỀN VÀO
+    // Phương thức kiểm tra tính duy nhất của email
+    private void checkEmailUniqueness(String email) {
+        DatabaseReference databaseReference = FirebaseDatabase.getInstance().getReference("account");
+        databaseReference.orderByChild("email").equalTo(email)
+                .addListenerForSingleValueEvent(new ValueEventListener() {
+                    @Override
+                    public void onDataChange(@NonNull DataSnapshot snapshot) {
+                        if (snapshot.exists()) {
+                            addBinding.etEmail.setError("Email đã tồn tại");
+                        } else {
+                            addBinding.btnThemNhanVien.setEnabled(true);
+                            addBinding.etEmail.setError(null); // Xóa lỗi nếu email hợp lệ
+                        }
+                    }
+
+                    @Override
+                    public void onCancelled(@NonNull DatabaseError error) {
+                        Log.e("l.d", "Lỗi khi kiểm tra email: " + error.getMessage());
+                    }
+                });
+    }
+
+    // Phương thức kiểm tra tính duy nhất của phone
+    private void checkPhoneUniqueness(String phone) {
+        DatabaseReference databaseReference = FirebaseDatabase.getInstance().getReference("nhanvien");
+        databaseReference.orderByChild("sdt").equalTo(phone)
+                .addListenerForSingleValueEvent(new ValueEventListener() {
+                    @Override
+                    public void onDataChange(@NonNull DataSnapshot snapshot) {
+                        if (snapshot.exists()) {
+                            addBinding.etSDT.setError("SĐT đã tồn tại");
+                        } else {
+                            addBinding.etSDT.setError(null); // Xóa lỗi nếu phone hợp lệ
+                        }
+                    }
+
+                    @Override
+                    public void onCancelled(@NonNull DatabaseError error) {
+                        Log.e("l.d", "checkPhoneUniqueness: Lỗi khi kiểm tra SĐT: " + error.getMessage());
+                    }
+                });
+    }
+
+    // Truy xuất FireBase: Lưu ID chức vụ được chọn cho nhân viên
     private void docIDChucVuBangTen(String tenChucVu) {
         if (tenChucVu == null || tenChucVu.isEmpty()) {
             Log.d("l.e", "docIDChucVuBangTen: Item Spinner.");
@@ -222,7 +352,7 @@ public class Owner_NhanVienAddFragment extends Fragment {
             }
         }
 
-        if (addBinding.etTenNhanVien.getText().toString().isEmpty()) {
+        if (addBinding.etTenNhanVien.getText().toString().isEmpty() || addBinding.etTenNhanVien.getText().toString().length() < 2) {
             addBinding.etTenNhanVien.setError("Vui lòng nhập đủ họ tên nhân viên");
             return false;
         }
@@ -242,10 +372,10 @@ public class Owner_NhanVienAddFragment extends Fragment {
             return false;
         }
 
-        if (addBinding.etPass.getText().toString().isEmpty() || addBinding.etPass.getText().toString().length() < 6) {
-            addBinding.etPass.setError("Vui lòng nhập mật khẩu (từ 6 ký tự)");
-            return false;
-        }
+//        if (addBinding.etPass.getText().toString().isEmpty() || addBinding.etPass.getText().toString().length() < 6) {
+//            addBinding.etPass.setError("Vui lòng nhập mật khẩu (từ 6 ký tự)");
+//            return false;
+//        }
 
 //        if (addBinding.spinnerChucVu.getSelectedItemPosition() == 0) {
 //            Toast.makeText(getContext(), "Vui lòng chọn chức vụ", Toast.LENGTH_SHORT).show();

@@ -53,6 +53,9 @@ public class Owner_NhanVienDetailFragment extends Fragment {
         super.onCreate(savedInstanceState);
         // Khởi tạo databaseReference với tên nhánh cần truy cập trong Firebase
         databaseReference = FirebaseDatabase.getInstance().getReference("nhanVien");
+
+        // Nó sẽ nằm ở đây, vì giao diện spinner hiển thị chức vụ INVISIBLE
+        layTatCaDSChucVuTuFirebase();
     }
 
     @Override
@@ -75,7 +78,7 @@ public class Owner_NhanVienDetailFragment extends Fragment {
         nhanvienDetailBinding.spinnerChucVu.setAdapter(chucVuAdapter);
 
         // Lấy danh sách chức vụ từ Firebase và cập nhật vào Spinner
-        layTatCaDSChucVuTuFirebase();
+        // layTatCaDSChucVuTuFirebase();
         setEventSpinner();
 
         // Lấy ID nhân viên từ Bundle rồi truy xuất thông tin nhân viên từ firebase và Hiển thị lên giao diện
@@ -91,9 +94,9 @@ public class Owner_NhanVienDetailFragment extends Fragment {
 
     // LẤY TẤT CẢ DANH SÁCH CHỨC VỤ TỪ FIREBASE THEO THỜI GIAN THỰC
     private void layTatCaDSChucVuTuFirebase() {
-        DatabaseReference chucVuRef = FirebaseDatabase.getInstance().getReference("chucvu");
+        databaseReference = FirebaseDatabase.getInstance().getReference("chucvu");
 
-        chucVuRef.addValueEventListener(new ValueEventListener() {
+        databaseReference.addValueEventListener(new ValueEventListener() {
             @Override
             public void onDataChange(@NonNull DataSnapshot dataSnapshot) {
                 // Xóa danh sách tên chức vụ trước khi thêm dữ liệu mới
