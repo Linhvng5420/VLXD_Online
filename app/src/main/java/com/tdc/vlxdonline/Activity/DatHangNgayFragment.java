@@ -14,6 +14,11 @@ import android.view.ViewGroup;
 import android.widget.Toast;
 
 import com.bumptech.glide.Glide;
+import com.google.firebase.database.DataSnapshot;
+import com.google.firebase.database.DatabaseError;
+import com.google.firebase.database.DatabaseReference;
+import com.google.firebase.database.FirebaseDatabase;
+import com.google.firebase.database.ValueEventListener;
 import com.tdc.vlxdonline.Model.ChiTietDon;
 import com.tdc.vlxdonline.Model.DonHang;
 import com.tdc.vlxdonline.Model.Products;
@@ -23,13 +28,17 @@ import com.tdc.vlxdonline.databinding.FragmentDatHangNgayBinding;
 public class DatHangNgayFragment extends Fragment {
 
     private FragmentDatHangNgayBinding binding;
+    // Bien luu tam don hang
     private DonHang donHang;
+    // Bien luu tam chi tiet don, vi dat ngay nen chi co 1 chi tiet
     private ChiTietDon chiTietDon;
-    private Products product;
-    private int soLuong;
 
-    public DatHangNgayFragment(Products product, int soLuong) {
-        this.product = product;
+    private String idProd;
+    private int soLuong;
+    DatabaseReference referDatHangNgay;
+
+    public DatHangNgayFragment(String idProduct, int soLuong) {
+        this.idProd = idProduct;
         this.soLuong = soLuong;
     }
 
@@ -49,54 +58,79 @@ public class DatHangNgayFragment extends Fragment {
     @Override
     public void onViewCreated(@NonNull View view, @Nullable Bundle savedInstanceState) {
         super.onViewCreated(view, savedInstanceState);
-        KhoiTao();
-        // Su Kien Tang Giam SL
-        binding.btnGiamDat.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View v) {
-                int so = Integer.parseInt(binding.edtSlDat.getText().toString());
-                if (so > 1) {
-                    binding.edtSlDat.setText((so - 1) + "");
-                    int tong = Integer.parseInt(product.getGia()) * Integer.parseInt(binding.edtSlDat.getText().toString());
-                    binding.tvTongDatNgay.setText(chuyenChuoi(tong));
+        referDatHangNgay = FirebaseDatabase.getInstance().getReference();
+        try {
+            referDatHangNgay.child("products").child(idProd).addValueEventListener(new ValueEventListener() {
+                @Override
+                public void onDataChange(DataSnapshot dataSnapshot) {
+                    Products product = dataSnapshot.getValue(Products.class);
+                    if (product != null) {
+                        KhoiTao(product);
+                        // Su Kien Tang Giam SL
+                        binding.btnGiamDat.setOnClickListener(new View.OnClickListener() {
+                            @Override
+                            public void onClick(View v) {
+                                int so = Integer.parseInt(binding.edtSlDat.getText().toString());
+                                if (so > 1) {
+                                    soLuong = so - 1;
+                                    binding.edtSlDat.setText((so - 1) + "");
+                                    int tong = Integer.parseInt(product.getGia()) * soLuong;
+                                    binding.tvTongDatNgay.setText(chuyenChuoi(tong));
+                                }
+                            }
+                        });
+                        binding.btnTangDat.setOnClickListener(new View.OnClickListener() {
+                            @Override
+                            public void onClick(View v) {
+                                int so = Integer.parseInt(binding.edtSlDat.getText().toString());
+                                soLuong = so + 1;
+                                binding.edtSlDat.setText((so + 1) + "");
+                                int tong = Integer.parseInt(product.getGia()) * soLuong;
+                                binding.tvTongDatNgay.setText(chuyenChuoi(tong));
+                            }
+                        });
+                        // Su kien nhap so luong
+                        binding.edtSlDat.addTextChangedListener(new TextWatcher() {
+                            @Override
+                            public void beforeTextChanged(CharSequence s, int start, int count, int after) {
+                            }
+
+                            @Override
+                            public void onTextChanged(CharSequence s, int start, int before, int count) {
+                                soLuong = Integer.parseInt(binding.edtSlDat.getText().toString());
+                                int tong = Integer.parseInt(product.getGia()) * soLuong;
+                                binding.tvTongDatNgay.setText(chuyenChuoi(tong));
+                            }
+
+                            @Override
+                            public void afterTextChanged(Editable s) {
+                            }
+                        });
+                        // Su kien mua ngay
+                        binding.btnDatNgay.setOnClickListener(new View.OnClickListener() {
+                            @Override
+                            public void onClick(View v) {
+
+                            }
+                        });
+                    }else{
+                        Toast.makeText(getActivity(), "Sản Phẩm Đã Bị Xóa!", Toast.LENGTH_SHORT).show();
+                    }
                 }
-            }
-        });
-        binding.btnTangDat.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View v) {
-                int so = Integer.parseInt(binding.edtSlDat.getText().toString());
-                binding.edtSlDat.setText((so + 1) + "");
-                int tong = Integer.parseInt(product.getGia()) * Integer.parseInt(binding.edtSlDat.getText().toString());
-                binding.tvTongDatNgay.setText(chuyenChuoi(tong));
-            }
-        });
-        // Su kien nhap so luong
-        binding.edtSlDat.addTextChangedListener(new TextWatcher() {
-            @Override
-            public void beforeTextChanged(CharSequence s, int start, int count, int after) {
-            }
 
-            @Override
-            public void onTextChanged(CharSequence s, int start, int before, int count) {
-                int tong = Integer.parseInt(product.getGia()) * Integer.parseInt(binding.edtSlDat.getText().toString());
-                binding.tvTongDatNgay.setText(chuyenChuoi(tong));
-            }
+                @Override
+                public void onCancelled(DatabaseError databaseError) {
+                    System.out.println("The read failed: " + databaseError.getCode());
+                }
+            });
+        }catch (Exception e){
 
-            @Override
-            public void afterTextChanged(Editable s) {
-            }
-        });
-        // Su kien mua ngay
-        binding.btnDatNgay.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View v) {
+        }
 
-            }
-        });
     }
 
-    private StringBuilder chuyenChuoi(int soTien){
+    // Ham them dau cham cho gia ban
+    private StringBuilder chuyenChuoi(int soTien) {
         StringBuilder chuoi = new StringBuilder(soTien + "");
         if (chuoi.length() > 3) {
             int dem = 0;
@@ -112,7 +146,7 @@ public class DatHangNgayFragment extends Fragment {
         return chuoi;
     }
 
-    private void KhoiTao() {
+    private void KhoiTao(Products product) {
         Glide.with(getActivity()).load(product.getAnh()).into(binding.imgDatHangNgay);
         binding.tvNameDatHangNgay.setText(product.getTen());
         binding.tvGiaDatHangNgay.setText(chuyenChuoi(Integer.parseInt(product.getGia())) + " đ");

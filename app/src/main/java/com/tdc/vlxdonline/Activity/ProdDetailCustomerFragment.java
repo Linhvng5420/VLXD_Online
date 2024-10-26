@@ -9,19 +9,20 @@ import androidx.recyclerview.widget.GridLayoutManager;
 import androidx.recyclerview.widget.LinearLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
 
-import android.text.Editable;
-import android.text.TextWatcher;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.Toast;
 
 import com.bumptech.glide.Glide;
+import com.google.firebase.database.DataSnapshot;
+import com.google.firebase.database.DatabaseError;
+import com.google.firebase.database.DatabaseReference;
+import com.google.firebase.database.FirebaseDatabase;
+import com.google.firebase.database.ValueEventListener;
 import com.tdc.vlxdonline.Adapter.ImageAdapter;
 import com.tdc.vlxdonline.Adapter.ProductAdapter;
-import com.tdc.vlxdonline.Model.Categorys;
 import com.tdc.vlxdonline.Model.Products;
-import com.tdc.vlxdonline.R;
 import com.tdc.vlxdonline.databinding.FragmentProdDetailCustomerBinding;
 
 import java.util.ArrayList;
@@ -29,47 +30,19 @@ import java.util.ArrayList;
 public class ProdDetailCustomerFragment extends Fragment {
 
     FragmentProdDetailCustomerBinding binding;
-    Products product = new Products();
+    // Id product duoc chon
+    private String idProd = "";
+    // danh sach product de cu
     ArrayList<Products> dataProds = new ArrayList<>();
     ProductAdapter productAdapter;
+    // Danh sach anh mo ta cua san pham dc chon
     ArrayList<String> dataAnh = new ArrayList<>();
     ImageAdapter imageAdapter;
 
-    public ProdDetailCustomerFragment(Products product) {
-        this.product = product;
-    }
+    private DatabaseReference referDetailProd;
+
     public ProdDetailCustomerFragment(String idProduct) {
-
-    }
-
-    private void setUpDisplay() {
-        Glide.with(getActivity()).load(product.getAnh()).into(binding.ivAnhChinh);
-        binding.tvTenSpDetail.setText(product.getTen());
-        binding.tvGiaSpDetail.setText(product.getGia() + " VND");
-        binding.tvTonKhoDetail.setText("Kho: " + product.getTonKho());
-        binding.tvDaBanDetail.setText("Đã Bán: " + product.getDaBan());
-        binding.tvDonViDetail.setText(product.getDonVi());
-        binding.tvMoTaDetail.setText(product.getMoTa());
-
-        // Reset All Data
-        dataAnh.clear();
-        dataProds.clear();
-
-        dataAnh.add("https://th.bing.com/th?id=OIF.0yfM4yF7hYIDB6%2bmwxU4GQ&w=172&h=180&c=7&r=0&o=5&dpr=1.3&pid=1.7");
-        dataAnh.add("https://th.bing.com/th/id/OIF.lf4QHwb4DMz5wHZ84QYJmQ?w=183&h=183&c=7&r=0&o=5&dpr=1.3&pid=1.7");
-        dataAnh.add("https://th.bing.com/th/id/OIP.UWORqopZEI954B5G-Z4sbgHaHQ?w=169&h=180&c=7&r=0&o=5&dpr=1.3&pid=1.7");
-        dataAnh.add("https://th.bing.com/th/id/OIP.BO1VNjeGOUGcGRWQNUVCZQHaHa?w=1024&h=1024&rs=1&pid=ImgDetMain");
-
-        dataProds.add(new Products("A", "A", "A", "1", "1", "https://th.bing.com/th/id/OIP.UWORqopZEI954B5G-Z4sbgHaHQ?w=169&h=180&c=7&r=0&o=5&dpr=1.3&pid=1.7", "100000", "0.0", "1", "1000", "580"));
-        dataProds.add(new Products("B", "B", "B", "1", "2", "https://th.bing.com/th/id/OIP.BO1VNjeGOUGcGRWQNUVCZQHaHa?w=1024&h=1024&rs=1&pid=ImgDetMain", "200000", "4.0", "1", "1000", "580"));
-        dataProds.add(new Products("C", "C", "C", "1", "3", "https://th.bing.com/th/id/OIP.vyMrfzra1TPcklie3-GA9gHaH9?w=180&h=183&c=7&r=0&o=5&dpr=1.3&pid=1.7", "300000", "5.0", "1", "1000", "580"));
-        dataProds.add(new Products("D", "D", "D", "1", "4", "https://th.bing.com/th?id=OIF.EGFQW6dgdgP%2fL6l2yvVChg&rs=1&pid=ImgDetMain", "400000", "3.5", "1", "1000", "580"));
-
-        Glide.with(getActivity()).load(dataAnh.get(0)).into(binding.imgDetail);
-        if (imageAdapter != null) {
-            imageAdapter.notifyDataSetChanged();
-            productAdapter.notifyDataSetChanged();
-        }
+        idProd = idProduct;
     }
 
     @Override
@@ -101,28 +74,11 @@ public class ProdDetailCustomerFragment extends Fragment {
         linearLayoutManager.setOrientation(RecyclerView.HORIZONTAL);
         binding.rcAnhSp.setLayoutManager(linearLayoutManager);
         binding.rcAnhSp.setAdapter(imageAdapter);
-        // Adapter San Pham
-        productAdapter = new ProductAdapter(getActivity(), dataProds, View.VISIBLE);
-        productAdapter.setOnItemProductClickListener(new ProductAdapter.OnItemProductClickListener() {
-            @Override
-            public void OnItemClick(View view, int position) {
-                Products product = dataProds.get(position);
-                ((Customer_HomeActivity) getActivity()).ReplaceFragment(new ProdDetailCustomerFragment(product));
-            }
-
-            @Override
-            public void OnBtnBuyClick(View view, int position) {
-                setUpDisplay();
-                Toast.makeText(getActivity(), "Co Ton Tai", Toast.LENGTH_SHORT).show();
-            }
-        });
-        binding.rcOfferProd.setLayoutManager(new GridLayoutManager(getActivity(), 2));
-        binding.rcOfferProd.setAdapter(productAdapter);
         // Su Kien Mua Ngay
         binding.btnDatHangNgay.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                ((Customer_HomeActivity) getActivity()).ReplaceFragment(new DatHangNgayFragment(product, Integer.parseInt(binding.edtSoLuong.getText().toString())));
+                ((Customer_HomeActivity) getActivity()).ReplaceFragment(new DatHangNgayFragment(idProd, Integer.parseInt(binding.edtSoLuong.getText().toString())));
             }
         });
         // Su Kien Tang Giam SL
@@ -151,7 +107,92 @@ public class ProdDetailCustomerFragment extends Fragment {
         });
     }
 
-    @Override
+    private void setHienThiSanPham() {
+        referDetailProd.child("products").addValueEventListener(new ValueEventListener() {
+            @Override
+            public void onDataChange(DataSnapshot dataSnapshot) {
+                try{
+                    dataProds.clear(); // Xóa danh sách cũ trước khi cập nhật
+
+                    // Duyệt qua từng User trong DataSnapshot
+                    for (DataSnapshot snapshot : dataSnapshot.getChildren()) {
+                        Products product = snapshot.getValue(Products.class);
+                        dataProds.add(product); // Thêm User vào danh sách
+                    }
+
+                    // Xử lý danh sách userList (ví dụ: hiển thị trong RecyclerView)
+                    // Event Click Product
+                    productAdapter = new ProductAdapter(getActivity(), dataProds, View.GONE);
+                    productAdapter.setOnItemProductClickListener(new ProductAdapter.OnItemProductClickListener() {
+                        @Override
+                        public void OnItemClick(View view, int position) {
+                            Products product = dataProds.get(position);
+                            ((Customer_HomeActivity) getActivity()).ReplaceFragment(new ProdDetailCustomerFragment(product.getId()));
+                        }
+
+                        @Override
+                        public void OnBtnBuyClick(View view, int position) {
+                        }
+                    });
+                    binding.rcOfferProd.setLayoutManager(new GridLayoutManager(getActivity(), 2));
+                    binding.rcOfferProd.setAdapter(productAdapter);
+                }catch (Exception e) {
+
+                }
+            }
+
+            @Override
+            public void onCancelled(DatabaseError databaseError) {
+                Toast.makeText(getActivity(), "Lỗi Rồi Nè Má!", Toast.LENGTH_SHORT).show();
+            }
+        });
+    }
+
+    private void setUpDisplay() {
+        referDetailProd = FirebaseDatabase.getInstance().getReference();
+        readProdFromDatabase(idProd);
+        setHienThiSanPham();
+        // Reset All Data
+        dataAnh.clear();
+
+        dataAnh.add("https://th.bing.com/th?id=OIF.0yfM4yF7hYIDB6%2bmwxU4GQ&w=172&h=180&c=7&r=0&o=5&dpr=1.3&pid=1.7");
+        dataAnh.add("https://th.bing.com/th/id/OIF.lf4QHwb4DMz5wHZ84QYJmQ?w=183&h=183&c=7&r=0&o=5&dpr=1.3&pid=1.7");
+        dataAnh.add("https://th.bing.com/th/id/OIP.UWORqopZEI954B5G-Z4sbgHaHQ?w=169&h=180&c=7&r=0&o=5&dpr=1.3&pid=1.7");
+        dataAnh.add("https://th.bing.com/th/id/OIP.BO1VNjeGOUGcGRWQNUVCZQHaHa?w=1024&h=1024&rs=1&pid=ImgDetMain");
+
+        Glide.with(getActivity()).load(dataAnh.get(0)).into(binding.imgDetail);
+    }
+
+    private void readProdFromDatabase(String prodId) {
+        referDetailProd.child("products").child(prodId).addValueEventListener(new ValueEventListener() {
+            @Override
+            public void onDataChange(DataSnapshot dataSnapshot) {
+                try {
+                    Products product = dataSnapshot.getValue(Products.class);
+                    if (product != null) {
+                        Glide.with(getActivity()).load(product.getAnh()).into(binding.ivAnhChinh);
+                        binding.tvTenSpDetail.setText(product.getTen());
+                        binding.tvGiaSpDetail.setText(product.getGia() + " VND");
+                        binding.tvTonKhoDetail.setText("Kho: " + product.getTonKho());
+                        binding.tvDaBanDetail.setText("Đã Bán: " + product.getDaBan());
+                        binding.tvDonViDetail.setText(product.getDonVi());
+                        binding.tvMoTaDetail.setText(product.getMoTa());
+                    }else{
+                        Toast.makeText(getActivity(), "Sản Phẩm Đã Bị Xóa!", Toast.LENGTH_SHORT).show();
+                    }
+                }catch (Exception e){
+
+                }
+            }
+
+            @Override
+            public void onCancelled(DatabaseError databaseError) {
+                System.out.println("The read failed: " + databaseError.getCode());
+            }
+        });
+    }
+
+        @Override
     public void onDestroyView() {
         super.onDestroyView();
         binding = null;

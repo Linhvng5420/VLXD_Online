@@ -22,7 +22,9 @@ import java.util.ArrayList;
 public class ChiTietDonFragment extends Fragment {
 
     FragmentChiTietDonBinding binding;
+    // Don hang da chon
     private DonHang donHang;
+    // Danh sach chi tiet cac san pham da mua cua don hang
     ArrayList<ChiTietDon> dataChiTietDon = new ArrayList<>();
     ChiTietDonHangAdapter adapter;
 

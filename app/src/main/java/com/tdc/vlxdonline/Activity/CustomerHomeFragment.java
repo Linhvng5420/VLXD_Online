@@ -1,5 +1,7 @@
 package com.tdc.vlxdonline.Activity;
 
+import android.graphics.Color;
+import android.graphics.drawable.Drawable;
 import android.os.Bundle;
 
 import androidx.annotation.NonNull;
@@ -30,6 +32,7 @@ import com.tdc.vlxdonline.Model.Products;
 import com.tdc.vlxdonline.R;
 import com.tdc.vlxdonline.databinding.FragmentCustomerHomeBinding;
 
+import java.sql.SQLException;
 import java.util.ArrayList;
 import java.util.Collections;
 import java.util.Comparator;
@@ -37,17 +40,21 @@ import java.util.Comparator;
 public class CustomerHomeFragment extends Fragment {
 
     FragmentCustomerHomeBinding binding;
+    // Data va adapter hien thi doc firebase
     ArrayList<Products> dataProds = new ArrayList<>();
     ProductAdapter productAdapter;
     ArrayList<Categorys> dataCategorys = new ArrayList<>();
     CategoryAdapter categoryAdapter;
+    // Data loc, sap xep
     ArrayList<String> dataLoc = new ArrayList<>();
     AdapterCenterDrop adapterLoc;
     ArrayList<String> dataSapXep = new ArrayList<>();
     AdapterCenterDrop adapterSX;
-    private int category = -1;
+    // Item khac
+    private String category = "";
     DatabaseReference mDatabase;
     private int typeSort = 0;
+    private View preView = null;
 
     @Override
     public void onCreate(Bundle savedInstanceState) {
@@ -111,7 +118,6 @@ public class CustomerHomeFragment extends Fragment {
         // Reset All Data
         dataLoc.clear();
         dataSapXep.clear();
-        dataCategorys.clear();
         mDatabase = FirebaseDatabase.getInstance().getReference();
 
         dataLoc.add("Lọc Theo");
@@ -139,33 +145,40 @@ public class CustomerHomeFragment extends Fragment {
         mDatabase.child("products").addValueEventListener(new ValueEventListener() {
             @Override
             public void onDataChange(DataSnapshot dataSnapshot) {
-                dataProds.clear(); // Xóa danh sách cũ trước khi cập nhật
+                try{
+                    dataProds.clear(); // Xóa danh sách cũ trước khi cập nhật
 
-                // Duyệt qua từng User trong DataSnapshot
-                for (DataSnapshot snapshot : dataSnapshot.getChildren()) {
-                    Products product = snapshot.getValue(Products.class);
-                    dataProds.add(product); // Thêm User vào danh sách
+                    // Duyệt qua từng User trong DataSnapshot
+                    for (DataSnapshot snapshot : dataSnapshot.getChildren()) {
+                        Products product = snapshot.getValue(Products.class);
+                        if (!category.isEmpty() && !category.equals(product.getDanhMuc())) continue;
+                        if (binding.spLoc.getSelectedItemPosition() == 1 && Double.parseDouble(product.getSoSao()) > 3) continue;
+                        if (binding.spLoc.getSelectedItemPosition() == 2 && Double.parseDouble(product.getSoSao()) < 4) continue;
+                        dataProds.add(product); // Thêm User vào danh sách
+                    }
+
+                    SapXepDanhSach();
+
+                    // Xử lý danh sách userList (ví dụ: hiển thị trong RecyclerView)
+                    // Event Click Product
+                    productAdapter = new ProductAdapter(getActivity(), dataProds, View.VISIBLE);
+                    productAdapter.setOnItemProductClickListener(new ProductAdapter.OnItemProductClickListener() {
+                        @Override
+                        public void OnItemClick(View view, int position) {
+                            Products product = dataProds.get(position);
+                            ((Customer_HomeActivity) getActivity()).ReplaceFragment(new ProdDetailCustomerFragment(product.getId()));
+                        }
+
+                        @Override
+                        public void OnBtnBuyClick(View view, int position) {
+                            ((Customer_HomeActivity) getActivity()).ReplaceFragment(new DatHangNgayFragment(dataProds.get(position).getId(), 1));
+                        }
+                    });
+                    binding.rcProdCustomerHome.setLayoutManager(new GridLayoutManager(getActivity(), 2));
+                    binding.rcProdCustomerHome.setAdapter(productAdapter);
+                }catch (Exception e) {
+
                 }
-
-                SapXepDanhSach();
-
-                // Xử lý danh sách userList (ví dụ: hiển thị trong RecyclerView)
-                // Event Click Product
-                productAdapter = new ProductAdapter(getActivity(), dataProds, View.VISIBLE);
-                productAdapter.setOnItemProductClickListener(new ProductAdapter.OnItemProductClickListener() {
-                    @Override
-                    public void OnItemClick(View view, int position) {
-                        Products product = dataProds.get(position);
-                        ((Customer_HomeActivity) getActivity()).ReplaceFragment(new ProdDetailCustomerFragment(product));
-                    }
-
-                    @Override
-                    public void OnBtnBuyClick(View view, int position) {
-                        ((Customer_HomeActivity) getActivity()).ReplaceFragment(new DatHangNgayFragment(dataProds.get(position), 1));
-                    }
-                });
-                binding.rcProdCustomerHome.setLayoutManager(new GridLayoutManager(getActivity(), 2));
-                binding.rcProdCustomerHome.setAdapter(productAdapter);
             }
 
             @Override
@@ -179,27 +192,43 @@ public class CustomerHomeFragment extends Fragment {
         mDatabase.child("categorys").addValueEventListener(new ValueEventListener() {
             @Override
             public void onDataChange(DataSnapshot dataSnapshot) {
-                dataCategorys.clear(); // Xóa danh sách cũ trước khi cập nhật
+                try{
+                    dataCategorys.clear(); // Xóa danh sách cũ trước khi cập nhật
 
-                // Duyệt qua từng User trong DataSnapshot
-                for (DataSnapshot snapshot : dataSnapshot.getChildren()) {
-                    Categorys category = snapshot.getValue(Categorys.class);
-                    dataCategorys.add(category); // Thêm User vào danh sách
-                }
-                // Xử lý danh sách userList (ví dụ: hiển thị trong RecyclerView)
-                // Category Adapter
-                categoryAdapter = new CategoryAdapter(getActivity(), dataCategorys);
-                categoryAdapter.setOnItemCategoryClickListener(new CategoryAdapter.OnItemCategoryClickListener() {
-                    @Override
-                    public void OnItemClick(View view, int position) {
-                        category = Integer.parseInt(dataCategorys.get(position).getId());
-                        setHienThiSanPham();
+                    // Duyệt qua từng User trong DataSnapshot
+                    for (DataSnapshot snapshot : dataSnapshot.getChildren()) {
+                        Categorys category = snapshot.getValue(Categorys.class);
+                        dataCategorys.add(category); // Thêm User vào danh sách
                     }
-                });
-                LinearLayoutManager linearLayoutManager = new LinearLayoutManager(getActivity());
-                linearLayoutManager.setOrientation(RecyclerView.HORIZONTAL);
-                binding.rcDanhMuc.setLayoutManager(linearLayoutManager);
-                binding.rcDanhMuc.setAdapter(categoryAdapter);
+                    // Xử lý danh sách userList (ví dụ: hiển thị trong RecyclerView)
+                    // Category Adapter
+                    categoryAdapter = new CategoryAdapter(getActivity(), dataCategorys);
+                    categoryAdapter.setOnItemCategoryClickListener(new CategoryAdapter.OnItemCategoryClickListener() {
+                        @Override
+                        public void OnItemClick(View view, int position) {
+                            if (category.equals(dataCategorys.get(position).getId())) {
+                                category = "";
+                                view.setBackgroundColor(Color.TRANSPARENT);
+                                preView = null;
+                            }
+                            else {
+                                category = dataCategorys.get(position).getId();
+                                Drawable drawable = getActivity().getDrawable(R.drawable.bg_detail);
+                                drawable.setTint(Color.rgb(0, 255, 255));
+                                view.setBackground(drawable);
+                                if (preView != null) preView.setBackgroundColor(Color.TRANSPARENT);
+                                preView = view;
+                            }
+                            setHienThiSanPham();
+                        }
+                    });
+                    LinearLayoutManager linearLayoutManager = new LinearLayoutManager(getActivity());
+                    linearLayoutManager.setOrientation(RecyclerView.HORIZONTAL);
+                    binding.rcDanhMuc.setLayoutManager(linearLayoutManager);
+                    binding.rcDanhMuc.setAdapter(categoryAdapter);
+                }catch (Exception e){
+
+                }
             }
 
             @Override

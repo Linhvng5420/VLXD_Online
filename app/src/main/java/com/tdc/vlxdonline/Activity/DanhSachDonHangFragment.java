@@ -24,10 +24,14 @@ import java.util.ArrayList;
 public class DanhSachDonHangFragment extends Fragment {
 
     FragmentDanhSachDonHangBinding binding;
+    // Danh sach don hang, duoc duyet theo loai nguoi dung
     ArrayList<DonHang> data = new ArrayList<>();
     DonHangAdapter adapter;
+    // Type su dung khi nguoi dung la nhan vien giao hang, 0 Nhan don, 1 Dang giao, 2 Hoan thanh
     private int type;
+    // Tu khoa dung cho tim kiem
     private String tuKhoa = "";
+    // Trang thai don da hoan thanh hay chua, -1 Exception cho Giao hang, 0 Don chua hoan thanh, 1 Don da hoan thanh
     private int trangThaiLoc = 0;
 
     public DanhSachDonHangFragment(int type) {
