@@ -45,15 +45,27 @@ public class DonHangAdapter extends RecyclerView.Adapter<DonHangAdapter.DonHangH
         holder.binding.tvTenNhanDon.setText(donHang.getTenKhach());
         holder.binding.tvSdtDon.setText(donHang.getSdt());
         holder.binding.tvDiaChiDon.setText(donHang.getDiaChi());
-        holder.binding.tvTongGia.setText(String.format("Tổng Tiền: %d", donHang.getTongTien()));
+        StringBuilder chuoi = new StringBuilder(donHang.getTongTien() + "");
+        if (chuoi.length() > 3) {
+            int dem = 0;
+            int doDai = chuoi.length() - 1;
+            for (int i = doDai; i > 0; i--) {
+                dem = dem + 1;
+                if (dem == 3) {
+                    chuoi.insert(i, '.');
+                    dem = 0;
+                }
+            }
+        }
+        holder.binding.tvTongGia.setText(chuoi);
         // Sử lý hiển thị trạng thái
-        int trangThai = Integer.parseInt(donHang.getTrangThai());
-        int trangThaiTT = Integer.parseInt(donHang.getTrangThaiTT());
+        int trangThai = donHang.getTrangThai();
+        int trangThaiTT = donHang.getTrangThaiTT();
         if (trangThai == 0) {
             holder.binding.tvTrangThaiVc.setBackgroundColor(Color.rgb(255, 0, 0));
             holder.binding.tvTrangThaiVc.setText(R.string.cho_xac_nhan);
         }else if (trangThai == 1) {
-            holder.binding.tvTrangThaiVc.setBackgroundColor(Color.rgb(0, 0, 255));
+            holder.binding.tvTrangThaiVc.setBackgroundColor(Color.rgb(0, 100, 255));
             holder.binding.tvTrangThaiVc.setText(R.string.cho_nhan_don);
         }else if (trangThai == 2) {
             holder.binding.tvTrangThaiVc.setBackgroundColor(Color.rgb(0, 255, 255));

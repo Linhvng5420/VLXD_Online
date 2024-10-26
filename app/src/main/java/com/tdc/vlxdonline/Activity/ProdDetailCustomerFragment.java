@@ -111,7 +111,7 @@ public class ProdDetailCustomerFragment extends Fragment {
         referDetailProd.child("products").addValueEventListener(new ValueEventListener() {
             @Override
             public void onDataChange(DataSnapshot dataSnapshot) {
-                try{
+                try {
                     dataProds.clear(); // Xóa danh sách cũ trước khi cập nhật
 
                     // Duyệt qua từng User trong DataSnapshot
@@ -136,7 +136,7 @@ public class ProdDetailCustomerFragment extends Fragment {
                     });
                     binding.rcOfferProd.setLayoutManager(new GridLayoutManager(getActivity(), 2));
                     binding.rcOfferProd.setAdapter(productAdapter);
-                }catch (Exception e) {
+                } catch (Exception e) {
 
                 }
             }
@@ -164,10 +164,10 @@ public class ProdDetailCustomerFragment extends Fragment {
     }
 
     private void readProdFromDatabase(String prodId) {
-        referDetailProd.child("products").child(prodId).addValueEventListener(new ValueEventListener() {
-            @Override
-            public void onDataChange(DataSnapshot dataSnapshot) {
-                try {
+        try{
+            referDetailProd.child("products").child(prodId).addValueEventListener(new ValueEventListener() {
+                @Override
+                public void onDataChange(DataSnapshot dataSnapshot) {
                     Products product = dataSnapshot.getValue(Products.class);
                     if (product != null) {
                         Glide.with(getActivity()).load(product.getAnh()).into(binding.ivAnhChinh);
@@ -177,22 +177,20 @@ public class ProdDetailCustomerFragment extends Fragment {
                         binding.tvDaBanDetail.setText("Đã Bán: " + product.getDaBan());
                         binding.tvDonViDetail.setText(product.getDonVi());
                         binding.tvMoTaDetail.setText(product.getMoTa());
-                    }else{
+                    } else {
                         Toast.makeText(getActivity(), "Sản Phẩm Đã Bị Xóa!", Toast.LENGTH_SHORT).show();
                     }
-                }catch (Exception e){
-
                 }
-            }
 
-            @Override
-            public void onCancelled(DatabaseError databaseError) {
-                System.out.println("The read failed: " + databaseError.getCode());
-            }
-        });
+                @Override
+                public void onCancelled(DatabaseError databaseError) {
+                    System.out.println("The read failed: " + databaseError.getCode());
+                }
+            });
+        }catch (Exception e){}
     }
 
-        @Override
+    @Override
     public void onDestroyView() {
         super.onDestroyView();
         binding = null;

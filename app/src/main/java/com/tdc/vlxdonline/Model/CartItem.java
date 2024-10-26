@@ -1,11 +1,12 @@
 package com.tdc.vlxdonline.Model;
 
 public class CartItem {
-    private String idKhach, idSanPham, gia, soLuong;
+    private String idKhach, idSanPham;
+    private int gia, soLuong;
     private String tenSP, moTa, anh;
     private boolean selected = false;
 
-    public CartItem(String idKhach, String idSanPham, String anh, String gia, String soLuong, String tenSP, String moTa, boolean selected) {
+    public CartItem(String idKhach, String idSanPham, String anh, int gia, int soLuong, String tenSP, String moTa, boolean selected) {
         this.idKhach = idKhach;
         this.idSanPham = idSanPham;
         this.anh = anh;
@@ -59,19 +60,19 @@ public class CartItem {
         this.anh = anh;
     }
 
-    public String getGia() {
+    public int getGia() {
         return gia;
     }
 
-    public void setGia(String gia) {
+    public void setGia(int gia) {
         this.gia = gia;
     }
 
-    public String getSoLuong() {
+    public int getSoLuong() {
         return soLuong;
     }
 
-    public void setSoLuong(String soLuong) {
+    public void setSoLuong(int soLuong) {
         this.soLuong = soLuong;
     }
 

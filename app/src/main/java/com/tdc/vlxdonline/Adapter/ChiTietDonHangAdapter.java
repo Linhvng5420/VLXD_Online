@@ -42,7 +42,7 @@ public class ChiTietDonHangAdapter extends RecyclerView.Adapter<ChiTietDonHangAd
         holder.binding.tvNameDetailDon.setText(chiTiet.getTen());
         holder.binding.tvGiaDetailDon.setText(String.format("%d đ", chiTiet.getGia()));
         holder.binding.tvSlDetailDon.setText(String.format("Số Lượng: %d", chiTiet.getSoLuong()));
-        int tong = Integer.parseInt(chiTiet.getSoLuong()) * Integer.parseInt(chiTiet.getGia());
+        int tong = chiTiet.getSoLuong() * chiTiet.getGia();
         holder.binding.tvTongDetailDon.setText(String.format("Tổng: %d", tong));
     }
 

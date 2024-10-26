@@ -24,12 +24,16 @@ public class ChiTietDonFragment extends Fragment {
     FragmentChiTietDonBinding binding;
     // Don hang da chon
     private DonHang donHang;
+    private int idDon;
     // Danh sach chi tiet cac san pham da mua cua don hang
     ArrayList<ChiTietDon> dataChiTietDon = new ArrayList<>();
     ChiTietDonHangAdapter adapter;
 
     public ChiTietDonFragment(DonHang donHang) {
         this.donHang = donHang;
+    }
+    public ChiTietDonFragment(int idDonHang) {
+        this.idDon = idDonHang;
     }
 
     @Override
@@ -73,8 +77,7 @@ public class ChiTietDonFragment extends Fragment {
         binding.btnTrangThai.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                int trangThaiVc = Integer.parseInt(donHang.getTrangThai());
-                int trangThaiTt = Integer.parseInt(donHang.getTrangThaiTT());
+                int trangThaiVc = donHang.getTrangThai();
 
 //                Update điều kiện typeUser = 2 thành typeEmployee = 1 khi có nhân viên giao hàng
                 if (LoginActivity.typeUser == 2 && trangThaiVc == 1) {
@@ -101,12 +104,10 @@ public class ChiTietDonFragment extends Fragment {
         binding.tvTongTien.setText(getChuoiTong());
 
         // Danh Sach Chi Tiet Don
-        dataChiTietDon.clear();
         // Doc data o day
-        if (adapter != null) adapter.notifyDataSetChanged();
 
-        int trangThaiVc = Integer.parseInt(donHang.getTrangThai());
-        int trangThaiTt = Integer.parseInt(donHang.getTrangThaiTT());
+        int trangThaiVc = donHang.getTrangThai();
+        int trangThaiTt = donHang.getTrangThaiTT();
         // Update điều kiện typeUser = 2 thành typeEmployee = 1 khi có nhân viên giao hàng
         if (trangThaiVc == 0) {
             binding.btnTrangThai.setText(R.string.cho_xac_nhan);
@@ -146,7 +147,7 @@ public class ChiTietDonFragment extends Fragment {
     }
 
     private StringBuilder getChuoiTong(){
-        StringBuilder chuoi = new StringBuilder(donHang.getTongTien());
+        StringBuilder chuoi = new StringBuilder(donHang.getTongTien() + "");
         if (chuoi.length() > 3) {
             int dem = 0;
             int doDai = chuoi.length() - 1;

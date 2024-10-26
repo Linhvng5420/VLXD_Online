@@ -1,18 +1,17 @@
 package com.tdc.vlxdonline.Model;
 
 public class KhachHang{
-    private String ID;
-    private String ten, SDT, email;
+    private String id, ten, sdt, email;
     private String avata, cccdMatTruoc, cccdMatSau;
     private String soCCCD, diaChi;
 
     public KhachHang() {
     }
 
-    public KhachHang(String ID, String ten, String SDT, String email, String avata, String cccdMatTruoc, String cccdMatSau, String soCCCD, String diaChi) {
-        this.ID = ID;
+    public KhachHang(String id, String ten, String sdt, String email, String avata, String cccdMatTruoc, String cccdMatSau, String soCCCD, String diaChi) {
+        this.id = id;
         this.ten = ten;
-        this.SDT = SDT;
+        this.sdt = sdt;
         this.email = email;
         this.avata = avata;
         this.cccdMatTruoc = cccdMatTruoc;
@@ -22,11 +21,11 @@ public class KhachHang{
     }
 
     public String getID() {
-        return ID;
+        return id;
     }
 
-    public void setID(String ID) {
-        this.ID = ID;
+    public void setID(String id) {
+        this.id = id;
     }
 
     public String getTen() {
@@ -37,12 +36,12 @@ public class KhachHang{
         this.ten = ten;
     }
 
-    public String getSDT() {
-        return SDT;
+    public String getSdt() {
+        return sdt;
     }
 
-    public void setSDT(String SDT) {
-        this.SDT = SDT;
+    public void setSdt(String sdt) {
+        this.sdt = sdt;
     }
 
     public String getEmail() {

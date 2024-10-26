@@ -31,9 +31,6 @@ public class LoginActivity extends AppCompatActivity {
     ActivityLoginBinding binding;
     public static int typeUser, typeEmployee = -1;
     String idUser = "";
-    ArrayList<TypeUser> dataTypeUser = new ArrayList<>();
-    ArrayList<Users> dataUsers = new ArrayList<>();
-    ArrayAdapter adapter;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -96,7 +93,7 @@ public class LoginActivity extends AppCompatActivity {
 
                         if (isValid) {
                             // Chuyển đến màn hình chủ
-                            Toast.makeText(LoginActivity.this, "Hello [ User: " + idUser + " ]", Toast.LENGTH_LONG).show();
+                            if (typeUser != 1) Toast.makeText(LoginActivity.this, "Hello [ User: " + idUser + " ]", Toast.LENGTH_LONG).show();
 
                             Class c = null;
                             if (typeUser == 0) {

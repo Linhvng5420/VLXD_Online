@@ -1,10 +1,11 @@
 package com.tdc.vlxdonline.Model;
 
 public class DonHang {
-    private String id, idChu, idKhach, tongTien, trangThai, trangThaiTT, idTao, idGiao, phiTraGop;
+    private String idChu, idKhach, idTao, idGiao;
     private String anh, tenKhach, sdt, diaChi, ngayTao;
+    private int id, tongTien, trangThai, trangThaiTT, phiTraGop;
 
-    public DonHang(String anh, String id, String idChu, String idKhach, String tongTien, String trangThai, String trangThaiTT, String idTao, String idGiao, String phiTraGop, String tenKhach, String sdt, String diaChi, String ngayTao) {
+    public DonHang(String anh, int id, String idChu, String idKhach, int tongTien, int trangThai, int trangThaiTT, String idTao, String idGiao, int phiTraGop, String tenKhach, String sdt, String diaChi, String ngayTao) {
         this.id = id;
         this.idChu = idChu;
         this.idKhach = idKhach;
@@ -32,11 +33,11 @@ public class DonHang {
         this.anh = anh;
     }
 
-    public String getId() {
+    public int getId() {
         return id;
     }
 
-    public void setId(String id) {
+    public void setId(int id) {
         this.id = id;
     }
 
@@ -56,27 +57,27 @@ public class DonHang {
         this.idKhach = idKhach;
     }
 
-    public String getTongTien() {
+    public int getTongTien() {
         return tongTien;
     }
 
-    public void setTongTien(String tongTien) {
+    public void setTongTien(int tongTien) {
         this.tongTien = tongTien;
     }
 
-    public String getTrangThai() {
+    public int getTrangThai() {
         return trangThai;
     }
 
-    public void setTrangThai(String trangThai) {
+    public void setTrangThai(int trangThai) {
         this.trangThai = trangThai;
     }
 
-    public String getTrangThaiTT() {
+    public int getTrangThaiTT() {
         return trangThaiTT;
     }
 
-    public void setTrangThaiTT(String trangThaiTT) {
+    public void setTrangThaiTT(int trangThaiTT) {
         this.trangThaiTT = trangThaiTT;
     }
 
@@ -96,11 +97,11 @@ public class DonHang {
         this.idGiao = idGiao;
     }
 
-    public String getPhiTraGop() {
+    public int getPhiTraGop() {
         return phiTraGop;
     }
 
-    public void setPhiTraGop(String phiTraGop) {
+    public void setPhiTraGop(int phiTraGop) {
         this.phiTraGop = phiTraGop;
     }
 

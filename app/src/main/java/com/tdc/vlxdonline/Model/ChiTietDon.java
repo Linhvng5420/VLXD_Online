@@ -1,10 +1,11 @@
 package com.tdc.vlxdonline.Model;
 
 public class ChiTietDon {
-    private String idDon, idSanPham, soLuong, gia;
+    private String idSanPham;
     private String ten, anh;
+    private int idDon, soLuong, gia;
 
-    public ChiTietDon(String idDon, String idSanPham, String soLuong, String gia, String ten, String anh) {
+    public ChiTietDon(int idDon, String idSanPham, int soLuong, int gia, String ten, String anh) {
         this.idDon = idDon;
         this.idSanPham = idSanPham;
         this.soLuong = soLuong;
@@ -16,11 +17,11 @@ public class ChiTietDon {
     public ChiTietDon() {
     }
 
-    public String getIdDon() {
+    public int getIdDon() {
         return idDon;
     }
 
-    public void setIdDon(String idDon) {
+    public void setIdDon(int idDon) {
         this.idDon = idDon;
     }
 
@@ -32,19 +33,19 @@ public class ChiTietDon {
         this.idSanPham = idSanPham;
     }
 
-    public String getSoLuong() {
+    public int getSoLuong() {
         return soLuong;
     }
 
-    public void setSoLuong(String soLuong) {
+    public void setSoLuong(int soLuong) {
         this.soLuong = soLuong;
     }
 
-    public String getGia() {
+    public int getGia() {
         return gia;
     }
 
-    public void setGia(String gia) {
+    public void setGia(int gia) {
         this.gia = gia;
     }
 

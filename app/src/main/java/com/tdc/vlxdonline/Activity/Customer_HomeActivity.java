@@ -13,7 +13,14 @@ import androidx.fragment.app.Fragment;
 import androidx.fragment.app.FragmentManager;
 import androidx.fragment.app.FragmentTransaction;
 
+import com.bumptech.glide.Glide;
+import com.google.firebase.database.DataSnapshot;
+import com.google.firebase.database.DatabaseError;
+import com.google.firebase.database.DatabaseReference;
+import com.google.firebase.database.FirebaseDatabase;
+import com.google.firebase.database.ValueEventListener;
 import com.tdc.vlxdonline.Model.KhachHang;
+import com.tdc.vlxdonline.Model.Products;
 import com.tdc.vlxdonline.R;
 import com.tdc.vlxdonline.databinding.ActivityCustomerHomeBinding;
 
@@ -21,7 +28,9 @@ public class Customer_HomeActivity extends AppCompatActivity {
     // Binding
     ActivityCustomerHomeBinding customerHomeBinding;
     private String currentTag = null;
+    // Thong tin khach hang dang dang nhap
     public static KhachHang info;
+    DatabaseReference referCustomerActi;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -29,8 +38,27 @@ public class Customer_HomeActivity extends AppCompatActivity {
         customerHomeBinding = ActivityCustomerHomeBinding.inflate(getLayoutInflater());
         setContentView(customerHomeBinding.getRoot());
 
+        referCustomerActi = FirebaseDatabase.getInstance().getReference();
         String email = getIntent().getStringExtra("emailUser");
-        Toast.makeText(this, email, Toast.LENGTH_SHORT).show();
+        try{
+            referCustomerActi.child("customers").child(email.substring(0, email.indexOf('@'))).addValueEventListener(new ValueEventListener() {
+                @Override
+                public void onDataChange(DataSnapshot dataSnapshot) {
+                    KhachHang khach = dataSnapshot.getValue(KhachHang.class);
+                    if (khach != null) {
+                        Customer_HomeActivity.info = khach;
+                        Toast.makeText(Customer_HomeActivity.this, "Hello " + info.getTen(), Toast.LENGTH_LONG).show();
+                    }else{
+                        Toast.makeText(Customer_HomeActivity.this, "Tài Khoản Đã Bị Xóa!", Toast.LENGTH_LONG).show();
+                    }
+                }
+
+                @Override
+                public void onCancelled(DatabaseError databaseError) {
+                    System.out.println("The read failed: " + databaseError.getCode());
+                }
+            });
+        }catch (Exception e){}
 
 		// Bắt sự kiện
         ReplaceFragment(new CustomerHomeFragment());

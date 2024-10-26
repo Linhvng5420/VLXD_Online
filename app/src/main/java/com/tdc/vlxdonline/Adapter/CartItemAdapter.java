@@ -42,7 +42,19 @@ public class CartItemAdapter extends RecyclerView.Adapter<CartItemAdapter.CartIt
         Glide.with(context).load(item.getAnh()).into(holder.binding.imgCart);
         holder.binding.tvNameCart.setText(item.getTenSP());
         holder.binding.tvDesCart.setText(item.getMoTa());
-        holder.binding.tvPrice.setText(item.getGia());
+        StringBuilder chuoi = new StringBuilder(item.getGia() + "");
+        if (chuoi.length() > 3) {
+            int dem = 0;
+            int doDai = chuoi.length() - 1;
+            for (int i = doDai; i > 0; i--) {
+                dem = dem + 1;
+                if (dem == 3) {
+                    chuoi.insert(i, '.');
+                    dem = 0;
+                }
+            }
+        }
+        holder.binding.tvPrice.setText(chuoi);
         holder.binding.tvSl.setText(item.getSoLuong());
         holder.binding.cbCart.setChecked(item.isSelected());
         final int pos = position;
