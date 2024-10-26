@@ -139,7 +139,7 @@ public class Owner_NhanVienDetailFragment extends Fragment {
             selectedIDNhanVien = getArguments().getSerializable("selectedIDNhanVien").toString();
 
             // Hiển thị thông tin ID nhân viên lên giao diện
-            Toast.makeText(getContext(), "ID Nhân Viên: " + selectedIDNhanVien, Toast.LENGTH_SHORT).show();
+            Toast.makeText(getContext(), "ID Nhân Viên\n" + selectedIDNhanVien, Toast.LENGTH_SHORT).show();
             Log.d("l.e", "nhanIDNhanVienTuBundle: " + selectedIDNhanVien.toString());
             nhanvienDetailBinding.tvIDNhanVien.setText(selectedIDNhanVien);
 

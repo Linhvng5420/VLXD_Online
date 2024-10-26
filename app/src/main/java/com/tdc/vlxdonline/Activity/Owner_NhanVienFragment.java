@@ -1,6 +1,7 @@
 package com.tdc.vlxdonline.Activity;
 
 import android.app.Activity;
+import android.content.Context;
 import android.os.Bundle;
 import android.util.Log;
 import android.view.LayoutInflater;
@@ -8,6 +9,7 @@ import android.view.View;
 import android.view.ViewGroup;
 import android.view.inputmethod.InputMethodManager;
 import android.widget.SearchView;
+import android.widget.Toast;
 
 import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
@@ -43,6 +45,11 @@ public class Owner_NhanVienFragment extends Fragment {
     // Lưu lại danh sách nhân viên ban đầu trước khi tìm kiếm
     private List<NhanVien> originalList = new ArrayList<>();
 
+    @Override
+    public void onCreate(@Nullable Bundle savedInstanceState) {
+        super.onCreate(savedInstanceState);
+    }
+
     @Nullable
     @Override
     public View onCreateView(@NonNull LayoutInflater inflater, @Nullable ViewGroup container, @Nullable Bundle savedInstanceState) {
@@ -74,14 +81,15 @@ public class Owner_NhanVienFragment extends Fragment {
         // Firebase: lấy dữ liệu từ Firebase
         getNhanVienData();
 
-        //nhấn vào recycleview nhân viên
+        // Bắt sự kiện khi nhấn vào recycleview nhân viên
         nhanVaoItemNhanVien();
 
-        // nhấn nút thêm nhân viên
+        // Bắt sự kiện khi nhấn nút thêm nhân viên
         nhanNutThemNhanVien();
 
         // Thiết lập tìm kiếm
         timKiemNhanVien();
+
         // Lắng nghe sự kiện nhấn ra ngoài thanh tìm kiếm để tắt con trỏ và ẩn bàn phím
         ownerNhanvienBinding.getRoot().setOnTouchListener((v, event) -> {
             hideKeyboard(v); // Ẩn bàn phím
@@ -93,7 +101,6 @@ public class Owner_NhanVienFragment extends Fragment {
     private void getNhanVienData() {
         // Firebase: Khởi tạo databaseReference và lấy dữ liệu từ Firebase
         databaseReference = FirebaseDatabase.getInstance().getReference("nhanvien");
-
         databaseReference.addValueEventListener(new ValueEventListener() {
             @Override
             public void onDataChange(@NonNull DataSnapshot dataSnapshot) {
@@ -106,10 +113,10 @@ public class Owner_NhanVienFragment extends Fragment {
                     // Lấy đối tượng NhanVien từ snapshot
                     NhanVien nhanVien = snapshot.getValue(NhanVien.class);
                     if (nhanVien != null) {
-                        // Set idnv là document ID
+                        // Set ID NV là snapshot key
                         nhanVien.setIdnv(snapshot.getKey());
 
-                        // Lọc theo email chu
+                        // Lọc theo nhân viên của Chủ CH theo email
                         // Nếu emailUser là admin, thêm tất cả nhân viên mà không kiểm tra điều kiện khác
                         if ("admin@tdc.com".equals(emailLogin)) {
                             nhanVienAdapter.getNhanVienList().add(nhanVien);
@@ -118,7 +125,7 @@ public class Owner_NhanVienFragment extends Fragment {
                             // Điều kiện email chủ thông thường
                             nhanVienAdapter.getNhanVienList().add(nhanVien);
                             originalList.add(nhanVien); // Lưu vào danh sách gốc
-                        }
+                        } else Toast.makeText( getContext(), "Bạn không có quyền truy cập \nQuản lý Nhân Viên", Toast.LENGTH_SHORT).show();
                     }
                 }
 
@@ -135,7 +142,6 @@ public class Owner_NhanVienFragment extends Fragment {
             }
         });
     }
-
 
     // BẮT SỰ KIỆN THIẾT LẬP SỰ KIỆN KHI NHẤN VÀO MỘT ITEM TRONG DANH SÁCH NHÂN VIÊN
     private void nhanVaoItemNhanVien() {
@@ -168,7 +174,7 @@ public class Owner_NhanVienFragment extends Fragment {
             public void onClick(View view) {
                 // Bundle email
                 Bundle bundle = new Bundle();
-                bundle.putSerializable("emailLogin", emailLogin);
+                bundle.putSerializable("loginEmailUser", emailLogin);
 
                 // Instance
                 Owner_NhanVienAddFragment nhanVienFragment = new Owner_NhanVienAddFragment();

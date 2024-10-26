@@ -1,5 +1,7 @@
 package com.tdc.vlxdonline.Activity;
 
+import static androidx.core.app.ActivityCompat.finishAffinity;
+
 import android.os.Bundle;
 import android.text.Editable;
 import android.text.TextWatcher;
@@ -35,7 +37,7 @@ import java.util.List;
 public class Owner_NhanVienAddFragment extends Fragment {
     FragmentOwnerNhanVienAddBinding addBinding;
 
-    private String loginUser;
+    private String loginEmailUser;
     private NhanVien nhanVien;
 
     //Danh sách chức vụ từ Firebase
@@ -52,7 +54,7 @@ public class Owner_NhanVienAddFragment extends Fragment {
 
         // Lấy instance loginUser
         if (getArguments() != null) {
-            loginUser = getArguments().getString("loginUser");
+            loginEmailUser = getArguments().getString("loginEmailUser");
         } else Log.d("l.d", "onCreate: Lấy Instance thất bại");
 
         // Khởi tạo đối tượng nhân viên dùng chung và duy nhất trong toàn bộ Fragment
@@ -240,11 +242,10 @@ public class Owner_NhanVienAddFragment extends Fragment {
                         Log.d("l.e", "setupSaveButton: tenChucVuMoi Spinner = " + tenChucVuMoi);
 
                         docIDChucVuBangTen(tenChucVuMoi);
-//                        kiemTraEmailNhanVien(addBinding.etEmail.getText().toString());
 
                         nhanVien.setTennv(addBinding.etTenNhanVien.getText().toString());
                         nhanVien.setSdt(addBinding.etSDT.getText().toString());
-                        nhanVien.setEmailchu(loginUser);
+                        nhanVien.setEmailchu(loginEmailUser);
                         nhanVien.setCccd(addBinding.etCCCD.getText().toString());
 
                         // Tạo mã nhân viên mới bằng timestamp
@@ -256,13 +257,14 @@ public class Owner_NhanVienAddFragment extends Fragment {
                         databaseReference.child(maNhanVien).setValue(nhanVien) //Thêm nv mới vào firebase với Key(document)=idnv, các value còn lại tự thêm.
                                 .addOnSuccessListener(aVoid -> {
                                     Toast.makeText(getContext(), "Thêm nhân viên thành công", Toast.LENGTH_SHORT).show();
+                                    getParentFragmentManager().popBackStack(); // Quay lại Fragment trước
                                 })
                                 .addOnFailureListener(e -> {
                                     Toast.makeText(getContext(), "Thêm nhân viên thất bại: " + e.getMessage(), Toast.LENGTH_SHORT).show();
                                 });
 
                         // Thêm nhân viên vào Firebase với mã ngẫu nhiên (Dài và xấu)
-//                        databaseReference.push().setValue(nhanVien);
+                        // databaseReference.push().setValue(nhanVien);
                     })
                     .setNegativeButton("Không", null)
                     .show();
@@ -343,6 +345,18 @@ public class Owner_NhanVienAddFragment extends Fragment {
 
     // CUỐI: BẮT ĐIỀU KIỆN DỮ LIỆU ĐẦU VÀO
     private boolean batDieuKienDuLieuDauVao() {
+        if (loginEmailUser == null) {
+            // Hiển thị thông báo nếu cần
+            Toast.makeText(getContext(), "Email đăng nhập không hợp lệ \nThoát ứng dụng.", Toast.LENGTH_LONG).show();
+
+            // Loại bỏ Fragment khỏi stack nếu đang sử dụng `FragmentManager`
+//            requireActivity().getSupportFragmentManager().popBackStack();
+
+            // Thoát ứng dụng
+            requireActivity().finishAffinity();
+        }
+
+
         // kiểm tra có ký tự số trong tên nhân viên
         String tenNhanVien = addBinding.etTenNhanVien.getText().toString();
         for (int i = 0; i < tenNhanVien.length(); i++) {
