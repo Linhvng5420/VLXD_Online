@@ -99,12 +99,21 @@
 
     <Button
         android:id="@+id/btn_rg"
-        android:layout_marginTop="10dp"
         android:layout_width="wrap_content"
         android:layout_height="50dp"
+        android:layout_marginTop="10dp"
+        android:backgroundTint="#1FA"
         android:text="XÁC NHẬN"
         android:textSize="21dp"
+        android:textStyle="bold" />
+    <TextView
+        android:id="@+id/tv_signin"
+        android:layout_marginTop="5dp"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:text="Quay về đăng nhập"
+        android:textSize="18dp"
         android:textStyle="bold"
-        android:backgroundTint="#1FA"/>
+        android:textColor="#00F" />
 
 </LinearLayout>
