@@ -39,11 +39,13 @@
         android:gravity="center"
         android:textSize="21dp"
         android:textStyle="bold"/>
+
     <EditText
-        style="@style/item_lg"
         android:id="@+id/edt_pass_lg"
+        style="@style/item_lg"
         android:hint="Nhập Mật khẩu ....."
-        android:inputType="textPassword"/>
+        android:imeOptions="actionDone"
+        android:inputType="textPassword" />
 
     <CheckBox
         android:id="@+id/cb_dis_pass"
