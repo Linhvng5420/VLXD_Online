@@ -42,6 +42,12 @@ public class DatHangNgayFragment extends Fragment {
     public DatHangNgayFragment(String idProduct, int soLuong) {
         this.idProd = idProduct;
         this.soLuong = soLuong;
+        donHang = new DonHang();
+        donHang.setIdKhach(Customer_HomeActivity.info.getID());
+        chiTietDon = new ChiTietDon();
+        chiTietDon.setIdSanPham(idProduct);
+        chiTietDon.setIdDon(donHang.getId());
+        chiTietDon.setSoLuong(soLuong);
     }
 
     @Override
@@ -62,15 +68,65 @@ public class DatHangNgayFragment extends Fragment {
     @Override
     public void onViewCreated(@NonNull View view, @Nullable Bundle savedInstanceState) {
         super.onViewCreated(view, savedInstanceState);
+        // Su kien nhap du lieu
+        binding.edtTenNguoiNhan.addTextChangedListener(new TextWatcher() {
+            @Override
+            public void beforeTextChanged(CharSequence s, int start, int count, int after) {
+
+            }
+
+            @Override
+            public void onTextChanged(CharSequence s, int start, int before, int count) {
+                donHang.setTenKhach(binding.edtTenNguoiNhan.getText().toString());
+            }
+
+            @Override
+            public void afterTextChanged(Editable s) {
+
+            }
+        });
+        binding.edtSdtNguoiNhan.addTextChangedListener(new TextWatcher() {
+            @Override
+            public void beforeTextChanged(CharSequence s, int start, int count, int after) {
+
+            }
+
+            @Override
+            public void onTextChanged(CharSequence s, int start, int before, int count) {
+                donHang.setSdt(binding.edtSdtNguoiNhan.getText().toString());
+            }
+
+            @Override
+            public void afterTextChanged(Editable s) {
+
+            }
+        });
+        binding.edtDiaChiNhan.addTextChangedListener(new TextWatcher() {
+            @Override
+            public void beforeTextChanged(CharSequence s, int start, int count, int after) {
+
+            }
+
+            @Override
+            public void onTextChanged(CharSequence s, int start, int before, int count) {
+                donHang.setDiaChi(binding.edtDiaChiNhan.getText().toString());
+            }
+
+            @Override
+            public void afterTextChanged(Editable s) {
+
+            }
+        });
         // Su Kien Tang Giam SL
         binding.btnGiamDat.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                int so = Integer.parseInt(binding.edtSlDat.getText().toString());
-                if (so > 1) {
-                    soLuong = so - 1;
-                    binding.edtSlDat.setText((so - 1) + "");
+                if (soLuong > 1) {
+                    soLuong = soLuong - 1;
+                    chiTietDon.setSoLuong(soLuong);
+                    binding.edtSlDat.setText(soLuong + "");
                     int tong = Integer.parseInt(prod.getGia()) * soLuong;
+                    donHang.setTongTien(tong);
                     binding.tvTongDatNgay.setText(chuyenChuoi(tong));
                 }
             }
@@ -78,10 +134,11 @@ public class DatHangNgayFragment extends Fragment {
         binding.btnTangDat.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                int so = Integer.parseInt(binding.edtSlDat.getText().toString());
-                soLuong = so + 1;
-                binding.edtSlDat.setText((so + 1) + "");
+                soLuong = soLuong + 1;
+                chiTietDon.setSoLuong(soLuong);
+                binding.edtSlDat.setText(soLuong + "");
                 int tong = Integer.parseInt(prod.getGia()) * soLuong;
+                donHang.setTongTien(tong);
                 binding.tvTongDatNgay.setText(chuyenChuoi(tong));
             }
         });
@@ -93,9 +150,15 @@ public class DatHangNgayFragment extends Fragment {
 
             @Override
             public void onTextChanged(CharSequence s, int start, int before, int count) {
-                soLuong = Integer.parseInt(binding.edtSlDat.getText().toString());
-                int tong = Integer.parseInt(prod.getGia()) * soLuong;
-                binding.tvTongDatNgay.setText(chuyenChuoi(tong));
+                if (!binding.edtSlDat.getText().toString().isEmpty()) {
+                    soLuong = Integer.parseInt(binding.edtSlDat.getText().toString());
+                    chiTietDon.setSoLuong(soLuong);
+                    int tong = Integer.parseInt(prod.getGia()) * soLuong;
+                    donHang.setTongTien(tong);
+                    binding.tvTongDatNgay.setText(chuyenChuoi(tong));
+                }else{
+                    binding.edtSlDat.setText("1");
+                }
             }
 
             @Override
@@ -106,7 +169,11 @@ public class DatHangNgayFragment extends Fragment {
         binding.btnDatNgay.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                Toast.makeText(getActivity(), prod.getGia(), Toast.LENGTH_SHORT).show();
+                if (!donHang.getTenKhach().isEmpty() && !donHang.getSdt().isEmpty() && !donHang.getDiaChi().isEmpty()) {
+                    addDataToFirebase();
+                }else{
+                    Toast.makeText(getActivity(), "Hãy Nhập Đủ Thông Tin!", Toast.LENGTH_SHORT).show();
+                }
             }
         });
     }
@@ -129,6 +196,12 @@ public class DatHangNgayFragment extends Fragment {
     }
 
     private void KhoiTao() {
+        binding.edtTenNguoiNhan.setText(Customer_HomeActivity.info.getTen());
+        binding.edtSdtNguoiNhan.setText(Customer_HomeActivity.info.getSdt());
+        binding.edtDiaChiNhan.setText(Customer_HomeActivity.info.getDiaChi());
+        donHang.setTenKhach(Customer_HomeActivity.info.getTen());
+        donHang.setSdt(Customer_HomeActivity.info.getSdt());
+        donHang.setDiaChi(Customer_HomeActivity.info.getDiaChi());
         referDatHangNgay.child("products").child(idProd).addValueEventListener(new ValueEventListener() {
             @Override
             public void onDataChange(DataSnapshot dataSnapshot) {
@@ -136,6 +209,12 @@ public class DatHangNgayFragment extends Fragment {
                     Products product = dataSnapshot.getValue(Products.class);
                     if (product != null) {
                         prod = product;
+                        chiTietDon.setTen(product.getTen());
+                        chiTietDon.setAnh(product.getAnh());
+                        chiTietDon.setGia(Integer.parseInt(product.getGia()));
+                        donHang.setIdChu(product.getIdChu());
+                        donHang.setAnh(product.getAnh());
+                        donHang.setTongTien(Integer.parseInt(product.getGia()) * soLuong);
                         Glide.with(getActivity()).load(product.getAnh()).into(binding.imgDatHangNgay);
                         binding.tvNameDatHangNgay.setText(product.getTen());
                         binding.tvGiaDatHangNgay.setText(chuyenChuoi(Integer.parseInt(product.getGia())) + " đ");
@@ -154,6 +233,12 @@ public class DatHangNgayFragment extends Fragment {
                 System.out.println("The read failed: " + databaseError.getCode());
             }
         });
+    }
+
+    private void addDataToFirebase(){
+        referDatHangNgay.child("bills").child(donHang.getId()+"").setValue(donHang);
+        referDatHangNgay.child("BillDetails").child(donHang.getId()+"").child(idProd).setValue(chiTietDon);
+        Toast.makeText(getActivity(), "Hoàn Tất Đặt Hàng, Kiểm Tra Đơn Tại 'Đơn Hàng'", Toast.LENGTH_LONG).show();
     }
 
     @Override

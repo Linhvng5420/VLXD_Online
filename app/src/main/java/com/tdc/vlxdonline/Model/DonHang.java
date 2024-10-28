@@ -1,11 +1,15 @@
 package com.tdc.vlxdonline.Model;
 
+import java.time.LocalDate;
+import java.time.format.DateTimeFormatter;
+
 public class DonHang {
     private String idChu, idKhach, idTao, idGiao;
     private String anh, tenKhach, sdt, diaChi, ngayTao;
-    private int id, tongTien, trangThai, trangThaiTT, phiTraGop;
+    private int tongTien, trangThai, trangThaiTT, phiTraGop;
+    private long id;
 
-    public DonHang(String anh, int id, String idChu, String idKhach, int tongTien, int trangThai, int trangThaiTT, String idTao, String idGiao, int phiTraGop, String tenKhach, String sdt, String diaChi, String ngayTao) {
+    public DonHang(String anh, long id, String idChu, String idKhach, int tongTien, int trangThai, int trangThaiTT, String idTao, String idGiao, int phiTraGop, String tenKhach, String sdt, String diaChi, String ngayTao) {
         this.id = id;
         this.idChu = idChu;
         this.idKhach = idKhach;
@@ -23,6 +27,21 @@ public class DonHang {
     }
 
     public DonHang() {
+        id = System.currentTimeMillis();
+        this.tongTien = 0;
+        this.trangThai = 1;
+        this.trangThaiTT = 0;
+        this.idTao = " ";
+        this.idGiao = " ";
+        this.phiTraGop = 0;
+        this.tenKhach = "";
+        this.sdt = "";
+        this.diaChi = "";
+        LocalDate today = LocalDate.now();
+        DateTimeFormatter formatter = DateTimeFormatter.ofPattern("dd-MM-yyyy");
+        String formattedDate = today.format(formatter);
+        this.ngayTao = formattedDate;
+        this.anh = "";
     }
 
     public String getAnh() {
@@ -33,11 +52,11 @@ public class DonHang {
         this.anh = anh;
     }
 
-    public int getId() {
+    public long getId() {
         return id;
     }
 
-    public void setId(int id) {
+    public void setId(long id) {
         this.id = id;
     }
 

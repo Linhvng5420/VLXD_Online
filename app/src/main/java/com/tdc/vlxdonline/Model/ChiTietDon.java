@@ -3,9 +3,10 @@ package com.tdc.vlxdonline.Model;
 public class ChiTietDon {
     private String idSanPham;
     private String ten, anh;
-    private int idDon, soLuong, gia;
+    private int soLuong, gia;
+    private long idDon;
 
-    public ChiTietDon(int idDon, String idSanPham, int soLuong, int gia, String ten, String anh) {
+    public ChiTietDon(long idDon, String idSanPham, int soLuong, int gia, String ten, String anh) {
         this.idDon = idDon;
         this.idSanPham = idSanPham;
         this.soLuong = soLuong;
@@ -17,11 +18,11 @@ public class ChiTietDon {
     public ChiTietDon() {
     }
 
-    public int getIdDon() {
+    public long getIdDon() {
         return idDon;
     }
 
-    public void setIdDon(int idDon) {
+    public void setIdDon(long idDon) {
         this.idDon = idDon;
     }
 
