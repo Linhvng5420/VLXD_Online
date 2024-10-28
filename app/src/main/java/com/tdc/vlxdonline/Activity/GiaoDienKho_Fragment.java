@@ -50,6 +50,7 @@ public class GiaoDienKho_Fragment extends Fragment {
     ArrayList<Products> dsSanPham = new ArrayList<>();
     int category = -1;
 
+
     @Override
     public void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -59,75 +60,16 @@ public class GiaoDienKho_Fragment extends Fragment {
     public void onViewCreated(@NonNull View view, @Nullable Bundle savedInstanceState) {
         super.onViewCreated(view, savedInstanceState);
 
-        // Test Firebase
-        // Tạo tham chiếu đến Realtime Database
-//        DatabaseReference databaseReference = FirebaseDatabase.getInstance().getReference("products");
-//
-//        // Đọc dữ liệu từ nhánh "products"
-//        databaseReference.addValueEventListener(new ValueEventListener() {
-//            @Override
-//            public void onDataChange(DataSnapshot dataSnapshot) {
-//                // Duyệt qua từng sản phẩm trong nhánh "products"
-//                for (DataSnapshot snapshot : dataSnapshot.getChildren()) {
-//                    // Chuyển đổi dữ liệu từ Firebase thành đối tượng Products
-//                    Products product = snapshot.getValue(Products.class);
-////                    dsSanPham.add......
-//                    // In thông tin sản phẩm ra Log hoặc xử lý theo ý muốn
-//                    Log.d("l.d", "Product: " + product.toString());
-//                }
-//            }
-//
-//            @Override
-//            public void onCancelled(DatabaseError error) {
-//                // Xử lý lỗi nếu xảy ra
-//                Log.w("Firebase", "Failed to read value.", error.toException());
-//            }
-//        });
 
-
-        // Đọc dữ liệu từ Firebase
-        // Khởi tạo danh sách sản phẩm
-//        readProductsFromFirebase();
         reference = FirebaseDatabase.getInstance().getReference();
         setHienThiSanPham();
         readcategorysFromDatabase();
     }
 
-//    private void readProductsFromFirebase() {
-//        // Tham chiếu đến Realtime Database nhánh "products"
-//        DatabaseReference databaseReference = FirebaseDatabase.getInstance().getReference("products");
-//
-//        // Lắng nghe thay đổi từ Firebase Realtime Database
-//        databaseReference.addValueEventListener(new ValueEventListener() {
-//            @Override
-//            public void onDataChange(@NonNull DataSnapshot snapshot) {
-//                dsSanPham.clear(); // Xóa dữ liệu cũ (nếu có)
-//
-//                // Duyệt qua tất cả các sản phẩm
-//                for (DataSnapshot productSnapshot : snapshot.getChildren()) {
-//                    // Chuyển đổi dữ liệu Firebase thành đối tượng Products
-//                    Products product = productSnapshot.getValue(Products.class);
-//                    dsSanPham.add(product); // Thêm sản phẩm vào danh sách
-//
-//                    // In thông tin sản phẩm ra Log hoặc xử lý theo ý muốn
-//                    Log.d("l.d", "getData: Product: " + product.toString());
-//                    Log.d("l.d", "getData: List Product: " + dsSanPham.toString());
-//
-//                }
-//
-//                // Cập nhật adapter để hiển thị dữ liệu
-////                adapter.notifyDataSetChanged();
-//            }
-//
-//            @Override
-//            public void onCancelled(@NonNull DatabaseError error) {
-//                // Xử lý lỗi khi đọc dữ liệu từ Firebase
-//            }
-//        });
-//    }
-
 
     private void setHienThiSanPham() {
+
+
         reference.child("products").addValueEventListener(new ValueEventListener() {
             @Override
             public void onDataChange(DataSnapshot dataSnapshot) {
@@ -162,10 +104,11 @@ public class GiaoDienKho_Fragment extends Fragment {
                     @Override
                     public void OnItemClick(View view, int position) {
                         products = dsSanPham.get(position);
-                        ((Warehouse_HomeActivity)getActivity()).ReplaceFragment(new ChiTietSPKho_Fragment(products));
+                        ((Warehouse_HomeActivity) getActivity()).ReplaceFragment(new ChiTietSPKho_Fragment(products.getId()));
 
 //                        Toast.makeText(getActivity(), "Đã chọn sản phẩm " + products.getTen(), Toast.LENGTH_SHORT).show();
                     }
+
                     @Override
                     public void OnBtnBuyClick(View view, int position) {
 
