@@ -16,6 +16,10 @@
         android:orientation="vertical">
 
         <SearchView
+            android:layout_marginTop="10dp"
+            android:layout_marginBottom="10dp"
+            android:layout_marginLeft="10dp"
+            android:layout_marginRight="10dp"
             android:id="@+id/sv_customer_home"
             android:layout_width="match_parent"
             android:layout_height="50dp"
@@ -43,19 +47,4 @@
             android:layout_height="match_parent"
             android:layout_marginHorizontal="10dp" />
     </LinearLayout>
-
-    <!--  NAVIGATOR BOTTON  -->
-<!--    <LinearLayout-->
-<!--        android:layout_width="match_parent"-->
-<!--        android:layout_height="0dp"-->
-<!--        android:layout_weight="1"-->
-<!--        android:orientation="horizontal">-->
-
-<!--        <com.google.android.material.bottomnavigation.BottomNavigationView-->
-<!--            android:id="@+id/nav_customer"-->
-<!--            android:layout_width="match_parent"-->
-<!--            android:layout_height="wrap_content"-->
-<!--            android:layout_gravity="bottom"-->
-<!--            app:menu="@menu/customer_bottom_nav_menu" />-->
-<!--    </LinearLayout>-->
 </LinearLayout>

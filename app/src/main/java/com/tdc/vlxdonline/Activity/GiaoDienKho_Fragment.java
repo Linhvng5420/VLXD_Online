@@ -1,5 +1,7 @@
 package com.tdc.vlxdonline.Activity;
 
+import android.graphics.Color;
+import android.graphics.drawable.Drawable;
 import android.os.Bundle;
 
 import androidx.annotation.NonNull;
@@ -15,6 +17,7 @@ import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.LinearLayout;
+import android.widget.SearchView;
 import android.widget.Toast;
 
 import com.google.firebase.database.DataSnapshot;
@@ -48,7 +51,10 @@ public class GiaoDienKho_Fragment extends Fragment {
     CategoryAdapter adapterCate;
     ArrayList<Categorys> dsCategory = new ArrayList<>();
     ArrayList<Products> dsSanPham = new ArrayList<>();
-    int category = -1;
+    String category = "";
+    View preView = null;
+    ValueEventListener eventDocDanhSach;
+    private String tuKhoa = "";
 
 
     @Override
@@ -59,18 +65,37 @@ public class GiaoDienKho_Fragment extends Fragment {
     @Override
     public void onViewCreated(@NonNull View view, @Nullable Bundle savedInstanceState) {
         super.onViewCreated(view, savedInstanceState);
+        tuKhoa = "";
+        category = "";
+        preView = null;
 
 
         reference = FirebaseDatabase.getInstance().getReference();
         setHienThiSanPham();
         readcategorysFromDatabase();
+        // Thêm sự kiện tìm kiếm cho SearchView
+        binding.svCustomerHome.setOnQueryTextListener(new SearchView.OnQueryTextListener() {
+            @Override
+            public boolean onQueryTextSubmit(String query) {
+                tuKhoa = query;
+                reference.child("products").addListenerForSingleValueEvent(eventDocDanhSach);
+                return false;
+            }
+
+            @Override
+            public boolean onQueryTextChange(String newText) {
+                if (newText.isEmpty()) {
+                    tuKhoa = "";
+                    reference.child("products").addListenerForSingleValueEvent(eventDocDanhSach);
+                }
+                return false;
+            }
+        });
     }
 
 
     private void setHienThiSanPham() {
-
-
-        reference.child("products").addValueEventListener(new ValueEventListener() {
+        eventDocDanhSach = new ValueEventListener() {
             @Override
             public void onDataChange(DataSnapshot dataSnapshot) {
                 dsSanPham.clear(); // Xóa danh sách cũ trước khi cập nhật
@@ -78,6 +103,9 @@ public class GiaoDienKho_Fragment extends Fragment {
                 // Duyệt qua từng User trong DataSnapshot
                 for (DataSnapshot snapshot : dataSnapshot.getChildren()) {
                     Products product = snapshot.getValue(Products.class);
+                    if (!category.isEmpty() && !category.equals(product.getDanhMuc())) continue;
+                    if (!tuKhoa.isEmpty() && !product.getTen().contains(tuKhoa) && !product.getMoTa().contains(tuKhoa))
+                        continue;
                     dsSanPham.add(product); // Thêm User vào danh sách
                 }
 
@@ -88,17 +116,6 @@ public class GiaoDienKho_Fragment extends Fragment {
                 adapterCate = new CategoryAdapter(getActivity(), dsCategory);
                 adapter = new ProductAdapter(getActivity(), dsSanPham, View.GONE);
 
-
-                adapterCate.setOnItemCategoryClickListener(new CategoryAdapter.OnItemCategoryClickListener() {
-                    @Override
-                    public void OnItemClick(View view, int position) {
-                        // Lấy ID của danh mục
-                        category = Integer.parseInt(dsCategory.get(position).getId());
-
-                        // Hiển thị thông báo
-                        Toast.makeText(getActivity(), "Da chon san pham " + dsCategory.get(position).getTen(), Toast.LENGTH_SHORT).show();
-                    }
-                });
 
                 adapter.setOnItemProductClickListener(new ProductAdapter.OnItemProductClickListener() {
                     @Override
@@ -122,34 +139,50 @@ public class GiaoDienKho_Fragment extends Fragment {
             public void onCancelled(DatabaseError databaseError) {
                 Toast.makeText(getActivity(), "Lỗi Rồi Nè Má!", Toast.LENGTH_SHORT).show();
             }
-        });
+        };
+
+        reference.child("products").addValueEventListener(eventDocDanhSach);
     }
 
     private void readcategorysFromDatabase() {
         reference.child("categorys").addValueEventListener(new ValueEventListener() {
             @Override
             public void onDataChange(DataSnapshot dataSnapshot) {
-                dsCategory.clear(); // Xóa danh sách cũ trước khi cập nhật
+                try {
+                    dsCategory.clear(); // Xóa danh sách cũ trước khi cập nhật
 
-                // Duyệt qua từng User trong DataSnapshot
-                for (DataSnapshot snapshot : dataSnapshot.getChildren()) {
-                    Categorys category = snapshot.getValue(Categorys.class);
-                    dsCategory.add(category); // Thêm User vào danh sách
-                }
-                // Xử lý danh sách userList (ví dụ: hiển thị trong RecyclerView)
-                // Category Adapter
-                adapterCate = new CategoryAdapter(getActivity(), dsCategory);
-                adapterCate.setOnItemCategoryClickListener(new CategoryAdapter.OnItemCategoryClickListener() {
-                    @Override
-                    public void OnItemClick(View view, int position) {
-                        category = Integer.parseInt(dsCategory.get(position).getId());
-                        setHienThiSanPham();
+                    // Duyệt qua từng User trong DataSnapshot
+                    for (DataSnapshot snapshot : dataSnapshot.getChildren()) {
+                        Categorys category = snapshot.getValue(Categorys.class);
+                        dsCategory.add(category); // Thêm User vào danh sách
                     }
-                });
-                LinearLayoutManager linearLayoutManager = new LinearLayoutManager(getActivity());
-                linearLayoutManager.setOrientation(RecyclerView.HORIZONTAL);
-                binding.rcvCategory.setLayoutManager(linearLayoutManager);
-                binding.rcvCategory.setAdapter(adapterCate);
+                    // Xử lý danh sách userList (ví dụ: hiển thị trong RecyclerView)
+                    // Category Adapter
+                    adapterCate = new CategoryAdapter(getActivity(), dsCategory);
+                    adapterCate.setOnItemCategoryClickListener(new CategoryAdapter.OnItemCategoryClickListener() {
+                        @Override
+                        public void OnItemClick(View view, int position) {
+                            if (category.equals(dsCategory.get(position).getId())) {
+                                category = "";
+                                view.setBackgroundColor(Color.TRANSPARENT);
+                                preView = null;
+                            } else {
+                                category = dsCategory.get(position).getId();
+                                Drawable drawable = getActivity().getDrawable(R.drawable.bg_detail);
+                                view.setBackground(drawable);
+                                if (preView != null) preView.setBackgroundColor(Color.TRANSPARENT);
+                                preView = view;
+                            }
+                            reference.child("products").addListenerForSingleValueEvent(eventDocDanhSach);
+                        }
+                    });
+                    LinearLayoutManager linearLayoutManager = new LinearLayoutManager(getActivity());
+                    linearLayoutManager.setOrientation(RecyclerView.HORIZONTAL);
+                    binding.rcvCategory.setLayoutManager(linearLayoutManager);
+                    binding.rcvCategory.setAdapter(adapterCate);
+                } catch (Exception e) {
+
+                }
             }
 
             @Override
@@ -164,7 +197,5 @@ public class GiaoDienKho_Fragment extends Fragment {
         binding = FragmentGiaoDienKhoBinding.inflate(inflater, container, false);
         // Inflate the layout for this fragment
         return binding.getRoot();
-
-
     }
 }
