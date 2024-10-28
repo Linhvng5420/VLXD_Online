@@ -125,7 +125,7 @@ public class LoginActivity extends AppCompatActivity {
                         Intent intent = new Intent(LoginActivity.this, Owner_HomeActivity.class);
                         intent.putExtra("emailUser", idUser);
                         startActivity(intent);
-                    }
+                    } else Toast.makeText(LoginActivity.this, "Đã Đăng Nhập Thành Công \nNhưng hiện chưa hỗ trợ chức năng này", Toast.LENGTH_LONG).show();
                 } else {
                     Toast.makeText(LoginActivity.this, "Sai thông tin đăng nhập!", Toast.LENGTH_SHORT).show();
                 }

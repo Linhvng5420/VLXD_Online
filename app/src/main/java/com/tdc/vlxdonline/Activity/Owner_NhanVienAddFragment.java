@@ -1,5 +1,8 @@
 package com.tdc.vlxdonline.Activity;
 
+import android.content.ClipData;
+import android.content.ClipboardManager;
+import android.content.Context;
 import android.os.Bundle;
 import android.text.Editable;
 import android.text.TextWatcher;
@@ -26,6 +29,7 @@ import com.google.firebase.database.FirebaseDatabase;
 import com.google.firebase.database.ValueEventListener;
 import com.tdc.vlxdonline.Model.ChucVu;
 import com.tdc.vlxdonline.Model.NhanVien;
+import com.tdc.vlxdonline.Model.Users;
 import com.tdc.vlxdonline.R;
 import com.tdc.vlxdonline.databinding.FragmentOwnerNhanVienAddBinding;
 
@@ -255,6 +259,8 @@ public class Owner_NhanVienAddFragment extends Fragment {
                             binding.etCCCD.setError("CCCD đã tồn tại");
                             break;
                     }
+
+                    binding.btnThemNhanVien.setEnabled(true);
                 } else {
                     // Trường hợp giá trị là duy nhất
                     switch (field) {
@@ -357,19 +363,52 @@ public class Owner_NhanVienAddFragment extends Fragment {
                 nhanVien.setEmailnv(binding.etEmail.getText().toString());
                 nhanVien.setCccd(binding.etCCCD.getText().toString());
 
-
                 // Lưu nhân viên vào Firebase với key
-                DatabaseReference databaseReference = FirebaseDatabase.getInstance().getReference("nhanvien");
-                databaseReference.child(maNhanVien).setValue(nhanVien) //Thêm nv mới vào firebase với Key(document)=idnv, các value còn lại tự thêm.
+                DatabaseReference dbrfNhanvien = FirebaseDatabase.getInstance().getReference("nhanvien");
+                dbrfNhanvien.child(maNhanVien).setValue(nhanVien) //Thêm nv mới vào firebase với Key(document)=idnv, các value còn lại tự thêm.
                         .addOnSuccessListener(aVoid -> {
                             Toast.makeText(getContext(), "Thêm nhân viên thành công", Toast.LENGTH_SHORT).show();
-                            getParentFragmentManager().popBackStack(); // Quay lại Fragment trước
+                            //getParentFragmentManager().popBackStack(); // Quay lại Fragment trước
                         }).addOnFailureListener(e -> {
                             Toast.makeText(getContext(), "Thêm nhân viên thất bại: " + e.getMessage(), Toast.LENGTH_SHORT).show();
                         });
 
                 // Thêm nhân viên vào Firebase với mã ngẫu nhiên (Dài và xấu)
                 // databaseReference.push().setValue(nhanVien);
+
+                // Tạo tài khoản mật khẩu 6 số ngẫu nhiên cho nhân viên
+                String userNhanVien = nhanVien.getEmailnv();
+                String passwordNhanVien = String.valueOf((int) (Math.random() * 1000000)); // ép kiểu int để chỉ lấy số nguyên
+                Users usersNhanVienMoi = new Users(userNhanVien, passwordNhanVien, "nv");
+
+                DatabaseReference dbrfAccount = FirebaseDatabase.getInstance().getReference("account");
+                dbrfAccount.push().setValue(usersNhanVienMoi)
+                        .addOnSuccessListener(aVoid -> {
+                            Toast.makeText(getContext(), "Tạo tài khoản cho nhân viên thành công", Toast.LENGTH_SHORT).show();
+
+                            // Tạo hộp thoại hiển thị thông tin tài khoản và mật khẩu với nút copy
+                            AlertDialog.Builder builder = new AlertDialog.Builder(getContext());
+                            builder.setTitle("Thông tin tài khoản nhân viên")
+                                    .setMessage("User: " + userNhanVien + "\nPassword: " + passwordNhanVien)
+                                    .setPositiveButton("OK", (dialogInterface, i) -> {
+                                        getParentFragmentManager().popBackStack(); // Quay lại Fragment trước
+                                    });
+
+                            // Thêm nút Copy
+                            builder.setNeutralButton("Copy", (dialogInterface, i) -> {
+                                // Sao chép User và Password vào Clipboard
+                                ClipboardManager clipboard = (ClipboardManager) getContext().getSystemService(Context.CLIPBOARD_SERVICE);
+                                ClipData clip = ClipData.newPlainText("User & Password", "User: " + userNhanVien + "\nPassword: " + passwordNhanVien);
+                                clipboard.setPrimaryClip(clip);
+                                getParentFragmentManager().popBackStack(); // Quay lại Fragment trước
+                                Toast.makeText(getContext(), "Đã sao chép User và Password vào clipboard", Toast.LENGTH_SHORT).show();
+                            });
+
+                            // Hiển thị hộp thoại
+                            builder.show();
+                        }).addOnFailureListener(e -> {
+                            Toast.makeText(getContext(), "Thêm nhân viên thất bại: " + e.getMessage(), Toast.LENGTH_SHORT).show();
+                        });
             }).setNegativeButton("Không", null).show();
         });
     }
