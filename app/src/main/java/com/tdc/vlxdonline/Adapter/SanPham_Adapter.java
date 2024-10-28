@@ -4,7 +4,6 @@ import android.content.Context;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
-import android.widget.TextView;
 
 import androidx.annotation.NonNull;
 import androidx.recyclerview.widget.RecyclerView;
@@ -42,9 +41,9 @@ public class SanPham_Adapter extends RecyclerView.Adapter<SanPham_ViewHolder> {
 
     @Override
     public void onBindViewHolder(@NonNull SanPham_ViewHolder holder, int position) {
-        Glide.with(context).load(list.get(position).getImages()).into(holder.ivImages);
-        holder.tvTenSP.setText(list.get(position).getTenSP());
-        holder.giabanSP.setText(list.get(position).giabanSP);
+        Glide.with(context).load(list.get(position).getAnh()).into(holder.ivImages);
+        holder.tvTenSP.setText(list.get(position).getTen());
+        holder.giabanSP.setText(list.get(position).gia);
         // Thiết lập sự kiện click
         holder.itemView.setOnClickListener(new View.OnClickListener() {
             @Override

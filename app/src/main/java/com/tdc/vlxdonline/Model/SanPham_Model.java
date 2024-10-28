@@ -1,10 +1,39 @@
 package com.tdc.vlxdonline.Model;
 
-import android.text.Editable;
-
 public class SanPham_Model {
-    public String images, tenSP, giabanSP, soluong, daban;
-public String moTa,donVi,danhMuc;
+    public String anh = "check", ten, gia, tonKho, daBan = "0";
+    public String moTa, donVi, danhMuc;
+
+    public String id, idChu, soSao = "0";
+
+    public String getSoSao() {
+        return soSao;
+    }
+
+    public void setSoSao(String soSao) {
+        this.soSao = soSao;
+    }
+
+    public SanPham_Model(String idChu, String id) {
+        this.idChu = idChu;
+        this.id = id;
+    }
+
+    public String getId() {
+        return id;
+    }
+
+    public void setId(String id) {
+        this.id = id;
+    }
+
+    public String getIdChu() {
+        return idChu;
+    }
+
+    public void setIdChu(String idChu) {
+        this.idChu = idChu;
+    }
 
     public SanPham_Model(String danhMuc, String donVi, String moTa) {
         this.danhMuc = danhMuc;
@@ -39,51 +68,51 @@ public String moTa,donVi,danhMuc;
     public SanPham_Model() {
     }
 
-    public SanPham_Model(String images, String tenSP, String giabanSP, String soluong, String daban) {
-        this.images = images;
-        this.tenSP = tenSP;
-        this.giabanSP = giabanSP;
-        this.soluong = soluong;
-        this.daban = daban;
+    public SanPham_Model(String anh, String ten, String gia, String tonKho, String daBan) {
+        this.anh = anh;
+        this.ten = ten;
+        this.gia = gia;
+        this.tonKho = tonKho;
+        this.daBan = daBan;
     }
 
-    public String getImages() {
-        return images;
+    public String getAnh() {
+        return anh;
     }
 
-    public void setImages(String images) {
-        this.images = images;
+    public void setAnh(String anh) {
+        this.anh = anh;
     }
 
-    public String getTenSP() {
-        return tenSP;
+    public String getTen() {
+        return ten;
     }
 
-    public void setTenSP(String tenSP) {
-        this.tenSP = tenSP;
+    public void setTen(String ten) {
+        this.ten = ten;
     }
 
-    public String getGiabanSP() {
-        return giabanSP;
+    public String getGia() {
+        return gia;
     }
 
-    public void setGiabanSP(String giabanSP) {
-        this.giabanSP = giabanSP;
+    public void setGia(String gia) {
+        this.gia = gia;
     }
 
-    public String getSoluong() {
-        return soluong;
+    public String getTonKho() {
+        return tonKho;
     }
 
-    public void setSoluong(String soluong) {
-        this.soluong = soluong;
+    public void setTonKho(String tonKho) {
+        this.tonKho = tonKho;
     }
 
-    public String getDaban() {
-        return daban;
+    public String getDaBan() {
+        return daBan;
     }
 
-    public void setDaban(String daban) {
-        this.daban = daban;
+    public void setDaBan(String daBan) {
+        this.daBan = daBan;
     }
 }

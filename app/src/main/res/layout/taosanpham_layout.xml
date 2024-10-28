@@ -9,140 +9,130 @@
 
     <LinearLayout
         android:layout_width="match_parent"
-        android:layout_height="wrap_content"
-        android:orientation="horizontal">
-
-
-        <ImageView
-            android:id="@+id/ivImages"
-            android:layout_width="150dp"
-            android:layout_height="150dp"
-            android:layout_gravity="center"
-            android:background="@drawable/chon_anh_layout" />
+        android:layout_height="0dp"
+        android:layout_weight="9"
+        android:orientation="vertical">
 
         <LinearLayout
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:orientation="vertical">
+            android:orientation="horizontal">
 
-            <EditText
-                android:id="@+id/edtNhapTen"
+
+            <ImageView
+                android:id="@+id/ivImages"
+                android:layout_width="150dp"
+                android:layout_height="150dp"
+                android:layout_gravity="center"
+                android:background="@drawable/chon_anh_layout" />
+
+            <LinearLayout
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
-                android:hint="Nhập tên sản phẩm" />
+                android:orientation="vertical">
 
-            <EditText
-                android:id="@+id/edtNhapgiaban"
-                android:layout_width="match_parent"
-                android:layout_height="wrap_content"
-                android:hint="Nhập giá ban" />
+                <EditText
+                    android:id="@+id/edtNhapTen"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:hint="Nhập tên sản phẩm" />
 
-            <EditText
-                android:id="@+id/edtNhapsoluong"
-                android:layout_width="match_parent"
-                android:layout_height="wrap_content"
-                android:hint="Nhập so luong" />
+                <EditText
+                    android:id="@+id/edtNhapgiaban"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:hint="Nhập giá ban" />
 
-            <EditText
-                android:id="@+id/edtDaban"
-                android:layout_width="match_parent"
-                android:layout_height="wrap_content"
-                android:hint="San pham da ban" />
+                <EditText
+                    android:id="@+id/edtNhapsoluong"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:hint="Nhập so luong" />
+
+                <EditText
+                    android:id="@+id/edtDaban"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:hint="San pham da ban" />
+
+            </LinearLayout>
 
         </LinearLayout>
 
-    </LinearLayout>
-
-    <LinearLayout
-        android:layout_width="match_parent"
-        android:layout_height="wrap_content"
-        android:orientation="horizontal">
-
         <LinearLayout
             android:layout_width="match_parent"
-            android:layout_height="match_parent"
-            android:orientation="horizontal"
-            android:layout_weight="1"
-            android:layout_gravity="center"
-            android:gravity="center">
-
-            <TextView
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:layout_gravity="center"
-                android:hint="Đơn Vị"
-                android:textSize="20dp"/>
+            android:layout_height="wrap_content"
+            android:orientation="horizontal">
 
             <Spinner
-                android:layout_width="40dp"
+                android:id="@+id/spdonVi"
+                android:layout_width="150dp"
                 android:layout_height="30dp"
                 android:gravity="center" />
 
+            <Spinner
+                android:id="@+id/spdanhMuc"
+                android:layout_width="match_parent"
+                android:layout_height="30dp"
+                android:gravity="center"/>
+
         </LinearLayout>
+
+        <EditText
+            android:id="@+id/edtMoTa"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:hint="Them mo ta san pha," />
 
         <LinearLayout
             android:layout_width="match_parent"
-            android:layout_height="match_parent"
-            android:orientation="horizontal"
-            android:layout_weight="1"
-            android:layout_gravity="center"
-            android:gravity="center">
+            android:layout_height="wrap_content"
+            android:gravity="center"
+            android:padding="10dp">
 
-            <TextView
+            <Button
+                android:id="@+id/btnThem"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
-                android:layout_gravity="center"
-                android:hint="Danh Mục"
-                android:textSize="20dp" />
+                android:layout_weight="1"
+                android:text="Thêm" />
 
-            <Spinner
-                android:layout_width="40dp"
-                android:layout_height="30dp" />
+            <Button
+                android:id="@+id/btnSua"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_weight="1"
+                android:text="Sửa" />
 
+            <Button
+                android:id="@+id/btnXoa"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_weight="1"
+                android:text="Xoá" />
         </LinearLayout>
 
-    </LinearLayout>
 
-    <EditText
-        android:id="@+id/edtMoTa"
-        android:layout_width="match_parent"
-        android:layout_height="wrap_content"
-        android:hint="Them mo ta san pha," />
+        <androidx.recyclerview.widget.RecyclerView
+            android:id="@+id/recycleview"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_marginStart="10dp"
+            android:layout_marginBottom="10dp" />
+    </LinearLayout>
 
     <LinearLayout
         android:layout_width="match_parent"
-        android:layout_height="wrap_content"
-        android:gravity="center"
-        android:padding="10dp">
+        android:layout_height="0dp"
+        android:layout_weight="1"
+        android:orientation="horizontal">
 
-        <Button
-            android:id="@+id/btnThem"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:layout_weight="1"
-            android:text="Thêm" />
-
-        <Button
-            android:id="@+id/btnSua"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:layout_weight="1"
-            android:text="Sửa" />
-
-        <Button
-            android:id="@+id/btnXoa"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:layout_weight="1"
-            android:text="Xoá" />
+        <com.google.android.material.bottomnavigation.BottomNavigationView
+            android:id="@+id/nav_customer"
+            android:layout_width="match_parent"
+            android:layout_height="match_parent"
+            android:layout_gravity="bottom"
+            app:menu="@menu/customer_bottom_nav_menu" />
     </LinearLayout>
-
-
-    <androidx.recyclerview.widget.RecyclerView
-        android:id="@+id/recycleview"
-        android:layout_width="match_parent"
-        android:layout_height="match_parent"
-        android:layout_marginStart="10dp"
-        android:layout_marginBottom="10dp" />
 
 </LinearLayout>

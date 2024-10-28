@@ -5,9 +5,12 @@ import android.content.Intent;
 import android.net.Uri;
 import android.os.Bundle;
 import android.view.View;
+import android.widget.AdapterView;
+import android.widget.ArrayAdapter;
 import android.widget.Button;
 import android.widget.EditText;
 import android.widget.ImageView;
+import android.widget.Spinner;
 import android.widget.Toast;
 
 import androidx.activity.result.ActivityResult;
@@ -18,10 +21,11 @@ import androidx.annotation.NonNull;
 import androidx.appcompat.app.AppCompatActivity;
 import androidx.recyclerview.widget.GridLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
-import androidx.swiperefreshlayout.widget.SwipeRefreshLayout;
 
 import com.bumptech.glide.Glide;
-import com.tdc.vlxdonline.MainActivity;
+import com.tdc.vlxdonline.Adapter.CategoryAdapter;
+import com.tdc.vlxdonline.Model.Categorys;
+import com.tdc.vlxdonline.Model.DonVi;
 import com.tdc.vlxdonline.R;
 import com.google.android.gms.tasks.OnCompleteListener;
 import com.google.android.gms.tasks.OnSuccessListener;
@@ -53,20 +57,108 @@ public class Warehouse_ThemSanPhamActivity extends AppCompatActivity {
     SanPham_Adapter adapter;
     SanPham_Model sanPhamModel = new SanPham_Model();
     List<SanPham_Model> list_SP = new ArrayList<>();
+
+    List<String> list_DV = new ArrayList<>();
+    ArrayAdapter adapter_DV;
+
+    ArrayList<Categorys> list_DM = new ArrayList<>();
+    ArrayAdapter categoryAdapter;
+
+
     ValueEventListener listener;
     RecyclerView recyclerView;
+    Spinner spdonVi, spdanhMuc;
+    String donVi, danhMuc;
 
     FirebaseDatabase database = FirebaseDatabase.getInstance();
 
-    DatabaseReference reference = FirebaseDatabase.getInstance().getReference("SanPham");
+    DatabaseReference reference = FirebaseDatabase.getInstance().getReference();
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.taosanpham_layout);
-        setCtronl();
+        setControl();
         getDate();
+        getDonVi();
+        getDanhMuc();
         setEvent();
+    }
+
+    private void getDanhMuc() {
+        reference = FirebaseDatabase.getInstance().getReference();
+        listener = reference.child("categorys").addValueEventListener(new ValueEventListener() {
+            @Override
+            public void onDataChange(@NonNull DataSnapshot snapshot) {
+                try {
+                    list_DM.clear();
+                    for (DataSnapshot items : snapshot.getChildren()) {
+                        Categorys category = items.getValue(Categorys.class);
+                        list_DM.add(category);
+                    }
+                    danhMuc = list_DM.get(0).getId();
+                    categoryAdapter = new ArrayAdapter(Warehouse_ThemSanPhamActivity.this, android.R.layout.simple_spinner_dropdown_item, list_DM);
+                    ;
+                    spdanhMuc.setAdapter(categoryAdapter);
+                    spdanhMuc.setOnItemSelectedListener(new AdapterView.OnItemSelectedListener() {
+                        @Override
+                        public void onItemSelected(AdapterView<?> adapterView, View view, int i, long l) {
+                            danhMuc = list_DM.get(i).getId();
+                        }
+
+                        @Override
+                        public void onNothingSelected(AdapterView<?> adapterView) {
+
+                        }
+                    });
+                } catch (Exception e) {
+
+                }
+            }
+
+            @Override
+            public void onCancelled(@NonNull DatabaseError error) {
+            }
+
+        });
+    }
+
+    private void getDonVi() {
+        reference = FirebaseDatabase.getInstance().getReference();
+        listener = reference.child("DonVi").addValueEventListener(new ValueEventListener() {
+            @Override
+            public void onDataChange(@NonNull DataSnapshot snapshot) {
+                try {
+                    list_DV.clear();
+                    for (DataSnapshot items : snapshot.getChildren()) {
+                        DonVi donviModel = items.getValue(DonVi.class);
+                        list_DV.add(donviModel.getTen());
+                    }
+                    donVi = list_DV.get(0);
+                    adapter_DV = new ArrayAdapter(Warehouse_ThemSanPhamActivity.this, android.R.layout.simple_dropdown_item_1line, list_DV);
+                    spdonVi.setAdapter(adapter_DV);
+                    spdonVi.setOnItemSelectedListener(new AdapterView.OnItemSelectedListener() {
+                        @Override
+                        public void onItemSelected(AdapterView<?> adapterView, View view, int i, long l) {
+                            donVi = list_DV.get(i);
+                        }
+
+                        @Override
+                        public void onNothingSelected(AdapterView<?> adapterView) {
+
+                        }
+                    });
+                } catch (Exception e) {
+
+                }
+            }
+
+            @Override
+            public void onCancelled(@NonNull DatabaseError error) {
+            }
+
+        });
+
     }
 
     private void getDate() {
@@ -74,8 +166,8 @@ public class Warehouse_ThemSanPhamActivity extends AppCompatActivity {
         recyclerView.setLayoutManager(gridLayoutManager);
         adapter = new SanPham_Adapter(Warehouse_ThemSanPhamActivity.this, list_SP);
         recyclerView.setAdapter(adapter);
-        reference = FirebaseDatabase.getInstance().getReference("SanPham");
-        listener = reference.addValueEventListener(new ValueEventListener() {
+        reference = FirebaseDatabase.getInstance().getReference();
+        listener = reference.child("products").addValueEventListener(new ValueEventListener() {
             @Override
             public void onDataChange(@NonNull DataSnapshot snapshot) {
                 list_SP.clear();
@@ -125,6 +217,7 @@ public class Warehouse_ThemSanPhamActivity extends AppCompatActivity {
             @Override
             public void onClick(View v) {
                 uploadData();
+
 //                Intent intent = new Intent(MainActivity.this, Warehouse_HomeActivity.class);
 //                startActivity(intent);
 //                finish();
@@ -134,10 +227,10 @@ public class Warehouse_ThemSanPhamActivity extends AppCompatActivity {
             @Override
             public void onClick(View v) {
                 // Lấy tên sản phẩm từ EditText
-                String tenSP = edtNhapten.getText().toString();
-                if (!tenSP.isEmpty()) {
+                String id = sanPhamModel.getId();
+                if (!id.isEmpty()) {
                     // Gọi phương thức xóa sản phẩm
-                    deleteProduct(tenSP);
+                    deleteProduct(id);
                 } else {
                     Toast.makeText(Warehouse_ThemSanPhamActivity.this, "Vui lòng chọn sản phẩm để xóa", Toast.LENGTH_SHORT).show();
                 }
@@ -154,25 +247,51 @@ public class Warehouse_ThemSanPhamActivity extends AppCompatActivity {
             }
         });
 
-// Đảm bảo Adapter đã được khởi tạo trước khi thiết lập sự kiện click
+        // Đảm bảo Adapter đã được khởi tạo trước khi thiết lập sự kiện click
         if (adapter != null) {
             adapter.setOnItemClickListener(new SanPham_Adapter.OnItemClickListener() {
                 @Override
                 public void onItemClick(int position) {
                     // Xử lý sự kiện click vào sản phẩm
                     if (position != RecyclerView.NO_POSITION) {
-                        SanPham_Model sanPhamModel = list_SP.get(position);
+                        if (!list_SP.get(position).getId().equals(sanPhamModel.getId())) {
+                            btnSua.setEnabled(true);
+                            btnThem.setEnabled(false);
+                            sanPhamModel = list_SP.get(position);
 
-                        // Hiển thị thông tin sản phẩm lên các EditText
-                        edtNhapten.setText(sanPhamModel.getTenSP());
-                        edtNhapgiaban.setText(sanPhamModel.getGiabanSP());
-                        edtNhapsoluong.setText(sanPhamModel.getSoluong());
-                        edtDaban.setText(sanPhamModel.getDaban());
-                        edtMoTa.setText(sanPhamModel.getMoTa());
-                        // Hiển thị hình ảnh sản phẩm
-                        Glide.with(Warehouse_ThemSanPhamActivity.this)
-                                .load(sanPhamModel.getImages())
-                                .into(ivImages);
+                            // Hiển thị thông tin sản phẩm lên các EditText
+                            edtNhapten.setText(sanPhamModel.getTen());
+                            edtNhapgiaban.setText(sanPhamModel.getGia());
+                            edtNhapsoluong.setText(sanPhamModel.getTonKho());
+                            edtDaban.setText(sanPhamModel.getDaBan());
+                            edtMoTa.setText(sanPhamModel.getMoTa());
+                            spdonVi.setSelection(adapter_DV.getPosition(sanPhamModel.getDonVi()));
+                            Categorys temp = new Categorys();
+                            for (int i = 0; i < list_DM.size(); i++) {
+                                if (list_DM.get(i).getId().equals(sanPhamModel.getDanhMuc())) {
+                                    temp = list_DM.get(i);
+                                    break;
+                                }
+                            }
+                            spdanhMuc.setSelection(categoryAdapter.getPosition(temp));
+                            // Hiển thị hình ảnh sản phẩm
+                            Glide.with(Warehouse_ThemSanPhamActivity.this)
+                                    .load(sanPhamModel.getAnh())
+                                    .into(ivImages);
+                        }else {
+                            sanPhamModel = new SanPham_Model();
+                            edtNhapten.setText("");
+                            edtNhapgiaban.setText("");
+                            edtNhapsoluong.setText("");
+                            edtDaban.setText("");
+                            edtMoTa.setText("");
+                            spdanhMuc.setSelection(0);
+                            spdonVi.setSelection(0);
+                            ivImages.setImageResource(R.drawable.chon_anh_layout);
+                            btnSua.setEnabled(false);
+                            btnThem.setEnabled(true);
+                        }
+
                     }
                 }
             });
@@ -182,63 +301,52 @@ public class Warehouse_ThemSanPhamActivity extends AppCompatActivity {
     }
 
     private void saveDate() {
-        sanPhamModel.setTenSP(edtNhapten.getText().toString());
-        sanPhamModel.setGiabanSP(edtNhapgiaban.getText().toString());
-        sanPhamModel.setSoluong(edtNhapsoluong.getText().toString());
-        sanPhamModel.setDaban(edtDaban.getText().toString());
+        if (sanPhamModel.getId() == null) sanPhamModel.setId(System.currentTimeMillis() + "");
+        sanPhamModel.setTen(edtNhapten.getText().toString());
+        sanPhamModel.setGia(edtNhapgiaban.getText().toString());
+        sanPhamModel.setTonKho(edtNhapsoluong.getText().toString());
         sanPhamModel.setMoTa(edtMoTa.getText().toString());
-        sanPhamModel.setImages(imagesUrl.toString());
-        FirebaseDatabase.getInstance().getReference("SanPham").child(sanPhamModel.getTenSP()).setValue(sanPhamModel).addOnCompleteListener(new OnCompleteListener<Void>() {
-            @Override
-            public void onComplete(@NonNull Task<Void> task) {
-                Toast.makeText(Warehouse_ThemSanPhamActivity.this, "Thêm Thành Công", Toast.LENGTH_SHORT).show();
-            }
-        });
+        sanPhamModel.setAnh(uri != null ? imagesUrl.toString() : sanPhamModel.getAnh());  // Nếu bạn không cần thay đổi ảnh
+        sanPhamModel.setDonVi(donVi);
+        sanPhamModel.setDanhMuc(danhMuc);
+        sanPhamModel.setIdChu("1");
+
+        reference.child("products").child(sanPhamModel.getId()).setValue(sanPhamModel);
     }
 
     public void uploadData() {
-        StorageReference storageReference = FirebaseStorage.getInstance().getReference().child("SanPham Images")
-                .child(uri.getLastPathSegment());
-        storageReference.putFile(uri).addOnSuccessListener(new OnSuccessListener<UploadTask.TaskSnapshot>() {
-            @Override
-            public void onSuccess(UploadTask.TaskSnapshot taskSnapshot) {
-                Task<Uri> uriTask = taskSnapshot.getStorage().getDownloadUrl();
-                while (!uriTask.isComplete()) ;
-                Uri urlImage = uriTask.getResult();
-                imagesUrl = urlImage.toString();
-                saveDate();
-            }
-        });
-        // Phương thức để cập nhật dữ liệu sản phẩm
-        String tenSP = edtNhapten.getText().toString();
-        String giabanSP = edtNhapgiaban.getText().toString();
-        String soluong = edtNhapsoluong.getText().toString();
-        String daban = edtDaban.getText().toString();
-        String moTa = edtMoTa.getText().toString();
-
-        SanPham_Model updatedSanPhamModel = new SanPham_Model();
-        updatedSanPhamModel.setTenSP(tenSP);
-        updatedSanPhamModel.setGiabanSP(giabanSP);
-        updatedSanPhamModel.setSoluong(soluong);
-        updatedSanPhamModel.setDaban(daban);
-        updatedSanPhamModel.setMoTa(moTa);
-        updatedSanPhamModel.setImages(imagesUrl);  // Nếu bạn không cần thay đổi ảnh
-
+        if (uri != null) {
+            StorageReference storageReference = FirebaseStorage.getInstance().getReference().child("SanPham Images")
+                    .child(uri.getLastPathSegment());
+            storageReference.putFile(uri).addOnSuccessListener(new OnSuccessListener<UploadTask.TaskSnapshot>() {
+                @Override
+                public void onSuccess(UploadTask.TaskSnapshot taskSnapshot) {
+                    Task<Uri> uriTask = taskSnapshot.getStorage().getDownloadUrl();
+                    while (!uriTask.isComplete()) ;
+                    Uri urlImage = uriTask.getResult();
+                    imagesUrl = urlImage.toString();
+                    saveDate();
+                }
+            });
+        }else{
+            saveDate();
+        }
         // Cập nhật dữ liệu trong Firebase
-        FirebaseDatabase.getInstance().getReference("SanPham").child(tenSP).setValue(updatedSanPhamModel)
-                .addOnCompleteListener(new OnCompleteListener<Void>() {
-                    @Override
-                    public void onComplete(@NonNull Task<Void> task) {
-                        if (task.isSuccessful()) {
-                            Toast.makeText(Warehouse_ThemSanPhamActivity.this, "Cập nhật thành công", Toast.LENGTH_SHORT).show();
-                        } else {
-                            Toast.makeText(Warehouse_ThemSanPhamActivity.this, "Cập nhật không thành công", Toast.LENGTH_SHORT).show();
-                        }
-                    }
-                });
+//        FirebaseDatabase.getInstance().getReference("products").child(updatedSanPhamModel.getId()).setValue(updatedSanPhamModel)
+//                .addOnCompleteListener(new OnCompleteListener<Void>() {
+//                    @Override
+//                    public void onComplete(@NonNull Task<Void> task) {
+//                        if (task.isSuccessful()) {
+//                            Toast.makeText(Warehouse_ThemSanPhamActivity.this, "Cập nhật thành công", Toast.LENGTH_SHORT).show();
+//                        } else {
+//                            Toast.makeText(Warehouse_ThemSanPhamActivity.this, "Cập nhật không thành công", Toast.LENGTH_SHORT).show();
+//                        }
+//                    }
+//                });
     }
-    private void deleteProduct(String tenSP) {
-        DatabaseReference productRef = FirebaseDatabase.getInstance().getReference("SanPham").child(tenSP);
+
+    private void deleteProduct(String id) {
+        DatabaseReference productRef = FirebaseDatabase.getInstance().getReference("products").child(id);
         productRef.removeValue().addOnCompleteListener(new OnCompleteListener<Void>() {
             @Override
             public void onComplete(@NonNull Task<Void> task) {
@@ -257,7 +365,8 @@ public class Warehouse_ThemSanPhamActivity extends AppCompatActivity {
             }
         });
     }
-    private void setCtronl() {
+
+    private void setControl() {
         edtNhapten = findViewById(R.id.edtNhapTen);
         edtNhapgiaban = findViewById(R.id.edtNhapgiaban);
         edtNhapsoluong = findViewById(R.id.edtNhapsoluong);
@@ -268,5 +377,7 @@ public class Warehouse_ThemSanPhamActivity extends AppCompatActivity {
         btnXoa = findViewById(R.id.btnXoa);
         btnSua = findViewById(R.id.btnSua);
         recyclerView = findViewById(R.id.recycleview);
+        spdonVi = findViewById(R.id.spdonVi);
+        spdanhMuc = findViewById(R.id.spdanhMuc);
     }
 }
