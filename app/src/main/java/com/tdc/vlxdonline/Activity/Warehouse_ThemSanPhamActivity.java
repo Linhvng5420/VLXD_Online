@@ -331,18 +331,6 @@ public class Warehouse_ThemSanPhamActivity extends AppCompatActivity {
         }else{
             saveDate();
         }
-        // Cập nhật dữ liệu trong Firebase
-//        FirebaseDatabase.getInstance().getReference("products").child(updatedSanPhamModel.getId()).setValue(updatedSanPhamModel)
-//                .addOnCompleteListener(new OnCompleteListener<Void>() {
-//                    @Override
-//                    public void onComplete(@NonNull Task<Void> task) {
-//                        if (task.isSuccessful()) {
-//                            Toast.makeText(Warehouse_ThemSanPhamActivity.this, "Cập nhật thành công", Toast.LENGTH_SHORT).show();
-//                        } else {
-//                            Toast.makeText(Warehouse_ThemSanPhamActivity.this, "Cập nhật không thành công", Toast.LENGTH_SHORT).show();
-//                        }
-//                    }
-//                });
     }
 
     private void deleteProduct(String id) {
