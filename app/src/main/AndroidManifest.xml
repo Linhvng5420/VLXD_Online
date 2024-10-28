@@ -3,7 +3,8 @@
     xmlns:tools="http://schemas.android.com/tools">
 
     <uses-permission android:name="android.permission.ACCESS_NETWORK_STATE" />
-    <uses-permission android:name="android.permission.READ_EXTERNAL_STORAGE" />
+    <uses-permission android:name="android.permission.READ_EXTERNAL_STORAGE"
+        android:maxSdkVersion="32" />
 
     <application
         android:allowBackup="true"
@@ -35,6 +36,8 @@
             android:exported="false"/>
         <activity
             android:name=".Activity.Warehouse_DonViActivity"
+            android:exported="false"/>  <activity
+            android:name=".Activity.Warehouse_AnhSP_BannerActivity"
             android:exported="false"/>
         <activity
             android:name=".Activity.Warehouse_Kho_HomeActivity"
