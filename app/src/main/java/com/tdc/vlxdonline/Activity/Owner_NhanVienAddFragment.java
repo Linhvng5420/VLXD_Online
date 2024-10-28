@@ -167,8 +167,6 @@ public class Owner_NhanVienAddFragment extends Fragment {
 
             }
         });
-
-
     }
 
     // LẤY TẤT CẢ DANH SÁCH CHỨC VỤ TỪ FIREBASE THEO THỜI GIAN THỰC
@@ -271,10 +269,10 @@ public class Owner_NhanVienAddFragment extends Fragment {
         });
     }
 
-    // Phương thức kiểm tra tính duy nhất của email
-    private void checkEmailUniqueness(String email) {
+    // Phương thức kiểm tra tính duy nhất của addEmail
+    private void checkEmailUniqueness(String addEmail) {
         DatabaseReference databaseReference = FirebaseDatabase.getInstance().getReference("account");
-        databaseReference.orderByChild("email").equalTo(email)
+        databaseReference.orderByChild("mail").equalTo(addEmail)
                 .addListenerForSingleValueEvent(new ValueEventListener() {
                     @Override
                     public void onDataChange(@NonNull DataSnapshot snapshot) {
@@ -282,13 +280,13 @@ public class Owner_NhanVienAddFragment extends Fragment {
                             addBinding.etEmail.setError("Email đã tồn tại");
                         } else {
                             addBinding.btnThemNhanVien.setEnabled(true);
-                            addBinding.etEmail.setError(null); // Xóa lỗi nếu email hợp lệ
+                            addBinding.etEmail.setError(null); // Xóa lỗi nếu addEmail hợp lệ
                         }
                     }
 
                     @Override
                     public void onCancelled(@NonNull DatabaseError error) {
-                        Log.e("l.d", "Lỗi khi kiểm tra email: " + error.getMessage());
+                        Log.e("l.d", "Lỗi khi kiểm tra addEmail: " + error.getMessage());
                     }
                 });
     }
