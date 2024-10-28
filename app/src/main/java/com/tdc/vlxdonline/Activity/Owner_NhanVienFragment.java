@@ -1,7 +1,6 @@
 package com.tdc.vlxdonline.Activity;
 
 import android.app.Activity;
-import android.content.Context;
 import android.os.Bundle;
 import android.util.Log;
 import android.view.LayoutInflater;
@@ -125,7 +124,12 @@ public class Owner_NhanVienFragment extends Fragment {
                             // Điều kiện email chủ thông thường
                             nhanVienAdapter.getNhanVienList().add(nhanVien);
                             originalList.add(nhanVien); // Lưu vào danh sách gốc
-                        } else Toast.makeText( getContext(), "Bạn không có quyền truy cập \nQuản lý Nhân Viên", Toast.LENGTH_SHORT).show();
+                        } else {
+                            Toast.makeText(getContext(), "Bạn không có quyền truy cập \nQuản lý Nhân Viên", Toast.LENGTH_SHORT).show();
+
+                            // TODO: Thoát ứng dụng khi chưa đăng nhập mà vào được trang quản lý
+//                            requireActivity().finishAffinity();
+                        }
                     }
                 }
 
