@@ -39,9 +39,9 @@
             android:layout_height="wrap_content"
             android:layout_marginTop="16dp"
             android:layout_marginEnd="16dp"
+            android:backgroundTint="#327735"
             android:drawableRight="@drawable/people_add"
-            android:drawableTint="#67FF6D"
-            android:drawableTintMode="src_in"
+            android:drawableTint="@color/white"
             android:text="Nhân Viên Mới"
             android:textSize="18sp"
             app:layout_constraintEnd_toEndOf="parent"
@@ -76,32 +76,14 @@
             app:layout_constraintStart_toStartOf="parent"
             app:layout_constraintTop_toBottomOf="@+id/btnThemNhanVien">
 
-            <TextView
-                android:layout_width="0dp"
-                android:layout_height="wrap_content"
-                android:layout_weight="1"
-                android:text="Mã Số"
-                android:textColor="@color/white"
-                android:textSize="24sp"
-                android:textStyle="bold" />
 
             <TextView
-                android:layout_width="0dp"
+                android:layout_width="match_parent"
                 android:layout_height="wrap_content"
-                android:layout_weight="2"
-                android:text="Tên Nhân Viên"
-                android:textColor="@color/white"
-                android:textSize="24sp"
-                android:textStyle="bold" />
-
-            <TextView
-                android:layout_width="0dp"
-                android:layout_height="wrap_content"
-                android:layout_weight="0.5"
-                android:text="Chức Vụ"
+                android:text="Danh Sách Nhân Viên"
                 android:textAlignment="center"
                 android:textColor="@color/white"
-                android:textSize="16sp"
+                android:textSize="24sp"
                 android:textStyle="bold" />
         </LinearLayout>
 
