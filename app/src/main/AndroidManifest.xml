@@ -31,6 +31,12 @@
             android:name=".Activity.Warehouse_ThemSanPhamActivity"
             android:exported="false"/>
         <activity
+            android:name=".Activity.Warehouse_DanhMucActivity"
+            android:exported="false"/>
+        <activity
+            android:name=".Activity.Warehouse_DonViActivity"
+            android:exported="false"/>
+        <activity
             android:name=".Activity.Warehouse_Kho_HomeActivity"
             android:exported="true"
             android:windowSoftInputMode="adjustPan">

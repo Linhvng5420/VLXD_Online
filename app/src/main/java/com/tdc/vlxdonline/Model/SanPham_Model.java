@@ -1,7 +1,7 @@
 package com.tdc.vlxdonline.Model;
 
 public class SanPham_Model {
-    public String anh = "check", ten, gia, tonKho, daBan = "0";
+    public String anh , ten, gia, tonKho, daBan = "0";
     public String moTa, donVi, danhMuc;
 
     public String id, idChu, soSao = "0";

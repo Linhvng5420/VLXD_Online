@@ -1,17 +1,16 @@
 package com.tdc.vlxdonline.Activity;
 
 import android.os.Bundle;
-import android.widget.TextView;
 
 import androidx.appcompat.app.AppCompatActivity;
 
 import com.tdc.vlxdonline.R;
 
-public class Warehouse_DanhMucDonViActivity extends AppCompatActivity {
+public class Warehouse_DanhMucActivity extends AppCompatActivity {
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-        setContentView(R.layout.danhmucdonvi_layout);
+        setContentView(R.layout.danhmuc_layout);
         setCtronl();
         setEvent();
     }

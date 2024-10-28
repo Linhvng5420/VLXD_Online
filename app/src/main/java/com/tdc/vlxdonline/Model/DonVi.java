@@ -7,7 +7,7 @@ public class DonVi {
     public DonVi() {
     }
 
-    public DonVi(String ten, long id) {
+    public DonVi(String ten, long  id) {
         this.ten = ten;
         this.id = id;
     }

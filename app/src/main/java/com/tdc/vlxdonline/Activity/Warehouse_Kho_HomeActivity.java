@@ -10,7 +10,7 @@ import androidx.appcompat.app.AppCompatActivity;
 import com.tdc.vlxdonline.R;
 
 public class Warehouse_Kho_HomeActivity extends AppCompatActivity {
-    TextView tvQLSP,tvQLDVDM,tvQLBanner;
+    TextView tvQLSP,tvQLDM,tvQLDV,tvQLBanner;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -28,10 +28,17 @@ public class Warehouse_Kho_HomeActivity extends AppCompatActivity {
                 startActivity(intent);
             }
         });
-        tvQLDVDM.setOnClickListener(new View.OnClickListener() {
+        tvQLDM.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
-                Intent intent = new Intent(Warehouse_Kho_HomeActivity.this, Warehouse_DanhMucDonViActivity.class);
+                Intent intent = new Intent(Warehouse_Kho_HomeActivity.this, Warehouse_DanhMucActivity.class);
+                startActivity(intent);
+            }
+        });
+        tvQLDV.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+                Intent intent = new Intent(Warehouse_Kho_HomeActivity.this, Warehouse_DonViActivity.class);
                 startActivity(intent);
             }
         });
@@ -47,7 +54,8 @@ public class Warehouse_Kho_HomeActivity extends AppCompatActivity {
 
     private void setCtronl() {
         tvQLSP = findViewById(R.id.tvQLSP);
-        tvQLDVDM = findViewById(R.id.tvQLDVDM);
+        tvQLDM = findViewById(R.id.tvQLDM);
+        tvQLDV = findViewById(R.id.tvQLDV);
         tvQLBanner = findViewById(R.id.tvQLBanner);
     }
 }

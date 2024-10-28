@@ -57,6 +57,7 @@ public class SanPham_Adapter extends RecyclerView.Adapter<SanPham_ViewHolder> {
 
     @Override
     public int getItemCount() {
+
         return list.size();
     }
 }
