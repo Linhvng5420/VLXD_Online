@@ -41,6 +41,7 @@ public class DanhSachDonHangFragment extends Fragment {
     // Trang thai don da hoan thanh hay chua
     private int trangThaiLoc;
     private DatabaseReference referDanhSachDon;
+    private ValueEventListener eventDocData;
 
     public DanhSachDonHangFragment(int type) {
         this.trangThaiLoc = type;
@@ -56,12 +57,6 @@ public class DanhSachDonHangFragment extends Fragment {
                              Bundle savedInstanceState) {
         // Inflate the layout for this fragment
         binding = FragmentDanhSachDonHangBinding.inflate(inflater, container, false);
-        return binding.getRoot();
-    }
-
-    @Override
-    public void onViewCreated(@NonNull View view, @Nullable Bundle savedInstanceState) {
-        super.onViewCreated(view, savedInstanceState);
         // Nếu là nhân viên giao hàng thì tắt phân loại trạng thái
         if (LoginActivity.typeEmployee == 1) {
             binding.btnDaHoanThanh.setVisibility(View.GONE);
@@ -69,12 +64,18 @@ public class DanhSachDonHangFragment extends Fragment {
         }
         referDanhSachDon = FirebaseDatabase.getInstance().getReference();
         KhoiTao();
+        return binding.getRoot();
+    }
+
+    @Override
+    public void onViewCreated(@NonNull View view, @Nullable Bundle savedInstanceState) {
+        super.onViewCreated(view, savedInstanceState);
         // Event Search
         binding.svDonHang.setOnQueryTextListener(new SearchView.OnQueryTextListener() {
             @Override
             public boolean onQueryTextSubmit(String query) {
                 tuKhoa = query;
-                KhoiTao();
+                referDanhSachDon.child("bills").addListenerForSingleValueEvent(eventDocData);
                 return false;
             }
 
@@ -82,7 +83,7 @@ public class DanhSachDonHangFragment extends Fragment {
             public boolean onQueryTextChange(String newText) {
                 if (newText.isEmpty()) {
                     tuKhoa = "";
-                    KhoiTao();
+                    referDanhSachDon.child("bills").addListenerForSingleValueEvent(eventDocData);
                 }
                 return false;
             }
@@ -95,7 +96,7 @@ public class DanhSachDonHangFragment extends Fragment {
                 Drawable draw = getActivity().getDrawable(R.drawable.bg_img_detail);
                 binding.btnChuaHoanThanh.setBackground(draw);
                 trangThaiLoc = 1;
-                KhoiTao();
+                referDanhSachDon.child("bills").addListenerForSingleValueEvent(eventDocData);
             }
         });
         // Event chọn chưa hoàn thành
@@ -106,13 +107,13 @@ public class DanhSachDonHangFragment extends Fragment {
                 Drawable draw = getActivity().getDrawable(R.drawable.bg_img_detail);
                 binding.btnDaHoanThanh.setBackground(draw);
                 trangThaiLoc = 0;
-                KhoiTao();
+                referDanhSachDon.child("bills").addListenerForSingleValueEvent(eventDocData);
             }
         });
     }
 
     private void KhoiTao() {
-        referDanhSachDon.child("bills").addValueEventListener(new ValueEventListener() {
+        eventDocData = new ValueEventListener() {
             @Override
             public void onDataChange(DataSnapshot dataSnapshot) {
                 try{
@@ -127,7 +128,7 @@ public class DanhSachDonHangFragment extends Fragment {
                         if (LoginActivity.typeEmployee != 1){
                             // 0 la chua hoan thanh, continue neu don da xac nhan hoan thanh
                             if (trangThaiLoc == 0 && vc == 4 && tt == 2) continue;
-                            // 1 la chua da hoan thanh, continue neu don chua xac nhan hoan thanh
+                                // 1 la chua da hoan thanh, continue neu don chua xac nhan hoan thanh
                             else if (trangThaiLoc == 1) {
                                 if (vc < 4) continue;
                                 else if (tt < 2) continue;
@@ -142,11 +143,11 @@ public class DanhSachDonHangFragment extends Fragment {
                             if (true) continue;
                             // 0 la chua nhan don
                             if (trangThaiLoc == 0) if(vc != 1) continue;
-                            // Neu khong phai don cua nhan vien nay thi continue
+                                // Neu khong phai don cua nhan vien nay thi continue
                             else if (true) continue;
-                            // 1 la dang giao
+                                // 1 la dang giao
                             else if (trangThaiLoc == 1) if (vc != 2 && vc != 3) continue;
-                            // 2 la giao hoan tat
+                                // 2 la giao hoan tat
                             else if (trangThaiLoc == 2) if (vc < 4) continue;
                         }
                         data.add(don); // Thêm User vào danh sách
@@ -162,7 +163,7 @@ public class DanhSachDonHangFragment extends Fragment {
                             if (donHang.getPhiTraGop() > 0) {
 
                             } else {
-                                ((Customer_HomeActivity) getActivity()).ReplaceFragment(new ChiTietDonFragment(donHang));
+                                ((Customer_HomeActivity) getActivity()).ReplaceFragment(new ChiTietDonFragment(donHang.getId()));
                             }
                         }
                     });
@@ -180,12 +181,22 @@ public class DanhSachDonHangFragment extends Fragment {
             public void onCancelled(DatabaseError databaseError) {
                 Toast.makeText(getActivity(), "Lỗi Rồi Nè Má!", Toast.LENGTH_SHORT).show();
             }
-        });
+        };
+        referDanhSachDon.child("bills").addValueEventListener(eventDocData);
     }
 
     @Override
     public void onDestroyView() {
         super.onDestroyView();
         binding = null;
+
+        // Loại bỏ listener của Firebase
+        if (referDanhSachDon != null && eventDocData != null) {
+            referDanhSachDon.child("bills").removeEventListener(eventDocData);
+        }
+
+        // Nullify references to help with garbage collection
+        referDanhSachDon = null;
+        eventDocData = null;
     }
 }

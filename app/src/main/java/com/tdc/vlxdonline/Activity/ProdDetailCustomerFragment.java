@@ -22,6 +22,8 @@ import com.google.firebase.database.FirebaseDatabase;
 import com.google.firebase.database.ValueEventListener;
 import com.tdc.vlxdonline.Adapter.ImageAdapter;
 import com.tdc.vlxdonline.Adapter.ProductAdapter;
+import com.tdc.vlxdonline.Model.AnhSanPham;
+import com.tdc.vlxdonline.Model.DonHang;
 import com.tdc.vlxdonline.Model.Products;
 import com.tdc.vlxdonline.databinding.FragmentProdDetailCustomerBinding;
 
@@ -55,25 +57,13 @@ public class ProdDetailCustomerFragment extends Fragment {
                              Bundle savedInstanceState) {
         // Inflate the layout for this fragment
         binding = FragmentProdDetailCustomerBinding.inflate(inflater, container, false);
+        setUpDisplay();
         return binding.getRoot();
     }
 
     @Override
     public void onViewCreated(@NonNull View view, @Nullable Bundle savedInstanceState) {
         super.onViewCreated(view, savedInstanceState);
-        setUpDisplay();
-        // Adapter Anh Mo Ta
-        imageAdapter = new ImageAdapter(getActivity(), dataAnh);
-        imageAdapter.setOnItemImageClick(new ImageAdapter.OnItemImageClick() {
-            @Override
-            public void onItemClick(int position) {
-                Glide.with(getActivity()).load(dataAnh.get(position)).into(binding.imgDetail);
-            }
-        });
-        LinearLayoutManager linearLayoutManager = new LinearLayoutManager(getActivity());
-        linearLayoutManager.setOrientation(RecyclerView.HORIZONTAL);
-        binding.rcAnhSp.setLayoutManager(linearLayoutManager);
-        binding.rcAnhSp.setAdapter(imageAdapter);
         // Su Kien Mua Ngay
         binding.btnDatHangNgay.setOnClickListener(new View.OnClickListener() {
             @Override
@@ -150,24 +140,55 @@ public class ProdDetailCustomerFragment extends Fragment {
 
     private void setUpDisplay() {
         referDetailProd = FirebaseDatabase.getInstance().getReference();
-        readProdFromDatabase(idProd);
+        readProdFromDatabase();
         setHienThiSanPham();
-        // Reset All Data
-        dataAnh.clear();
-
-        dataAnh.add("https://th.bing.com/th?id=OIF.0yfM4yF7hYIDB6%2bmwxU4GQ&w=172&h=180&c=7&r=0&o=5&dpr=1.3&pid=1.7");
-        dataAnh.add("https://th.bing.com/th/id/OIF.lf4QHwb4DMz5wHZ84QYJmQ?w=183&h=183&c=7&r=0&o=5&dpr=1.3&pid=1.7");
-        dataAnh.add("https://th.bing.com/th/id/OIP.UWORqopZEI954B5G-Z4sbgHaHQ?w=169&h=180&c=7&r=0&o=5&dpr=1.3&pid=1.7");
-        dataAnh.add("https://th.bing.com/th/id/OIP.BO1VNjeGOUGcGRWQNUVCZQHaHa?w=1024&h=1024&rs=1&pid=ImgDetMain");
-
-        Glide.with(getActivity()).load(dataAnh.get(0)).into(binding.imgDetail);
+        setHienThiAnh();
     }
 
-    private void readProdFromDatabase(String prodId) {
-        try{
-            referDetailProd.child("products").child(prodId).addValueEventListener(new ValueEventListener() {
-                @Override
-                public void onDataChange(DataSnapshot dataSnapshot) {
+    private void setHienThiAnh() {
+        referDetailProd.child("ProdImages").addValueEventListener(new ValueEventListener() {
+            @Override
+            public void onDataChange(DataSnapshot dataSnapshot) {
+                try {
+                    dataAnh.clear(); // Xóa danh sách cũ trước khi cập nhật
+
+                    // Duyệt qua từng User trong DataSnapshot
+                    for (DataSnapshot snapshot : dataSnapshot.getChildren()) {
+                        AnhSanPham image = snapshot.getValue(AnhSanPham.class);
+                        if (image.getIdSanPham().equals(idProd)) dataAnh.add(image.getAnh());
+                    }
+
+                    Glide.with(getActivity()).load(dataAnh.get(0)).into(binding.imgDetail);
+
+                    // Adapter Anh Mo Ta
+                    imageAdapter = new ImageAdapter(getActivity(), dataAnh);
+                    imageAdapter.setOnItemImageClick(new ImageAdapter.OnItemImageClick() {
+                        @Override
+                        public void onItemClick(int position) {
+                            Glide.with(getActivity()).load(dataAnh.get(position)).into(binding.imgDetail);
+                        }
+                    });
+                    LinearLayoutManager linearLayoutManager = new LinearLayoutManager(getActivity());
+                    linearLayoutManager.setOrientation(RecyclerView.HORIZONTAL);
+                    binding.rcAnhSp.setLayoutManager(linearLayoutManager);
+                    binding.rcAnhSp.setAdapter(imageAdapter);
+                } catch (Exception e) {
+
+                }
+            }
+
+            @Override
+            public void onCancelled(DatabaseError databaseError) {
+                Toast.makeText(getActivity(), "Lỗi Rồi Nè Má!", Toast.LENGTH_SHORT).show();
+            }
+        });
+    }
+
+    private void readProdFromDatabase() {
+        referDetailProd.child("products").child(idProd).addValueEventListener(new ValueEventListener() {
+            @Override
+            public void onDataChange(DataSnapshot dataSnapshot) {
+                try {
                     Products product = dataSnapshot.getValue(Products.class);
                     if (product != null) {
                         Glide.with(getActivity()).load(product.getAnh()).into(binding.ivAnhChinh);
@@ -180,14 +201,15 @@ public class ProdDetailCustomerFragment extends Fragment {
                     } else {
                         Toast.makeText(getActivity(), "Sản Phẩm Đã Bị Xóa!", Toast.LENGTH_SHORT).show();
                     }
+                } catch (Exception e) {
                 }
+            }
 
-                @Override
-                public void onCancelled(DatabaseError databaseError) {
-                    System.out.println("The read failed: " + databaseError.getCode());
-                }
-            });
-        }catch (Exception e){}
+            @Override
+            public void onCancelled(DatabaseError databaseError) {
+                System.out.println("The read failed: " + databaseError.getCode());
+            }
+        });
     }
 
     @Override

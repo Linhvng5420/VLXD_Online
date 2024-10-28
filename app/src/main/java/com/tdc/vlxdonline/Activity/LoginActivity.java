@@ -134,6 +134,13 @@ public class LoginActivity extends AppCompatActivity {
                 }
             }
         });
-
+        // Dang Ky
+        binding.tvSignup.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                Intent intent = new Intent(LoginActivity.this, RegisterActivity.class);
+                startActivity(intent);
+            }
+        });
     }
 }

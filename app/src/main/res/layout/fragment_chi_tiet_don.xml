@@ -58,15 +58,19 @@
 
             <androidx.recyclerview.widget.RecyclerView
                 android:id="@+id/rc_chi_tiet_don"
-                android:layout_marginVertical="5dp"
+                android:layout_marginTop="5dp"
                 android:layout_width="match_parent"
-                android:layout_height="300dp"
-                android:background="@drawable/bg_img_detail"/>
+                android:layout_height="300dp"/>
 
             <LinearLayout
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
-                android:orientation="horizontal">
+                android:orientation="horizontal"
+                android:layout_marginTop="8dp"
+                android:layout_marginBottom="5dp"
+                android:background="@drawable/bg_detail"
+                android:backgroundTint="#0DF"
+                android:padding="10dp">
                 <TextView
                     android:layout_width="wrap_content"
                     android:layout_height="40dp"
