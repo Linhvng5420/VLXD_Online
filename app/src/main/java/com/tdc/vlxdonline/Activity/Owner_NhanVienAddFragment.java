@@ -172,7 +172,7 @@ public class Owner_NhanVienAddFragment extends Fragment {
                             Toast.makeText(getContext(), "Lỗi kiểm tra email", Toast.LENGTH_SHORT).show();
                         }
                     });
-                }
+                } else binding.etEmail.setError("Email không hợp lệ");
             }
 
             @Override
@@ -190,13 +190,13 @@ public class Owner_NhanVienAddFragment extends Fragment {
 
                 // Kiểm tra định dạng email mỗi khi có thay đổi
                 String cccd = s.toString();
-                if (binding.etCCCD.getText().toString().isEmpty() || binding.etCCCD.getText().toString().length() != 10) // Kiểm tra định dạng Email
+                if (binding.etCCCD.getText().toString().isEmpty() == false && binding.etCCCD.getText().toString().length() == 10) // Kiểm tra định dạng Email
                 {
                     // Bắt đầu kiểm tra tính duy nhất nếu cccd hợp lệ
                     checkInputUniqueness("nhanvien", "cccd", cccd);
                 } else {
+                    binding.etCCCD.setError("Vui lòng nhập CCCD (10 số)");
                     binding.btnThemNhanVien.setEnabled(false);
-                    binding.etCCCD.setError("Email không hợp lệ");
                 }
             }
 
@@ -248,9 +248,6 @@ public class Owner_NhanVienAddFragment extends Fragment {
                         case "email":
                             binding.etEmail.setError("Email đã tồn tại");
                             break;
-                        case "emailnv":
-                            binding.etEmail.setError("Email đã tồn tại");
-                            break;
                         case "sdt":
                             binding.etSDT.setError("Số điện thoại đã tồn tại");
                             break;
@@ -262,9 +259,6 @@ public class Owner_NhanVienAddFragment extends Fragment {
                     // Trường hợp giá trị là duy nhất
                     switch (field) {
                         case "email":
-                            binding.etEmail.setError(null);
-                            break;
-                        case "emailnv":
                             binding.etEmail.setError(null);
                             break;
                         case "sdt":
@@ -350,17 +344,19 @@ public class Owner_NhanVienAddFragment extends Fragment {
                 // Lưu giá trị Chức vụ từ Spinner
                 String tenChucVuMoi = binding.spinnerChucVu.getSelectedItem().toString();
                 Log.d("l.e", "setupSaveButton: tenChucVuMoi Spinner = " + tenChucVuMoi);
-
                 docIDChucVuBangTen(tenChucVuMoi);
-
-                nhanVien.setTennv(binding.etTenNhanVien.getText().toString());
-                nhanVien.setSdt(binding.etSDT.getText().toString());
-                nhanVien.setEmailchu(loginEmailUser);
-                nhanVien.setCccd(binding.etCCCD.getText().toString());
 
                 // Tạo mã nhân viên mới bằng timestamp
                 long timestamp = System.currentTimeMillis();
                 String maNhanVien = "nv" + timestamp;
+
+                nhanVien.setIdnv(maNhanVien);
+                nhanVien.setTennv(binding.etTenNhanVien.getText().toString());
+                nhanVien.setSdt(binding.etSDT.getText().toString());
+                nhanVien.setEmailchu(loginEmailUser);
+                nhanVien.setEmailnv(binding.etEmail.getText().toString());
+                nhanVien.setCccd(binding.etCCCD.getText().toString());
+
 
                 // Lưu nhân viên vào Firebase với key
                 DatabaseReference databaseReference = FirebaseDatabase.getInstance().getReference("nhanvien");
@@ -433,31 +429,6 @@ public class Owner_NhanVienAddFragment extends Fragment {
             binding.etTenNhanVien.setError("Vui lòng nhập đủ họ tên nhân viên");
             return false;
         }
-
-        if (binding.etSDT.getText().toString().isEmpty() || binding.etSDT.getText().toString().length() != 10) {
-            binding.etSDT.setError("Vui lòng nhập số điện thoại 10 số");
-            return false;
-        }
-
-        if (binding.etEmail.getText().toString().isEmpty() || !binding.etEmail.getText().toString().contains("@") || !binding.etEmail.getText().toString().contains(".")) {
-            binding.etEmail.setError("Vui lòng nhập đúng email");
-            return false;
-        }
-
-        if (binding.etCCCD.getText().toString().isEmpty() || binding.etCCCD.getText().toString().length() != 10) {
-            binding.etCCCD.setError("Vui lòng nhập CCCD (10 số)");
-            return false;
-        }
-
-        /*if (addBinding.etPass.getText().toString().isEmpty() || addBinding.etPass.getText().toString().length() < 6) {
-            addBinding.etPass.setError("Vui lòng nhập mật khẩu (từ 6 ký tự)");
-            return false;
-        }
-
-        if (addBinding.spinnerChucVu.getSelectedItemPosition() == 0) {
-            Toast.makeText(getContext(), "Vui lòng chọn chức vụ", Toast.LENGTH_SHORT).show();
-            return false;
-        }*/
 
         return true;
     }
