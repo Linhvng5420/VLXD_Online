@@ -196,17 +196,17 @@
                     android:layout_height="50dp"
                     android:layout_marginVertical="5dp"
                     android:backgroundTint="#0DF"
-                    android:text="Nhập Thêm Số Lượng"
+                    android:text="Thêm số lượng"
                     android:textSize="21dp"
                     android:textStyle="bold" />
 
                 <Button
-                    android:id="@+id/btn_anSanPham"
+                    android:id="@+id/btn_giamSoLuong"
                     android:layout_width="match_parent"
                     android:layout_height="50dp"
                     android:layout_marginVertical="5dp"
                     android:backgroundTint="#0DF"
-                    android:text="Ẩn Sản Phẩm Khỏi Trang Bán Hàng"
+                    android:text="Giảm số lượng"
                     android:textSize="21dp"
                     android:textStyle="bold" />
 

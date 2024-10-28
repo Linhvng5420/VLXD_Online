@@ -1,7 +1,10 @@
 package com.tdc.vlxdonline.Activity;
 
+import android.app.AlertDialog;
+import android.content.DialogInterface;
 import android.os.Bundle;
 
+import androidx.annotation.NonNull;
 import androidx.fragment.app.Fragment;
 
 import android.util.Log;
@@ -30,7 +33,6 @@ public class ChiTietSPKho_Fragment extends Fragment {
     Products product;
     String idProduct;
     FragmentChiTietSpKhoBinding binding;
-    EditText edt_nhapsoluong;
 
     public ChiTietSPKho_Fragment(String id) {
         this.idProduct = id;
@@ -78,46 +80,130 @@ public class ChiTietSPKho_Fragment extends Fragment {
         binding.btnThemSoLuong.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
-                String soLuongNhap = binding.edtNhapsoluong.getText().toString();
-
-                if (!soLuongNhap.isEmpty()) {
-                    int soLuongThem = Integer.parseInt(soLuongNhap);
-                    DatabaseReference reference = FirebaseDatabase.getInstance().getReference();
-
-                    // Lấy số lượng hiện có từ Firebase
-                    reference.child("products").child(idProduct).addListenerForSingleValueEvent(new ValueEventListener() {
-                        @Override
-                        public void onDataChange(DataSnapshot snapshot) {
-                            Products product = snapshot.getValue(Products.class);
-                            if (product != null) {
-                                int currentStock = Integer.parseInt(product.getTonKho());
-                                int updatedStock = currentStock + soLuongThem;
-
-                                // Cập nhật số lượng trong kho lên Firebase
-                                reference.child("products").child(idProduct).child("tonKho").setValue(String.valueOf(updatedStock))
-                                        .addOnSuccessListener(aVoid -> {
-                                            Toast.makeText(getActivity(), "Đã thêm số lượng vào kho!", Toast.LENGTH_SHORT).show();
-                                            binding.tvTonKhoDetail.setText("Kho: " + updatedStock);
-                                        })
-                                        .addOnFailureListener(e ->
-                                                Toast.makeText(getActivity(), "Không thể cập nhật số lượng!", Toast.LENGTH_SHORT).show());
-                            }
-                        }
-
-                        @Override
-                        public void onCancelled(DatabaseError error) {
-                            Log.d("l.d", "binding.btnThemSoLuong.setOnClickListener");
-                        }
-                    });
-                } else {
-                    Toast.makeText(getActivity(), "Vui lòng nhập số lượng!", Toast.LENGTH_SHORT).show();
-                }
+                showConfirm();
             }
-
+        });
+        binding.btnGiamSoLuong.setOnClickListener(view -> {
+            showConfirm1();
         });
 
         // Inflate the layout for this fragment
         return binding.getRoot();
+    }
+
+    private void showConfirm() {
+        AlertDialog.Builder builder = new AlertDialog.Builder(getActivity());
+        builder.setMessage("Bạn có chắc chắn thêm số lượng ?")
+                .setCancelable(false)
+                .setPositiveButton("Có", new DialogInterface.OnClickListener() {
+                    public void onClick(DialogInterface dialog, int id) {
+                        // Thoát ứng dụng
+
+                        themSoLuong(); // Đóng tất cả các activity và thoát ứng dụng
+                    }
+                })
+                .setNegativeButton("Không", new DialogInterface.OnClickListener() {
+                    public void onClick(DialogInterface dialog, int id) {
+                        // Đóng hộp thoại, không thoát ứng dụng
+                        dialog.cancel();
+                    }
+                });
+        AlertDialog alert = builder.create();
+        alert.show();
+    }
+
+    private void showConfirm1() {
+        AlertDialog.Builder builder = new AlertDialog.Builder(getActivity());
+        builder.setMessage("Bạn có chắc chắn giảm số lượng ?")
+                .setCancelable(false)
+                .setPositiveButton("Có", new DialogInterface.OnClickListener() {
+                    public void onClick(DialogInterface dialog, int id) {
+                        // Thoát ứng dụng
+                        giamSoLuong();
+                        // Đóng tất cả các activity và thoát ứng dụng
+                    }
+                })
+                .setNegativeButton("Không", new DialogInterface.OnClickListener() {
+                    public void onClick(DialogInterface dialog, int id) {
+                        // Đóng hộp thoại, không thoát ứng dụng
+                        dialog.cancel();
+                    }
+                });
+        AlertDialog alert = builder.create();
+        alert.show();
+    }
+
+    private void themSoLuong() {
+        String soLuongNhap = binding.edtNhapsoluong.getText().toString();
+
+        if (!soLuongNhap.isEmpty()) {
+            int soLuongThem = Integer.parseInt(soLuongNhap);
+            DatabaseReference reference = FirebaseDatabase.getInstance().getReference();
+
+            // Lấy số lượng hiện có từ Firebase
+            reference.child("products").child(idProduct).addListenerForSingleValueEvent(new ValueEventListener() {
+                @Override
+                public void onDataChange(DataSnapshot snapshot) {
+                    Products product = snapshot.getValue(Products.class);
+                    if (product != null) {
+                        int currentStock = Integer.parseInt(product.getTonKho());
+                        int updatedStock = currentStock + soLuongThem;
+
+                        // Cập nhật số lượng trong kho lên Firebase
+                        reference.child("products").child(idProduct).child("tonKho").setValue(String.valueOf(updatedStock))
+                                .addOnSuccessListener(aVoid -> {
+                                    Toast.makeText(getActivity(), "Đã thêm số lượng vào kho!", Toast.LENGTH_SHORT).show();
+                                    binding.tvTonKhoDetail.setText("Kho: " + updatedStock);
+                                })
+                                .addOnFailureListener(e ->
+                                        Toast.makeText(getActivity(), "Không thể cập nhật số lượng!", Toast.LENGTH_SHORT).show());
+                    }
+                }
+
+                @Override
+                public void onCancelled(DatabaseError error) {
+                    Log.d("l.d", "binding.btnThemSoLuong.setOnClickListener");
+                }
+            });
+
+        } else {
+            Toast.makeText(getActivity(), "Vui lòng nhập số lượng!", Toast.LENGTH_SHORT).show();
+        }
+    }
+
+    private void giamSoLuong() {
+        String inputQuantityStr = binding.edtNhapsoluong.getText().toString().trim();
+
+        if (inputQuantityStr.isEmpty()) {
+            Toast.makeText(getActivity(), "Vui lòng nhập số lượng cần giảm!", Toast.LENGTH_SHORT).show();
+            return;
+        }
+        int inputQuantity = Integer.parseInt(inputQuantityStr);
+
+        DatabaseReference reference = FirebaseDatabase.getInstance().getReference();
+        reference.child("products").child(idProduct).addListenerForSingleValueEvent(new ValueEventListener() {
+            @Override
+            public void onDataChange(@NonNull DataSnapshot dataSnapshot) {
+                Products product = dataSnapshot.getValue(Products.class);
+                if (product != null) {
+                    // Lấy số lượng hiện tại và giảm đi số lượng nhập vào, đảm bảo không âm
+                    int currentStock = Integer.parseInt(product.getTonKho());
+                    if (inputQuantity <= currentStock) {
+                        currentStock -= inputQuantity;
+                        reference.child("products").child(idProduct).child("tonKho").setValue(String.valueOf(currentStock));
+                        binding.tvTonKhoDetail.setText("Kho: " + currentStock);
+                        Toast.makeText(getActivity(), "Giảm thành công!", Toast.LENGTH_SHORT).show();
+                    } else {
+                        Toast.makeText(getActivity(), "Số lượng > 0", Toast.LENGTH_SHORT).show();
+                    }
+                }
+            }
+
+            @Override
+            public void onCancelled(@NonNull DatabaseError databaseError) {
+                Toast.makeText(getActivity(), "Lỗi khi cập nhật số lượng", Toast.LENGTH_SHORT).show();
+            }
+        });
     }
 
     private void docDulieu() {
