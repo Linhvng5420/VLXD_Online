@@ -87,7 +87,7 @@ public class Warehouse_ThemSanPhamActivity extends AppCompatActivity {
 
     private void getDanhMuc() {
         reference = FirebaseDatabase.getInstance().getReference();
-        listener = reference.child("categorys").addValueEventListener(new ValueEventListener() {
+        listener = reference.child("category").addValueEventListener(new ValueEventListener() {
             @Override
             public void onDataChange(@NonNull DataSnapshot snapshot) {
                 try {
@@ -111,7 +111,7 @@ public class Warehouse_ThemSanPhamActivity extends AppCompatActivity {
 
                         }
                     });
-                } catch (Exception e) {
+                } catch (Exception ignored) {
 
                 }
             }
@@ -217,10 +217,6 @@ public class Warehouse_ThemSanPhamActivity extends AppCompatActivity {
             @Override
             public void onClick(View v) {
                 uploadData();
-
-//                Intent intent = new Intent(MainActivity.this, Warehouse_HomeActivity.class);
-//                startActivity(intent);
-//                finish();
             }
         });
         btnXoa.setOnClickListener(new View.OnClickListener() {
@@ -287,7 +283,7 @@ public class Warehouse_ThemSanPhamActivity extends AppCompatActivity {
                             edtMoTa.setText("");
                             spdanhMuc.setSelection(0);
                             spdonVi.setSelection(0);
-                            ivImages.setImageResource(R.drawable.chon_anh_layout);
+                            ivImages.setImageResource(R.drawable.add_a_photo_24);
                             btnSua.setEnabled(false);
                             btnThem.setEnabled(true);
                         }
@@ -299,7 +295,6 @@ public class Warehouse_ThemSanPhamActivity extends AppCompatActivity {
             Toast.makeText(this, "Adapter chưa được khởi tạo", Toast.LENGTH_SHORT).show();
         }
     }
-
     private void saveDate() {
         if (sanPhamModel.getId() == null) sanPhamModel.setId(System.currentTimeMillis() + "");
         sanPhamModel.setTen(edtNhapten.getText().toString());

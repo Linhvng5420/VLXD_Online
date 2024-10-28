@@ -5,6 +5,7 @@
     android:layout_width="match_parent"
     android:layout_height="match_parent"
     android:orientation="vertical"
+    android:background="#D5F1F8"
     tools:context=".Activity.Warehouse_ThemSanPhamActivity">
 
     <TextView
@@ -12,34 +13,46 @@
         android:layout_height="wrap_content"
         android:gravity="center"
         android:text="Quản Lý"
-        android:textSize="50dp" />
+        android:textSize="40sp"
+        android:textStyle="bold"
+        android:paddingBottom="16dp"/>
 
     <LinearLayout
         android:layout_width="match_parent"
         android:layout_height="0dp"
         android:layout_weight="9"
         android:orientation="vertical"
-        android:gravity="center"
-        android:background="#CAE8F4">
+        android:layout_marginBottom="16dp"
+        android:layout_marginTop="8dp"
+        android:backgroundTint="#EEEEEE"
+        android:elevation="4dp"
+        android:layout_marginStart="4dp"
+        android:layout_marginEnd="4dp">
 
         <LinearLayout
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:orientation="horizontal"
-            android:background="#fff">
-
+            android:background="#fff"
+            android:padding="8dp"
+            android:layout_marginBottom="8dp"
+            android:elevation="2dp"
+            android:backgroundTint="@color/white">
 
             <ImageView
                 android:id="@+id/ivImages"
-                android:layout_width="150dp"
-                android:layout_height="150dp"
+                android:layout_width="120dp"
+                android:layout_height="120dp"
                 android:layout_gravity="center"
-                android:background="@drawable/chon_anh_layout" />
+                android:src="@drawable/add_a_photo_24"
+                android:scaleType="centerCrop"  />
 
             <LinearLayout
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
-                android:orientation="vertical">
+                android:orientation="vertical"
+                android:paddingStart="12dp"
+                android:paddingTop="8dp">
 
                 <EditText
                     android:id="@+id/edtNhapTen"
@@ -93,16 +106,15 @@
             android:id="@+id/edtMoTa"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:hint="Them mo ta san pha"
-            android:padding="10dp"
-            android:background="#fff"/>
+            android:hint="Thêm Mô Tả Sản Phẩm"
+            android:background="#fff"
+            android:paddingTop="8dp"/>
 
         <LinearLayout
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:gravity="center"
-            android:padding="10dp"
-            android:background="#fff">
+            android:padding="10dp">
 
             <Button
                 android:id="@+id/btnThem"
@@ -129,7 +141,10 @@
             android:id="@+id/recycleview"
             android:layout_width="match_parent"
             android:layout_height="match_parent"
-            android:layout_marginStart="10dp"
-            android:layout_marginBottom="10dp" />
+            android:layout_marginTop="5dp"
+            android:layout_marginBottom="5dp"
+            android:background="@color/white"
+            android:elevation="3dp"
+            android:backgroundTint="#E0E0E0"/>
     </LinearLayout>
 </LinearLayout>

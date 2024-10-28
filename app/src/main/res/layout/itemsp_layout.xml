@@ -1,46 +1,66 @@
 <?xml version="1.0" encoding="utf-8"?>
-<androidx.cardview.widget.CardView xmlns:android="http://schemas.android.com/apk/res/android"
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:app="http://schemas.android.com/apk/res-auto"
     android:layout_width="match_parent"
     android:layout_height="wrap_content"
+    android:layout_marginStart="10dp"
     android:layout_marginTop="10dp"
     android:layout_marginEnd="10dp"
     android:orientation="vertical"
-    app:cardCornerRadius="10dp">
+    android:padding="8dp"
+    app:cardCornerRadius="12dp"
+    app:cardElevation="6dp"
+    android:elevation="4dp"
+    android:background="@android:color/white">
 
     <LinearLayout
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
+        android:gravity="center"
         android:orientation="vertical">
+
+        <!-- Circular ImageView with Padding -->
         <androidx.cardview.widget.CardView
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:layout_marginHorizontal="5dp"
-            android:layout_marginTop="5dp"
-            app:cardCornerRadius="8dp"
-            android:layout_gravity="center">
+            android:layout_margin="8dp"
+            app:cardCornerRadius="80dp"
+            android:elevation="4dp"/><!-- Make circular by setting a high radius -->
+
+
         <ImageView
             android:id="@+id/ivImages"
             android:layout_width="160dp"
             android:layout_height="160dp"
-            android:background="@drawable/ic_launcher_background"
+            android:layout_gravity="center"
             android:scaleType="centerCrop"
-            android:layout_gravity="center"/>
-        </androidx.cardview.widget.CardView>
-        <TextView
-            android:id="@+id/tvItemsTen"
-            android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            android:gravity="center"
-            android:padding="2dp"
-            android:textSize="15dp" />
-        <TextView
-            android:id="@+id/tvGiaSP"
-            android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            android:gravity="center"
-            android:padding="2dp"
-            android:textColor="#F00"
-            android:textSize="15dp" />
+            android:src="@drawable/ic_launcher_background" />
+
     </LinearLayout>
-</androidx.cardview.widget.CardView>
+
+    <!-- Centered and Styled TextView -->
+    <TextView
+        android:id="@+id/tvItemsTen"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:backgroundTint="#E0E0E0"
+        android:gravity="center"
+        android:paddingTop="8dp"
+        android:paddingBottom="8dp"
+        android:text="Tên Sản Phẩm"
+        android:textSize="16sp"
+        android:textStyle="bold" />
+    <TextView
+        android:id="@+id/tvGiaSP"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:backgroundTint="#E0E0E0"
+        android:gravity="center"
+        android:paddingTop="8dp"
+        android:paddingBottom="8dp"
+        android:text="Giá Sản Phẩm"
+        android:textSize="16sp"
+        android:textStyle="bold"
+        android:textColor="#EBA3A3"/>
+
+</LinearLayout>
