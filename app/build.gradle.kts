@@ -37,9 +37,6 @@ android {
 }
 
 dependencies {
-
-//    implementation(libs.android.mail)
-//    implementation(libs.android.activation)
     implementation(libs.glide)
     implementation(libs.firebase.database)
     annotationProcessor(libs.compiler)
@@ -54,7 +51,7 @@ dependencies {
     androidTestImplementation(libs.espresso.core)
 
     // Import the Firebase
-    implementation ("com.google.firebase:firebase-database:21.0.0")
+    implementation ("com.google.firebase:firebase-database")
     implementation(platform("com.google.firebase:firebase-bom:33.4.0"))
     implementation("com.google.firebase:firebase-analytics")
 }

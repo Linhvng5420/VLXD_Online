@@ -6,7 +6,6 @@ import android.os.Bundle;
 import android.text.InputType;
 import android.view.View;
 import android.widget.AdapterView;
-import android.widget.ArrayAdapter;
 import android.widget.Toast;
 
 import androidx.appcompat.app.AppCompatActivity;
@@ -16,21 +15,13 @@ import com.google.firebase.database.DatabaseError;
 import com.google.firebase.database.DatabaseReference;
 import com.google.firebase.database.FirebaseDatabase;
 import com.google.firebase.database.ValueEventListener;
-import com.tdc.vlxdonline.Model.TypeUser;
-import com.tdc.vlxdonline.Model.Users;
 import com.tdc.vlxdonline.databinding.ActivityLoginBinding;
-
-import java.util.ArrayList;
 
 public class LoginActivity extends AppCompatActivity {
 
     ActivityLoginBinding binding;
-    public static int typeUser, typeEmployee = -1;
+    public static int typeUser;
     public static String idUser = "";
-    ArrayList<TypeUser> dataTypeUser = new ArrayList<>();
-    ArrayList<Users> dataUsers = new ArrayList<>();
-    ArrayAdapter adapter;
-    static String emailUser = null;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -61,18 +52,6 @@ public class LoginActivity extends AppCompatActivity {
                 binding.edtPassLg.setInputType(InputType.TYPE_CLASS_TEXT);
             } else {
                 binding.edtPassLg.setInputType(InputType.TYPE_CLASS_TEXT | InputType.TYPE_TEXT_VARIATION_PASSWORD);
-            }
-        });
-
-        // Lựa chọn vai trò
-        binding.spRoleLg.setOnItemSelectedListener(new AdapterView.OnItemSelectedListener() {
-            @Override
-            public void onItemSelected(AdapterView<?> parent, View view, int position, long id) {
-                typeUser = position;
-            }
-
-            @Override
-            public void onNothingSelected(AdapterView<?> parent) {
             }
         });
     }

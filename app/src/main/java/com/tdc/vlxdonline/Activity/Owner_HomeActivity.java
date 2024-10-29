@@ -26,8 +26,9 @@ public class Owner_HomeActivity extends AppCompatActivity {
         // Thiết lập nội dung hiển thị của Activity từ layout đã được binding
         setContentView(ownerHomeBinding.getRoot());
         // Thiết lập Fragment mặc định (Hiển thị màn hình mặc định ban đầu của ứng dụng)
-//        ReplaceFragment(new Owner_NhanVienFragment());
+        //ReplaceFragment(new Owner_NhanVienFragment());
 
+        // Bắt instance
         emailUser = getIntent().getStringExtra("emailUser");
         Log.d("l.e", "onCreate: emailUser = " + emailUser);
 
@@ -73,7 +74,7 @@ public class Owner_HomeActivity extends AppCompatActivity {
             } else if (itemId == R.id.nav_owner_donhang) {
                 ReplaceFragment(new Fragment());
             } else if (itemId == R.id.nav_owner_kho) {
-                ReplaceFragment(new Fragment());
+                ReplaceFragment(new AccountSettingFragment());
             }
 
             return true;
