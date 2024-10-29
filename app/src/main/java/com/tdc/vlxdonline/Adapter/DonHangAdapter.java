@@ -12,11 +12,9 @@ import androidx.recyclerview.widget.RecyclerView;
 
 
 import com.tdc.vlxdonline.Model.ChiTietNhap;
-import com.tdc.vlxdonline.Model.TaoDonHang;
 import com.tdc.vlxdonline.R;
 
 import java.util.ArrayList;
-import java.util.List;
 
 public class DonHangAdapter extends RecyclerView.Adapter<DonHangAdapter.ChiTietViewHolder> {
 
@@ -31,7 +29,7 @@ public class DonHangAdapter extends RecyclerView.Adapter<DonHangAdapter.ChiTietV
     @NonNull
     @Override
     public ChiTietViewHolder onCreateViewHolder(@NonNull ViewGroup parent, int viewType) {
-        View view = LayoutInflater.from(context).inflate(R.layout.item_hoadon_donhang, parent, false);
+        View view = LayoutInflater.from(context).inflate(R.layout.item_hoadon, parent, false);
         return new ChiTietViewHolder(view);
     }
 
