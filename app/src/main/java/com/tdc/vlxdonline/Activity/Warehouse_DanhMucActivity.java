@@ -226,6 +226,5 @@ public class Warehouse_DanhMucActivity extends AppCompatActivity {
         btnXoaDM = findViewById(R.id.btnXoaDM);
         btnSuaDM = findViewById(R.id.btnSuaDM);
         recyclerView = findViewById(R.id.recycleviewDM);
-
     }
 }

@@ -14,7 +14,6 @@ import com.tdc.vlxdonline.Model.Categorys;
 import com.tdc.vlxdonline.Model.DonVi;
 import com.tdc.vlxdonline.Model.SanPham_Model;
 import com.tdc.vlxdonline.R;
-import com.tdc.vlxdonline.databinding.ItemPhanLoaiBinding;
 
 import java.util.ArrayList;
 import java.util.List;

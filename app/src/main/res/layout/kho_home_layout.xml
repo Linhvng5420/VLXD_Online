@@ -5,7 +5,7 @@
     android:layout_width="match_parent"
     android:layout_height="match_parent"
     android:orientation="vertical"
-    android:padding="16dp"
+    android:padding="15dp"
     android:background="#F5F5F5">
 
     <TextView
@@ -14,7 +14,8 @@
         android:gravity="center"
         android:text="Kho"
         android:textSize="40dp"
-        android:paddingBottom="20dp" />
+        android:paddingBottom="20dp"
+        app:cardCornerRadius="10dp"/>
 
     <TextView
         android:id="@+id/tvQLSP"
@@ -59,10 +60,24 @@
         android:background="@android:color/white"/>
 
     <TextView
+        android:id="@+id/tvQLAnhSP"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:text="Quản Lý Ảnh Sản Phẩm"
+        android:textColor="#000"
+        android:textSize="24sp"
+        android:padding="16dp"
+        android:layout_marginBottom="8dp"
+        app:cardCornerRadius="12dp"
+        app:cardElevation="6dp"
+        android:elevation="4dp"
+        android:background="@android:color/white"/>
+
+    <TextView
         android:id="@+id/tvQLBanner"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:text="Quản Lý Ảnh Sản Phẩm-Banner"
+        android:text="Quản Lý Banner"
         android:textColor="#000"
         android:textSize="24sp"
         android:padding="16dp"

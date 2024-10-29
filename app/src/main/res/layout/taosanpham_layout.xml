@@ -15,7 +15,8 @@
         android:text="Quản Lý"
         android:textSize="40sp"
         android:textStyle="bold"
-        android:paddingBottom="16dp"/>
+        android:paddingBottom="16dp"
+        android:elevation="4dp"/>
 
     <LinearLayout
         android:layout_width="match_parent"
@@ -137,6 +138,7 @@
                 android:layout_weight="1"
                 android:text="Xoá" />
         </LinearLayout>
+
         <androidx.recyclerview.widget.RecyclerView
             android:id="@+id/recycleview"
             android:layout_width="match_parent"

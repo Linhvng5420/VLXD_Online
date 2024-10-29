@@ -20,13 +20,7 @@
             android:name=".Activity.Warehouse_HomeActivityBeta"
             android:exported="false" />
         <activity
-            android:name=".Activity.Shipper_HomeActivity"
-            android:exported="false" />
-        <activity
             android:name=".Activity.Owner_HomeActivity"
-            android:exported="false" />
-        <activity
-            android:name=".Activity.Customer_HomeActivity"
             android:exported="false" />
         <activity
             android:name=".Activity.Warehouse_ThemSanPhamActivity"
@@ -36,8 +30,12 @@
             android:exported="false"/>
         <activity
             android:name=".Activity.Warehouse_DonViActivity"
-            android:exported="false"/>  <activity
-            android:name=".Activity.Warehouse_AnhSP_BannerActivity"
+            android:exported="false"/>
+        <activity
+            android:name=".Activity.Warehouse_AnhSPActivity"
+            android:exported="false"/>
+        <activity
+            android:name=".Activity.Warehouse_BannerActivity"
             android:exported="false"/>
         <activity
             android:name=".Activity.Warehouse_Kho_HomeActivity"
