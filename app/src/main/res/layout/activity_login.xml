@@ -1,4 +1,3 @@
-<?xml version="1.0" encoding="utf-8"?>
 <LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:app="http://schemas.android.com/apk/res-auto"
     xmlns:tools="http://schemas.android.com/tools"
@@ -17,33 +16,16 @@
         android:textSize="50dp"
         android:textStyle="bold"/>
 
-    <TextView
-        android:layout_marginTop="34dp"
+    <FrameLayout
+        android:id="@+id/container_email"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:layout_marginBottom="10dp"
-        android:text="Email"
-        android:gravity="center"
-        android:textSize="21dp"
-        android:textStyle="bold"/>
-    <EditText
-        style="@style/item_lg"
-        android:id="@+id/edt_email_lg"
-        android:hint="Nhập Email ....."/>
+        android:layout_marginTop="34dp"/>
 
-    <TextView
+    <FrameLayout
+        android:id="@+id/container_password"
         android:layout_width="match_parent"
-        android:layout_height="wrap_content"
-        android:layout_marginVertical="10dp"
-        android:text="Mật Khẩu"
-        android:gravity="center"
-        android:textSize="21dp"
-        android:textStyle="bold"/>
-    <EditText
-        style="@style/item_lg"
-        android:id="@+id/edt_pass_lg"
-        android:hint="Nhập Mật khẩu ....."
-        android:inputType="textPassword"/>
+        android:layout_height="wrap_content"/>
 
     <CheckBox
         android:id="@+id/cb_dis_pass"
@@ -71,7 +53,5 @@
         android:text="Đăng Ký Tài Khoản Ngay"
         android:textSize="18dp"
         android:textStyle="bold"
-        android:textColor="#00F"
-        />
-    
+        android:textColor="#00F"/>
 </LinearLayout>

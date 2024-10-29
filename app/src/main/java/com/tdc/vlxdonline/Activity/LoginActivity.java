@@ -7,6 +7,7 @@ import android.text.InputType;
 import android.view.View;
 import android.widget.AdapterView;
 import android.widget.ArrayAdapter;
+import android.widget.EditText;
 import android.widget.Toast;
 
 import androidx.appcompat.app.AppCompatActivity;
@@ -21,6 +22,7 @@ import com.tdc.vlxdonline.Model.DonVi;
 import com.tdc.vlxdonline.Model.SendMail;
 import com.tdc.vlxdonline.Model.TypeUser;
 import com.tdc.vlxdonline.Model.Users;
+import com.tdc.vlxdonline.R;
 import com.tdc.vlxdonline.databinding.ActivityLoginBinding;
 
 import java.lang.reflect.Type;
@@ -31,6 +33,8 @@ public class LoginActivity extends AppCompatActivity {
     ActivityLoginBinding binding;
     public static int typeUser, typeEmployee = -1;
     String idUser = "";
+    private InputFragment emailFragment;
+    private InputFragment passwordFragment;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -38,6 +42,7 @@ public class LoginActivity extends AppCompatActivity {
         binding = ActivityLoginBinding.inflate(getLayoutInflater());
         setContentView(binding.getRoot());
         binding.tvSignup.setPaintFlags(binding.tvSignup.getPaintFlags() | Paint.UNDERLINE_TEXT_FLAG);
+        capNhatFragmentInput();
         setEvents();
     }
 
@@ -46,8 +51,10 @@ public class LoginActivity extends AppCompatActivity {
         binding.btnLg.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                String email = binding.edtEmailLg.getText().toString();
-                String pass = binding.edtPassLg.getText().toString();
+                EditText editTextEmail = emailFragment.getEditText();
+                EditText editTextPassword = passwordFragment.getEditText();
+                String email = editTextEmail.getText().toString();
+                String pass = editTextPassword.getText().toString();
 
                 // Kiểm tra rỗng
                 if (email.isEmpty() || pass.isEmpty()) {
@@ -127,10 +134,8 @@ public class LoginActivity extends AppCompatActivity {
         binding.cbDisPass.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                if (binding.cbDisPass.isChecked()) {
-                    binding.edtPassLg.setInputType(InputType.TYPE_CLASS_TEXT);
-                } else {
-                    binding.edtPassLg.setInputType(InputType.TYPE_CLASS_TEXT | InputType.TYPE_TEXT_VARIATION_PASSWORD);
+                if (passwordFragment != null) {
+                    passwordFragment.showPassword(binding.cbDisPass.isChecked());
                 }
             }
         });
@@ -143,6 +148,19 @@ public class LoginActivity extends AppCompatActivity {
                 startActivity(intent);
             }
         });
+    }
 
+    private void capNhatFragmentInput() {
+        // Gắn InputFragment cho phần email
+        this.emailFragment = InputFragment.newInstance("Email", "Nhập Email .....", false);
+        getSupportFragmentManager().beginTransaction()
+                .replace(R.id.container_email, this.emailFragment)
+                .commit();
+
+        // Gắn InputFragment cho phần mật khẩu
+        this.passwordFragment = InputFragment.newInstance("Mật Khẩu", "Nhập Mật khẩu...", true);
+        getSupportFragmentManager().beginTransaction()
+                .replace(R.id.container_password, this.passwordFragment)
+                .commit();
     }
 }
