@@ -84,7 +84,8 @@
                     android:layout_height="wrap_content"
                     android:padding="12dp"
                     android:text="Chọn Ảnh Sản Phẩm"
-                    android:gravity="center"/>
+                    android:gravity="center"
+                    android:textSize="15dp"/>
 
                 <LinearLayout
                     android:layout_width="match_parent"
