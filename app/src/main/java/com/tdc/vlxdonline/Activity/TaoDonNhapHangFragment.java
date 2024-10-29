@@ -49,8 +49,11 @@ public class TaoDonNhapHangFragment extends Fragment {
     ArrayList<ChiTietNhap> dsChiTiet = new ArrayList<>();
     Products products = new Products();
     DatabaseReference reference;
-    Button btnXacNhan;
-    private Spinner spinnerOptions;
+    ValueEventListener eventDocDanhSach;
+    private String tuKhoa = "";
+    String category = "";
+    View preView = null;
+
     @Override
     public void onCreate(Bundle savedInstanceState) {
 
@@ -61,12 +64,33 @@ public class TaoDonNhapHangFragment extends Fragment {
     @Override
     public void onViewCreated(@NonNull View view, @Nullable Bundle savedInstanceState) {
         super.onViewCreated(view, savedInstanceState);
+        tuKhoa = "";
+        category = "";
+        preView = null;
         reference = FirebaseDatabase.getInstance().getReference();
         setHienThiSanPham();
 
         DonHangAdapter donHangAdapter = new DonHangAdapter(getActivity(), dsChiTiet);
         binding.rcvChitiet.setLayoutManager(new LinearLayoutManager(getActivity()));
         binding.rcvChitiet.setAdapter(donHangAdapter);
+        // Thêm sự kiện tìm kiếm cho SearchView
+        binding.svDonhang.setOnQueryTextListener(new SearchView.OnQueryTextListener() {
+            @Override
+            public boolean onQueryTextSubmit(String query) {
+                tuKhoa = query;
+                reference.child("products").addListenerForSingleValueEvent(eventDocDanhSach);
+                return false;
+            }
+
+            @Override
+            public boolean onQueryTextChange(String newText) {
+                if (newText.isEmpty()) {
+                    tuKhoa = "";
+                    reference.child("products").addListenerForSingleValueEvent(eventDocDanhSach);
+                }
+                return false;
+            }
+        });
 
         setEvent();
 //        btnXacNhan = binding.btnXacNhan; // Ensure binding is initialized
@@ -99,30 +123,27 @@ public class TaoDonNhapHangFragment extends Fragment {
 
 
     private void setHienThiSanPham() {
-
-        reference.child("products").addValueEventListener(new ValueEventListener() {
+        eventDocDanhSach = new ValueEventListener() {
             @Override
             public void onDataChange(DataSnapshot dataSnapshot) {
                 dsSanPham.clear(); // Xóa danh sách cũ trước khi cập nhật
-
-                // Duyệt qua từng User trong DataSnapshot
                 for (DataSnapshot snapshot : dataSnapshot.getChildren()) {
                     Products product = snapshot.getValue(Products.class);
+                    if (!category.isEmpty() && !category.equals(product.getDanhMuc())) continue;
+                    if (!tuKhoa.isEmpty() && !product.getTen().contains(tuKhoa) && !product.getMoTa().contains(tuKhoa))
+                        continue;
                     dsSanPham.add(product); // Thêm User vào danh sách
                 }
 
-//                SapXepDanhSach();
-
-                // Xử lý danh sách userList (ví dụ: hiển thị trong RecyclerView)
-                // Event Click Product
-
                 adapter = new ProductAdapter(getActivity(), dsSanPham, View.GONE);
+
 
                 adapter.setOnItemProductClickListener(new ProductAdapter.OnItemProductClickListener() {
                     @Override
                     public void OnItemClick(View view, int position) {
                         products = dsSanPham.get(position);
-//                        ((Warehouse_HomeActivity)getActivity()).ReplaceFragment(new ChiTietSPKho_Fragment(products));
+
+                        ((Warehouse_HomeActivity) getActivity()).ReplaceFragment(new ChiTietSPKho_Fragment(products.getId()));
 
 //                        Toast.makeText(getActivity(), "Đã chọn sản phẩm " + products.getTen(), Toast.LENGTH_SHORT).show();
                     }
@@ -134,15 +155,17 @@ public class TaoDonNhapHangFragment extends Fragment {
                 });
                 binding.rcvSanpham.setLayoutManager(new GridLayoutManager(getActivity(), 2));
                 binding.rcvSanpham.setAdapter(adapter);
-
             }
 
             @Override
             public void onCancelled(DatabaseError databaseError) {
                 Toast.makeText(getActivity(), "Lỗi Rồi Nè Má!", Toast.LENGTH_SHORT).show();
             }
-        });
+        };
+
+        reference.child("products").addValueEventListener(eventDocDanhSach);
     }
+
 
     //    private void setHienThiHoaDon(){
 //        reference.child("products").addValueEventListener(new ValueEventListener() {
