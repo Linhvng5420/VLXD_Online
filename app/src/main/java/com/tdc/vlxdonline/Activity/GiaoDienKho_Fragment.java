@@ -159,6 +159,7 @@ public class GiaoDienKho_Fragment extends Fragment {
                     // Xử lý danh sách userList (ví dụ: hiển thị trong RecyclerView)
                     // Category Adapter
                     adapterCate = new CategoryAdapter(getActivity(), dsCategory);
+
                     adapterCate.setOnItemCategoryClickListener(new CategoryAdapter.OnItemCategoryClickListener() {
                         @Override
                         public void OnItemClick(View view, int position) {
