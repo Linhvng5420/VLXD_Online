@@ -52,9 +52,11 @@ public class CustomerHomeFragment extends Fragment {
     AdapterCenterDrop adapterSX;
     // Item khac
     private String category = "";
+    private String tuKhoa = "";
     DatabaseReference mDatabase;
     private int typeSort = 0;
     private View preView = null;
+    ValueEventListener eventDocDanhSach;
 
     @Override
     public void onCreate(Bundle savedInstanceState) {
@@ -65,6 +67,8 @@ public class CustomerHomeFragment extends Fragment {
     public View onCreateView(LayoutInflater inflater, ViewGroup container,
                              Bundle savedInstanceState) {
         binding = FragmentCustomerHomeBinding.inflate(inflater, container, false);
+        mDatabase = FirebaseDatabase.getInstance().getReference();
+        KhoiTao();
         // Inflate the layout for this fragment
         return binding.getRoot();
     }
@@ -72,16 +76,21 @@ public class CustomerHomeFragment extends Fragment {
     @Override
     public void onViewCreated(@NonNull View view, @Nullable Bundle savedInstanceState) {
         super.onViewCreated(view, savedInstanceState);
-        KhoiTao();
         // Su kien search
         binding.svCustomerHome.setOnQueryTextListener(new SearchView.OnQueryTextListener() {
             @Override
             public boolean onQueryTextSubmit(String query) {
+                tuKhoa = query;
+                mDatabase.child("products").addListenerForSingleValueEvent(eventDocDanhSach);
                 return false;
             }
 
             @Override
             public boolean onQueryTextChange(String newText) {
+                if (newText.isEmpty()) {
+                    tuKhoa = "";
+                    mDatabase.child("products").addListenerForSingleValueEvent(eventDocDanhSach);
+                }
                 return false;
             }
         });
@@ -89,7 +98,7 @@ public class CustomerHomeFragment extends Fragment {
         binding.spLoc.setOnItemSelectedListener(new AdapterView.OnItemSelectedListener() {
             @Override
             public void onItemSelected(AdapterView<?> parent, View view, int position, long id) {
-                setHienThiSanPham();
+                mDatabase.child("products").addListenerForSingleValueEvent(eventDocDanhSach);
             }
 
             @Override
@@ -102,7 +111,7 @@ public class CustomerHomeFragment extends Fragment {
             @Override
             public void onItemSelected(AdapterView<?> parent, View view, int position, long id) {
                 typeSort = position;
-                setHienThiSanPham();
+                mDatabase.child("products").addListenerForSingleValueEvent(eventDocDanhSach);
             }
 
             @Override
@@ -118,7 +127,6 @@ public class CustomerHomeFragment extends Fragment {
         // Reset All Data
         dataLoc.clear();
         dataSapXep.clear();
-        mDatabase = FirebaseDatabase.getInstance().getReference();
 
         dataLoc.add("Lọc Theo");
         dataLoc.add("Số sao từ 1 - 3");
@@ -136,13 +144,7 @@ public class CustomerHomeFragment extends Fragment {
         adapterSX = new AdapterCenterDrop(getActivity(), R.layout.item_center_drop, dataSapXep);
         binding.spXapSep.setAdapter(adapterSX);
 
-        readcategorysFromDatabase();
-
-        setHienThiSanPham();
-    }
-
-    private void setHienThiSanPham() {
-        mDatabase.child("products").addValueEventListener(new ValueEventListener() {
+        eventDocDanhSach = new ValueEventListener() {
             @Override
             public void onDataChange(DataSnapshot dataSnapshot) {
                 try{
@@ -152,6 +154,7 @@ public class CustomerHomeFragment extends Fragment {
                     for (DataSnapshot snapshot : dataSnapshot.getChildren()) {
                         Products product = snapshot.getValue(Products.class);
                         if (!category.isEmpty() && !category.equals(product.getDanhMuc())) continue;
+                        if (!tuKhoa.isEmpty() && !product.getTen().contains(tuKhoa) && !product.getMoTa().contains(tuKhoa)) continue;
                         if (binding.spLoc.getSelectedItemPosition() == 1 && Double.parseDouble(product.getSoSao()) > 3) continue;
                         if (binding.spLoc.getSelectedItemPosition() == 2 && Double.parseDouble(product.getSoSao()) < 4) continue;
                         dataProds.add(product); // Thêm User vào danh sách
@@ -185,7 +188,14 @@ public class CustomerHomeFragment extends Fragment {
             public void onCancelled(DatabaseError databaseError) {
                 Toast.makeText(getActivity(), "Lỗi Rồi Nè Má!", Toast.LENGTH_SHORT).show();
             }
-        });
+        };
+
+        readcategorysFromDatabase();
+        category = "";
+        tuKhoa = "";
+        typeSort = 0;
+        binding.spLoc.setSelection(0);
+        mDatabase.child("products").addValueEventListener(eventDocDanhSach);
     }
 
     private void readcategorysFromDatabase() {
@@ -214,12 +224,11 @@ public class CustomerHomeFragment extends Fragment {
                             else {
                                 category = dataCategorys.get(position).getId();
                                 Drawable drawable = getActivity().getDrawable(R.drawable.bg_detail);
-                                drawable.setTint(Color.rgb(0, 255, 255));
                                 view.setBackground(drawable);
                                 if (preView != null) preView.setBackgroundColor(Color.TRANSPARENT);
                                 preView = view;
                             }
-                            setHienThiSanPham();
+                            mDatabase.child("products").addListenerForSingleValueEvent(eventDocDanhSach);
                         }
                     });
                     LinearLayoutManager linearLayoutManager = new LinearLayoutManager(getActivity());
@@ -264,5 +273,14 @@ public class CustomerHomeFragment extends Fragment {
     public void onDestroyView() {
         super.onDestroyView();
         binding = null;
+
+        // Loại bỏ listener của Firebase
+        if (mDatabase != null && eventDocDanhSach != null) {
+            mDatabase.child("products").removeEventListener(eventDocDanhSach);
+        }
+
+        // Nullify references to help with garbage collection
+        mDatabase = null;
+        eventDocDanhSach = null;
     }
 }

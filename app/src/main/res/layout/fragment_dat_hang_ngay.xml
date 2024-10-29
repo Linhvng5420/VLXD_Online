@@ -60,7 +60,7 @@
                     android:background="@drawable/bg_img_item"
                     android:src="@drawable/call" />
 
-                <TextView
+                <EditText
                     android:id="@+id/edt_sdt_nguoi_nhan"
                     android:layout_width="match_parent"
                     android:layout_height="45dp"
@@ -79,7 +79,7 @@
                 android:textSize="18dp"
                 android:textStyle="bold"
                 android:text="Địa Chỉ Người Nhận Hàng:"/>
-            <TextView
+            <EditText
                 android:id="@+id/edt_dia_chi_nhan"
                 android:layout_width="match_parent"
                 android:layout_height="45dp"

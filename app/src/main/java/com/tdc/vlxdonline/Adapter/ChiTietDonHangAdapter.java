@@ -40,10 +40,10 @@ public class ChiTietDonHangAdapter extends RecyclerView.Adapter<ChiTietDonHangAd
 
         Glide.with(context).load(chiTiet.getAnh()).into(holder.binding.imgDetailDon);
         holder.binding.tvNameDetailDon.setText(chiTiet.getTen());
-        holder.binding.tvGiaDetailDon.setText(String.format("%d đ", chiTiet.getGia()));
+        holder.binding.tvGiaDetailDon.setText(getChuoiTong(chiTiet.getGia()) + " đ");
         holder.binding.tvSlDetailDon.setText(String.format("Số Lượng: %d", chiTiet.getSoLuong()));
         int tong = chiTiet.getSoLuong() * chiTiet.getGia();
-        holder.binding.tvTongDetailDon.setText(String.format("Tổng: %d", tong));
+        holder.binding.tvTongDetailDon.setText("Thành Tiền: " + getChuoiTong(tong) + " đ");
     }
 
     @Override
@@ -72,5 +72,21 @@ public class ChiTietDonHangAdapter extends RecyclerView.Adapter<ChiTietDonHangAd
 
     public interface OnChiTietDonClick{
         void onItemClick(int position);
+    }
+
+    private StringBuilder getChuoiTong(int soTien) {
+        StringBuilder chuoi = new StringBuilder(soTien + "");
+        if (chuoi.length() > 3) {
+            int dem = 0;
+            int doDai = chuoi.length() - 1;
+            for (int i = doDai; i > 0; i--) {
+                dem = dem + 1;
+                if (dem == 3) {
+                    chuoi.insert(i, '.');
+                    dem = 0;
+                }
+            }
+        }
+        return chuoi;
     }
 }
