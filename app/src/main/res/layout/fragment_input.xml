@@ -17,5 +17,6 @@
         android:id="@+id/edt_input"
         style="@style/item_lg"
         android:hint="Nhập giá trị ....."
-        android:layout_marginBottom="10dp"/>
+        android:layout_marginBottom="10dp"
+        android:fontFamily="sans-serif"/>
 </LinearLayout>

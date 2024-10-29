@@ -1,78 +1,84 @@
 <?xml version="1.0" encoding="utf-8"?>
-<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+<ScrollView xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:app="http://schemas.android.com/apk/res-auto"
     xmlns:tools="http://schemas.android.com/tools"
-    android:id="@+id/main"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
-    android:gravity="center"
-    android:orientation="vertical"
     tools:context=".Activity.RegisterActivity">
 
-    <TextView
+    <LinearLayout
+        android:id="@+id/main"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:gravity="center"
-        android:text="VLXD Online"
-        android:textSize="50dp"
-        android:textStyle="bold"/>
+        android:orientation="vertical">
 
-    <FrameLayout
-        android:id="@+id/fragment_ten"
-        android:layout_width="match_parent"
-        android:layout_height="wrap_content"
-        android:layout_marginTop="20dp" />
+        <TextView
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:gravity="center"
+            android:text="VLXD Online"
+            android:textSize="50dp"
+            android:textStyle="bold"/>
 
-    <FrameLayout
-        android:id="@+id/fragment_sdt"
-        android:layout_marginTop="10dp"
-        android:layout_width="match_parent"
-        android:layout_height="wrap_content" />
+        <FrameLayout
+            android:id="@+id/fragment_ten"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_marginTop="20dp" />
 
-    <FrameLayout
-        android:id="@+id/fragment_email"
-        android:layout_marginTop="10dp"
-        android:layout_width="match_parent"
-        android:layout_height="wrap_content" />
+        <FrameLayout
+            android:id="@+id/fragment_sdt"
+            android:layout_marginTop="10dp"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content" />
 
-    <FrameLayout
-        android:id="@+id/fragment_pass"
-        android:layout_marginTop="10dp"
-        android:layout_width="match_parent"
-        android:layout_height="wrap_content" />
+        <FrameLayout
+            android:id="@+id/fragment_email"
+            android:layout_marginTop="10dp"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content" />
 
-    <FrameLayout
-        android:id="@+id/fragment_rePass"
-        android:layout_marginTop="10dp"
-        android:layout_width="match_parent"
-        android:layout_height="wrap_content" />
+        <FrameLayout
+            android:id="@+id/fragment_pass"
+            android:layout_marginTop="10dp"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content" />
 
-    <Spinner
-        android:id="@+id/sp_role_rg"
-        android:layout_width="250dp"
-        android:layout_height="35dp"
-        android:layout_marginTop="14dp"
-        android:background="@drawable/bg_item_lg"
-        android:elevation="5dp" />
+        <FrameLayout
+            android:id="@+id/fragment_rePass"
+            android:layout_marginTop="10dp"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content" />
 
-    <Button
-        android:id="@+id/btn_rg"
-        android:layout_width="wrap_content"
-        android:layout_height="50dp"
-        android:layout_marginTop="10dp"
-        android:backgroundTint="#1FA"
-        android:text="XÁC NHẬN"
-        android:textSize="21dp"
-        android:textStyle="bold"/>
+        <Spinner
+            android:id="@+id/sp_role_rg"
+            android:layout_width="250dp"
+            android:layout_height="35dp"
+            android:layout_marginTop="14dp"
+            android:background="@drawable/bg_item_lg"
+            android:elevation="5dp" />
 
-    <TextView
-        android:id="@+id/tv_signin"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:layout_marginTop="5dp"
-        android:text="Quay về đăng nhập"
-        android:textColor="#00F"
-        android:textSize="18dp"
-        android:textStyle="bold"/>
+        <Button
+            android:id="@+id/btn_rg"
+            android:layout_width="wrap_content"
+            android:layout_height="50dp"
+            android:layout_marginTop="10dp"
+            android:backgroundTint="#1FA"
+            android:text="XÁC NHẬN"
+            android:textSize="21dp"
+            android:textStyle="bold"/>
 
-</LinearLayout>
+        <TextView
+            android:id="@+id/tv_signin"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_marginTop="5dp"
+            android:text="Quay về đăng nhập"
+            android:textColor="#00F"
+            android:textSize="18dp"
+            android:textStyle="bold"/>
+
+    </LinearLayout>
+
+</ScrollView>

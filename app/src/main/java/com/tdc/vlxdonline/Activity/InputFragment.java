@@ -1,5 +1,6 @@
 package com.tdc.vlxdonline.Activity;
 
+import android.graphics.Typeface;
 import android.os.Bundle;
 import android.text.InputType;
 import android.view.LayoutInflater;
@@ -48,6 +49,7 @@ public class InputFragment extends Fragment {
             edtInput.setHint(hint);
             if (isPassword) {
                 edtInput.setInputType(InputType.TYPE_CLASS_TEXT | InputType.TYPE_TEXT_VARIATION_PASSWORD);
+                edtInput.setTypeface(Typeface.SANS_SERIF);
             } else {
                 edtInput.setInputType(InputType.TYPE_CLASS_TEXT);
             }
@@ -75,6 +77,7 @@ public class InputFragment extends Fragment {
                 edtInput.setInputType(InputType.TYPE_CLASS_TEXT);
             } else {
                 edtInput.setInputType(InputType.TYPE_CLASS_TEXT | InputType.TYPE_TEXT_VARIATION_PASSWORD);
+                edtInput.setTypeface(Typeface.SANS_SERIF);
             }
             // Đặt lại con trỏ để giữ vị trí của nó
             edtInput.setSelection(edtInput.getText().length());
