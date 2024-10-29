@@ -8,6 +8,7 @@
     tools:context=".Activity.Owner_HomeActivity">
 
     <FrameLayout
+        android:id="@+id/fragment_owner"
         android:layout_width="match_parent"
         android:layout_height="0dp"
         android:layout_weight="9"
