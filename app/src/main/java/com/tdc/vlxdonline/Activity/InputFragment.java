@@ -6,6 +6,7 @@ import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.EditText;
+import android.widget.LinearLayout;
 import android.widget.TextView;
 
 import androidx.fragment.app.Fragment;
@@ -16,13 +17,15 @@ public class InputFragment extends Fragment {
     private static final String ARG_LABEL = "label";
     private static final String ARG_HINT = "hint";
     private static final String ARG_IS_PASSWORD = "isPassword";
+    private static final String ARG_MARGIN_BOTTOM = "distanceBetween";
 
-    public static InputFragment newInstance(String label, String hint, boolean isPassword) {
+    public static InputFragment newInstance(String label, String hint, boolean isPassword, int distanceBetween) {
         InputFragment fragment = new InputFragment();
         Bundle args = new Bundle();
         args.putString(ARG_LABEL, label);
         args.putString(ARG_HINT, hint);
         args.putBoolean(ARG_IS_PASSWORD, isPassword);
+        args.putInt(ARG_MARGIN_BOTTOM, distanceBetween);
         fragment.setArguments(args);
         return fragment;
     }
@@ -33,12 +36,14 @@ public class InputFragment extends Fragment {
 
         TextView tvLabel = view.findViewById(R.id.tv_label);
         EditText edtInput = view.findViewById(R.id.edt_input);
-        boolean isPassword = getArguments().getBoolean(ARG_IS_PASSWORD);
 
         // Nhận và hiển thị giá trị label
         if (getArguments() != null) {
             String label = getArguments().getString(ARG_LABEL);
             String hint = getArguments().getString(ARG_HINT);
+            boolean isPassword = getArguments().getBoolean(ARG_IS_PASSWORD);
+            int distanceBetween = getArguments().getInt(ARG_MARGIN_BOTTOM);
+
             tvLabel.setText(label);
             edtInput.setHint(hint);
             if (isPassword) {
@@ -46,6 +51,11 @@ public class InputFragment extends Fragment {
             } else {
                 edtInput.setInputType(InputType.TYPE_CLASS_TEXT);
             }
+
+            // Áp dụng distanceBetween cho TextView
+            LinearLayout.LayoutParams params = (LinearLayout.LayoutParams) tvLabel.getLayoutParams();
+            params.setMargins(params.leftMargin, params.topMargin, params.rightMargin, (int) (distanceBetween * getResources().getDisplayMetrics().density));
+            tvLabel.setLayoutParams(params);
         }
 
         return view;

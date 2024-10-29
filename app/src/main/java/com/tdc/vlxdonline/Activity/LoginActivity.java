@@ -152,15 +152,15 @@ public class LoginActivity extends AppCompatActivity {
 
     private void capNhatFragmentInput() {
         // Gắn InputFragment cho phần email
-        this.emailFragment = InputFragment.newInstance("Email", "Nhập Email .....", false);
+        this.emailFragment = InputFragment.newInstance("Email", "Nhập Email .....", false, 10);
         getSupportFragmentManager().beginTransaction()
-                .replace(R.id.container_email, this.emailFragment)
+                .replace(R.id.fragment_email, this.emailFragment)
                 .commit();
 
         // Gắn InputFragment cho phần mật khẩu
-        this.passwordFragment = InputFragment.newInstance("Mật Khẩu", "Nhập Mật khẩu...", true);
+        this.passwordFragment = InputFragment.newInstance("Mật Khẩu", "Nhập Mật khẩu...", true, 10);
         getSupportFragmentManager().beginTransaction()
-                .replace(R.id.container_password, this.passwordFragment)
+                .replace(R.id.fragment_password, this.passwordFragment)
                 .commit();
     }
 }

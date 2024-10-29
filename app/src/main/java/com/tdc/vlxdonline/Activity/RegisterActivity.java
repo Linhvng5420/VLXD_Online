@@ -37,6 +37,11 @@ public class RegisterActivity extends AppCompatActivity {
     ArrayList<String> dataType = new ArrayList();
     AdapterCenterDrop adap;
     int type = 0;
+    private InputFragment tenFragment;
+    private InputFragment sdtFragment;
+    private InputFragment emailFragment;
+    private InputFragment passwordFragment;
+    private InputFragment rePasswordFragment;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -44,6 +49,7 @@ public class RegisterActivity extends AppCompatActivity {
         binding = ActivityRegisterBinding.inflate(getLayoutInflater());
         setContentView(binding.getRoot());
         binding.tvSignin.setPaintFlags(binding.tvSignin.getPaintFlags() | Paint.UNDERLINE_TEXT_FLAG);
+        capNhatFragmentInput();
         setEvents();
     }
 
@@ -104,11 +110,11 @@ public class RegisterActivity extends AppCompatActivity {
 
     private void addAccount() {
         // Lấy giá trị
-        String pass = binding.edtPassRg.getText().toString();
-        String rePass = binding.edtRePassRg.getText().toString();
-        String email = binding.edtEmailRg.getText().toString();
-        String sdt = binding.edtSDTRg.getText().toString();
-        String ten = binding.edtHoTenRg.getText().toString();
+        String pass = this.passwordFragment.getEditText().getText().toString();
+        String rePass = this.rePasswordFragment.getEditText().getText().toString();
+        String email = this.emailFragment.getEditText().getText().toString();
+        String sdt = this.sdtFragment.getEditText().getText().toString();
+        String ten = this.tenFragment.getEditText().getText().toString();
         String type = this.getTypeString();
 
         // Kiểm tra tên account
@@ -189,6 +195,33 @@ public class RegisterActivity extends AppCompatActivity {
                 Toast.makeText(getApplicationContext(), "Có lỗi xảy ra!", Toast.LENGTH_SHORT).show();
             }
         });
+    }
+
+    private void capNhatFragmentInput() {
+        this.tenFragment = InputFragment.newInstance("Họ Và Tên", "Nhập Họ Tên .....", false, 5);
+        getSupportFragmentManager().beginTransaction()
+                .replace(R.id.fragment_ten, this.tenFragment)
+                .commit();
+
+        this.sdtFragment = InputFragment.newInstance("Số Điện Thoại", "Nhập Số Điện Thoại .....", false, 5);
+        getSupportFragmentManager().beginTransaction()
+                .replace(R.id.fragment_sdt, this.sdtFragment)
+                .commit();
+
+        this.emailFragment = InputFragment.newInstance("Email", "Nhập Email .....", false, 5);
+        getSupportFragmentManager().beginTransaction()
+                .replace(R.id.fragment_email, this.emailFragment)
+                .commit();
+
+        this.passwordFragment = InputFragment.newInstance("Mật Khẩu", "Nhập Mật khẩu...", true, 5);
+        getSupportFragmentManager().beginTransaction()
+                .replace(R.id.fragment_pass, this.passwordFragment)
+                .commit();
+
+        this.rePasswordFragment = InputFragment.newInstance("Nhập Lại Mật Khẩu", "Nhập Lại Mật Khẩu .....", true, 5);
+        getSupportFragmentManager().beginTransaction()
+                .replace(R.id.fragment_rePass, this.rePasswordFragment)
+                .commit();
     }
 
 }

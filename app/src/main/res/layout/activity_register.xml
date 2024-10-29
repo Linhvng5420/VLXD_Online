@@ -5,97 +5,55 @@
     android:id="@+id/main"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
-    tools:context=".Activity.RegisterActivity"
+    android:gravity="center"
     android:orientation="vertical"
-    android:gravity="center">
+    tools:context=".Activity.RegisterActivity">
 
     <TextView
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:text="VLXD Online"
         android:gravity="center"
+        android:text="VLXD Online"
         android:textSize="50dp"
         android:textStyle="bold"/>
 
-    <TextView
-        android:layout_marginTop="20dp"
+    <FrameLayout
+        android:id="@+id/fragment_ten"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:layout_marginBottom="5dp"
-        android:text="Họ Và Tên"
-        android:gravity="center"
-        android:textSize="21dp"
-        android:textStyle="bold"/>
-    <EditText
-        style="@style/item_lg"
-        android:id="@+id/edt_ho_ten_rg"
-        android:hint="Nhập Họ Tên ....."/>
+        android:layout_marginTop="20dp" />
 
-    <TextView
-        android:layout_width="match_parent"
-        android:layout_height="wrap_content"
-        android:layout_marginTop="10dp"
-        android:layout_marginBottom="5dp"
-        android:text="Số Điện Thoại"
-        android:gravity="center"
-        android:textSize="21dp"
-        android:textStyle="bold"/>
-    <EditText
-        style="@style/item_lg"
-        android:id="@+id/edt_SDT_rg"
-        android:hint="Nhập Số Điện Thoại ....."/>
-
-    <TextView
+    <FrameLayout
+        android:id="@+id/fragment_sdt"
         android:layout_marginTop="10dp"
         android:layout_width="match_parent"
-        android:layout_height="wrap_content"
-        android:layout_marginBottom="5dp"
-        android:text="Email"
-        android:gravity="center"
-        android:textSize="21dp"
-        android:textStyle="bold"/>
-    <EditText
-        style="@style/item_lg"
-        android:id="@+id/edt_email_rg"
-        android:hint="Nhập Email ....."/>
+        android:layout_height="wrap_content" />
 
-    <TextView
-        android:layout_width="match_parent"
-        android:layout_height="wrap_content"
+    <FrameLayout
+        android:id="@+id/fragment_email"
         android:layout_marginTop="10dp"
-        android:layout_marginBottom="5dp"
-        android:text="Mật Khẩu"
-        android:gravity="center"
-        android:textSize="21dp"
-        android:textStyle="bold"/>
-    <EditText
-        style="@style/item_lg"
-        android:id="@+id/edt_pass_rg"
-        android:hint="Nhập Mật khẩu ....."
-        android:inputType="textPassword"/>
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content" />
 
-    <TextView
-        android:layout_width="match_parent"
-        android:layout_height="wrap_content"
+    <FrameLayout
+        android:id="@+id/fragment_pass"
         android:layout_marginTop="10dp"
-        android:layout_marginBottom="5dp"
-        android:text="Nhập Lại Mật Khẩu"
-        android:gravity="center"
-        android:textSize="21dp"
-        android:textStyle="bold"/>
-    <EditText
-        style="@style/item_lg"
-        android:id="@+id/edt_rePass_rg"
-        android:hint="Nhập Lại Mật khẩu ....."
-        android:inputType="textPassword"/>
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content" />
+
+    <FrameLayout
+        android:id="@+id/fragment_rePass"
+        android:layout_marginTop="10dp"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content" />
 
     <Spinner
-        android:layout_marginTop="14dp"
         android:id="@+id/sp_role_rg"
         android:layout_width="250dp"
         android:layout_height="35dp"
+        android:layout_marginTop="14dp"
         android:background="@drawable/bg_item_lg"
-        android:elevation="5dp"/>
+        android:elevation="5dp" />
 
     <Button
         android:id="@+id/btn_rg"
@@ -105,15 +63,16 @@
         android:backgroundTint="#1FA"
         android:text="XÁC NHẬN"
         android:textSize="21dp"
-        android:textStyle="bold" />
+        android:textStyle="bold"/>
+
     <TextView
         android:id="@+id/tv_signin"
-        android:layout_marginTop="5dp"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
+        android:layout_marginTop="5dp"
         android:text="Quay về đăng nhập"
+        android:textColor="#00F"
         android:textSize="18dp"
-        android:textStyle="bold"
-        android:textColor="#00F" />
+        android:textStyle="bold"/>
 
 </LinearLayout>

@@ -9,7 +9,6 @@
         android:id="@+id/tv_label"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:layout_marginBottom="10dp"
         android:text="Text View"
         android:gravity="center"
         android:textSize="21dp"
@@ -18,5 +17,5 @@
         android:id="@+id/edt_input"
         style="@style/item_lg"
         android:hint="Nhập giá trị ....."
-        android:layout_marginVertical="10dp"/>
+        android:layout_marginBottom="10dp"/>
 </LinearLayout>
