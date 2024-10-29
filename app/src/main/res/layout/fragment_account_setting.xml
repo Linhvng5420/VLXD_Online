@@ -123,7 +123,7 @@
                         android:layout_width="40dp"
                         android:layout_height="40dp"
                         android:background="@drawable/bg_img_item"
-                        android:src="@drawable/call" />
+                        android:src="@android:drawable/sym_call_incoming" />
 
                     <TextView
                         android:layout_width="wrap_content"
@@ -144,7 +144,7 @@
                         android:layout_width="40dp"
                         android:layout_height="40dp"
                         android:background="@drawable/bg_img_item"
-                        android:src="@drawable/call" />
+                        android:src="@android:drawable/ic_menu_report_image" />
 
                     <TextView
                         android:layout_width="wrap_content"
@@ -165,7 +165,7 @@
                         android:layout_width="40dp"
                         android:layout_height="40dp"
                         android:background="@drawable/bg_img_item"
-                        android:src="@drawable/call" />
+                        android:src="@android:drawable/ic_menu_view" />
 
                     <TextView
                         android:layout_width="wrap_content"

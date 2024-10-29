@@ -16,13 +16,17 @@ import com.tdc.vlxdonline.databinding.ActivityOwnerHomeBinding;
 public class Owner_HomeActivity extends AppCompatActivity {
     // Binding
     ActivityOwnerHomeBinding ownerHomeBinding;
+    String emailUser = null;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         ownerHomeBinding = ActivityOwnerHomeBinding.inflate(getLayoutInflater());
         setContentView(ownerHomeBinding.getRoot());
-        
+
+        // Bắt instance
+        emailUser = getIntent().getStringExtra("emailUser");
+
         //Bắt sự kiện
         EventNavigationBottom();
 
@@ -56,7 +60,7 @@ public class Owner_HomeActivity extends AppCompatActivity {
             } else if (itemId == R.id.nav_owner_donhang) {
                 ReplaceFragment(new Fragment());
             } else if (itemId == R.id.nav_owner_kho) {
-                ReplaceFragment(new Fragment());
+                ReplaceFragment(new AccountSettingFragment());
             }
 
             return true;

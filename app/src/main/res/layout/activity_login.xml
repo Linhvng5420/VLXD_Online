@@ -26,10 +26,12 @@
         android:gravity="center"
         android:textSize="21dp"
         android:textStyle="bold"/>
+
     <EditText
-        style="@style/item_lg"
         android:id="@+id/edt_email_lg"
-        android:hint="Nhập Email ....."/>
+        style="@style/item_lg"
+        android:hint="Nhập Email ....."
+        android:inputType="text|textEmailAddress" />
 
     <TextView
         android:layout_width="match_parent"
@@ -52,13 +54,6 @@
         android:layout_height="wrap_content"
         android:text="Hiển thị mật khẩu"
         android:layout_gravity="center"/>
-
-    <Spinner
-        android:id="@+id/sp_role_lg"
-        android:layout_width="250dp"
-        android:layout_height="35dp"
-        android:background="@drawable/bg_item_lg"
-        android:elevation="5dp"/>
 
     <Button
         android:id="@+id/btn_lg"
