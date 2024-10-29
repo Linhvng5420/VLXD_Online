@@ -154,6 +154,7 @@ public class ChiTietSPKho_Fragment extends Fragment {
                                 .addOnSuccessListener(aVoid -> {
                                     Toast.makeText(getActivity(), "Đã thêm số lượng vào kho!", Toast.LENGTH_SHORT).show();
                                     binding.tvTonKhoDetail.setText("Kho: " + updatedStock);
+                                    binding.edtNhapsoluong.setText("");
                                 })
                                 .addOnFailureListener(e ->
                                         Toast.makeText(getActivity(), "Không thể cập nhật số lượng!", Toast.LENGTH_SHORT).show());
@@ -193,6 +194,7 @@ public class ChiTietSPKho_Fragment extends Fragment {
                         reference.child("products").child(idProduct).child("tonKho").setValue(String.valueOf(currentStock));
                         binding.tvTonKhoDetail.setText("Kho: " + currentStock);
                         Toast.makeText(getActivity(), "Giảm thành công!", Toast.LENGTH_SHORT).show();
+                        binding.edtNhapsoluong.setText("");
                     } else {
                         Toast.makeText(getActivity(), "Số lượng > 0", Toast.LENGTH_SHORT).show();
                     }

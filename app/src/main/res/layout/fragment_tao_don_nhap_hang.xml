@@ -12,31 +12,22 @@
         android:layout_height="match_parent"
         android:orientation="vertical">
 
-        <!--        <EditText-->
-        <!--            android:id="@+id/edtTuKhoa"-->
-        <!--            android:layout_width="match_parent"-->
-        <!--            android:layout_height="wrap_content"-->
-        <!--            android:layout_marginLeft="15dp"-->
-        <!--            android:layout_marginTop="10dp"-->
-        <!--            android:layout_marginRight="15dp"-->
-        <!--            android:background="@drawable/edit_text"-->
-        <!--            android:hint="Nhập từ khóa ....." />-->
-
         <SearchView
-            android:id="@+id/svTimSanPham"
+            android:layout_marginTop="10dp"
+            android:layout_marginBottom="10dp"
+            android:layout_marginLeft="10dp"
+            android:layout_marginRight="10dp"
+            android:id="@+id/sv_donhang"
             android:layout_width="match_parent"
             android:layout_height="50dp"
-            android:layout_marginLeft="15dp"
-            android:layout_marginTop="10dp"
-            android:layout_marginRight="15dp"
-            android:background="@drawable/edit_text"
-            android:hint="Nhập từ khóa ....."
-            android:iconifiedByDefault="false" />
+            android:background="@drawable/bg_detail"
+            android:iconifiedByDefault="false"
+            android:searchIcon="@drawable/search" />
 
         <androidx.recyclerview.widget.RecyclerView
             android:id="@+id/rcv_sanpham"
             android:layout_width="match_parent"
-            android:layout_height="250dp"
+            android:layout_height="230dp"
             android:layout_marginHorizontal="10dp"
             android:layout_marginTop="10dp" />
 
@@ -52,7 +43,8 @@
                 android:layout_width="200dp"
                 android:layout_height="50dp"
                 android:background="@drawable/edit_donhang"
-                android:hint="Nhập số lượng..."/>
+                android:hint="Nhập số lượng..."
+                android:inputType="number" />
 
             <Button
                 android:id="@+id/btnThem"
@@ -69,6 +61,7 @@
             android:layout_height="wrap_content"
             android:background="@drawable/edit_donhang"
             android:hint="Nhập giá"
+            android:inputType="number"
             android:paddingLeft="40dp"
             android:paddingRight="30dp" />
 
@@ -76,44 +69,15 @@
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:layout_marginTop="20dp"
-
+            android:layout_marginBottom="10dp"
+            android:background="#00BCD4"
             android:gravity="center"
             android:paddingTop="10dp"
             android:paddingBottom="5dp"
             android:text="Hóa Đơn"
             android:textSize="20dp" />
 
-<!--        <LinearLayout-->
-<!--            android:layout_width="match_parent"-->
-<!--            android:layout_height="wrap_content"-->
-<!--            android:orientation="vertical">-->
 
-<!--            <EditText-->
-<!--                android:layout_width="match_parent"-->
-<!--                android:layout_height="wrap_content"-->
-<!--                android:background="null"-->
-<!--                android:gravity="center"-->
-<!--                android:hint="Tên vật liệu" />-->
-
-<!--            <LinearLayout-->
-<!--                android:layout_width="wrap_content"-->
-<!--                android:layout_height="wrap_content"-->
-<!--                android:gravity="center"-->
-<!--                android:layout_gravity="center"-->
-
-<!--                android:orientation="horizontal">-->
-
-<!--                <EditText-->
-<!--                    android:layout_width="match_parent"-->
-<!--                    android:layout_height="wrap_content"-->
-<!--                    android:hint="Giá" />-->
-<!--                <EditText-->
-<!--                    android:layout_width="match_parent"-->
-<!--                    android:layout_height="wrap_content"-->
-<!--                    android:layout_marginLeft="90dp"-->
-<!--                    android:hint="Số lượng" />-->
-<!--            </LinearLayout>-->
-<!--        </LinearLayout>-->
         <androidx.recyclerview.widget.RecyclerView
             android:id="@+id/rcv_chitiet"
             android:layout_width="match_parent"
@@ -122,15 +86,11 @@
             android:layout_marginTop="10dp" />
 
         <Button
-            android:id="@+id/btnNext1"
+            android:id="@+id/btnXacNhan"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:layout_margin="16dp"
-            android:text="Next"
-            app:layout_constraintBottom_toBottomOf="parent"
-            app:layout_constraintEnd_toEndOf="parent"
-            app:layout_constraintStart_toStartOf="parent" />
-
+            android:text="Xác nhận" />
     </LinearLayout>
 
 </FrameLayout>

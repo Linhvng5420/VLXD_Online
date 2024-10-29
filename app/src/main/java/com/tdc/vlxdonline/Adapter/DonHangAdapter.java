@@ -11,69 +11,59 @@ import androidx.annotation.NonNull;
 import androidx.recyclerview.widget.RecyclerView;
 
 
+import com.tdc.vlxdonline.Model.ChiTietNhap;
 import com.tdc.vlxdonline.Model.TaoDonHang;
 import com.tdc.vlxdonline.R;
 
+import java.util.ArrayList;
 import java.util.List;
 
-public class DonHangAdapter extends RecyclerView.Adapter<DonHangAdapter.UserViewHolder> {
-    private Context mContext;
-    private List<TaoDonHang> mListDonHang;
-//    ArrayList<DonHang> arrayList = new ArrayList<>();
+public class DonHangAdapter extends RecyclerView.Adapter<DonHangAdapter.ChiTietViewHolder> {
 
-    public DonHangAdapter(Context mContext) {
-        this.mContext = mContext;
+    private Context context;
+    private ArrayList<ChiTietNhap> dsChiTiet;
+
+    public DonHangAdapter(Context context, ArrayList<ChiTietNhap> dsChiTiet) {
+        this.context = context;
+        this.dsChiTiet = dsChiTiet;
     }
 
-    public void setData(List<TaoDonHang> list){
-        this.mListDonHang = list;
-        notifyDataSetChanged();
-    }
     @NonNull
     @Override
-    public UserViewHolder onCreateViewHolder(@NonNull ViewGroup parent, int viewType) {
-        View view = LayoutInflater.from(parent.getContext()).inflate(R.layout.item_product, parent, false);
-        return new UserViewHolder(view);
+    public ChiTietViewHolder onCreateViewHolder(@NonNull ViewGroup parent, int viewType) {
+        View view = LayoutInflater.from(context).inflate(R.layout.item_hoadon_donhang, parent, false);
+        return new ChiTietViewHolder(view);
     }
 
     @Override
-    public void onBindViewHolder(@NonNull UserViewHolder holder, int position) {
-        TaoDonHang donHang = mListDonHang.get(position);
-        if (donHang == null){
-            return;
-        }
-        holder.imgDonHang.setImageResource(donHang.getResourceImage());
-        holder.tvName.setText(donHang.getName());
-//        holder.imgDonHang.setOnClickListener(new View.OnClickListener() {
-//            @Override
-//            public void onClick(View view) {
-//                Toast.makeText(mContext, "Country"+position, Toast.LENGTH_SHORT).show();
-//
-//                Intent intent = new Intent(mContext,TaoDonHang.class);
-//                intent.putExtra("flag",arrayList.get(position).getResourceImage());
-//                intent.putExtra("name",arrayList.get(position).getName());
-//            }
-//        });
+    public void onBindViewHolder(@NonNull ChiTietViewHolder holder, int position) {
+        ChiTietNhap chiTiet = dsChiTiet.get(position);
+
+        // Bind data to views
+        holder.tvTenSanPham.setText(chiTiet.getTen());
+        holder.tvGiaSP.setText("Giá: " + chiTiet.getGia());
+        holder.tvSoLuong.setText("Số Lượng: " + chiTiet.getSoLuong());
+        // Load image (example with a placeholder if no image URL is provided)
+        // Glide or Picasso can be used here to load images from a URL
+        // Glide.with(context).load(chiTiet.getImageUrl()).into(holder.imgItemDonHang);
     }
 
     @Override
     public int getItemCount() {
-        if (mListDonHang != null){
-            return mListDonHang.size();
-        }
-        return 0;
+        return dsChiTiet.size();
     }
 
-    public class UserViewHolder extends RecyclerView.ViewHolder{
-        private ImageView imgDonHang;
-        private TextView tvName;
+    static class ChiTietViewHolder extends RecyclerView.ViewHolder {
+        ImageView imgItemDonHang;
+        TextView tvTenSanPham, tvGiaSP, tvSoLuong, tvTongTien;
 
-
-        public UserViewHolder(@NonNull View itemView) {
+        public ChiTietViewHolder(@NonNull View itemView) {
             super(itemView);
-
-            imgDonHang = itemView.findViewById(R.id.imgItem);
-            tvName = itemView.findViewById(R.id.tvNameItem);
+            imgItemDonHang = itemView.findViewById(R.id.img_itemDonHang);
+            tvTenSanPham = itemView.findViewById(R.id.tv_tenSanPham);
+            tvGiaSP = itemView.findViewById(R.id.tv_giaSP);
+            tvSoLuong = itemView.findViewById(R.id.tv_soLuong);
+            tvTongTien = itemView.findViewById(R.id.tv_tongTien);
         }
     }
 }

@@ -1,6 +1,18 @@
 package com.tdc.vlxdonline.Model;
 
 public class ChiTietNhap {
+    @Override
+    public String toString() {
+        return "ChiTietNhap{" +
+                "idDon='" + idDon + '\'' +
+                ", idSanPham='" + idSanPham + '\'' +
+                ", soLuong='" + soLuong + '\'' +
+                ", gia='" + gia + '\'' +
+                ", ten='" + ten + '\'' +
+                ", anh='" + anh + '\'' +
+                '}';
+    }
+
     private String idDon, idSanPham, soLuong, gia;
     private String ten, anh;
 
