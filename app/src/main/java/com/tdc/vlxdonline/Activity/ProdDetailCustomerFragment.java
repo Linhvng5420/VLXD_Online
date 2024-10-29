@@ -9,6 +9,8 @@ import androidx.recyclerview.widget.GridLayoutManager;
 import androidx.recyclerview.widget.LinearLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
 
+import android.text.Editable;
+import android.text.TextWatcher;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -34,6 +36,8 @@ public class ProdDetailCustomerFragment extends Fragment {
     FragmentProdDetailCustomerBinding binding;
     // Id product duoc chon
     private String idProd = "";
+    private Products prod;
+    private int soLuong = 1;
     // danh sach product de cu
     ArrayList<Products> dataProds = new ArrayList<>();
     ProductAdapter productAdapter;
@@ -68,24 +72,43 @@ public class ProdDetailCustomerFragment extends Fragment {
         binding.btnDatHangNgay.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                ((Customer_HomeActivity) getActivity()).ReplaceFragment(new DatHangNgayFragment(idProd, Integer.parseInt(binding.edtSoLuong.getText().toString())));
+                if (soLuong > 0) ((Customer_HomeActivity) getActivity()).ReplaceFragment(new DatHangNgayFragment(idProd, 0));
             }
         });
         // Su Kien Tang Giam SL
         binding.btnGiam.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                int so = Integer.parseInt(binding.edtSoLuong.getText().toString());
-                if (so > 1) {
-                    binding.edtSoLuong.setText(String.format("%d", so - 1));
+                if (soLuong > 1) {
+                    binding.edtSoLuong.setText(soLuong - 1 + "");
                 }
+                checkSoLuong();
             }
         });
         binding.btnTang.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                int so = Integer.parseInt(binding.edtSoLuong.getText().toString());
-                binding.edtSoLuong.setText(String.format("%d", so + 1));
+                binding.edtSoLuong.setText(soLuong + 1 + "");
+                checkSoLuong();
+            }
+        });
+        // Su kien nhap sl
+        binding.edtSoLuong.addTextChangedListener(new TextWatcher() {
+            @Override
+            public void beforeTextChanged(CharSequence s, int start, int count, int after) {
+            }
+
+            @Override
+            public void onTextChanged(CharSequence s, int start, int before, int count) {
+                if (!binding.edtSoLuong.getText().toString().isEmpty()) {
+                    checkSoLuong();
+                }else{
+                    binding.edtSoLuong.setText("1");
+                }
+            }
+
+            @Override
+            public void afterTextChanged(Editable s) {
             }
         });
         // Su kien Add Cart
@@ -95,6 +118,16 @@ public class ProdDetailCustomerFragment extends Fragment {
 
             }
         });
+    }
+
+    private void checkSoLuong(){
+        soLuong = Integer.parseInt(binding.edtSoLuong.getText().toString());
+        int kho = Integer.parseInt(prod.getTonKho());
+        if (soLuong > kho) {
+            Toast.makeText(getActivity(), "Số Lượng Bạn Nhập Lớn Hơn Tồn Kho!", Toast.LENGTH_SHORT).show();
+            soLuong = kho;
+            binding.edtSoLuong.setText(soLuong + "");
+        }
     }
 
     private void setHienThiSanPham() {
@@ -191,10 +224,15 @@ public class ProdDetailCustomerFragment extends Fragment {
                 try {
                     Products product = dataSnapshot.getValue(Products.class);
                     if (product != null) {
+                        prod = product;
                         Glide.with(getActivity()).load(product.getAnh()).into(binding.ivAnhChinh);
                         binding.tvTenSpDetail.setText(product.getTen());
                         binding.tvGiaSpDetail.setText(product.getGia() + " VND");
                         binding.tvTonKhoDetail.setText("Kho: " + product.getTonKho());
+                        if (product.getTonKho().equals("0")) {
+                            soLuong = 0;
+                            binding.edtSoLuong.setText("0");
+                        }
                         binding.tvDaBanDetail.setText("Đã Bán: " + product.getDaBan());
                         binding.tvDonViDetail.setText(product.getDonVi());
                         binding.tvMoTaDetail.setText(product.getMoTa());

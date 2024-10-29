@@ -1,9 +1,13 @@
 package com.tdc.vlxdonline.Activity;
 
+import android.content.DialogInterface;
+import android.graphics.Color;
+import android.graphics.drawable.Drawable;
 import android.os.Bundle;
 
 import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
+import androidx.appcompat.app.AlertDialog;
 import androidx.fragment.app.Fragment;
 
 import android.text.Editable;
@@ -123,11 +127,8 @@ public class DatHangNgayFragment extends Fragment {
             public void onClick(View v) {
                 if (soLuong > 1) {
                     soLuong = soLuong - 1;
-                    chiTietDon.setSoLuong(soLuong);
                     binding.edtSlDat.setText(soLuong + "");
-                    int tong = Integer.parseInt(prod.getGia()) * soLuong;
-                    donHang.setTongTien(tong);
-                    binding.tvTongDatNgay.setText(chuyenChuoi(tong));
+                    changeSoLuong();
                 }
             }
         });
@@ -135,11 +136,8 @@ public class DatHangNgayFragment extends Fragment {
             @Override
             public void onClick(View v) {
                 soLuong = soLuong + 1;
-                chiTietDon.setSoLuong(soLuong);
                 binding.edtSlDat.setText(soLuong + "");
-                int tong = Integer.parseInt(prod.getGia()) * soLuong;
-                donHang.setTongTien(tong);
-                binding.tvTongDatNgay.setText(chuyenChuoi(tong));
+                changeSoLuong();
             }
         });
         // Su kien nhap so luong
@@ -152,10 +150,7 @@ public class DatHangNgayFragment extends Fragment {
             public void onTextChanged(CharSequence s, int start, int before, int count) {
                 if (!binding.edtSlDat.getText().toString().isEmpty()) {
                     soLuong = Integer.parseInt(binding.edtSlDat.getText().toString());
-                    chiTietDon.setSoLuong(soLuong);
-                    int tong = Integer.parseInt(prod.getGia()) * soLuong;
-                    donHang.setTongTien(tong);
-                    binding.tvTongDatNgay.setText(chuyenChuoi(tong));
+                    changeSoLuong();
                 }else{
                     binding.edtSlDat.setText("1");
                 }
@@ -176,6 +171,18 @@ public class DatHangNgayFragment extends Fragment {
                 }
             }
         });
+    }
+
+    private void changeSoLuong(){
+        int kho = Integer.parseInt(prod.getTonKho());
+        if (soLuong > kho) {
+            soLuong = kho;
+            binding.edtSlDat.setText(soLuong + "");
+        }
+        chiTietDon.setSoLuong(soLuong);
+        int tong = Integer.parseInt(prod.getGia()) * soLuong;
+        donHang.setTongTien(tong);
+        binding.tvTongDatNgay.setText(chuyenChuoi(tong));
     }
 
     // Ham them dau cham cho gia ban
@@ -236,9 +243,33 @@ public class DatHangNgayFragment extends Fragment {
     }
 
     private void addDataToFirebase(){
-        referDatHangNgay.child("bills").child(donHang.getId()+"").setValue(donHang);
-        referDatHangNgay.child("BillDetails").child(donHang.getId()+"").child(idProd).setValue(chiTietDon);
-        Toast.makeText(getActivity(), "Hoàn Tất Đặt Hàng, Kiểm Tra Đơn Tại 'Đơn Hàng'", Toast.LENGTH_LONG).show();
+        AlertDialog.Builder builder = new AlertDialog.Builder(getActivity());
+        builder.setTitle("Xác Nhận Đơn Hàng!").setMessage("Hãy Chắc Chắn Bạn Sẽ Xác Nhận Đặt Mua Hàng!");
+
+        builder.setPositiveButton(android.R.string.yes, new DialogInterface.OnClickListener() {
+            @Override
+            public void onClick(DialogInterface dialog, int which) {
+                referDatHangNgay.child("bills").child(donHang.getId()+"").setValue(donHang);
+                referDatHangNgay.child("BillDetails").child(donHang.getId()+"").child(idProd).setValue(chiTietDon);
+                referDatHangNgay.child("products").child(idProd).child("tonKho").setValue(Integer.parseInt(prod.getTonKho()) - soLuong);
+                Toast.makeText(getActivity(), "Hoàn Tất Đặt Hàng, Kiểm Tra Đơn Tại 'Đơn Hàng'", Toast.LENGTH_LONG).show();
+            }
+        });
+        builder.setNegativeButton(R.string.quay_lai, new DialogInterface.OnClickListener() {
+            @Override
+            public void onClick(DialogInterface dialog, int which) {
+                dialog.cancel();
+            }
+        });
+
+        Drawable drawableIcon = getResources().getDrawable(android.R.drawable.ic_dialog_alert);
+        drawableIcon.setTint(Color.RED);
+        builder.setIcon(drawableIcon);
+        Drawable drawableBg = getResources().getDrawable(R.drawable.bg_item_lg);
+        drawableBg.setTint(Color.rgb(100, 220, 255));
+        AlertDialog alertDialog = builder.create();
+        alertDialog.getWindow().setBackgroundDrawable(drawableBg);
+        alertDialog.show();
     }
 
     @Override
