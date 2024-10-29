@@ -14,11 +14,18 @@ import android.widget.Button;
 import android.widget.SearchView;
 import android.widget.Toast;
 
+import com.google.firebase.database.DataSnapshot;
+import com.google.firebase.database.DatabaseError;
+import com.google.firebase.database.DatabaseReference;
+import com.google.firebase.database.FirebaseDatabase;
+import com.google.firebase.database.ValueEventListener;
+import com.tdc.vlxdonline.Adapter.CategoryAdapter;
 import com.tdc.vlxdonline.Adapter.ProductAdapter;
 import com.tdc.vlxdonline.Model.ChiTietNhap;
 import com.tdc.vlxdonline.Model.Products;
 import com.tdc.vlxdonline.R;
 import com.tdc.vlxdonline.databinding.FragmentTaoDonNhapHangBinding;
+
 
 import java.util.ArrayList;
 
@@ -30,6 +37,7 @@ public class TaoDonNhapHangFragment extends Fragment {
     ArrayList<ChiTietNhap> dsChiTiet = new ArrayList<>();
     Products products = new Products();
     Button btnNext1;
+    DatabaseReference reference;
 
     @Override
     public void onCreate(Bundle savedInstanceState) {
@@ -41,52 +49,48 @@ public class TaoDonNhapHangFragment extends Fragment {
     @Override
     public void onViewCreated(@NonNull View view, @Nullable Bundle savedInstanceState) {
         super.onViewCreated(view, savedInstanceState);
-
-        setEvent();
+        reference = FirebaseDatabase.getInstance().getReference();
+        setHienThiSanPham();
     }
 
-    private void setEvent() {
-        dsSanPham.add(new Products("A", "A", "A", "1", "1", "https://th.bing.com/th/id/OIP.UWORqopZEI954B5G-Z4sbgHaHQ?w=169&h=180&c=7&r=0&o=5&dpr=1.3&pid=1.7", "100000", "0.0", "1", "1000", "580"));
-        dsSanPham.add(new Products("B", "B", "B", "1", "2", "https://th.bing.com/th/id/OIP.BO1VNjeGOUGcGRWQNUVCZQHaHa?w=1024&h=1024&rs=1&pid=ImgDetMain", "200000", "4.0", "1", "1000", "580"));
-        dsSanPham.add(new Products("C", "C", "C", "1", "3", "https://th.bing.com/th/id/OIP.vyMrfzra1TPcklie3-GA9gHaH9?w=180&h=183&c=7&r=0&o=5&dpr=1.3&pid=1.7", "300000", "5.0", "1", "1000", "580"));
-        dsSanPham.add(new Products("D", "D", "D", "1", "4", "https://th.bing.com/th?id=OIF.EGFQW6dgdgP%2fL6l2yvVChg&rs=1&pid=ImgDetMain", "400000", "3.5", "1", "1000", "580"));
-
-        adapter = new ProductAdapter(getActivity(), dsSanPham, View.GONE);
-        adapter.setOnItemProductClickListener(new ProductAdapter.OnItemProductClickListener() {
+    private void setHienThiSanPham() {
+        reference.child("products").addValueEventListener(new ValueEventListener() {
             @Override
-            public void OnItemClick(View view, int position) {
-                products = dsSanPham.get(position);
-                Toast.makeText(getActivity(), "Da chon san pham " + products.getTen(), Toast.LENGTH_SHORT).show();
+            public void onDataChange(DataSnapshot dataSnapshot) {
+                dsSanPham.clear(); // Xóa danh sách cũ trước khi cập nhật
+
+                // Duyệt qua từng User trong DataSnapshot
+                for (DataSnapshot snapshot : dataSnapshot.getChildren()) {
+                    Products product = snapshot.getValue(Products.class);
+                    dsSanPham.add(product); // Thêm User vào danh sách
+                }
+
+//                SapXepDanhSach();
+
+                // Xử lý danh sách userList (ví dụ: hiển thị trong RecyclerView)
+                // Event Click Product
+                adapter = new ProductAdapter(getActivity(), dsSanPham, View.GONE);
+
+                adapter.setOnItemProductClickListener(new ProductAdapter.OnItemProductClickListener() {
+                    @Override
+                    public void OnItemClick(View view, int position) {
+                        products = dsSanPham.get(position);
+//                        ((Warehouse_HomeActivity)getActivity()).ReplaceFragment(new ChiTietSPKho_Fragment(products));
+
+//                        Toast.makeText(getActivity(), "Đã chọn sản phẩm " + products.getTen(), Toast.LENGTH_SHORT).show();
+                    }
+                    @Override
+                    public void OnBtnBuyClick(View view, int position) {
+
+                    }
+                });
+                binding.rcvSanpham.setLayoutManager(new GridLayoutManager(getActivity(), 2));
+                binding.rcvSanpham.setAdapter(adapter);
             }
 
             @Override
-            public void OnBtnBuyClick(View view, int position) {
-
-            }
-        });
-
-        binding.rcvSanpham.setLayoutManager(new GridLayoutManager(getActivity(), 2));
-
-        binding.rcvSanpham.setAdapter(adapter);
-
-        binding.svTimSanPham.setOnQueryTextListener(new SearchView.OnQueryTextListener() {
-            @Override
-            public boolean onQueryTextSubmit(String s) {
-                Toast.makeText(getActivity(), "" + s, Toast.LENGTH_SHORT).show();
-                return false;
-            }
-
-            @Override
-            public boolean onQueryTextChange(String s) {
-                return false;
-            }
-        });
-        // Thêm sự kiện cho nút chuyển trang
-        binding.btnNext1.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View v) {
-                // Gọi phương thức để chuyển sang Fragment khác
-                ((Warehouse_HomeActivity) getActivity()).ReplaceFragment(new ThongTinNhanHang_Fragment());
+            public void onCancelled(DatabaseError databaseError) {
+                Toast.makeText(getActivity(), "Lỗi Rồi Nè Má!", Toast.LENGTH_SHORT).show();
             }
         });
     }
