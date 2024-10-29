@@ -187,6 +187,8 @@ public class Warehouse_ThemSanPhamActivity extends AppCompatActivity {
     }
 
     private void setEvent() {
+        btnXoa.setEnabled(false);
+        btnSua.setEnabled(false);
 
         ActivityResultLauncher<Intent> activityResultLauncher = registerForActivityResult(
                 new ActivityResultContracts.StartActivityForResult(),
@@ -216,19 +218,28 @@ public class Warehouse_ThemSanPhamActivity extends AppCompatActivity {
         btnThem.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                uploadData();
+                if (
+                        uri == null ||
+                                edtNhapten.getText().toString().trim().isEmpty() ||
+                                edtNhapgiaban.getText().toString().trim().isEmpty() ||
+                                edtNhapsoluong.getText().toString().trim().isEmpty()) {
+
+                    Toast.makeText(Warehouse_ThemSanPhamActivity.this,
+                            "Vui lòng điền đầy đủ thông tin sản phẩm!", Toast.LENGTH_SHORT).show();
+                } else {
+                    uploadData();
+                }
             }
         });
         btnXoa.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                // Lấy tên sản phẩm từ EditText
-                String id = sanPhamModel.getId();
-                if (!id.isEmpty()) {
-                    // Gọi phương thức xóa sản phẩm
-                    deleteProduct(id);
-                } else {
+                // Kiểm tra xem có sản phẩm nào đã được chọn chưa
+                if (sanPhamModel == null || sanPhamModel.getId() == null || sanPhamModel.getId().isEmpty()) {
                     Toast.makeText(Warehouse_ThemSanPhamActivity.this, "Vui lòng chọn sản phẩm để xóa", Toast.LENGTH_SHORT).show();
+                } else {
+                    // Thực hiện xóa sản phẩm nếu đã chọn
+                    deleteProduct(sanPhamModel.getId());
                 }
             }
         });
@@ -251,6 +262,7 @@ public class Warehouse_ThemSanPhamActivity extends AppCompatActivity {
                     // Xử lý sự kiện click vào sản phẩm
                     if (position != RecyclerView.NO_POSITION) {
                         if (!list_SP.get(position).getId().equals(sanPhamModel.getId())) {
+                            btnXoa.setEnabled(true);
                             btnSua.setEnabled(true);
                             btnThem.setEnabled(false);
                             sanPhamModel = list_SP.get(position);
@@ -262,6 +274,8 @@ public class Warehouse_ThemSanPhamActivity extends AppCompatActivity {
                             edtDaban.setText(sanPhamModel.getDaBan());
                             edtMoTa.setText(sanPhamModel.getMoTa());
                             spdonVi.setSelection(adapter_DV.getPosition(sanPhamModel.getDonVi()));
+
+                            // Tìm vị trí danh mục trong danh sách và hiển thị lên Spinner
                             Categorys temp = new Categorys();
                             for (int i = 0; i < list_DM.size(); i++) {
                                 if (list_DM.get(i).getId().equals(sanPhamModel.getDanhMuc())) {
@@ -274,18 +288,20 @@ public class Warehouse_ThemSanPhamActivity extends AppCompatActivity {
                             Glide.with(Warehouse_ThemSanPhamActivity.this)
                                     .load(sanPhamModel.getAnh())
                                     .into(ivImages);
-                        }else {
-                            sanPhamModel = new SanPham_Model();
-                            edtNhapten.setText("");
-                            edtNhapgiaban.setText("");
-                            edtNhapsoluong.setText("");
-                            edtDaban.setText("");
-                            edtMoTa.setText("");
-                            spdanhMuc.setSelection(0);
-                            spdonVi.setSelection(0);
-                            ivImages.setImageResource(R.drawable.add_a_photo_24);
-                            btnSua.setEnabled(false);
-                            btnThem.setEnabled(true);
+                        } else {
+//                            sanPhamModel = new SanPham_Model();
+//                            edtNhapten.setText("");
+//                            edtNhapgiaban.setText("");
+//                            edtNhapsoluong.setText("");
+//                            edtDaban.setText("");
+//                            edtMoTa.setText("");
+//                            spdanhMuc.setSelection(0);
+//                            spdonVi.setSelection(0);
+//                            ivImages.setImageResource(R.drawable.add_a_photo_24);
+//
+//                            btnSua.setEnabled(false);
+//                            btnThem.setEnabled(true);
+                            clearSelection();
                         }
 
                     }
@@ -295,18 +311,25 @@ public class Warehouse_ThemSanPhamActivity extends AppCompatActivity {
             Toast.makeText(this, "Adapter chưa được khởi tạo", Toast.LENGTH_SHORT).show();
         }
     }
+
     private void saveDate() {
         if (sanPhamModel.getId() == null) sanPhamModel.setId(System.currentTimeMillis() + "");
         sanPhamModel.setTen(edtNhapten.getText().toString());
         sanPhamModel.setGia(edtNhapgiaban.getText().toString());
         sanPhamModel.setTonKho(edtNhapsoluong.getText().toString());
         sanPhamModel.setMoTa(edtMoTa.getText().toString());
-        sanPhamModel.setAnh(uri != null ? imagesUrl.toString() : sanPhamModel.getAnh());  // Nếu bạn không cần thay đổi ảnh
+        sanPhamModel.setAnh(uri != null ? imagesUrl.toString() : sanPhamModel.getAnh());
         sanPhamModel.setDonVi(donVi);
         sanPhamModel.setDanhMuc(danhMuc);
         sanPhamModel.setIdChu("1");
 
-        reference.child("products").child(sanPhamModel.getId()).setValue(sanPhamModel);
+        reference.child("products").child(sanPhamModel.getId()).setValue(sanPhamModel)
+                .addOnCompleteListener(task -> {
+                    if (task.isSuccessful()) {
+                        clearFields(); // Gọi phương thức để xóa thông tin sau khi lưu thành công
+                        Toast.makeText(this, "Thêm sản phẩm thành công", Toast.LENGTH_SHORT).show();
+                    }
+                });
     }
 
     public void uploadData() {
@@ -323,7 +346,7 @@ public class Warehouse_ThemSanPhamActivity extends AppCompatActivity {
                     saveDate();
                 }
             });
-        }else{
+        } else {
             saveDate();
         }
     }
@@ -335,13 +358,21 @@ public class Warehouse_ThemSanPhamActivity extends AppCompatActivity {
             public void onComplete(@NonNull Task<Void> task) {
                 if (task.isSuccessful()) {
                     Toast.makeText(Warehouse_ThemSanPhamActivity.this, "Xóa sản phẩm thành công", Toast.LENGTH_SHORT).show();
-                    // Xóa dữ liệu trên giao diện người dùng
+
+                    // Reset tất cả thông tin về mặc định sau khi xóa
                     edtNhapten.setText("");
                     edtNhapgiaban.setText("");
                     edtNhapsoluong.setText("");
                     edtDaban.setText("");
                     edtMoTa.setText("");
-                    ivImages.setImageResource(0); // Xóa hình ảnh
+                    spdanhMuc.setSelection(0);
+                    spdonVi.setSelection(0);
+                    ivImages.setImageResource(R.drawable.add_a_photo_24); // Đặt lại hình ảnh về biểu tượng mặc định
+
+                    // Thiết lập lại trạng thái cho các nút
+                    btnThem.setEnabled(true);
+                    btnSua.setEnabled(false);
+
                 } else {
                     Toast.makeText(Warehouse_ThemSanPhamActivity.this, "Xóa sản phẩm thất bại", Toast.LENGTH_SHORT).show();
                 }
@@ -349,6 +380,26 @@ public class Warehouse_ThemSanPhamActivity extends AppCompatActivity {
         });
     }
 
+    private void clearFields() {
+        edtNhapten.setText("");
+        edtNhapgiaban.setText("");
+        edtNhapsoluong.setText("");
+        edtDaban.setText("");
+        edtMoTa.setText("");
+        spdanhMuc.setSelection(0);
+        spdonVi.setSelection(0);
+        ivImages.setImageResource(R.drawable.add_a_photo_24);  // Đặt lại hình ảnh về biểu tượng mặc định
+        uri = null;  // Đặt lại URI ảnh về null để chuẩn bị cho lần thêm tiếp theo
+        btnThem.setEnabled(true);
+        btnSua.setEnabled(false);
+    }
+    private void clearSelection() {
+        sanPhamModel = new SanPham_Model();
+        clearFields();
+        btnXoa.setEnabled(false);
+        btnSua.setEnabled(false);
+        btnThem.setEnabled(true);
+    }
     private void setControl() {
         edtNhapten = findViewById(R.id.edtNhapTen);
         edtNhapgiaban = findViewById(R.id.edtNhapgiaban);
