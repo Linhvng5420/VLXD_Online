@@ -32,8 +32,10 @@ import com.google.firebase.storage.FirebaseStorage;
 import com.google.firebase.storage.StorageReference;
 import com.google.firebase.storage.UploadTask;
 import com.tdc.vlxdonline.Adapter.AnhSP_Adapter;
+import com.tdc.vlxdonline.Adapter.Banner_Adapter;
 import com.tdc.vlxdonline.Adapter.CategoryAdapter;
 import com.tdc.vlxdonline.Model.AnhSP;
+import com.tdc.vlxdonline.Model.Banner;
 import com.tdc.vlxdonline.Model.Categorys;
 import com.tdc.vlxdonline.R;
 
@@ -118,11 +120,12 @@ public class Warehouse_AnhSPActivity extends AppCompatActivity {
                             btnThemASP.setEnabled(false);
                             anhSP = list_ASP.get(position);
 
+                            // Hiển thị thông tin sản phẩm lên các EditText
                             // Hiển thị hình ảnh sản phẩm
                             Glide.with(Warehouse_AnhSPActivity.this)
                                     .load(anhSP.getAnhSP())
                                     .into(ivAnhSP);
-                        } else {
+                        }else {
                             anhSP = new AnhSP();
                             ivAnhSP.setImageResource(R.drawable.add_a_photo_24);
                             btnThemASP.setEnabled(true);
@@ -134,6 +137,7 @@ public class Warehouse_AnhSPActivity extends AppCompatActivity {
         } else {
             Toast.makeText(this, "Adapter chưa được khởi tạo", Toast.LENGTH_SHORT).show();
         }
+
     }
 
     private void getDate() {
@@ -166,7 +170,7 @@ public class Warehouse_AnhSPActivity extends AppCompatActivity {
 
     public void uploadData() {
         if (uri != null) {
-            StorageReference storageReference = FirebaseStorage.getInstance().getReference().child("category Images")
+            StorageReference storageReference = FirebaseStorage.getInstance().getReference().child("QLAnhSP Images")
                     .child(uri.getLastPathSegment());
             storageReference.putFile(uri).addOnSuccessListener(new OnSuccessListener<UploadTask.TaskSnapshot>() {
                 @Override
@@ -188,7 +192,6 @@ public class Warehouse_AnhSPActivity extends AppCompatActivity {
         anhSP.setAnhSP(uri != null ? imagesUrl.toString() : anhSP.getAnhSP());  // Nếu bạn không cần thay đổi ảnh
         reference.child("QLAnhSP").child(anhSP.getId()).setValue(anhSP);
     }
-
     private void deleteProduct(String id) {
         DatabaseReference productRef = FirebaseDatabase.getInstance().getReference("QLAnhSP").child(id);
         productRef.removeValue().addOnCompleteListener(new OnCompleteListener<Void>() {

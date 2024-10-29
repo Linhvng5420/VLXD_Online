@@ -54,12 +54,13 @@
                 android:paddingStart="12dp"
                 android:paddingTop="8dp">
 
-                <EditText
+                <TextView
                     android:id="@+id/edtChonASP"
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
                     android:padding="12dp"
-                    android:hint="Chọn Ảnh Sản Phẩm" />
+                    android:text="Chọn Ảnh Sản Phẩm"
+                    android:gravity="center"/>
 
                 <LinearLayout
                     android:layout_width="match_parent"
