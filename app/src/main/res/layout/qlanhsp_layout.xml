@@ -4,18 +4,30 @@
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
-    android:background="#D5F1F8"
+    android:background="@drawable/anhgiaodien"
     android:orientation="vertical"
     tools:context=".Activity.Warehouse_DanhMucActivity">
 
+
+    <LinearLayout
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:background="#F0E4CE"
+        android:elevation="10dp"
+        android:orientation="horizontal"
+        android:padding="8dp"
+        android:layout_gravity="center"
+        android:gravity="center">
+
     <TextView
+        android:textColor="#03A9F4"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:gravity="center"
-        android:paddingBottom="16dp"
-        android:text="Ảnh Sản Phẩm"
+        android:text="QUẢN LÝ ẢNH"
         android:textSize="40sp"
         android:textStyle="bold" />
+    </LinearLayout>
 
     <LinearLayout
         android:layout_width="match_parent"
@@ -23,7 +35,6 @@
         android:layout_marginStart="8dp"
         android:layout_marginTop="8dp"
         android:layout_marginEnd="8dp"
-        android:layout_marginBottom="16dp"
         android:layout_weight="9"
         android:backgroundTint="#EEEEEE"
         android:elevation="4dp"
@@ -39,13 +50,26 @@
             android:orientation="horizontal"
             android:padding="8dp">
 
-            <ImageView
-                android:id="@+id/ivAnhSP"
-                android:layout_width="120dp"
-                android:layout_height="120dp"
+            <LinearLayout
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_marginBottom="8dp"
+                android:background="#fff"
+                android:backgroundTint="@color/white"
+                android:elevation="10dp"
+                android:orientation="horizontal"
+                android:padding="8dp"
                 android:layout_gravity="center"
-                android:scaleType="centerCrop"
-                android:src="@drawable/add_a_photo_24" />
+                android:gravity="center">
+
+                <ImageView
+                    android:id="@+id/ivAnhSP"
+                    android:layout_width="120dp"
+                    android:layout_height="120dp"
+                    android:layout_gravity="center"
+                    android:scaleType="centerCrop"
+                    android:src="@drawable/add_a_photo_24" />
+            </LinearLayout>
 
             <LinearLayout
                 android:layout_width="match_parent"
@@ -111,6 +135,9 @@
             android:layout_marginBottom="5dp"
             android:background="@color/white"
             android:backgroundTint="#E0E0E0"
-            android:elevation="3dp"/>
+            android:elevation="10dp"
+            android:padding="8dp"
+            android:layout_gravity="center"
+            android:gravity="center"/>
     </LinearLayout>
 </LinearLayout>

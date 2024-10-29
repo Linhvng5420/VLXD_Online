@@ -6,16 +6,30 @@
     android:layout_height="match_parent"
     android:orientation="vertical"
     android:padding="15dp"
-    android:background="#F5F5F5">
+    android:background="@drawable/anhgiaodien">
 
-    <TextView
+    <LinearLayout
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:gravity="center"
-        android:text="Kho"
-        android:textSize="40dp"
-        android:paddingBottom="20dp"
-        app:cardCornerRadius="10dp"/>
+        android:layout_marginBottom="8dp"
+        android:background="#F0E4CE"
+        android:elevation="10dp"
+        android:orientation="horizontal"
+        android:padding="8dp"
+        android:layout_gravity="center"
+        android:gravity="center">
+
+        <TextView
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:gravity="center"
+            android:text="KHO"
+            android:textColor="#03A9F4"
+            android:textSize="40dp"
+            app:cardCornerRadius="10dp"
+            android:textStyle="bold"/>
+    </LinearLayout>
+
 
     <TextView
         android:id="@+id/tvQLSP"

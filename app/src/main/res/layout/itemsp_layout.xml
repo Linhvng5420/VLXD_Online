@@ -19,14 +19,16 @@
         android:gravity="center"
         android:orientation="vertical">
 
-        <!-- Circular ImageView with Padding -->
         <androidx.cardview.widget.CardView
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:layout_margin="8dp"
             app:cardCornerRadius="80dp"
-            android:elevation="4dp"/><!-- Make circular by setting a high radius -->
-
+            android:elevation="10dp"
+            android:orientation="horizontal"
+            android:padding="8dp"
+            android:layout_gravity="center"
+            android:gravity="center"/>
 
         <ImageView
             android:id="@+id/ivImages"
@@ -34,11 +36,13 @@
             android:layout_height="160dp"
             android:layout_gravity="center"
             android:scaleType="centerCrop"
-            android:src="@drawable/ic_launcher_background" />
+            android:src="@drawable/ic_launcher_background"
+            android:elevation="10dp"
+            android:padding="8dp"
+            android:gravity="center"/>
 
     </LinearLayout>
 
-    <!-- Centered and Styled TextView -->
     <TextView
         android:id="@+id/tvItemsTen"
         android:layout_width="match_parent"
@@ -49,7 +53,12 @@
         android:paddingBottom="8dp"
         android:text="Tên Sản Phẩm"
         android:textSize="16sp"
-        android:textStyle="bold" />
+        android:textStyle="bold"
+        android:elevation="10dp"
+        android:orientation="horizontal"
+        android:padding="8dp"
+        android:layout_gravity="center" />
+
     <TextView
         android:id="@+id/tvGiaSP"
         android:layout_width="match_parent"
@@ -61,6 +70,10 @@
         android:text="Giá Sản Phẩm"
         android:textSize="16sp"
         android:textStyle="bold"
-        android:textColor="#EBA3A3"/>
+        android:textColor="#EBA3A3"
+        android:elevation="10dp"
+        android:orientation="horizontal"
+        android:padding="8dp"
+        android:layout_gravity="center" />
 
 </LinearLayout>
