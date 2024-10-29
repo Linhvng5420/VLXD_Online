@@ -9,6 +9,7 @@ import androidx.annotation.Nullable;
 import androidx.fragment.app.Fragment;
 import androidx.recyclerview.widget.GridLayoutManager;
 import androidx.recyclerview.widget.LinearLayoutManager;
+import androidx.recyclerview.widget.LinearSnapHelper;
 import androidx.recyclerview.widget.RecyclerView;
 
 import android.view.LayoutInflater;
@@ -25,8 +26,10 @@ import com.google.firebase.database.DatabaseReference;
 import com.google.firebase.database.FirebaseDatabase;
 import com.google.firebase.database.ValueEventListener;
 import com.tdc.vlxdonline.Adapter.AdapterCenterDrop;
+import com.tdc.vlxdonline.Adapter.BannerAdapter;
 import com.tdc.vlxdonline.Adapter.CategoryAdapter;
 import com.tdc.vlxdonline.Adapter.ProductAdapter;
+import com.tdc.vlxdonline.Model.Banner;
 import com.tdc.vlxdonline.Model.Categorys;
 import com.tdc.vlxdonline.Model.Products;
 import com.tdc.vlxdonline.R;
@@ -36,6 +39,8 @@ import java.sql.SQLException;
 import java.util.ArrayList;
 import java.util.Collections;
 import java.util.Comparator;
+import java.util.Timer;
+import java.util.TimerTask;
 
 public class CustomerHomeFragment extends Fragment {
 
@@ -50,6 +55,11 @@ public class CustomerHomeFragment extends Fragment {
     AdapterCenterDrop adapterLoc;
     ArrayList<String> dataSapXep = new ArrayList<>();
     AdapterCenterDrop adapterSX;
+    // Banner
+    ArrayList<Banner> dataBanner = new ArrayList<>();
+    BannerAdapter bannerAdapter;
+    Timer timer;
+
     // Item khac
     private String category = "";
     private String tuKhoa = "";
@@ -144,6 +154,12 @@ public class CustomerHomeFragment extends Fragment {
         adapterSX = new AdapterCenterDrop(getActivity(), R.layout.item_center_drop, dataSapXep);
         binding.spXapSep.setAdapter(adapterSX);
 
+        readBanners();
+        readcategorysFromDatabase();
+        category = "";
+        tuKhoa = "";
+        typeSort = 0;
+        binding.spLoc.setSelection(0);
         eventDocDanhSach = new ValueEventListener() {
             @Override
             public void onDataChange(DataSnapshot dataSnapshot) {
@@ -174,7 +190,8 @@ public class CustomerHomeFragment extends Fragment {
 
                         @Override
                         public void OnBtnBuyClick(View view, int position) {
-                            ((Customer_HomeActivity) getActivity()).ReplaceFragment(new DatHangNgayFragment(dataProds.get(position).getId(), 1));
+                            if (!dataProds.get(position).getTonKho().equals("0")) ((Customer_HomeActivity) getActivity()).ReplaceFragment(new DatHangNgayFragment(dataProds.get(position).getId(), 1));
+                            else Toast.makeText(getActivity(), "Hiện Tại Sản Phẩm Đã Bán Hết!", Toast.LENGTH_SHORT).show();
                         }
                     });
                     binding.rcProdCustomerHome.setLayoutManager(new GridLayoutManager(getActivity(), 2));
@@ -189,13 +206,55 @@ public class CustomerHomeFragment extends Fragment {
                 Toast.makeText(getActivity(), "Lỗi Rồi Nè Má!", Toast.LENGTH_SHORT).show();
             }
         };
-
-        readcategorysFromDatabase();
-        category = "";
-        tuKhoa = "";
-        typeSort = 0;
-        binding.spLoc.setSelection(0);
         mDatabase.child("products").addValueEventListener(eventDocDanhSach);
+    }
+
+    private void readBanners() {
+        mDatabase.child("banners").addValueEventListener(new ValueEventListener() {
+            @Override
+            public void onDataChange(DataSnapshot dataSnapshot) {
+                try{
+                    dataBanner.clear(); // Xóa danh sách cũ trước khi cập nhật
+
+                    // Duyệt qua từng User trong DataSnapshot
+                    for (DataSnapshot snapshot : dataSnapshot.getChildren()) {
+                        Banner banner = snapshot.getValue(Banner.class);
+                        dataBanner.add(banner); // Thêm User vào danh sách
+                    }
+                    setBannerChange();
+                }catch (Exception e){
+
+                }
+            }
+
+            @Override
+            public void onCancelled(DatabaseError databaseError) {
+                Toast.makeText(getActivity(), "Lỗi Rồi Nè Má!", Toast.LENGTH_SHORT).show();
+            }
+        });
+    }
+
+    private void setBannerChange() {
+        bannerAdapter = new BannerAdapter(getActivity(), dataBanner);
+        LinearLayoutManager linearLayoutManager = new LinearLayoutManager(getActivity(), LinearLayoutManager.HORIZONTAL, false);
+        binding.rcBanner.setLayoutManager(linearLayoutManager);
+        binding.rcBanner.setAdapter(bannerAdapter);
+
+        // Set tu chuyen banner
+        LinearSnapHelper helper = new LinearSnapHelper();
+        helper.attachToRecyclerView(binding.rcBanner);
+        timer = new Timer();
+        timer.schedule(new TimerTask() {
+            @Override
+            public void run() {
+                int position = linearLayoutManager.findLastCompletelyVisibleItemPosition();
+                if (position < (bannerAdapter.getItemCount() - 1)) {
+                    linearLayoutManager.smoothScrollToPosition(binding.rcBanner, new RecyclerView.State(), position + 1);
+                }else {
+                    linearLayoutManager.smoothScrollToPosition(binding.rcBanner, new RecyclerView.State(), 0);
+                }
+            }
+        },0,3000);
     }
 
     private void readcategorysFromDatabase() {
@@ -273,6 +332,7 @@ public class CustomerHomeFragment extends Fragment {
     public void onDestroyView() {
         super.onDestroyView();
         binding = null;
+        timer.cancel();
 
         // Loại bỏ listener của Firebase
         if (mDatabase != null && eventDocDanhSach != null) {

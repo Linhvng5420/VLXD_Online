@@ -176,6 +176,7 @@ public class DatHangNgayFragment extends Fragment {
     private void changeSoLuong(){
         int kho = Integer.parseInt(prod.getTonKho());
         if (soLuong > kho) {
+            Toast.makeText(getActivity(), "Số Lượng Bạn Nhập Lớn Hơn Tồn Kho!", Toast.LENGTH_SHORT).show();
             soLuong = kho;
             binding.edtSlDat.setText(soLuong + "");
         }
@@ -226,6 +227,7 @@ public class DatHangNgayFragment extends Fragment {
                         binding.tvNameDatHangNgay.setText(product.getTen());
                         binding.tvGiaDatHangNgay.setText(chuyenChuoi(Integer.parseInt(product.getGia())) + " đ");
                         binding.tvDesDatNgay.setText(product.getMoTa());
+                        if (product.getTonKho().equals("0")) soLuong = 0;
                         binding.edtSlDat.setText(soLuong + "");
                         binding.tvTongDatNgay.setText(chuyenChuoi(Integer.parseInt(product.getGia()) * soLuong));
                     } else {
@@ -243,33 +245,38 @@ public class DatHangNgayFragment extends Fragment {
     }
 
     private void addDataToFirebase(){
-        AlertDialog.Builder builder = new AlertDialog.Builder(getActivity());
-        builder.setTitle("Xác Nhận Đơn Hàng!").setMessage("Hãy Chắc Chắn Bạn Sẽ Xác Nhận Đặt Mua Hàng!");
+        if (!prod.getTonKho().equals("0")) {
+            AlertDialog.Builder builder = new AlertDialog.Builder(getActivity());
+            builder.setTitle("Xác Nhận Đơn Hàng!").setMessage("Hãy Chắc Chắn Bạn Sẽ Xác Nhận Đặt Mua Hàng!");
 
-        builder.setPositiveButton(android.R.string.yes, new DialogInterface.OnClickListener() {
-            @Override
-            public void onClick(DialogInterface dialog, int which) {
-                referDatHangNgay.child("bills").child(donHang.getId()+"").setValue(donHang);
-                referDatHangNgay.child("BillDetails").child(donHang.getId()+"").child(idProd).setValue(chiTietDon);
-                referDatHangNgay.child("products").child(idProd).child("tonKho").setValue(Integer.parseInt(prod.getTonKho()) - soLuong);
-                Toast.makeText(getActivity(), "Hoàn Tất Đặt Hàng, Kiểm Tra Đơn Tại 'Đơn Hàng'", Toast.LENGTH_LONG).show();
-            }
-        });
-        builder.setNegativeButton(R.string.quay_lai, new DialogInterface.OnClickListener() {
-            @Override
-            public void onClick(DialogInterface dialog, int which) {
-                dialog.cancel();
-            }
-        });
+            builder.setPositiveButton(android.R.string.yes, new DialogInterface.OnClickListener() {
+                @Override
+                public void onClick(DialogInterface dialog, int which) {
+                    referDatHangNgay.child("bills").child(donHang.getId()+"").setValue(donHang);
+                    referDatHangNgay.child("BillDetails").child(donHang.getId()+"").child(idProd).setValue(chiTietDon);
+                    referDatHangNgay.child("products").child(idProd).child("tonKho").setValue(Integer.parseInt(prod.getTonKho()) - soLuong + "");
+                    Toast.makeText(getActivity(), "Hoàn Tất Đặt Hàng, Kiểm Tra Đơn Tại 'Đơn Hàng'", Toast.LENGTH_LONG).show();
+                    getActivity().getSupportFragmentManager().popBackStack();
+                }
+            });
+            builder.setNegativeButton(R.string.quay_lai, new DialogInterface.OnClickListener() {
+                @Override
+                public void onClick(DialogInterface dialog, int which) {
+                    dialog.cancel();
+                }
+            });
 
-        Drawable drawableIcon = getResources().getDrawable(android.R.drawable.ic_dialog_alert);
-        drawableIcon.setTint(Color.RED);
-        builder.setIcon(drawableIcon);
-        Drawable drawableBg = getResources().getDrawable(R.drawable.bg_item_lg);
-        drawableBg.setTint(Color.rgb(100, 220, 255));
-        AlertDialog alertDialog = builder.create();
-        alertDialog.getWindow().setBackgroundDrawable(drawableBg);
-        alertDialog.show();
+            Drawable drawableIcon = getResources().getDrawable(android.R.drawable.ic_dialog_alert);
+            drawableIcon.setTint(Color.RED);
+            builder.setIcon(drawableIcon);
+            Drawable drawableBg = getResources().getDrawable(R.drawable.bg_item_lg);
+            drawableBg.setTint(Color.rgb(100, 220, 255));
+            AlertDialog alertDialog = builder.create();
+            alertDialog.getWindow().setBackgroundDrawable(drawableBg);
+            alertDialog.show();
+        }else{
+            Toast.makeText(getActivity(), "Hiện Tại Sản Phẩm Này Đã Bán Hết!", Toast.LENGTH_SHORT).show();
+        }
     }
 
     @Override

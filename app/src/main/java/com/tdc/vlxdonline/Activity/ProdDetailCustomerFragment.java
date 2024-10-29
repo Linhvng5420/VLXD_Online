@@ -37,7 +37,7 @@ public class ProdDetailCustomerFragment extends Fragment {
     // Id product duoc chon
     private String idProd = "";
     private Products prod;
-    private int soLuong = 1;
+    private int soLuong = 0;
     // danh sach product de cu
     ArrayList<Products> dataProds = new ArrayList<>();
     ProductAdapter productAdapter;
@@ -72,7 +72,8 @@ public class ProdDetailCustomerFragment extends Fragment {
         binding.btnDatHangNgay.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                if (soLuong > 0) ((Customer_HomeActivity) getActivity()).ReplaceFragment(new DatHangNgayFragment(idProd, 0));
+                if (soLuong > 0) ((Customer_HomeActivity) getActivity()).ReplaceFragment(new DatHangNgayFragment(idProd, soLuong));
+                else Toast.makeText(getActivity(), "Hiện Tại Sản Phẩm Đã Bán Hết!", Toast.LENGTH_SHORT).show();
             }
         });
         // Su Kien Tang Giam SL
@@ -229,8 +230,9 @@ public class ProdDetailCustomerFragment extends Fragment {
                         binding.tvTenSpDetail.setText(product.getTen());
                         binding.tvGiaSpDetail.setText(product.getGia() + " VND");
                         binding.tvTonKhoDetail.setText("Kho: " + product.getTonKho());
-                        if (product.getTonKho().equals("0")) {
-                            soLuong = 0;
+                        if (!product.getTonKho().equals("0")) {
+                            soLuong = 1;
+                        }else{
                             binding.edtSoLuong.setText("0");
                         }
                         binding.tvDaBanDetail.setText("Đã Bán: " + product.getDaBan());

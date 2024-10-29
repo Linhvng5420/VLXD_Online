@@ -113,6 +113,11 @@ public class DanhSachDonHangFragment extends Fragment {
     }
 
     private void KhoiTao() {
+        if (trangThaiLoc == 1) {
+            binding.btnDaHoanThanh.setBackgroundColor(Color.WHITE);
+            Drawable draw = getActivity().getDrawable(R.drawable.bg_img_detail);
+            binding.btnChuaHoanThanh.setBackground(draw);
+        }
         eventDocData = new ValueEventListener() {
             @Override
             public void onDataChange(DataSnapshot dataSnapshot) {

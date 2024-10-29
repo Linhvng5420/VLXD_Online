@@ -2,11 +2,10 @@ package com.tdc.vlxdonline.Model;
 
 public class Banner {
     private String anh;
-    private String id, idChu;
+    private String idChu;
 
-    public Banner(String anh, String id, String idChu) {
+    public Banner(String anh, String idChu) {
         this.anh = anh;
-        this.id = id;
         this.idChu = idChu;
     }
 
@@ -19,14 +18,6 @@ public class Banner {
 
     public void setAnh(String anh) {
         this.anh = anh;
-    }
-
-    public String getId() {
-        return id;
-    }
-
-    public void setId(String id) {
-        this.id = id;
     }
 
     public String getIdChu() {
