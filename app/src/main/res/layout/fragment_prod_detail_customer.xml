@@ -31,7 +31,8 @@
                     android:layout_height="wrap_content"
                     android:paddingVertical="5dp"
                     android:layout_marginTop="10dp"
-                    android:background="@drawable/bg_img_detail" />
+                    android:background="@drawable/bg_img_detail"
+                    android:backgroundTint="#D7D7D7"/>
 
                 <LinearLayout
                     android:layout_width="match_parent"
@@ -159,13 +160,14 @@
 
                     <Button
                         android:id="@+id/btn_datHangNgay"
-                        android:backgroundTint="#0DF"
+                        android:background="@drawable/bg_detail"
+                        android:textColor="@color/black"
                         android:layout_width="match_parent"
                         android:layout_height="50dp"
                         android:layout_marginVertical="5dp"
                         android:text="Đặt Hàng Ngay"
                         android:textSize="21dp"
-                        android:textStyle="bold" />
+                        android:textStyle="bold"/>
 
                     <androidx.recyclerview.widget.RecyclerView
                         android:id="@+id/rc_offer_prod"
@@ -195,7 +197,7 @@
 
                 <TextView
                     android:id="@+id/btn_giam"
-                    android:background="#0DF"
+                    android:background="#D7D7D7"
                     android:layout_width="25dp"
                     android:layout_height="match_parent"
                     android:gravity="center_vertical|center_horizontal"
@@ -214,7 +216,7 @@
 
                 <TextView
                     android:id="@+id/btn_tang"
-                    android:background="#0DF"
+                    android:background="#D7D7D7"
                     android:layout_width="25dp"
                     android:layout_height="match_parent"
                     android:gravity="center_vertical|center_horizontal"
@@ -225,7 +227,8 @@
 
             <Button
                 android:id="@+id/btn_addToCart"
-                android:backgroundTint="#0DF"
+                android:background="@drawable/bg_detail"
+                android:textColor="@color/black"
                 android:layout_width="match_parent"
                 android:layout_height="match_parent"
                 android:text="Thêm Vào Giỏ Hàng"
