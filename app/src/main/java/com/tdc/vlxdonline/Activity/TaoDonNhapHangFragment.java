@@ -50,7 +50,7 @@ public class TaoDonNhapHangFragment extends Fragment {
     ProductAdapter adapter;
     DonHangAdapter donHangAdapter;
     ArrayList<ChiTietNhap> dsChiTiet = new ArrayList<>();
-    ChiTietNhap temp = new ChiTietNhap();
+    ChiTietNhap temp;
     Products products = new Products();
     DatabaseReference reference;
     ValueEventListener eventDocDanhSach;
@@ -59,6 +59,7 @@ public class TaoDonNhapHangFragment extends Fragment {
     View preView = null;
     int SoLuong = 0;
     DonNhap donNhap = new DonNhap();
+    String idChu = " ";
 
     @Override
     public void onCreate(Bundle savedInstanceState) {
@@ -76,7 +77,7 @@ public class TaoDonNhapHangFragment extends Fragment {
         reference = FirebaseDatabase.getInstance().getReference();
         setHienThiSanPham();
 
-        DonHangAdapter donHangAdapter = new DonHangAdapter(getActivity(), dsChiTiet);
+        donHangAdapter = new DonHangAdapter(getActivity(), dsChiTiet);
         binding.rcvChitiet.setLayoutManager(new LinearLayoutManager(getActivity()));
         binding.rcvChitiet.setAdapter(donHangAdapter);
         // Thêm sự kiện tìm kiếm cho SearchView
@@ -106,7 +107,8 @@ public class TaoDonNhapHangFragment extends Fragment {
 
             @Override
             public void onTextChanged(CharSequence charSequence, int i, int i1, int i2) {
-
+                SoLuong = Integer.parseInt(binding.edtSoLuong.getText().toString());
+                temp.setSoLuong(SoLuong);
             }
 
             @Override
@@ -114,7 +116,24 @@ public class TaoDonNhapHangFragment extends Fragment {
 
             }
         });
-        setEvent();
+        binding.btnThem.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+                String sl = binding.edtSoLuong.getText().toString();
+                String gia = binding.edtGia.getText().toString();
+                if (!sl.isEmpty() && !gia.isEmpty() && temp.getTen() != null){
+                    temp.setSoLuong(Integer.parseInt(sl));
+                    temp.setGia(Integer.parseInt(gia));
+                    dsChiTiet.add(temp);
+                    temp = new ChiTietNhap(donNhap.getId());
+                    donHangAdapter.notifyDataSetChanged();
+
+                }else {
+                    Toast.makeText(getActivity(), "Hãy chọn sản phẩm và nhâp đủ thông tin !!!", Toast.LENGTH_SHORT).show();
+                }
+            }
+        });
+
 //        btnXacNhan = binding.btnXacNhan; // Ensure binding is initialized
 //        btnXacNhan.setOnClickListener(new View.OnClickListener() {
 //            @Override
@@ -134,17 +153,20 @@ public class TaoDonNhapHangFragment extends Fragment {
 //        setHienThiHoaDon();
     }
 
-
-    private void setEvent() {
-
-// bug ấn nút xác nhận + thêm 1 item dsChiTiet
-        dsChiTiet.add(new ChiTietNhap("0", "0", 1000, 95000, "Thép", "https://www.pexels.com/vi-vn/anh/c-nh-bai-d-xe-ng-m-moody-vao-ban-dem-29113387/"));
-        donHangAdapter = new DonHangAdapter(getActivity(), dsChiTiet);
+    private void upLoad(){
+        reference.child("donnhap").child(donNhap.getId()+"").setValue(donNhap);
+        for (int i = 0; i < dsChiTiet.size(); i++) {
+            reference.child("chiTietNhap").child(donNhap.getId()+"").child(dsChiTiet.get(i).getIdSanPham()).setValue(dsChiTiet.get(i));
+        }
+        Toast.makeText(getActivity(), "Tạo đơn nhập kho thành công", Toast.LENGTH_SHORT).show();
+        donNhap = new DonNhap();
+        temp = new ChiTietNhap(donNhap.getId());
+        dsChiTiet.clear();
         donHangAdapter.notifyDataSetChanged();
     }
 
-
     private void setHienThiSanPham() {
+        temp = new ChiTietNhap(donNhap.getId());
         eventDocDanhSach = new ValueEventListener() {
             @Override
             public void onDataChange(DataSnapshot dataSnapshot) {
@@ -246,7 +268,8 @@ public class TaoDonNhapHangFragment extends Fragment {
             @Override
             public void onClick(View v) {
                 // Gọi phương thức để chuyển sang Fragment khác
-                ((Warehouse_HomeActivity) getActivity()).ReplaceFragment(new ThongTinNhanHang_Fragment());
+//                ((Warehouse_HomeActivity) getActivity()).ReplaceFragment(new ThongTinNhanHang_Fragment());
+                upLoad();
             }
         });
         return binding.getRoot();

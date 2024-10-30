@@ -11,6 +11,7 @@ import androidx.annotation.NonNull;
 import androidx.recyclerview.widget.RecyclerView;
 
 
+import com.bumptech.glide.Glide;
 import com.tdc.vlxdonline.Model.ChiTietNhap;
 import com.tdc.vlxdonline.R;
 
@@ -38,6 +39,7 @@ public class DonHangAdapter extends RecyclerView.Adapter<DonHangAdapter.ChiTietV
         ChiTietNhap chiTiet = dsChiTiet.get(position);
 
         // Bind data to views
+        Glide.with(context).load(chiTiet.getAnh()).into(holder.imgItemDonHang);
         holder.tvTenSanPham.setText(chiTiet.getTen());
         holder.tvGiaSP.setText("Giá: " + chiTiet.getGia());
         holder.tvSoLuong.setText("Số Lượng: " + chiTiet.getSoLuong());
