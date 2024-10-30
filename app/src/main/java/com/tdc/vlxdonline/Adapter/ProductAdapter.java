@@ -84,7 +84,7 @@ public class ProductAdapter extends RecyclerView.Adapter<ProductAdapter.ProductH
             holder.binding.lnSoSao.setVisibility(View.GONE);
         }
 
-        holder.binding.btnBuy.setVisibility(displayButtonBuy);
+//        holder.binding.btnBuy.setVisibility(displayButtonBuy);
         final int pos = position;
         holder.position = pos;
     }
@@ -108,14 +108,14 @@ public class ProductAdapter extends RecyclerView.Adapter<ProductAdapter.ProductH
                     }
                 }
             });
-            binding.btnBuy.setOnClickListener(new View.OnClickListener() {
-                @Override
-                public void onClick(View v) {
-                    if (onItemProductClickListener != null) {
-                        onItemProductClickListener.OnBtnBuyClick(v, position);
-                    }
-                }
-            });
+//            binding.btnBuy.setOnClickListener(new View.OnClickListener() {
+//                @Override
+//                public void onClick(View v) {
+//                    if (onItemProductClickListener != null) {
+//                        onItemProductClickListener.OnBtnBuyClick(v, position);
+//                    }
+//                }
+//            });
         }
     }
 
