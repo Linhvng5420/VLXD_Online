@@ -17,6 +17,7 @@ import com.google.firebase.database.DatabaseError;
 import com.google.firebase.database.DatabaseReference;
 import com.google.firebase.database.FirebaseDatabase;
 import com.google.firebase.database.ValueEventListener;
+import com.tdc.vlxdonline.Model.NhanVien;
 import com.tdc.vlxdonline.R;
 import com.tdc.vlxdonline.databinding.ActivityWarehouseHomeBinding;
 
@@ -25,6 +26,7 @@ import java.lang.ref.Reference;
 public class Warehouse_HomeActivity extends AppCompatActivity {
     // Binding
     ActivityWarehouseHomeBinding warehouseHomeBinding;
+    public static NhanVien nhanVien = new NhanVien("1","123456789","Kho","trinhminhthien@gmail.com","example@gmail.com","19001009","Thien");
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {

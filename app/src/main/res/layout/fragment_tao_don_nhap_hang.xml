@@ -44,6 +44,7 @@
                 android:layout_height="50dp"
                 android:background="@drawable/common_google_signin_btn_icon_dark_normal_background"
                 android:hint="Nhập số lượng..."
+                android:text="1"
                 android:inputType="number" />
 
             <Button
@@ -61,6 +62,7 @@
             android:layout_height="wrap_content"
             android:background="@drawable/common_google_signin_btn_icon_dark_normal_background"
             android:hint="Nhập giá"
+            android:text="1"
             android:inputType="number"
             android:paddingLeft="40dp"
             android:paddingRight="30dp" />

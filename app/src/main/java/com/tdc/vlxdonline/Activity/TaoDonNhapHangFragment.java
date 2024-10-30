@@ -3,6 +3,7 @@ package com.tdc.vlxdonline.Activity;
 import android.app.Activity;
 import android.content.Intent;
 import android.content.pm.PackageManager;
+import android.graphics.Color;
 import android.net.Uri;
 import android.os.Bundle;
 
@@ -59,7 +60,6 @@ public class TaoDonNhapHangFragment extends Fragment {
     View preView = null;
     int SoLuong = 0;
     DonNhap donNhap = new DonNhap();
-    String idChu = " ";
 
     @Override
     public void onCreate(Bundle savedInstanceState) {
@@ -107,8 +107,32 @@ public class TaoDonNhapHangFragment extends Fragment {
 
             @Override
             public void onTextChanged(CharSequence charSequence, int i, int i1, int i2) {
-                SoLuong = Integer.parseInt(binding.edtSoLuong.getText().toString());
+                String chuoi = binding.edtSoLuong.getText().toString();
+                if (!chuoi.isEmpty())SoLuong = Integer.parseInt(chuoi);
+                else {
+                    SoLuong = 1;
+                    binding.edtSoLuong.setText("1");
+                }
                 temp.setSoLuong(SoLuong);
+            }
+
+            @Override
+            public void afterTextChanged(Editable editable) {
+
+            }
+        });
+        binding.edtGia.addTextChangedListener(new TextWatcher() {
+            @Override
+            public void beforeTextChanged(CharSequence charSequence, int i, int i1, int i2) {
+
+            }
+
+            @Override
+            public void onTextChanged(CharSequence charSequence, int i, int i1, int i2) {
+                String chuoi = binding.edtGia.getText().toString();
+                if (chuoi.isEmpty()) {
+                    binding.edtGia.setText("1");
+                }
             }
 
             @Override
@@ -125,6 +149,7 @@ public class TaoDonNhapHangFragment extends Fragment {
                     temp.setSoLuong(Integer.parseInt(sl));
                     temp.setGia(Integer.parseInt(gia));
                     dsChiTiet.add(temp);
+                    donNhap.setTongTien(donNhap.getTongTien() + (temp.getSoLuong()*temp.getGia()));
                     temp = new ChiTietNhap(donNhap.getId());
                     donHangAdapter.notifyDataSetChanged();
 
@@ -154,15 +179,21 @@ public class TaoDonNhapHangFragment extends Fragment {
     }
 
     private void upLoad(){
-        reference.child("donnhap").child(donNhap.getId()+"").setValue(donNhap);
-        for (int i = 0; i < dsChiTiet.size(); i++) {
-            reference.child("chiTietNhap").child(donNhap.getId()+"").child(dsChiTiet.get(i).getIdSanPham()).setValue(dsChiTiet.get(i));
+        if (dsChiTiet.size() > 0) {
+            reference.child("donnhap").child(donNhap.getId()+"").setValue(donNhap);
+            for (int i = 0; i < dsChiTiet.size(); i++) {
+                reference.child("chiTietNhap").child(donNhap.getId()+"").child(dsChiTiet.get(i).getIdSanPham()).setValue(dsChiTiet.get(i));
+            }
+            Toast.makeText(getActivity(), "Tạo đơn nhập kho thành công", Toast.LENGTH_SHORT).show();
+            donNhap = new DonNhap();
+            temp = new ChiTietNhap(donNhap.getId());
+            dsChiTiet.clear();
+            donHangAdapter.notifyDataSetChanged();
+
         }
-        Toast.makeText(getActivity(), "Tạo đơn nhập kho thành công", Toast.LENGTH_SHORT).show();
-        donNhap = new DonNhap();
-        temp = new ChiTietNhap(donNhap.getId());
-        dsChiTiet.clear();
-        donHangAdapter.notifyDataSetChanged();
+        else {
+            Toast.makeText(getActivity(), "Chưa có thông tin nhập hàng", Toast.LENGTH_SHORT).show();
+        }
     }
 
     private void setHienThiSanPham() {
@@ -192,6 +223,7 @@ public class TaoDonNhapHangFragment extends Fragment {
                         temp.setAnh(products.getAnh());
                         temp.setTen(products.getTen());
                         temp.setIdSanPham(products.getId());
+                        view.setBackgroundColor(Color.rgb(0, 255, 255));
 
 //                        Toast.makeText(getActivity(), "Đã chọn sản phẩm " + products.getTen(), Toast.LENGTH_SHORT).show();
                     }
