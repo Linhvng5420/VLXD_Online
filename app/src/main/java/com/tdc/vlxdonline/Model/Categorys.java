@@ -20,6 +20,7 @@ public class Categorys {
     private String id;
 
     public Categorys() {
+        id = System.currentTimeMillis() + "";
     }
 
     public Categorys(String ten, String id, String anh) {

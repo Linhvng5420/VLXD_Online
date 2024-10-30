@@ -16,7 +16,8 @@
         android:elevation="10dp"
         android:padding="8dp"
         android:layout_gravity="center"
-        android:gravity="center">
+        android:gravity="center"
+        android:background="@drawable/common_google_signin_btn_icon_dark_normal_background">
 
         <TextView
             android:id="@+id/tvTenDV"
@@ -24,7 +25,8 @@
             android:layout_height="wrap_content"
             android:gravity="center"
             android:padding="10dp"
-            android:textSize="30sp" />
+            android:textSize="30sp"
+            />
     </LinearLayout>
 
 </androidx.cardview.widget.CardView>

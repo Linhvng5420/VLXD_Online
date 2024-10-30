@@ -4,6 +4,7 @@ import android.app.Activity;
 import android.content.Intent;
 import android.net.Uri;
 import android.os.Bundle;
+import android.util.Log;
 import android.view.View;
 import android.widget.Button;
 import android.widget.EditText;
@@ -178,34 +179,36 @@ public class Warehouse_DanhMucActivity extends AppCompatActivity {
     }
 
     public void uploadData() {
-            if (!edtNhapDM.getText().toString().isEmpty()){
-                if (uri != null) {
-                    StorageReference storageReference = FirebaseStorage.getInstance().getReference().child("category Images")
-                            .child(uri.getLastPathSegment());
-                    storageReference.putFile(uri).addOnSuccessListener(new OnSuccessListener<UploadTask.TaskSnapshot>() {
-                        @Override
-                        public void onSuccess(UploadTask.TaskSnapshot taskSnapshot) {
-                            Task<Uri> uriTask = taskSnapshot.getStorage().getDownloadUrl();
-                            while (!uriTask.isComplete()) ;
-                            Uri urlImage = uriTask.getResult();
-                            imagesUrl = urlImage.toString();
-                            saveDate();
-                        }
-                    });
-                } else {
-                    saveDate();
-                }
+        if (!edtNhapDM.getText().toString().isEmpty()) {
+            if (uri != null) {
+                StorageReference storageReference = FirebaseStorage.getInstance().getReference().child("category Images")
+                        .child(uri.getLastPathSegment());
+                storageReference.putFile(uri).addOnSuccessListener(new OnSuccessListener<UploadTask.TaskSnapshot>() {
+                    @Override
+                    public void onSuccess(UploadTask.TaskSnapshot taskSnapshot) {
+                        Task<Uri> uriTask = taskSnapshot.getStorage().getDownloadUrl();
+                        while (!uriTask.isComplete()) ;
+                        Uri urlImage = uriTask.getResult();
+                        imagesUrl = urlImage.toString();
+                        saveDate();
+                    }
+                });
+            } else {
+                saveDate();
             }
+        }
     }
 
     private void saveDate() {
-        if (category.getId() == null){ category.setId(System.currentTimeMillis() + "");
-        category.setTen(edtNhapDM.getText().toString());
-        category.setAnh(uri != null ? imagesUrl.toString() : category.getAnh());  // Nếu bạn không cần thay đổi ảnh
+        if (category.getId() != null) {
+            category.setTen(edtNhapDM.getText().toString());
+            category.setAnh(uri != null ? imagesUrl.toString() : category.getAnh());  // Nếu bạn không cần thay đổi ảnh
+            reference.child("category").child(category.getId()).setValue(category);
 
-        reference.child("category").child(category.getId()).setValue(category);
+            Toast.makeText(this, "Đổi tên thành công", Toast.LENGTH_SHORT).show();
+        }
     }
-}
+
     private void deleteProduct(String id) {
         DatabaseReference productRef = FirebaseDatabase.getInstance().getReference("category").child(id);
         productRef.removeValue().addOnCompleteListener(new OnCompleteListener<Void>() {

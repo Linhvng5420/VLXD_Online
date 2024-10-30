@@ -32,7 +32,8 @@
             android:layout_height="160dp"
             android:layout_gravity="center"
             android:scaleType="centerCrop"
-            android:src="@drawable/ic_launcher_background" />
+            android:src="@drawable/ic_launcher_background"
+            android:background="@drawable/common_google_signin_btn_icon_dark_normal_background"/>
 
     </LinearLayout>
 

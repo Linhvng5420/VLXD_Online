@@ -319,7 +319,6 @@ public class Warehouse_ThemSanPhamActivity extends AppCompatActivity {
                     }
                 });
     }
-
     public void uploadData() {
         if (uri != null) {
             StorageReference storageReference = FirebaseStorage.getInstance().getReference().child("SanPham Images")

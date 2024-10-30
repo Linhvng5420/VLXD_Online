@@ -35,7 +35,8 @@
             android:src="@drawable/ic_launcher_background"
             android:elevation="10dp"
             android:padding="8dp"
-            android:gravity="center"/>
+            android:gravity="center"
+            android:background="@drawable/common_google_signin_btn_icon_dark_normal_background"/>
     </LinearLayout>
 
 </LinearLayout>
