@@ -1,0 +1,117 @@
+<?xml version="1.0" encoding="utf-8"?>
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:background="@drawable/anhgiaodien"
+    android:orientation="vertical"
+    tools:context=".Activity.Warehouse_DanhMucActivity">
+
+
+    <LinearLayout
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:background="#F0E4CE"
+        android:elevation="10dp"
+        android:orientation="horizontal"
+        android:padding="8dp"
+        android:layout_gravity="center"
+        android:gravity="center">
+
+    <TextView
+        android:textColor="#03A9F4"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:gravity="center"
+        android:text="BANNER"
+        android:textSize="40sp"
+        android:textStyle="bold" />
+    </LinearLayout>
+
+    <LinearLayout
+        android:layout_width="match_parent"
+        android:layout_height="0dp"
+        android:layout_marginStart="8dp"
+        android:layout_marginTop="8dp"
+        android:layout_marginEnd="8dp"
+        android:layout_weight="9"
+        android:backgroundTint="#EEEEEE"
+        android:elevation="4dp"
+        android:orientation="vertical">
+
+        <LinearLayout
+            android:layout_width="match_parent"
+            android:layout_height="175dp"
+            android:layout_marginBottom="8dp"
+            android:background="#fff"
+            android:backgroundTint="@color/white"
+            android:elevation="2dp"
+            android:orientation="horizontal"
+            android:padding="8dp"
+            android:layout_gravity="center"
+            android:gravity="center">
+
+            <Button
+                android:id="@+id/btnThemBanner"
+                android:layout_width="wrap_content"
+                android:layout_height="118dp"
+                android:layout_gravity="center"
+                android:paddingHorizontal="16dp"
+                android:text="Thêm"
+                android:textColor="@color/white"
+                app:cornerRadius="12dp"
+                android:elevation="10dp"
+                android:padding="8dp"
+                android:gravity="center"/>
+
+            <LinearLayout
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_marginBottom="8dp"
+                android:background="#fff"
+                android:backgroundTint="@color/white"
+                android:elevation="10dp"
+                android:orientation="horizontal"
+                android:padding="8dp"
+                android:layout_gravity="center"
+                android:gravity="center">
+
+                <ImageView
+                    android:id="@+id/ivAnhBanner"
+                    android:layout_width="157dp"
+                    android:layout_height="130dp"
+                    android:layout_gravity="center"
+                    android:scaleType="centerCrop"
+                    android:src="@drawable/add_a_photo_24" />
+            </LinearLayout>
+
+            <Button
+                android:id="@+id/btnXoaBanner"
+                android:layout_width="wrap_content"
+                android:layout_height="118dp"
+                android:layout_gravity="center"
+                android:paddingHorizontal="16dp"
+                android:text="Xoá"
+                android:textColor="@color/white"
+                app:cornerRadius="12dp"
+                android:elevation="10dp"
+                android:padding="8dp"
+                android:gravity="center"/>
+
+        </LinearLayout>
+
+        <androidx.recyclerview.widget.RecyclerView
+            android:id="@+id/recycleviewBanner"
+            android:layout_width="match_parent"
+            android:layout_height="match_parent"
+            android:layout_marginTop="5dp"
+            android:layout_marginBottom="5dp"
+            android:background="@color/white"
+            android:backgroundTint="#E0E0E0"
+            android:elevation="10dp"
+            android:padding="8dp"
+            android:layout_gravity="center"
+            android:gravity="center"/>
+    </LinearLayout>
+</LinearLayout>
