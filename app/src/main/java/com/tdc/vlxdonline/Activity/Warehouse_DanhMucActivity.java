@@ -218,10 +218,13 @@ public class Warehouse_DanhMucActivity extends AppCompatActivity {
                     Toast.makeText(Warehouse_DanhMucActivity.this, "Xóa sản phẩm thành công", Toast.LENGTH_SHORT).show();
                     // Xóa dữ liệu trên giao diện người dùng
                     edtNhapDM.setText("");
-                    ivAnhDM.setImageResource(0); // Xóa hình ảnh
+                    ivAnhDM.setImageResource(R.drawable.add_a_photo_24); // Xóa hình ảnh
+
+                    btnThemDM.setEnabled(true);
                 } else {
                     Toast.makeText(Warehouse_DanhMucActivity.this, "Xóa sản phẩm thất bại", Toast.LENGTH_SHORT).show();
                 }
+                list_DM.clear();
             }
         });
     }
