@@ -41,6 +41,7 @@ public class DonHangAdapter extends RecyclerView.Adapter<DonHangAdapter.ChiTietV
         holder.tvTenSanPham.setText(chiTiet.getTen());
         holder.tvGiaSP.setText("Giá: " + chiTiet.getGia());
         holder.tvSoLuong.setText("Số Lượng: " + chiTiet.getSoLuong());
+        holder.tvTongTien.setText("Tổng Tiền: " + (chiTiet.getGia() * chiTiet.getSoLuong()));
         // Load image (example with a placeholder if no image URL is provided)
         // Glide or Picasso can be used here to load images from a URL
         // Glide.with(context).load(chiTiet.getImageUrl()).into(holder.imgItemDonHang);

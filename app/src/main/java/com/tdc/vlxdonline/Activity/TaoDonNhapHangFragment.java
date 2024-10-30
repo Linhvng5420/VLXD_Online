@@ -14,6 +14,8 @@ import androidx.fragment.app.Fragment;
 import androidx.recyclerview.widget.GridLayoutManager;
 import androidx.recyclerview.widget.LinearLayoutManager;
 
+import android.text.Editable;
+import android.text.TextWatcher;
 import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
@@ -34,6 +36,7 @@ import com.tdc.vlxdonline.Adapter.DonHangAdapter;
 import com.tdc.vlxdonline.Adapter.ProductAdapter;
 
 import com.tdc.vlxdonline.Model.ChiTietNhap;
+import com.tdc.vlxdonline.Model.DonNhap;
 import com.tdc.vlxdonline.Model.Products;
 import com.tdc.vlxdonline.R;
 import com.tdc.vlxdonline.databinding.FragmentTaoDonNhapHangBinding;
@@ -47,12 +50,15 @@ public class TaoDonNhapHangFragment extends Fragment {
     ProductAdapter adapter;
     DonHangAdapter donHangAdapter;
     ArrayList<ChiTietNhap> dsChiTiet = new ArrayList<>();
+    ChiTietNhap temp = new ChiTietNhap();
     Products products = new Products();
     DatabaseReference reference;
     ValueEventListener eventDocDanhSach;
     private String tuKhoa = "";
     String category = "";
     View preView = null;
+    int SoLuong = 0;
+    DonNhap donNhap = new DonNhap();
 
     @Override
     public void onCreate(Bundle savedInstanceState) {
@@ -92,6 +98,22 @@ public class TaoDonNhapHangFragment extends Fragment {
             }
         });
 
+        binding.edtSoLuong.addTextChangedListener(new TextWatcher() {
+            @Override
+            public void beforeTextChanged(CharSequence charSequence, int i, int i1, int i2) {
+
+            }
+
+            @Override
+            public void onTextChanged(CharSequence charSequence, int i, int i1, int i2) {
+
+            }
+
+            @Override
+            public void afterTextChanged(Editable editable) {
+
+            }
+        });
         setEvent();
 //        btnXacNhan = binding.btnXacNhan; // Ensure binding is initialized
 //        btnXacNhan.setOnClickListener(new View.OnClickListener() {
@@ -116,7 +138,7 @@ public class TaoDonNhapHangFragment extends Fragment {
     private void setEvent() {
 
 // bug ấn nút xác nhận + thêm 1 item dsChiTiet
-        dsChiTiet.add(new ChiTietNhap("0", "0", "1000", "95000", "Thép", "https://www.pexels.com/vi-vn/anh/c-nh-bai-d-xe-ng-m-moody-vao-ban-dem-29113387/"));
+        dsChiTiet.add(new ChiTietNhap("0", "0", 1000, 95000, "Thép", "https://www.pexels.com/vi-vn/anh/c-nh-bai-d-xe-ng-m-moody-vao-ban-dem-29113387/"));
         donHangAdapter = new DonHangAdapter(getActivity(), dsChiTiet);
         donHangAdapter.notifyDataSetChanged();
     }
@@ -143,7 +165,11 @@ public class TaoDonNhapHangFragment extends Fragment {
                     public void OnItemClick(View view, int position) {
                         products = dsSanPham.get(position);
 
-                        ((Warehouse_HomeActivity) getActivity()).ReplaceFragment(new ChiTietSPKho_Fragment(products.getId()));
+//                        ((Warehouse_HomeActivity) getActivity()).ReplaceFragment(new ChiTietSPKho_Fragment(products.getId()));
+                        Toast.makeText(getActivity(), "Bạn đã chọn sản phẩm "+ products.getTen(), Toast.LENGTH_SHORT).show();
+                        temp.setAnh(products.getAnh());
+                        temp.setTen(products.getTen());
+                        temp.setIdSanPham(products.getId());
 
 //                        Toast.makeText(getActivity(), "Đã chọn sản phẩm " + products.getTen(), Toast.LENGTH_SHORT).show();
                     }

@@ -13,10 +13,11 @@ public class ChiTietNhap {
                 '}';
     }
 
-    private String idDon, idSanPham, soLuong, gia;
+    private String idDon, idSanPham;
+    private int soLuong, gia;
     private String ten, anh;
 
-    public ChiTietNhap(String idDon, String idSanPham, String soLuong, String gia, String ten, String anh) {
+    public ChiTietNhap(String idDon, String idSanPham, int soLuong, int gia, String ten, String anh) {
         this.idDon = idDon;
         this.idSanPham = idSanPham;
         this.soLuong = soLuong;
@@ -44,19 +45,19 @@ public class ChiTietNhap {
         this.idSanPham = idSanPham;
     }
 
-    public String getSoLuong() {
+    public int getSoLuong() {
         return soLuong;
     }
 
-    public void setSoLuong(String soLuong) {
+    public void setSoLuong(int soLuong) {
         this.soLuong = soLuong;
     }
 
-    public String getGia() {
+    public int getGia() {
         return gia;
     }
 
-    public void setGia(String gia) {
+    public void setGia(int gia) {
         this.gia = gia;
     }
 
