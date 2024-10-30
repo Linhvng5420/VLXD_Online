@@ -14,7 +14,7 @@
             android:layout_height="match_parent"
             android:elevation="10dp"
             android:layout_margin="5dp"
-            android:background="@android:drawable/editbox_background_normal"
+            android:background="@drawable/common_google_signin_btn_icon_dark_normal_background"
             android:orientation="vertical"
             android:padding="10dp">
 
@@ -65,10 +65,10 @@
                     android:layout_width="0dp"
                     android:layout_height="match_parent"
                     android:layout_weight="1"
-                    android:autoSizeMaxTextSize="24sp"
+                    android:autoSizeMaxTextSize="20sp"
                     android:autoSizeTextType="uniform"
                     android:background="@drawable/bg_img_item"
-                    android:gravity="center"
+                    android:gravity="center|top"
                     android:paddingLeft="5dp"
                     android:paddingRight="5dp"
                     android:text="Chức Vụ"
