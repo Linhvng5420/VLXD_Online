@@ -43,7 +43,20 @@ public class SanPham_Adapter extends RecyclerView.Adapter<SanPham_ViewHolder> {
     public void onBindViewHolder(@NonNull SanPham_ViewHolder holder, int position) {
         Glide.with(context).load(list.get(position).getAnh()).into(holder.ivImages);
         holder.tvTenSP.setText(list.get(position).getTen());
-        holder.giabanSP.setText(list.get(position).gia);
+        StringBuilder chuoi = new StringBuilder(list.get(position).gia);
+        if (chuoi.length() > 3) {
+            int dem = 0;
+            int doDai = chuoi.length() - 1;
+            for (int i = doDai; i > 0; i--) {
+                dem = dem + 1;
+                if (dem == 3) {
+                    chuoi.insert(i, '.');
+                    dem = 0;
+                }
+            }
+        }
+        chuoi = new StringBuilder(chuoi + " VND");
+        holder.giabanSP.setText(chuoi);
         // Thiết lập sự kiện click
         holder.itemView.setOnClickListener(new View.OnClickListener() {
             @Override

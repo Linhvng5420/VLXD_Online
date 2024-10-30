@@ -35,6 +35,7 @@ import com.tdc.vlxdonline.Adapter.AnhSP_Adapter;
 import com.tdc.vlxdonline.Adapter.Banner_Adapter;
 import com.tdc.vlxdonline.Adapter.CategoryAdapter;
 import com.tdc.vlxdonline.Model.AnhSP;
+import com.tdc.vlxdonline.Model.AnhSanPham;
 import com.tdc.vlxdonline.Model.Banner;
 import com.tdc.vlxdonline.Model.Categorys;
 import com.tdc.vlxdonline.R;
@@ -49,8 +50,8 @@ public class Warehouse_AnhSPActivity extends AppCompatActivity {
     Uri uri;
     String imagesUrl;
     AnhSP_Adapter adapter;
-    AnhSP anhSP = new AnhSP();
-    List<AnhSP> list_ASP = new ArrayList<>();
+    AnhSanPham anhSP = new AnhSanPham();
+    List<AnhSanPham> list_ASP = new ArrayList<>();
     ValueEventListener listener;
     RecyclerView recyclerView;
     FirebaseDatabase database = FirebaseDatabase.getInstance();
@@ -100,8 +101,8 @@ public class Warehouse_AnhSPActivity extends AppCompatActivity {
             @Override
             public void onClick(View v) {
                 // Lấy tên sản phẩm từ EditText
-                String id = anhSP.getId();
-                if (!id.isEmpty()) {
+                long id = anhSP.getId();
+                if (id != 0) {
                     // Gọi phương thức xóa sản phẩm
                     deleteProduct(id);
                 } else {
@@ -116,17 +117,17 @@ public class Warehouse_AnhSPActivity extends AppCompatActivity {
                 public void onItemClick(int position) {
                     // Xử lý sự kiện click vào sản phẩm
                     if (position != RecyclerView.NO_POSITION) {
-                        if (!list_ASP.get(position).getId().equals(anhSP.getId())) {
+                        if (list_ASP.get(position).getId()!=(anhSP.getId())) {
                             btnThemASP.setEnabled(false);
                             anhSP = list_ASP.get(position);
 
                             // Hiển thị thông tin sản phẩm lên các EditText
                             // Hiển thị hình ảnh sản phẩm
                             Glide.with(Warehouse_AnhSPActivity.this)
-                                    .load(anhSP.getAnhSP())
+                                    .load(anhSP.getAnh())
                                     .into(ivAnhSP);
                         }else {
-                            anhSP = new AnhSP();
+                            anhSP = new AnhSanPham();
                             ivAnhSP.setImageResource(R.drawable.add_a_photo_24);
                             btnThemASP.setEnabled(true);
                         }
@@ -150,12 +151,12 @@ public class Warehouse_AnhSPActivity extends AppCompatActivity {
         };
         recyclerView.setAdapter(adapter);
         reference = FirebaseDatabase.getInstance().getReference();
-        listener = reference.child("QLAnhSP").addValueEventListener(new ValueEventListener() {
+        listener = reference.child("ProdImages").addValueEventListener(new ValueEventListener() {
             @Override
             public void onDataChange(@NonNull DataSnapshot snapshot) {
                 list_ASP.clear();
                 for (DataSnapshot items : snapshot.getChildren()) {
-                    AnhSP anhSP = items.getValue(AnhSP.class);
+                    AnhSanPham anhSP = items.getValue(AnhSanPham.class);
                     list_ASP.add(anhSP);
                 }
                 // Cập nhật adapter sau khi có dữ liệu
@@ -170,7 +171,7 @@ public class Warehouse_AnhSPActivity extends AppCompatActivity {
 
     public void uploadData() {
         if (uri != null) {
-            StorageReference storageReference = FirebaseStorage.getInstance().getReference().child("QLAnhSP Images")
+            StorageReference storageReference = FirebaseStorage.getInstance().getReference().child("ProdImages Images")
                     .child(uri.getLastPathSegment());
             storageReference.putFile(uri).addOnSuccessListener(new OnSuccessListener<UploadTask.TaskSnapshot>() {
                 @Override
@@ -186,21 +187,19 @@ public class Warehouse_AnhSPActivity extends AppCompatActivity {
             saveDate();
         }
     }
-
     private void saveDate() {
-        if (anhSP.getId() == null) anhSP.setId(System.currentTimeMillis() + "");
-        anhSP.setAnhSP(uri != null ? imagesUrl.toString() : anhSP.getAnhSP());  // Nếu bạn không cần thay đổi ảnh
-        reference.child("QLAnhSP").child(anhSP.getId()).setValue(anhSP);
+        anhSP.setAnh(uri != null ? imagesUrl.toString() : anhSP.getAnh());  // Nếu bạn không cần thay đổi ảnh
+        reference.child("ProdImages").child(anhSP.getId()+"").setValue(anhSP);
     }
-    private void deleteProduct(String id) {
-        DatabaseReference productRef = FirebaseDatabase.getInstance().getReference("QLAnhSP").child(id);
+    private void deleteProduct(long id) {
+        DatabaseReference productRef = FirebaseDatabase.getInstance().getReference("ProdImages").child(id + "");
         productRef.removeValue().addOnCompleteListener(new OnCompleteListener<Void>() {
             @Override
             public void onComplete(@NonNull Task<Void> task) {
                 if (task.isSuccessful()) {
                     Toast.makeText(Warehouse_AnhSPActivity.this, "Xóa sản phẩm thành công", Toast.LENGTH_SHORT).show();
                     // Xóa dữ liệu trên giao diện người dùng
-                    ivAnhSP.setImageResource(0); // Xóa hình ảnh
+                    ivAnhSP.setImageResource(R.drawable.add_a_photo_24); // Xóa hình ảnh
                 } else {
                     Toast.makeText(Warehouse_AnhSPActivity.this, "Xóa sản phẩm thất bại", Toast.LENGTH_SHORT).show();
                 }

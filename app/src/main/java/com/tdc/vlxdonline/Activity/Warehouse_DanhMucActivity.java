@@ -63,6 +63,7 @@ public class Warehouse_DanhMucActivity extends AppCompatActivity {
         getDate();
         setEvent();
     }
+
     private void setEvent() {
         ActivityResultLauncher<Intent> activityResultLauncher = registerForActivityResult(
                 new ActivityResultContracts.StartActivityForResult(),
@@ -135,7 +136,7 @@ public class Warehouse_DanhMucActivity extends AppCompatActivity {
                             Glide.with(Warehouse_DanhMucActivity.this)
                                     .load(category.getAnh())
                                     .into(ivAnhDM);
-                        }else {
+                        } else {
                             category = new Categorys();
                             edtNhapDM.setText("");
                             ivAnhDM.setImageResource(R.drawable.add_a_photo_24);
@@ -177,31 +178,34 @@ public class Warehouse_DanhMucActivity extends AppCompatActivity {
     }
 
     public void uploadData() {
-        if (uri != null) {
-            StorageReference storageReference = FirebaseStorage.getInstance().getReference().child("category Images")
-                    .child(uri.getLastPathSegment());
-            storageReference.putFile(uri).addOnSuccessListener(new OnSuccessListener<UploadTask.TaskSnapshot>() {
-                @Override
-                public void onSuccess(UploadTask.TaskSnapshot taskSnapshot) {
-                    Task<Uri> uriTask = taskSnapshot.getStorage().getDownloadUrl();
-                    while (!uriTask.isComplete()) ;
-                    Uri urlImage = uriTask.getResult();
-                    imagesUrl = urlImage.toString();
+            if (!edtNhapDM.getText().toString().isEmpty()){
+                if (uri != null) {
+                    StorageReference storageReference = FirebaseStorage.getInstance().getReference().child("category Images")
+                            .child(uri.getLastPathSegment());
+                    storageReference.putFile(uri).addOnSuccessListener(new OnSuccessListener<UploadTask.TaskSnapshot>() {
+                        @Override
+                        public void onSuccess(UploadTask.TaskSnapshot taskSnapshot) {
+                            Task<Uri> uriTask = taskSnapshot.getStorage().getDownloadUrl();
+                            while (!uriTask.isComplete()) ;
+                            Uri urlImage = uriTask.getResult();
+                            imagesUrl = urlImage.toString();
+                            saveDate();
+                        }
+                    });
+                } else {
                     saveDate();
                 }
-            });
-        } else {
-            saveDate();
-        }
+            }
     }
 
     private void saveDate() {
-        if (category.getId() == null) category.setId(System.currentTimeMillis() + "");
+        if (category.getId() == null){ category.setId(System.currentTimeMillis() + "");
         category.setTen(edtNhapDM.getText().toString());
         category.setAnh(uri != null ? imagesUrl.toString() : category.getAnh());  // Nếu bạn không cần thay đổi ảnh
+
         reference.child("category").child(category.getId()).setValue(category);
     }
-
+}
     private void deleteProduct(String id) {
         DatabaseReference productRef = FirebaseDatabase.getInstance().getReference("category").child(id);
         productRef.removeValue().addOnCompleteListener(new OnCompleteListener<Void>() {

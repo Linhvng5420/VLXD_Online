@@ -289,18 +289,6 @@ public class Warehouse_ThemSanPhamActivity extends AppCompatActivity {
                                     .load(sanPhamModel.getAnh())
                                     .into(ivImages);
                         } else {
-//                            sanPhamModel = new SanPham_Model();
-//                            edtNhapten.setText("");
-//                            edtNhapgiaban.setText("");
-//                            edtNhapsoluong.setText("");
-//                            edtDaban.setText("");
-//                            edtMoTa.setText("");
-//                            spdanhMuc.setSelection(0);
-//                            spdonVi.setSelection(0);
-//                            ivImages.setImageResource(R.drawable.add_a_photo_24);
-//
-//                            btnSua.setEnabled(false);
-//                            btnThem.setEnabled(true);
                             clearSelection();
                         }
 
