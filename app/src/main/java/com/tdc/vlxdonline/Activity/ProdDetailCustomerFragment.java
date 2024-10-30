@@ -37,7 +37,7 @@ public class ProdDetailCustomerFragment extends Fragment {
     // Id product duoc chon
     private String idProd = "";
     private Products prod;
-    private int soLuong = 0;
+    private int soLuong = 1;
     // danh sach product de cu
     ArrayList<Products> dataProds = new ArrayList<>();
     ProductAdapter productAdapter;
@@ -230,10 +230,11 @@ public class ProdDetailCustomerFragment extends Fragment {
                         binding.tvTenSpDetail.setText(product.getTen());
                         binding.tvGiaSpDetail.setText(product.getGia() + " VND");
                         binding.tvTonKhoDetail.setText("Kho: " + product.getTonKho());
-                        if (!product.getTonKho().equals("0")) {
-                            soLuong = 1;
-                        }else{
+                        if (product.getTonKho().equals("0")) {
+                            soLuong = 0;
                             binding.edtSoLuong.setText("0");
+                        }else{
+                            binding.edtSoLuong.setText(soLuong + "");
                         }
                         binding.tvDaBanDetail.setText("Đã Bán: " + product.getDaBan());
                         binding.tvDonViDetail.setText(product.getDonVi());
