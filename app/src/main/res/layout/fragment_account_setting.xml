@@ -86,7 +86,7 @@
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
                 android:alignmentMode="alignBounds"
-                android:background="@drawable/common_google_signin_btn_icon_dark_normal_background"
+                android:background="@android:drawable/editbox_dropdown_light_frame"
                 android:columnCount="4"
                 android:rowCount="1"
                 android:useDefaultMargins="true">
@@ -193,7 +193,6 @@
             <LinearLayout
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
-                android:background="@drawable/common_google_signin_btn_icon_dark_normal_background"
                 android:orientation="vertical"
                 android:padding="8dp">
 
@@ -290,7 +289,7 @@
             <LinearLayout
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
-                android:background="@drawable/common_google_signin_btn_icon_dark_normal_background"
+                android:background="@drawable/"
                 android:orientation="vertical"
                 android:padding="8dp">
 
