@@ -100,4 +100,18 @@
         android:elevation="4dp"
         android:background="@android:color/white"/>
 
+<!--    <LinearLayout-->
+<!--        android:layout_width="match_parent"-->
+<!--        android:layout_height="0dp"-->
+<!--        android:layout_weight="1"-->
+<!--        android:orientation="horizontal">-->
+
+<!--        <com.google.android.material.bottomnavigation.BottomNavigationView-->
+<!--            android:id="@+id/nav_owner_kho"-->
+<!--            android:layout_width="match_parent"-->
+<!--            android:layout_height="wrap_content"-->
+<!--            android:layout_gravity="bottom"-->
+<!--            app:menu="@menu/owner_bottom_nav_menu"/>-->
+<!--    </LinearLayout>-->
+
 </LinearLayout>

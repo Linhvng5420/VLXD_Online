@@ -187,9 +187,6 @@ public class Warehouse_ThemSanPhamActivity extends AppCompatActivity {
     }
 
     private void setEvent() {
-        btnXoa.setEnabled(false);
-        btnSua.setEnabled(false);
-
         ActivityResultLauncher<Intent> activityResultLauncher = registerForActivityResult(
                 new ActivityResultContracts.StartActivityForResult(),
                 new ActivityResultCallback<ActivityResult>() {
@@ -253,6 +250,10 @@ public class Warehouse_ThemSanPhamActivity extends AppCompatActivity {
                 }
             }
         });
+        btnSua.setEnabled(false);
+        btnXoa.setEnabled(false);
+        btnThem.setEnabled(true);
+        edtDaban.setEnabled(false);
 
         // Đảm bảo Adapter đã được khởi tạo trước khi thiết lập sự kiện click
         if (adapter != null) {
@@ -262,9 +263,10 @@ public class Warehouse_ThemSanPhamActivity extends AppCompatActivity {
                     // Xử lý sự kiện click vào sản phẩm
                     if (position != RecyclerView.NO_POSITION) {
                         if (!list_SP.get(position).getId().equals(sanPhamModel.getId())) {
-                            btnXoa.setEnabled(true);
                             btnSua.setEnabled(true);
+                            btnXoa.setEnabled(true);
                             btnThem.setEnabled(false);
+                            edtDaban.setEnabled(false);
                             sanPhamModel = list_SP.get(position);
 
                             // Hiển thị thông tin sản phẩm lên các EditText
@@ -291,7 +293,6 @@ public class Warehouse_ThemSanPhamActivity extends AppCompatActivity {
                         } else {
                             clearSelection();
                         }
-
                     }
                 }
             });
@@ -314,11 +315,11 @@ public class Warehouse_ThemSanPhamActivity extends AppCompatActivity {
         reference.child("products").child(sanPhamModel.getId()).setValue(sanPhamModel)
                 .addOnCompleteListener(task -> {
                     if (task.isSuccessful()) {
-                        clearFields(); // Gọi phương thức để xóa thông tin sau khi lưu thành công
                         Toast.makeText(this, "Thêm sản phẩm thành công", Toast.LENGTH_SHORT).show();
                     }
                 });
     }
+
     public void uploadData() {
         if (uri != null) {
             StorageReference storageReference = FirebaseStorage.getInstance().getReference().child("SanPham Images")
@@ -331,10 +332,12 @@ public class Warehouse_ThemSanPhamActivity extends AppCompatActivity {
                     Uri urlImage = uriTask.getResult();
                     imagesUrl = urlImage.toString();
                     saveDate();
+                    clearSelection();
                 }
             });
         } else {
             saveDate();
+            clearSelection();
         }
     }
 
@@ -345,21 +348,7 @@ public class Warehouse_ThemSanPhamActivity extends AppCompatActivity {
             public void onComplete(@NonNull Task<Void> task) {
                 if (task.isSuccessful()) {
                     Toast.makeText(Warehouse_ThemSanPhamActivity.this, "Xóa sản phẩm thành công", Toast.LENGTH_SHORT).show();
-
-                    // Reset tất cả thông tin về mặc định sau khi xóa
-                    edtNhapten.setText("");
-                    edtNhapgiaban.setText("");
-                    edtNhapsoluong.setText("");
-                    edtDaban.setText("");
-                    edtMoTa.setText("");
-                    spdanhMuc.setSelection(0);
-                    spdonVi.setSelection(0);
-                    ivImages.setImageResource(R.drawable.add_a_photo_24); // Đặt lại hình ảnh về biểu tượng mặc định
-
-                    // Thiết lập lại trạng thái cho các nút
-                    btnThem.setEnabled(true);
-                    btnSua.setEnabled(false);
-
+                    clearSelection(); // Clear selection after deleting
                 } else {
                     Toast.makeText(Warehouse_ThemSanPhamActivity.this, "Xóa sản phẩm thất bại", Toast.LENGTH_SHORT).show();
                 }
@@ -367,7 +356,8 @@ public class Warehouse_ThemSanPhamActivity extends AppCompatActivity {
         });
     }
 
-    private void clearFields() {
+    private void clearSelection() {
+        sanPhamModel = new SanPham_Model();
         edtNhapten.setText("");
         edtNhapgiaban.setText("");
         edtNhapsoluong.setText("");
@@ -375,18 +365,12 @@ public class Warehouse_ThemSanPhamActivity extends AppCompatActivity {
         edtMoTa.setText("");
         spdanhMuc.setSelection(0);
         spdonVi.setSelection(0);
-        ivImages.setImageResource(R.drawable.add_a_photo_24);  // Đặt lại hình ảnh về biểu tượng mặc định
-        uri = null;  // Đặt lại URI ảnh về null để chuẩn bị cho lần thêm tiếp theo
-        btnThem.setEnabled(true);
-        btnSua.setEnabled(false);
-    }
-    private void clearSelection() {
-        sanPhamModel = new SanPham_Model();
-        clearFields();
+        ivImages.setImageResource(R.drawable.add_a_photo_24);
         btnXoa.setEnabled(false);
         btnSua.setEnabled(false);
         btnThem.setEnabled(true);
     }
+
     private void setControl() {
         edtNhapten = findViewById(R.id.edtNhapTen);
         edtNhapgiaban = findViewById(R.id.edtNhapgiaban);

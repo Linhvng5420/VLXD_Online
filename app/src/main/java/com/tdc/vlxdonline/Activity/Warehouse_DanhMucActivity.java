@@ -93,7 +93,16 @@ public class Warehouse_DanhMucActivity extends AppCompatActivity {
         btnThemDM.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                uploadData();
+                if (
+                        uri == null ||
+                                edtNhapDM.getText().toString().trim().isEmpty())
+                {
+
+                    Toast.makeText(Warehouse_DanhMucActivity.this,
+                            "Vui lòng điền đầy đủ thông tin sản phẩm!", Toast.LENGTH_SHORT).show();
+                } else{
+                    uploadData();
+                }
             }
         });
         btnXoaDM.setOnClickListener(new View.OnClickListener() {
@@ -119,6 +128,9 @@ public class Warehouse_DanhMucActivity extends AppCompatActivity {
                 }
             }
         });
+        btnSuaDM.setEnabled(false);
+        btnXoaDM.setEnabled(false);
+        btnThemDM.setEnabled(true);
         // Đảm bảo Adapter đã được khởi tạo trước khi thiết lập sự kiện click
         if (adapter != null) {
             adapter.setOnItemClickListener(new CategoryAdapter.OnItemClickListener() {
@@ -128,6 +140,7 @@ public class Warehouse_DanhMucActivity extends AppCompatActivity {
                     if (position != RecyclerView.NO_POSITION) {
                         if (!list_DM.get(position).getId().equals(category.getId())) {
                             btnSuaDM.setEnabled(true);
+                            btnXoaDM.setEnabled(true);
                             btnThemDM.setEnabled(false);
                             category = list_DM.get(position);
 
@@ -138,13 +151,8 @@ public class Warehouse_DanhMucActivity extends AppCompatActivity {
                                     .load(category.getAnh())
                                     .into(ivAnhDM);
                         } else {
-                            category = new Categorys();
-                            edtNhapDM.setText("");
-                            ivAnhDM.setImageResource(R.drawable.add_a_photo_24);
-                            btnSuaDM.setEnabled(false);
-                            btnThemDM.setEnabled(true);
+                            resetSelection();
                         }
-
                     }
                 }
             });
@@ -190,43 +198,58 @@ public class Warehouse_DanhMucActivity extends AppCompatActivity {
                         while (!uriTask.isComplete()) ;
                         Uri urlImage = uriTask.getResult();
                         imagesUrl = urlImage.toString();
-                        saveDate();
+                        saveData();
                     }
                 });
             } else {
-                saveDate();
+                saveData();
             }
         }
     }
 
-    private void saveDate() {
+    private void saveData() {
         if (category.getId() != null) {
             category.setTen(edtNhapDM.getText().toString());
-            category.setAnh(uri != null ? imagesUrl.toString() : category.getAnh());  // Nếu bạn không cần thay đổi ảnh
-            reference.child("category").child(category.getId()).setValue(category);
-
-            Toast.makeText(this, "Đổi tên thành công", Toast.LENGTH_SHORT).show();
+            category.setAnh(uri != null ? imagesUrl : category.getAnh());
+            reference.child("category").child(category.getId()).setValue(category).addOnCompleteListener(task -> {
+                if (task.isSuccessful()) {
+                    Toast.makeText(this, "Cập nhật thành công", Toast.LENGTH_SHORT).show();
+                    resetSelection();
+                }
+            });
+        } else {
+            String newCategoryId = reference.child("category").push().getKey();
+            category.setId(newCategoryId);
+            category.setTen(edtNhapDM.getText().toString());
+            category.setAnh(uri != null ? imagesUrl : null);
+            reference.child("category").child(newCategoryId).setValue(category).addOnCompleteListener(task -> {
+                if (task.isSuccessful()) {
+                    Toast.makeText(this, "Thêm danh mục thành công", Toast.LENGTH_SHORT).show();
+                    resetSelection();
+                }
+            });
         }
     }
 
     private void deleteProduct(String id) {
         DatabaseReference productRef = FirebaseDatabase.getInstance().getReference("category").child(id);
-        productRef.removeValue().addOnCompleteListener(new OnCompleteListener<Void>() {
-            @Override
-            public void onComplete(@NonNull Task<Void> task) {
-                if (task.isSuccessful()) {
-                    Toast.makeText(Warehouse_DanhMucActivity.this, "Xóa sản phẩm thành công", Toast.LENGTH_SHORT).show();
-                    // Xóa dữ liệu trên giao diện người dùng
-                    edtNhapDM.setText("");
-                    ivAnhDM.setImageResource(R.drawable.add_a_photo_24); // Xóa hình ảnh
-
-                    btnThemDM.setEnabled(true);
-                } else {
-                    Toast.makeText(Warehouse_DanhMucActivity.this, "Xóa sản phẩm thất bại", Toast.LENGTH_SHORT).show();
-                }
-                list_DM.clear();
+        productRef.removeValue().addOnCompleteListener(task -> {
+            if (task.isSuccessful()) {
+                Toast.makeText(Warehouse_DanhMucActivity.this, "Xóa sản phẩm thành công", Toast.LENGTH_SHORT).show();
+                resetSelection();
+            } else {
+                Toast.makeText(Warehouse_DanhMucActivity.this, "Xóa sản phẩm thất bại", Toast.LENGTH_SHORT).show();
             }
         });
+    }
+
+    private void resetSelection() {
+        category = new Categorys();
+        edtNhapDM.setText("");
+        ivAnhDM.setImageResource(R.drawable.add_a_photo_24);
+        btnSuaDM.setEnabled(false);
+        btnXoaDM.setEnabled(false);
+        btnThemDM.setEnabled(true);
     }
 
     private void setCtronl() {

@@ -58,7 +58,26 @@ public class Warehouse_Kho_HomeActivity extends AppCompatActivity {
         });
 
     }
-
+//Bắt sự kiện nhấn Navbar Bottom
+//    private void EventNavigationBottom() {
+//        warehouseHomeBinding.navWarehouse.setOnItemSelectedListener(item -> {
+//            int itemId = item.getItemId();
+//
+//            if (itemId == R.id.nav_owner_dashboard) {
+//                ReplaceFragment(new Fragment());
+//            } else if (itemId == R.id.nav_owner_nhanvien) {
+//                ReplaceFragment(new Fragment());
+//            } else if (itemId == R.id.nav_owner_khachhang) {
+//                ReplaceFragment(new Fragment());
+//            } else if (itemId == R.id.nav_owner_donhang) {
+//                ReplaceFragment(new Fragment());
+//            } else if (itemId == R.id.nav_owner_kho) {
+//                ReplaceFragment(new Fragment());
+//            }
+//
+//            return true;
+//        });
+//    }
     private void setCtronl() {
         tvQLSP = findViewById(R.id.tvQLSP);
         tvQLDM = findViewById(R.id.tvQLDM);
