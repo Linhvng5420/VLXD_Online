@@ -1,5 +1,5 @@
 [versions]
-agp = "8.6.0"
+agp = "8.7.1"
 androidMail = "1.6.7"
 compiler = "4.11.0"
 junit = "4.13.2"

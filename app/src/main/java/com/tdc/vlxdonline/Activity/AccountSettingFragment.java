@@ -1,5 +1,6 @@
 package com.tdc.vlxdonline.Activity;
 
+import android.app.AlertDialog;
 import android.content.Intent;
 import android.os.Bundle;
 import android.view.LayoutInflater;
@@ -10,7 +11,6 @@ import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
 import androidx.fragment.app.Fragment;
 
-import com.tdc.vlxdonline.R;
 import com.tdc.vlxdonline.databinding.FragmentAccountSettingBinding;
 
 public class AccountSettingFragment extends Fragment {
@@ -36,15 +36,19 @@ public class AccountSettingFragment extends Fragment {
         binding.btnLogout.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                // Xóa thông tin đăng nhập nếu có, ví dụ:
-                LoginActivity.idUser = ""; // Reset idUser
-                LoginActivity.typeUser = -1; // Reset typeUser
+                new AlertDialog.Builder(getContext()).setTitle("Đăng Xuất").setMessage("Đăng Xuất Khỏi Ứng Dụng").setPositiveButton("Có", (dialog, which) -> {
+                    // Xóa thông tin đăng nhập
+//                LoginActivity.idUser = "";
+//                LoginActivity.typeUser = -1;
 
-                // Quay về màn hình LoginActivity
-                Intent intent = new Intent(getActivity(), LoginActivity.class);
-                intent.addFlags(Intent.FLAG_ACTIVITY_CLEAR_TOP | Intent.FLAG_ACTIVITY_NEW_TASK);
-                startActivity(intent);
-                getActivity().finish(); // Đóng Owner_HomeActivity để quay lại màn hình đăng nhập
+                    // Quay về màn hình LoginActivity
+                    Intent intent = new Intent(getActivity(), LoginActivity.class);
+                    // Đóng hết các màn hình hiện có hoặc ẩn để quay lại màn hình đăng nhập
+                    intent.addFlags(Intent.FLAG_ACTIVITY_CLEAR_TOP | Intent.FLAG_ACTIVITY_NEW_TASK);
+
+                    startActivity(intent);
+                    getActivity().finish(); // Đóng Owner_HomeActivity để quay lại màn hình đăng nhập
+                }).setNegativeButton("Không", null).show();
             }
         });
 

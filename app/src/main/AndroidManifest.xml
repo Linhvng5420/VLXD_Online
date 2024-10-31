@@ -26,9 +26,6 @@
             </intent-filter>
         </activity>
         <activity
-            android:name=".Activity.RegisterActivity"
-            android:exported="false" />
-        <activity
             android:name=".Activity.Owner_HomeActivity"
             android:exported="false" />
     </application>
