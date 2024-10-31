@@ -5,7 +5,10 @@ import android.content.ClipboardManager;
 import android.content.Context;
 import android.os.Bundle;
 import android.text.Editable;
+import android.text.SpannableString;
+import android.text.Spanned;
 import android.text.TextWatcher;
+import android.text.style.StrikethroughSpan;
 import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
@@ -96,8 +99,39 @@ public class Owner_NhanVienAddFragment extends Fragment {
         setupSaveButton();
 
         // Bắt sự kiện nhập dữ liệu đầu vào
-        setupNameTextWatcher();
+        binding.etTenNhanVien.addTextChangedListener(new TextWatcher() {
+            @Override
+            public void beforeTextChanged(CharSequence charSequence, int i, int i1, int i2) {
 
+            }
+
+            @Override
+            public void onTextChanged(CharSequence charSequence, int start, int before, int count) {
+                String tenNhanVien = binding.etTenNhanVien.getText().toString();
+
+                // Kiểm tra điều kiện độ dài tên
+                if (tenNhanVien.isEmpty() || tenNhanVien.length() < 2) {
+                    binding.etTenNhanVien.setError("Vui lòng nhập đủ họ tên nhân viên");
+                    setVisibilitySaveButton(false);
+                    return;
+                }
+
+                // Kiểm tra ký tự
+                if (!tenNhanVien.matches("[a-zA-Z ]+")) {
+                    binding.etTenNhanVien.setError("Không Nhập Ký Tự Khác A-Z");
+                    setVisibilitySaveButton(false);
+                    return;
+                }
+
+                // Tên hợp lệ
+                setVisibilitySaveButton(true);
+            }
+
+            @Override
+            public void afterTextChanged(Editable editable) {
+
+            }
+        });
         binding.etSDT.addTextChangedListener(new TextWatcher() {
             @Override
             public void beforeTextChanged(CharSequence s, int start, int count, int after) {
@@ -112,11 +146,13 @@ public class Owner_NhanVienAddFragment extends Fragment {
                 String phone = s.toString();
                 if (phone.matches(vietnamPhoneRegex) == true) // Kiểm tra định dạng phone
                 {
+                    setVisibilitySaveButton(true);
+
                     // Bắt đầu kiểm tra tính duy nhất nếu phone hợp lệ
                     checkInputUniqueness("nhanvien", "sdt", phone);
                 } else {
-                    binding.btnThemNhanVien.setEnabled(false);
                     binding.etSDT.setError("Phone không hợp lệ");
+                    setVisibilitySaveButton(false);
                 }
             }
 
@@ -131,12 +167,12 @@ public class Owner_NhanVienAddFragment extends Fragment {
 
             @Override
             public void onTextChanged(CharSequence s, int start, int before, int count) {
-                binding.btnThemNhanVien.setEnabled(false);
-
                 // Kiểm tra định dạng email mỗi khi có thay đổi
                 String emailInput = s.toString();
                 if (android.util.Patterns.EMAIL_ADDRESS.matcher(emailInput).matches() == true) // Kiểm tra định dạng Email
                 {
+                    setVisibilitySaveButton(true);
+
                     // Bắt đầu kiểm tra tính duy nhất nếu email hợp lệ
                     FirebaseDatabase database = FirebaseDatabase.getInstance();
                     DatabaseReference accountRef = database.getReference("account");
@@ -147,17 +183,22 @@ public class Owner_NhanVienAddFragment extends Fragment {
                         @Override
                         public void onDataChange(DataSnapshot snapshot) {
                             if (snapshot.exists()) {
-                                binding.etEmail.setError("Email đã tồn tại trong account");
+                                binding.etEmail.setError("Email đã bị đăng ký tài khoản");
+                                setVisibilitySaveButton(false);
+
                             } else {
-                                // Nếu không tồn tại trong account, kiểm tra tiếp nhanvien
+                                // Nếu không tồn tại trong account, kiểm tra tiếp trong bảng nhanvien
                                 nhanVienRef.orderByChild("emailnv").equalTo(emailInput).addListenerForSingleValueEvent(new ValueEventListener() {
                                     @Override
                                     public void onDataChange(DataSnapshot snapshot) {
                                         if (snapshot.exists()) {
-                                            binding.etEmail.setError("Email đã tồn tại trong nhanvien");
+                                            binding.etEmail.setError("Email trùng với nhân viên khác");
+                                            setVisibilitySaveButton(false);
+
                                         } else {
                                             // Email là duy nhất, có thể tiếp tục xử lý lưu
                                             binding.etEmail.setError(null);
+                                            setVisibilitySaveButton(false);
                                         }
                                     }
 
@@ -176,7 +217,11 @@ public class Owner_NhanVienAddFragment extends Fragment {
                             Toast.makeText(getContext(), "Lỗi kiểm tra email", Toast.LENGTH_SHORT).show();
                         }
                     });
-                } else binding.etEmail.setError("Email không hợp lệ");
+                }
+                else {
+                    binding.etEmail.setError("Email không hợp lệ");
+                    setVisibilitySaveButton(false);
+                }
             }
 
             @Override
@@ -190,53 +235,22 @@ public class Owner_NhanVienAddFragment extends Fragment {
 
             @Override
             public void onTextChanged(CharSequence s, int start, int before, int count) {
-                binding.btnThemNhanVien.setEnabled(false);
-
                 // Kiểm tra định dạng email mỗi khi có thay đổi
                 String cccd = s.toString();
                 if (binding.etCCCD.getText().toString().isEmpty() == false && binding.etCCCD.getText().toString().length() == 10) // Kiểm tra định dạng Email
                 {
+                    setVisibilitySaveButton(true);
+
                     // Bắt đầu kiểm tra tính duy nhất nếu cccd hợp lệ
                     checkInputUniqueness("nhanvien", "cccd", cccd);
                 } else {
                     binding.etCCCD.setError("Vui lòng nhập CCCD (10 số)");
-                    binding.btnThemNhanVien.setEnabled(false);
+                    setVisibilitySaveButton(false);
                 }
             }
 
             @Override
             public void afterTextChanged(Editable s) {
-            }
-        });
-    }
-
-    private void setupNameTextWatcher() {
-        binding.etTenNhanVien.addTextChangedListener(new TextWatcher() {
-            @Override
-            public void beforeTextChanged(CharSequence charSequence, int i, int i1, int i2) {
-
-            }
-
-            @Override
-            public void onTextChanged(CharSequence charSequence, int start, int before, int count) {
-                if (binding.etTenNhanVien.getText().toString().isEmpty() || binding.etTenNhanVien.getText().toString().length() < 2) {
-                    binding.btnThemNhanVien.setEnabled(false);
-                    binding.etTenNhanVien.setError("Vui lòng nhập đủ họ tên nhân viên");
-                } else binding.btnThemNhanVien.setEnabled(true);
-
-                // kiểm tra xem có ký tự số trong tên nhân viên
-                String tenNhanVien = binding.etTenNhanVien.getText().toString();
-                for (int i = 0; i < tenNhanVien.length(); i++) {
-                    if (Character.isDigit(tenNhanVien.charAt(i))) {
-                        binding.etTenNhanVien.setError("Vui lòng không nhập số vào tên nhân viên");
-                        binding.btnThemNhanVien.setEnabled(false);
-                    } else binding.btnThemNhanVien.setEnabled(true);
-                }
-            }
-
-            @Override
-            public void afterTextChanged(Editable editable) {
-
             }
         });
     }
@@ -260,9 +274,10 @@ public class Owner_NhanVienAddFragment extends Fragment {
                             break;
                     }
 
-                    binding.btnThemNhanVien.setEnabled(true);
+                    setVisibilitySaveButton(false);
+
                 } else {
-                    // Trường hợp giá trị là duy nhất
+                    // Xóa Error nếu nhập vào hợp lệ
                     switch (field) {
                         case "email":
                             binding.etEmail.setError(null);
@@ -274,6 +289,8 @@ public class Owner_NhanVienAddFragment extends Fragment {
                             binding.etCCCD.setError(null);
                             break;
                     }
+
+                    setVisibilitySaveButton(true);
                 }
             }
 
@@ -470,6 +487,25 @@ public class Owner_NhanVienAddFragment extends Fragment {
         }
 
         return true;
+    }
+
+    // CUỐI: TRẠNG THÁI NÚT THÊM NHÂN VIÊN
+    private void setVisibilitySaveButton(Boolean visibility) {
+        if (visibility == false) {
+            String text = "Thêm Nhân Viên";
+            SpannableString spannableString = new SpannableString(text);
+            spannableString.setSpan(new StrikethroughSpan(), 0, text.length(), Spanned.SPAN_EXCLUSIVE_EXCLUSIVE);
+            binding.btnThemNhanVien.setText(spannableString);
+            binding.btnThemNhanVien.setEnabled(false);
+            return;
+        }
+
+        if (visibility == true) {
+            String text = "Thêm Nhân Viên";
+            binding.btnThemNhanVien.setText(text);
+            binding.btnThemNhanVien.setEnabled(true);
+            return;
+        }
     }
 
     // CUỐI: THIẾT LẬP TOOLBAR VÀ ĐIỀU HƯỚNG

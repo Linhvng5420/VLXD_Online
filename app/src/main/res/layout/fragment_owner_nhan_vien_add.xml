@@ -40,7 +40,7 @@
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:hint="Tên Nhân Viên"
-            android:inputType="text|textPersonName|textCapSentences"
+            android:inputType="text|textPersonName"
             android:maxLength="40"
             android:textColor="#1EA323"
             android:textStyle="bold"
