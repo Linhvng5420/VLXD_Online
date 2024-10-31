@@ -2,12 +2,12 @@ package com.tdc.vlxdonline.Model;
 
 public class AnhSanPham {
     private String anh, idSanPham;
-    private int id;
+    private long id;
 
     public AnhSanPham() {
     }
 
-    public AnhSanPham(String anh, int id, String idSanPham) {
+    public AnhSanPham(String anh, long id, String idSanPham) {
         this.idSanPham = idSanPham;
         this.id = id;
         this.anh = anh;
@@ -21,11 +21,11 @@ public class AnhSanPham {
         this.anh = anh;
     }
 
-    public int getId() {
+    public long getId() {
         return id;
     }
 
-    public void setId(int id) {
+    public void setId(long id) {
         this.id = id;
     }
 

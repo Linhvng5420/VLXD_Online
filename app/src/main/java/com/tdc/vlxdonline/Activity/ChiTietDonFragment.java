@@ -96,6 +96,7 @@ public class ChiTietDonFragment extends Fragment {
                         binding.tvTenNguoiNhan.setText(donHang.getTenKhach());
                         binding.tvSdtNguoiNhan.setText(donHang.getSdt());
                         binding.tvDiaChiNhan.setText(donHang.getDiaChi());
+                        binding.tvNgayTao.setText("Ngày Tạo: " + donHang.getNgayTao());
                         binding.btnTrangThai.setEnabled(false);
                         binding.btnTrangThaiTt.setEnabled(false);
                         binding.btnTrangThaiTt.setVisibility(View.GONE);
@@ -165,18 +166,7 @@ public class ChiTietDonFragment extends Fragment {
                         dataChiTietDon.add(detail); // Thêm User vào danh sách
                     }
 
-                    // Adapter va Event chi tiet don
-                    adapter = new ChiTietDonHangAdapter(getActivity(), dataChiTietDon);
-                    adapter.setOnChiTietDonClick(new ChiTietDonHangAdapter.OnChiTietDonClick() {
-                        @Override
-                        public void onItemClick(int position) {
-                            ((Customer_HomeActivity) getActivity()).ReplaceFragment(new ProdDetailCustomerFragment(dataChiTietDon.get(position).getIdSanPham()));
-                        }
-                    });
-                    LinearLayoutManager linearLayoutManager = new LinearLayoutManager(getActivity());
-                    linearLayoutManager.setOrientation(LinearLayoutManager.VERTICAL);
-                    binding.rcChiTietDon.setLayoutManager(linearLayoutManager);
-                    binding.rcChiTietDon.setAdapter(adapter);
+                    setAdapterChiTiet();
                 }catch (Exception e){}
             }
 
@@ -185,6 +175,21 @@ public class ChiTietDonFragment extends Fragment {
                 Toast.makeText(getActivity(), "Lỗi Rồi Nè Má!", Toast.LENGTH_SHORT).show();
             }
         });
+    }
+
+    private void setAdapterChiTiet() {
+        // Adapter va Event chi tiet don
+        adapter = new ChiTietDonHangAdapter(getActivity(), dataChiTietDon);
+        adapter.setOnChiTietDonClick(new ChiTietDonHangAdapter.OnChiTietDonClick() {
+            @Override
+            public void onItemClick(int position) {
+                ((Customer_HomeActivity) getActivity()).ReplaceFragment(new ProdDetailCustomerFragment(dataChiTietDon.get(position).getIdSanPham()));
+            }
+        });
+        LinearLayoutManager linearLayoutManager = new LinearLayoutManager(getActivity());
+        linearLayoutManager.setOrientation(LinearLayoutManager.VERTICAL);
+        binding.rcChiTietDon.setLayoutManager(linearLayoutManager);
+        binding.rcChiTietDon.setAdapter(adapter);
     }
 
     private void XacNhanDaThanhToan() {

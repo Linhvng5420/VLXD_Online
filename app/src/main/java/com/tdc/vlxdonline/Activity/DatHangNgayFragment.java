@@ -254,7 +254,7 @@ public class DatHangNgayFragment extends Fragment {
                 public void onClick(DialogInterface dialog, int which) {
                     referDatHangNgay.child("bills").child(donHang.getId()+"").setValue(donHang);
                     referDatHangNgay.child("BillDetails").child(donHang.getId()+"").child(idProd).setValue(chiTietDon);
-                    referDatHangNgay.child("products").child(idProd).child("tonKho").setValue(Integer.parseInt(prod.getTonKho()) - soLuong + "");
+                    referDatHangNgay.child("products").child(idProd).child("tonKho").setValue((Integer.parseInt(prod.getTonKho()) - soLuong) + "");
                     Toast.makeText(getActivity(), "Hoàn Tất Đặt Hàng, Kiểm Tra Đơn Tại 'Đơn Hàng'", Toast.LENGTH_LONG).show();
                     getActivity().getSupportFragmentManager().popBackStack();
                 }

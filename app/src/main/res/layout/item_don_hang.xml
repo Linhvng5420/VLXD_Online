@@ -9,17 +9,19 @@
 
     <LinearLayout
         android:layout_width="match_parent"
-        android:layout_height="wrap_content"
+        android:layout_height="135dp"
         android:orientation="vertical"
-        android:paddingVertical="5dp">
+        android:paddingVertical="5dp"
+        android:background="@drawable/back2">
         <LinearLayout
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
+            android:layout_marginHorizontal="5dp"
             android:orientation="horizontal">
             <androidx.cardview.widget.CardView
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
-                android:backgroundTint="#D7D7D7">
+                android:backgroundTint="#FFF">
                 <ImageView
                     android:id="@+id/iv_anh_don"
                     android:layout_width="75dp"
@@ -39,6 +41,7 @@
                     android:gravity="center_vertical"
                     android:textSize="21dp"
                     android:textStyle="bold"
+                    android:textColor="@color/black"
                     android:text="Tên người nhận"/>
                 <TextView
                     android:id="@+id/tv_sdt_don"
@@ -46,6 +49,7 @@
                     android:layout_height="23dp"
                     android:gravity="center_vertical"
                     android:textSize="18dp"
+                    android:textColor="@color/black"
                     android:text="0398678436"/>
                 <TextView
                     android:id="@+id/tv_dia_chi_don"
@@ -53,6 +57,7 @@
                     android:layout_height="23dp"
                     android:gravity="center_vertical"
                     android:textSize="18dp"
+                    android:textColor="@color/black"
                     android:text="Địa chỉ người nhận"/>
             </LinearLayout>
         </LinearLayout>
@@ -72,10 +77,9 @@
             <TextView
                 android:id="@+id/tv_tong_gia"
                 android:layout_marginTop="5dp"
-                android:layout_marginRight="5dp"
-                android:layout_width="125dp"
+                android:layout_width="132dp"
                 android:layout_height="45dp"
-                android:paddingLeft="5dp"
+                android:paddingHorizontal="5dp"
                 android:text="9.000.000.000"
                 android:gravity="center_vertical"
                 android:textSize="18dp"

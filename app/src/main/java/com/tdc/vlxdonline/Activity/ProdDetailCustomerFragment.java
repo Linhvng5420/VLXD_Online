@@ -61,6 +61,8 @@ public class ProdDetailCustomerFragment extends Fragment {
                              Bundle savedInstanceState) {
         // Inflate the layout for this fragment
         binding = FragmentProdDetailCustomerBinding.inflate(inflater, container, false);
+        setAdapterProduct();
+        setAdapterAnh();
         setUpDisplay();
         return binding.getRoot();
     }
@@ -131,6 +133,24 @@ public class ProdDetailCustomerFragment extends Fragment {
         }
     }
 
+    private void setAdapterProduct(){
+        // Event Click Product
+        productAdapter = new ProductAdapter(getActivity(), dataProds, View.GONE);
+        productAdapter.setOnItemProductClickListener(new ProductAdapter.OnItemProductClickListener() {
+            @Override
+            public void OnItemClick(View view, int position) {
+                Products product = dataProds.get(position);
+                ((Customer_HomeActivity) getActivity()).ReplaceFragment(new ProdDetailCustomerFragment(product.getId()));
+            }
+
+            @Override
+            public void OnBtnBuyClick(View view, int position) {
+            }
+        });
+        binding.rcOfferProd.setLayoutManager(new GridLayoutManager(getActivity(), 2));
+        binding.rcOfferProd.setAdapter(productAdapter);
+    }
+
     private void setHienThiSanPham() {
         referDetailProd.child("products").addValueEventListener(new ValueEventListener() {
             @Override
@@ -144,22 +164,7 @@ public class ProdDetailCustomerFragment extends Fragment {
                         dataProds.add(product); // Thêm User vào danh sách
                     }
 
-                    // Xử lý danh sách userList (ví dụ: hiển thị trong RecyclerView)
-                    // Event Click Product
-                    productAdapter = new ProductAdapter(getActivity(), dataProds, View.GONE);
-                    productAdapter.setOnItemProductClickListener(new ProductAdapter.OnItemProductClickListener() {
-                        @Override
-                        public void OnItemClick(View view, int position) {
-                            Products product = dataProds.get(position);
-                            ((Customer_HomeActivity) getActivity()).ReplaceFragment(new ProdDetailCustomerFragment(product.getId()));
-                        }
-
-                        @Override
-                        public void OnBtnBuyClick(View view, int position) {
-                        }
-                    });
-                    binding.rcOfferProd.setLayoutManager(new GridLayoutManager(getActivity(), 2));
-                    binding.rcOfferProd.setAdapter(productAdapter);
+                    productAdapter.notifyDataSetChanged();
                 } catch (Exception e) {
 
                 }
@@ -179,8 +184,23 @@ public class ProdDetailCustomerFragment extends Fragment {
         setHienThiAnh();
     }
 
+    private void setAdapterAnh(){
+        // Adapter Anh Mo Ta
+        imageAdapter = new ImageAdapter(getActivity(), dataAnh);
+        imageAdapter.setOnItemImageClick(new ImageAdapter.OnItemImageClick() {
+            @Override
+            public void onItemClick(int position) {
+                Glide.with(getActivity()).load(dataAnh.get(position)).into(binding.imgDetail);
+            }
+        });
+        LinearLayoutManager linearLayoutManager = new LinearLayoutManager(getActivity());
+        linearLayoutManager.setOrientation(RecyclerView.HORIZONTAL);
+        binding.rcAnhSp.setLayoutManager(linearLayoutManager);
+        binding.rcAnhSp.setAdapter(imageAdapter);
+    }
+
     private void setHienThiAnh() {
-        referDetailProd.child("ProdImages").addValueEventListener(new ValueEventListener() {
+        referDetailProd.child("ProdImages").child(idProd).addValueEventListener(new ValueEventListener() {
             @Override
             public void onDataChange(DataSnapshot dataSnapshot) {
                 try {
@@ -189,23 +209,12 @@ public class ProdDetailCustomerFragment extends Fragment {
                     // Duyệt qua từng User trong DataSnapshot
                     for (DataSnapshot snapshot : dataSnapshot.getChildren()) {
                         AnhSanPham image = snapshot.getValue(AnhSanPham.class);
-                        if (image.getIdSanPham().equals(idProd)) dataAnh.add(image.getAnh());
+                        dataAnh.add(image.getAnh());
                     }
 
                     Glide.with(getActivity()).load(dataAnh.get(0)).into(binding.imgDetail);
 
-                    // Adapter Anh Mo Ta
-                    imageAdapter = new ImageAdapter(getActivity(), dataAnh);
-                    imageAdapter.setOnItemImageClick(new ImageAdapter.OnItemImageClick() {
-                        @Override
-                        public void onItemClick(int position) {
-                            Glide.with(getActivity()).load(dataAnh.get(position)).into(binding.imgDetail);
-                        }
-                    });
-                    LinearLayoutManager linearLayoutManager = new LinearLayoutManager(getActivity());
-                    linearLayoutManager.setOrientation(RecyclerView.HORIZONTAL);
-                    binding.rcAnhSp.setLayoutManager(linearLayoutManager);
-                    binding.rcAnhSp.setAdapter(imageAdapter);
+                    imageAdapter.notifyDataSetChanged();
                 } catch (Exception e) {
 
                 }
@@ -228,7 +237,7 @@ public class ProdDetailCustomerFragment extends Fragment {
                         prod = product;
                         Glide.with(getActivity()).load(product.getAnh()).into(binding.ivAnhChinh);
                         binding.tvTenSpDetail.setText(product.getTen());
-                        binding.tvGiaSpDetail.setText(product.getGia() + " VND");
+                        binding.tvGiaSpDetail.setText(chuyenChuoi(product.getGia()) + " VND");
                         binding.tvTonKhoDetail.setText("Kho: " + product.getTonKho());
                         if (product.getTonKho().equals("0")) {
                             soLuong = 0;
@@ -251,6 +260,23 @@ public class ProdDetailCustomerFragment extends Fragment {
                 System.out.println("The read failed: " + databaseError.getCode());
             }
         });
+    }
+
+    // Ham them dau cham cho gia ban
+    private StringBuilder chuyenChuoi(String soTien) {
+        StringBuilder chuoi = new StringBuilder(soTien);
+        if (chuoi.length() > 3) {
+            int dem = 0;
+            int doDai = chuoi.length() - 1;
+            for (int i = doDai; i > 0; i--) {
+                dem = dem + 1;
+                if (dem == 3) {
+                    chuoi.insert(i, '.');
+                    dem = 0;
+                }
+            }
+        }
+        return chuoi;
     }
 
     @Override

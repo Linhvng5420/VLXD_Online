@@ -12,12 +12,11 @@
         <androidx.cardview.widget.CardView
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            app:cardCornerRadius="8dp"
-            >
+            app:cardCornerRadius="8dp">
             <ImageView
                 android:id="@+id/imgItemCa"
-                android:layout_width="60dp"
-                android:layout_height="60dp"
+                android:layout_width="50dp"
+                android:layout_height="50dp"
                 android:src="@drawable/tc"
                 android:background="@drawable/bg_img_item"
                 android:scaleType="centerCrop"/>
@@ -29,6 +28,7 @@
             android:paddingHorizontal="2dp"
             android:gravity="center"
             android:textSize="10dp"
+            android:textColor="@color/white"
             android:text="Thép Cuộn"
             android:textStyle="bold"/>
 

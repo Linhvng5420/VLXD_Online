@@ -64,7 +64,6 @@ public class CustomerHomeFragment extends Fragment {
     private String category = "";
     private String tuKhoa = "";
     DatabaseReference mDatabase;
-    private int typeSort = 0;
     private View preView = null;
     ValueEventListener eventDocDanhSach;
 
@@ -78,6 +77,11 @@ public class CustomerHomeFragment extends Fragment {
                              Bundle savedInstanceState) {
         binding = FragmentCustomerHomeBinding.inflate(inflater, container, false);
         mDatabase = FirebaseDatabase.getInstance().getReference();
+        Drawable draw = getActivity().getDrawable(R.drawable.bg_detail);
+        draw.setTint(Color.rgb(215,215,215));
+        binding.svCustomerHome.setBackground(draw);
+        setAdapterProduct();
+        setAdapterCategory();
         KhoiTao();
         // Inflate the layout for this fragment
         return binding.getRoot();
@@ -120,7 +124,6 @@ public class CustomerHomeFragment extends Fragment {
         binding.spXapSep.setOnItemSelectedListener(new AdapterView.OnItemSelectedListener() {
             @Override
             public void onItemSelected(AdapterView<?> parent, View view, int position, long id) {
-                typeSort = position;
                 mDatabase.child("products").addListenerForSingleValueEvent(eventDocDanhSach);
             }
 
@@ -129,8 +132,6 @@ public class CustomerHomeFragment extends Fragment {
 
             }
         });
-
-
     }
 
     private void KhoiTao() {
@@ -158,47 +159,30 @@ public class CustomerHomeFragment extends Fragment {
         readcategorysFromDatabase();
         category = "";
         tuKhoa = "";
-        typeSort = 0;
-        binding.spLoc.setSelection(0);
+        setValueEvent();
+        mDatabase.child("products").addValueEventListener(eventDocDanhSach);
+    }
+
+    private void setValueEvent() {
         eventDocDanhSach = new ValueEventListener() {
             @Override
             public void onDataChange(DataSnapshot dataSnapshot) {
                 try{
                     dataProds.clear(); // Xóa danh sách cũ trước khi cập nhật
-
-                    // Duyệt qua từng User trong DataSnapshot
+                    // Duyệt qua từng prod trong DataSnapshot
                     for (DataSnapshot snapshot : dataSnapshot.getChildren()) {
                         Products product = snapshot.getValue(Products.class);
                         if (!category.isEmpty() && !category.equals(product.getDanhMuc())) continue;
                         if (!tuKhoa.isEmpty() && !product.getTen().contains(tuKhoa) && !product.getMoTa().contains(tuKhoa)) continue;
                         if (binding.spLoc.getSelectedItemPosition() == 1 && Double.parseDouble(product.getSoSao()) > 3) continue;
                         if (binding.spLoc.getSelectedItemPosition() == 2 && Double.parseDouble(product.getSoSao()) < 4) continue;
-                        dataProds.add(product); // Thêm User vào danh sách
+                        dataProds.add(product); // Thêm prod vào danh sách
                     }
 
                     SapXepDanhSach();
 
-                    // Xử lý danh sách userList (ví dụ: hiển thị trong RecyclerView)
-                    // Event Click Product
-                    productAdapter = new ProductAdapter(getActivity(), dataProds, View.VISIBLE);
-                    productAdapter.setOnItemProductClickListener(new ProductAdapter.OnItemProductClickListener() {
-                        @Override
-                        public void OnItemClick(View view, int position) {
-                            Products product = dataProds.get(position);
-                            ((Customer_HomeActivity) getActivity()).ReplaceFragment(new ProdDetailCustomerFragment(product.getId()));
-                        }
-
-                        @Override
-                        public void OnBtnBuyClick(View view, int position) {
-                            if (!dataProds.get(position).getTonKho().equals("0")) ((Customer_HomeActivity) getActivity()).ReplaceFragment(new DatHangNgayFragment(dataProds.get(position).getId(), 1));
-                            else Toast.makeText(getActivity(), "Hiện Tại Sản Phẩm Đã Bán Hết!", Toast.LENGTH_SHORT).show();
-                        }
-                    });
-                    binding.rcProdCustomerHome.setLayoutManager(new GridLayoutManager(getActivity(), 2));
-                    binding.rcProdCustomerHome.setAdapter(productAdapter);
-                }catch (Exception e) {
-
-                }
+                    productAdapter.notifyDataSetChanged();
+                }catch (Exception e) {}
             }
 
             @Override
@@ -206,7 +190,53 @@ public class CustomerHomeFragment extends Fragment {
                 Toast.makeText(getActivity(), "Lỗi Rồi Nè Má!", Toast.LENGTH_SHORT).show();
             }
         };
-        mDatabase.child("products").addValueEventListener(eventDocDanhSach);
+    }
+
+    private void setAdapterProduct() {
+        // Event Click Product
+        productAdapter = new ProductAdapter(getActivity(), dataProds, View.VISIBLE);
+        productAdapter.setOnItemProductClickListener(new ProductAdapter.OnItemProductClickListener() {
+            @Override
+            public void OnItemClick(View view, int position) {
+                Products product = dataProds.get(position);
+                ((Customer_HomeActivity) getActivity()).ReplaceFragment(new ProdDetailCustomerFragment(product.getId()));
+            }
+
+            @Override
+            public void OnBtnBuyClick(View view, int position) {
+                if (!dataProds.get(position).getTonKho().equals("0")) ((Customer_HomeActivity) getActivity()).ReplaceFragment(new DatHangNgayFragment(dataProds.get(position).getId(), 1));
+                else Toast.makeText(getActivity(), "Hiện Tại Sản Phẩm Đã Bán Hết!", Toast.LENGTH_SHORT).show();
+            }
+        });
+        binding.rcProdCustomerHome.setLayoutManager(new GridLayoutManager(getActivity(), 2));
+        binding.rcProdCustomerHome.setAdapter(productAdapter);
+    }
+
+    private void setAdapterCategory(){
+        // Category Adapter
+        categoryAdapter = new CategoryAdapter(getActivity(), dataCategorys);
+        categoryAdapter.setOnItemCategoryClickListener(new CategoryAdapter.OnItemCategoryClickListener() {
+            @Override
+            public void OnItemClick(View view, int position) {
+                if (category.equals(dataCategorys.get(position).getId())) {
+                    category = "";
+                    view.setBackgroundColor(Color.TRANSPARENT);
+                    preView = null;
+                }
+                else {
+                    category = dataCategorys.get(position).getId();
+                    Drawable drawable = getActivity().getDrawable(R.drawable.bg_detail);
+                    view.setBackground(drawable);
+                    if (preView != null) preView.setBackgroundColor(Color.TRANSPARENT);
+                    preView = view;
+                }
+                mDatabase.child("products").addListenerForSingleValueEvent(eventDocDanhSach);
+            }
+        });
+        LinearLayoutManager linearLayoutManager = new LinearLayoutManager(getActivity());
+        linearLayoutManager.setOrientation(RecyclerView.HORIZONTAL);
+        binding.rcDanhMuc.setLayoutManager(linearLayoutManager);
+        binding.rcDanhMuc.setAdapter(categoryAdapter);
     }
 
     private void readBanners() {
@@ -243,6 +273,7 @@ public class CustomerHomeFragment extends Fragment {
         // Set tu chuyen banner
         LinearSnapHelper helper = new LinearSnapHelper();
         helper.attachToRecyclerView(binding.rcBanner);
+        if (timer != null) timer.cancel();
         timer = new Timer();
         timer.schedule(new TimerTask() {
             @Override
@@ -269,31 +300,8 @@ public class CustomerHomeFragment extends Fragment {
                         Categorys category = snapshot.getValue(Categorys.class);
                         dataCategorys.add(category); // Thêm User vào danh sách
                     }
-                    // Xử lý danh sách userList (ví dụ: hiển thị trong RecyclerView)
-                    // Category Adapter
-                    categoryAdapter = new CategoryAdapter(getActivity(), dataCategorys);
-                    categoryAdapter.setOnItemCategoryClickListener(new CategoryAdapter.OnItemCategoryClickListener() {
-                        @Override
-                        public void OnItemClick(View view, int position) {
-                            if (category.equals(dataCategorys.get(position).getId())) {
-                                category = "";
-                                view.setBackgroundColor(Color.TRANSPARENT);
-                                preView = null;
-                            }
-                            else {
-                                category = dataCategorys.get(position).getId();
-                                Drawable drawable = getActivity().getDrawable(R.drawable.bg_detail);
-                                view.setBackground(drawable);
-                                if (preView != null) preView.setBackgroundColor(Color.TRANSPARENT);
-                                preView = view;
-                            }
-                            mDatabase.child("products").addListenerForSingleValueEvent(eventDocDanhSach);
-                        }
-                    });
-                    LinearLayoutManager linearLayoutManager = new LinearLayoutManager(getActivity());
-                    linearLayoutManager.setOrientation(RecyclerView.HORIZONTAL);
-                    binding.rcDanhMuc.setLayoutManager(linearLayoutManager);
-                    binding.rcDanhMuc.setAdapter(categoryAdapter);
+
+                    categoryAdapter.notifyDataSetChanged();
                 }catch (Exception e){
 
                 }
@@ -310,6 +318,7 @@ public class CustomerHomeFragment extends Fragment {
         Collections.sort(dataProds, new Comparator<Products>() {
             @Override
             public int compare(Products p1, Products p2) {
+                int typeSort = binding.spXapSep.getSelectedItemPosition();
                 int gia1 = Integer.parseInt(p1.getGia());
                 int gia2 = Integer.parseInt(p2.getGia());
                 double sao1 = Double.parseDouble(p1.getSoSao());

@@ -9,45 +9,55 @@
     <LinearLayout
         android:layout_width="match_parent"
         android:layout_height="match_parent"
-        android:orientation="vertical">
+        android:orientation="vertical"
+        android:background="@drawable/back3">
+
         <TextView
             android:layout_width="match_parent"
             android:layout_height="50dp"
+            android:background="@drawable/back6"
             android:gravity="center"
-            android:textSize="30dp"
             android:text="ĐẶT HÀNG NGAY"
+            android:textSize="30dp"
             android:textStyle="bold"
-            android:background="#0F9"/>
+            android:textColor="#D7D7D7"/>
+
         <LinearLayout
             android:layout_width="match_parent"
-            android:layout_height="match_parent"
-            android:orientation="vertical"
-            android:layout_margin="10dp">
+            android:layout_height="wrap_content"
+            android:layout_marginHorizontal="10dp"
+            android:layout_marginTop="10dp"
+            android:orientation="vertical">
 
             <TextView
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
+                android:text="Tên Người Nhận Hàng:"
+                android:textColor="#D7D7D7"
                 android:textSize="18dp"
-                android:textStyle="bold"
-                android:text="Tên Người Nhận Hàng:"/>
+                android:textStyle="bold" />
+
             <EditText
                 android:id="@+id/edt_ten_nguoi_nhan"
                 android:layout_width="match_parent"
                 android:layout_height="45dp"
                 android:background="@drawable/bg_img_item"
+                android:backgroundTint="#DDD"
                 android:gravity="center_vertical"
-                android:paddingLeft="5dp"
                 android:hint="Ten Nguoi Nhan ..."
+                android:paddingLeft="5dp"
                 android:textSize="21dp"
                 android:textStyle="bold" />
 
             <TextView
-                android:layout_marginTop="5dp"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
+                android:layout_marginTop="5dp"
+                android:text="Số Điện Thoại Người Nhận Hàng:"
+                android:textColor="#D7D7D7"
                 android:textSize="18dp"
-                android:textStyle="bold"
-                android:text="Số Điện Thoại Người Nhận Hàng:"/>
+                android:textStyle="bold" />
+
             <LinearLayout
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
@@ -65,40 +75,44 @@
                     android:layout_width="match_parent"
                     android:layout_height="45dp"
                     android:background="@drawable/bg_img_item"
+                    android:backgroundTint="#DDD"
                     android:gravity="center_vertical"
-                    android:paddingLeft="5dp"
                     android:hint="So Dien Thoai Nguoi Nhan ..."
+                    android:paddingLeft="5dp"
                     android:textSize="21dp"
                     android:textStyle="bold" />
             </LinearLayout>
 
             <TextView
-                android:layout_marginTop="5dp"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
+                android:layout_marginTop="5dp"
+                android:text="Địa Chỉ Người Nhận Hàng:"
+                android:textColor="#D7D7D7"
                 android:textSize="18dp"
-                android:textStyle="bold"
-                android:text="Địa Chỉ Người Nhận Hàng:"/>
+                android:textStyle="bold" />
+
             <EditText
                 android:id="@+id/edt_dia_chi_nhan"
                 android:layout_width="match_parent"
-                android:layout_height="45dp"
+                android:layout_height="65dp"
                 android:background="@drawable/bg_img_item"
-                android:gravity="center_vertical"
-                android:paddingLeft="5dp"
+                android:backgroundTint="#DDD"
+                android:gravity="top"
                 android:hint="Dia Chi Nguoi Nhan ..."
+                android:padding="5dp"
                 android:textSize="21dp"
                 android:textStyle="bold" />
 
             <LinearLayout
-                android:layout_marginTop="10dp"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
-                android:paddingVertical="20dp"
-                android:paddingHorizontal="10dp"
-                android:orientation="horizontal"
+                android:layout_marginTop="10dp"
+                android:background="@drawable/bg_img_item"
                 android:gravity="center"
-                android:background="@drawable/bg_img_item">
+                android:orientation="horizontal"
+                android:paddingHorizontal="10dp"
+                android:paddingVertical="20dp">
 
                 <androidx.cardview.widget.CardView
                     android:layout_width="wrap_content"
@@ -110,8 +124,8 @@
                         android:layout_width="90dp"
                         android:layout_height="90dp"
                         android:background="@drawable/bg_img_detail"
-                        android:src="@drawable/tc"
-                        android:scaleType="centerCrop"/>
+                        android:scaleType="centerCrop"
+                        android:src="@drawable/tc" />
                 </androidx.cardview.widget.CardView>
 
                 <LinearLayout
@@ -126,6 +140,7 @@
                         android:gravity="center_vertical"
                         android:paddingHorizontal="6dp"
                         android:text="Thép uốn Hòa Phát"
+                        android:textColor="#D7D7D7"
                         android:textSize="18dp"
                         android:textStyle="bold" />
 
@@ -133,8 +148,8 @@
                         android:id="@+id/tv_gia_dat_hang_ngay"
                         android:layout_width="match_parent"
                         android:layout_height="30dp"
-                        android:paddingHorizontal="6dp"
                         android:gravity="center_vertical"
+                        android:paddingHorizontal="6dp"
                         android:text="100.000 đ"
                         android:textColor="#F00"
                         android:textSize="18dp"
@@ -150,8 +165,9 @@
                             android:layout_height="match_parent"
                             android:layout_marginRight="25dp"
                             android:gravity="center_vertical"
-                            android:textSize="18dp"
                             android:text="Số Lượng: "
+                            android:textColor="#D7D7D7"
+                            android:textSize="18dp"
                             android:textStyle="bold" />
 
                         <LinearLayout
@@ -176,8 +192,8 @@
                                 android:layout_height="25dp"
                                 android:background="@drawable/bg_img_detail"
                                 android:gravity="center"
-                                android:text="1000"
                                 android:inputType="number"
+                                android:text="1000"
                                 android:textSize="16dp" />
 
                             <TextView
@@ -192,60 +208,68 @@
                     </LinearLayout>
                 </LinearLayout>
             </LinearLayout>
+
             <TextView
                 android:id="@+id/tv_des_dat_ngay"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
                 android:layout_marginTop="-10dp"
                 android:layout_marginBottom="10dp"
-                android:layout_width="match_parent"
-                android:layout_height="wrap_content"
                 android:background="@drawable/bg_img_item"
                 android:backgroundTint="#D7D7D7"
-                android:paddingHorizontal="10dp"
                 android:gravity="center_horizontal"
+                android:paddingHorizontal="10dp"
                 android:paddingVertical="10dp"
                 android:text="Thep uon hoa phat chat luong cao, day 1mm"
-                android:textSize="18dp"/>
-            <LinearLayout
-                android:layout_width="match_parent"
-                android:layout_height="wrap_content"
-                android:background="#0F9"
-                android:orientation="horizontal"
-                android:layout_marginBottom="9dp">
-                <TextView
-                    android:layout_width="wrap_content"
-                    android:layout_height="50dp"
-                    android:gravity="center_vertical"
-                    android:paddingLeft="10dp"
-                    android:textSize="21dp"
-                    android:textStyle="bold"
-                    android:text="Tổng Tiền: "/>
-                <TextView
-                    android:id="@+id/tv_tong_dat_ngay"
-                    android:layout_width="wrap_content"
-                    android:layout_height="match_parent"
-                    android:layout_marginRight="5dp"
-                    android:gravity="center_vertical"
-                    android:textSize="25dp"
-                    android:textStyle="bold"
-                    android:text="100.000.000"
-                    android:textColor="#F00"/>
-                <TextView
-                    android:layout_width="wrap_content"
-                    android:layout_height="match_parent"
-                    android:gravity="center_vertical"
-                    android:textSize="25dp"
-                    android:textStyle="bold"
-                    android:text="đ"
-                    android:textColor="#F00"/>
-            </LinearLayout>
-            <Button
-                android:id="@+id/btn_dat_ngay"
-                android:layout_width="match_parent"
-                android:layout_height="wrap_content"
-                android:text="Đặt Hàng Ngay"
-                android:textSize="25dp"
-                android:textStyle="bold"
-                android:backgroundTint="#0DF"/>
+                android:textSize="18dp" />
         </LinearLayout>
+
+        <LinearLayout
+            android:layout_width="match_parent"
+            android:layout_height="50dp"
+            android:layout_marginBottom="9dp"
+            android:background="@drawable/bg_detail"
+            android:backgroundTint="#0AF"
+            android:orientation="horizontal">
+
+            <TextView
+                android:layout_width="wrap_content"
+                android:layout_height="match_parent"
+                android:gravity="center_vertical"
+                android:paddingLeft="10dp"
+                android:text="Tổng Tiền: "
+                android:textSize="21dp"
+                android:textStyle="bold" />
+
+            <TextView
+                android:id="@+id/tv_tong_dat_ngay"
+                android:layout_width="wrap_content"
+                android:layout_height="match_parent"
+                android:layout_marginRight="5dp"
+                android:gravity="center_vertical"
+                android:text="100.000.000"
+                android:textColor="#F00"
+                android:textSize="25dp"
+                android:textStyle="bold" />
+
+            <TextView
+                android:layout_width="wrap_content"
+                android:layout_height="match_parent"
+                android:gravity="center_vertical"
+                android:text="đ"
+                android:textColor="#F00"
+                android:textSize="25dp"
+                android:textStyle="bold" />
+        </LinearLayout>
+
+        <Button
+            android:id="@+id/btn_dat_ngay"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:backgroundTint="#5000FF"
+            android:text="Đặt Hàng Ngay"
+            android:textSize="25dp"
+            android:textStyle="bold"
+            android:layout_marginHorizontal="10dp"/>
     </LinearLayout>
 </FrameLayout>

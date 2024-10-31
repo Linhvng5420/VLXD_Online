@@ -29,10 +29,8 @@
                     android:id="@+id/rc_anh_sp"
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
-                    android:paddingVertical="5dp"
-                    android:layout_marginTop="10dp"
-                    android:background="@drawable/bg_img_detail"
-                    android:backgroundTint="#D7D7D7"/>
+                    android:background="@drawable/backnav"
+                    android:paddingVertical="5dp" />
 
                 <LinearLayout
                     android:layout_width="match_parent"
@@ -57,8 +55,8 @@
                                 android:layout_width="120dp"
                                 android:layout_height="120dp"
                                 android:background="@drawable/bg_img_detail"
-                                android:src="@drawable/star"
-                                android:scaleType="centerCrop"/>
+                                android:scaleType="centerCrop"
+                                android:src="@drawable/star" />
 
                             <LinearLayout
                                 android:layout_width="match_parent"
@@ -74,7 +72,8 @@
                                     android:paddingHorizontal="5dp"
                                     android:text="Thép Hòa Phát"
                                     android:textSize="15dp"
-                                    android:textStyle="bold" />
+                                    android:textStyle="bold"
+                                    android:textColor="@color/black"/>
 
                                 <TextView
                                     android:id="@+id/tv_giaSp_detail"
@@ -84,7 +83,8 @@
                                     android:paddingHorizontal="5dp"
                                     android:text="13.640 VND"
                                     android:textSize="15dp"
-                                    android:textStyle="bold" />
+                                    android:textStyle="bold"
+                                    android:textColor="@color/black"/>
 
                                 <LinearLayout
                                     android:layout_width="match_parent"
@@ -97,7 +97,8 @@
                                         android:layout_height="30dp"
                                         android:gravity="center_vertical"
                                         android:text="Kho: 500"
-                                        android:textSize="15dp" />
+                                        android:textSize="15dp"
+                                        android:textColor="@color/black"/>
 
                                     <TextView
                                         android:id="@+id/tv_daBan_detail"
@@ -105,7 +106,8 @@
                                         android:layout_height="30dp"
                                         android:gravity="center_vertical"
                                         android:text="Đã Bán: 150"
-                                        android:textSize="15dp" />
+                                        android:textSize="15dp"
+                                        android:textColor="@color/black"/>
                                 </LinearLayout>
 
                                 <LinearLayout
@@ -119,7 +121,8 @@
                                         android:paddingLeft="5dp"
                                         android:text="Đơn vị tính: "
                                         android:textSize="15dp"
-                                        android:textStyle="bold" />
+                                        android:textStyle="bold"
+                                        android:textColor="@color/black"/>
 
                                     <TextView
                                         android:id="@+id/tv_donVi_detail"
@@ -128,7 +131,8 @@
                                         android:gravity="center_vertical"
                                         android:text="Tấm"
                                         android:textSize="15dp"
-                                        android:textStyle="bold" />
+                                        android:textStyle="bold"
+                                        android:textColor="@color/black"/>
                                 </LinearLayout>
                             </LinearLayout>
                         </LinearLayout>
@@ -144,7 +148,8 @@
                                 android:layout_marginBottom="-2dp"
                                 android:paddingHorizontal="5dp"
                                 android:text="Mô tả:"
-                                android:textSize="16dp" />
+                                android:textSize="16dp"
+                                android:textColor="@color/black"/>
 
                             <TextView
                                 android:id="@+id/tv_moTa_detail"
@@ -153,21 +158,22 @@
                                 android:paddingHorizontal="5dp"
                                 android:paddingBottom="5dp"
                                 android:text="Thép cuộn CB240 chất lượng cao, độ dày 1mm, đàn hồi tốt, cứng cáp, chắc chắn."
-                                android:textSize="15dp" />
+                                android:textSize="15dp"
+                                android:textColor="@color/black"/>
                         </LinearLayout>
 
                     </LinearLayout>
 
                     <Button
                         android:id="@+id/btn_datHangNgay"
-                        android:background="@drawable/bg_detail"
-                        android:textColor="@color/black"
                         android:layout_width="match_parent"
                         android:layout_height="50dp"
                         android:layout_marginVertical="5dp"
+                        android:backgroundTint="@color/white"
                         android:text="Đặt Hàng Ngay"
+                        android:textColor="@color/black"
                         android:textSize="21dp"
-                        android:textStyle="bold"/>
+                        android:textStyle="bold" />
 
                     <androidx.recyclerview.widget.RecyclerView
                         android:id="@+id/rc_offer_prod"
@@ -184,7 +190,7 @@
             android:layout_width="match_parent"
             android:layout_height="0dp"
             android:layout_weight="1"
-            android:background="#DFF"
+            android:background="@drawable/back6"
             android:orientation="horizontal"
             android:padding="5dp">
 
@@ -197,9 +203,9 @@
 
                 <TextView
                     android:id="@+id/btn_giam"
-                    android:background="#D7D7D7"
                     android:layout_width="25dp"
                     android:layout_height="match_parent"
+                    android:background="#D7D7D7"
                     android:gravity="center_vertical|center_horizontal"
                     android:text="-"
                     android:textSize="25dp"
@@ -209,16 +215,16 @@
                     android:id="@+id/edt_soLuong"
                     android:layout_width="60dp"
                     android:layout_height="match_parent"
+                    android:background="@color/white"
                     android:gravity="center"
-                    android:text="1"
                     android:inputType="number"
-                    android:background="@color/white"/>
+                    android:text="1" />
 
                 <TextView
                     android:id="@+id/btn_tang"
-                    android:background="#D7D7D7"
                     android:layout_width="25dp"
                     android:layout_height="match_parent"
+                    android:background="#D7D7D7"
                     android:gravity="center_vertical|center_horizontal"
                     android:text="+"
                     android:textSize="25dp"
@@ -227,11 +233,11 @@
 
             <Button
                 android:id="@+id/btn_addToCart"
-                android:background="@drawable/bg_detail"
-                android:textColor="@color/black"
                 android:layout_width="match_parent"
                 android:layout_height="match_parent"
+                android:backgroundTint="@color/white"
                 android:text="Thêm Vào Giỏ Hàng"
+                android:textColor="@color/black"
                 android:textSize="18dp"
                 android:textStyle="bold" />
 

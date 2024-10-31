@@ -42,6 +42,7 @@ public class DanhSachDonHangFragment extends Fragment {
     private int trangThaiLoc;
     private DatabaseReference referDanhSachDon;
     private ValueEventListener eventDocData;
+    private Drawable draw;
 
     public DanhSachDonHangFragment(int type) {
         this.trangThaiLoc = type;
@@ -63,6 +64,9 @@ public class DanhSachDonHangFragment extends Fragment {
             binding.btnChuaHoanThanh.setVisibility(View.GONE);
         }
         referDanhSachDon = FirebaseDatabase.getInstance().getReference();
+        setAdapterDonHang();
+        draw = getActivity().getDrawable(R.drawable.bg_detail);
+        draw.setTint(Color.rgb(0, 100, 255));
         KhoiTao();
         return binding.getRoot();
     }
@@ -92,9 +96,10 @@ public class DanhSachDonHangFragment extends Fragment {
         binding.btnDaHoanThanh.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                binding.btnDaHoanThanh.setBackgroundColor(Color.WHITE);
-                Drawable draw = getActivity().getDrawable(R.drawable.bg_img_detail);
-                binding.btnChuaHoanThanh.setBackground(draw);
+                binding.btnDaHoanThanh.setBackground(draw);
+                binding.btnDaHoanThanh.setTextColor(Color.WHITE);
+                binding.btnChuaHoanThanh.setBackgroundColor(Color.TRANSPARENT);
+                binding.btnChuaHoanThanh.setTextColor(Color.BLACK);
                 trangThaiLoc = 1;
                 referDanhSachDon.child("bills").addListenerForSingleValueEvent(eventDocData);
             }
@@ -103,9 +108,10 @@ public class DanhSachDonHangFragment extends Fragment {
         binding.btnChuaHoanThanh.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                binding.btnChuaHoanThanh.setBackgroundColor(Color.WHITE);
-                Drawable draw = getActivity().getDrawable(R.drawable.bg_img_detail);
-                binding.btnDaHoanThanh.setBackground(draw);
+                binding.btnChuaHoanThanh.setBackground(draw);
+                binding.btnChuaHoanThanh.setTextColor(Color.WHITE);
+                binding.btnDaHoanThanh.setBackgroundColor(Color.TRANSPARENT);
+                binding.btnDaHoanThanh.setTextColor(Color.BLACK);
                 trangThaiLoc = 0;
                 referDanhSachDon.child("bills").addListenerForSingleValueEvent(eventDocData);
             }
@@ -114,10 +120,16 @@ public class DanhSachDonHangFragment extends Fragment {
 
     private void KhoiTao() {
         if (trangThaiLoc == 1) {
-            binding.btnDaHoanThanh.setBackgroundColor(Color.WHITE);
-            Drawable draw = getActivity().getDrawable(R.drawable.bg_img_detail);
-            binding.btnChuaHoanThanh.setBackground(draw);
+            binding.btnDaHoanThanh.setBackground(draw);
+            binding.btnDaHoanThanh.setTextColor(Color.WHITE);
+            binding.btnChuaHoanThanh.setBackgroundColor(Color.TRANSPARENT);
+            binding.btnChuaHoanThanh.setTextColor(Color.BLACK);
         }
+        setValueEventDon();
+        referDanhSachDon.child("bills").addValueEventListener(eventDocData);
+    }
+
+    private void setValueEventDon(){
         eventDocData = new ValueEventListener() {
             @Override
             public void onDataChange(DataSnapshot dataSnapshot) {
@@ -158,25 +170,7 @@ public class DanhSachDonHangFragment extends Fragment {
                         data.add(don); // Thêm User vào danh sách
                     }
 
-                    // Xử lý danh sách userList (ví dụ: hiển thị trong RecyclerView)
-                    adapter = new DonHangAdapter(getActivity(), data);
-                    // Event Click Don Hang
-                    adapter.setOnItemDonHangClick(new DonHangAdapter.OnItemDonHangClick() {
-                        @Override
-                        public void onItemClick(int position) {
-                            DonHang donHang = data.get(position);
-                            if (donHang.getPhiTraGop() > 0) {
-
-                            } else {
-                                ((Customer_HomeActivity) getActivity()).ReplaceFragment(new ChiTietDonFragment(donHang.getId()));
-                            }
-                        }
-                    });
-
-                    LinearLayoutManager linearLayoutManager = new LinearLayoutManager(getActivity());
-                    linearLayoutManager.setOrientation(LinearLayoutManager.VERTICAL);
-                    binding.rcDanhSachDon.setLayoutManager(linearLayoutManager);
-                    binding.rcDanhSachDon.setAdapter(adapter);
+                    adapter.notifyDataSetChanged();
                 }catch (Exception e) {
 
                 }
@@ -187,12 +181,33 @@ public class DanhSachDonHangFragment extends Fragment {
                 Toast.makeText(getActivity(), "Lỗi Rồi Nè Má!", Toast.LENGTH_SHORT).show();
             }
         };
-        referDanhSachDon.child("bills").addValueEventListener(eventDocData);
+    }
+
+    private void setAdapterDonHang(){
+        adapter = new DonHangAdapter(getActivity(), data);
+        // Event Click Don Hang
+        adapter.setOnItemDonHangClick(new DonHangAdapter.OnItemDonHangClick() {
+            @Override
+            public void onItemClick(int position) {
+                DonHang donHang = data.get(position);
+                if (donHang.getPhiTraGop() > 0) {
+
+                } else {
+                    ((Customer_HomeActivity) getActivity()).ReplaceFragment(new ChiTietDonFragment(donHang.getId()));
+                }
+            }
+        });
+
+        LinearLayoutManager linearLayoutManager = new LinearLayoutManager(getActivity());
+        linearLayoutManager.setOrientation(LinearLayoutManager.VERTICAL);
+        binding.rcDanhSachDon.setLayoutManager(linearLayoutManager);
+        binding.rcDanhSachDon.setAdapter(adapter);
     }
 
     @Override
     public void onDestroyView() {
-        super.onDestroyView();
+        draw.setTint(Color.rgb(215,215,215));
+
         binding = null;
 
         // Loại bỏ listener của Firebase
@@ -203,5 +218,7 @@ public class DanhSachDonHangFragment extends Fragment {
         // Nullify references to help with garbage collection
         referDanhSachDon = null;
         eventDocData = null;
+
+        super.onDestroyView();
     }
 }

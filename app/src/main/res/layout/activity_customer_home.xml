@@ -13,7 +13,8 @@
         android:id="@+id/frm_customer"
         android:layout_width="match_parent"
         android:layout_height="0dp"
-        android:layout_weight="9">
+        android:layout_weight="9"
+        android:background="@drawable/back4">
 
     </FrameLayout>
     <!--  NAVIGATOR BOTTON  -->
@@ -28,6 +29,9 @@
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:layout_gravity="bottom"
+            android:background="@drawable/back6"
+            app:itemIconTint="@color/color_customer_nav_item"
+            app:itemTextColor="@color/color_customer_nav_item"
             app:menu="@menu/customer_bottom_nav_menu" />
     </LinearLayout>
 </LinearLayout>

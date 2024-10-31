@@ -5,103 +5,143 @@
     android:layout_height="match_parent"
     tools:context=".Activity.ChiTietDonFragment">
 
-    <ScrollView
+    <LinearLayout
         android:layout_width="match_parent"
         android:layout_height="match_parent"
-        android:layout_margin="10dp">
+        android:background="@drawable/back3"
+        android:orientation="vertical">
+
         <LinearLayout
             android:layout_width="match_parent"
-            android:layout_height="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_marginHorizontal="10dp"
+            android:layout_marginTop="10dp"
+            android:layout_marginBottom="5dp"
             android:orientation="vertical">
+
             <TextView
                 android:id="@+id/tv_ten_nguoi_nhan"
                 android:layout_width="match_parent"
                 android:layout_height="45dp"
-                android:paddingLeft="5dp"
+                android:background="@drawable/bg_img_item"
+                android:backgroundTint="#DDD"
+                android:gravity="center_vertical"
+                android:paddingLeft="10dp"
                 android:text="Ten Nguoi Nhan"
                 android:textSize="21dp"
-                android:textStyle="bold"
-                android:gravity="center_vertical"
-                android:background="@drawable/bg_img_item"/>
+                android:textStyle="bold" />
+
             <LinearLayout
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
-                android:orientation="horizontal"
-                android:layout_marginVertical="5dp">
+                android:layout_marginVertical="5dp"
+                android:orientation="horizontal">
+
                 <ImageView
                     android:layout_width="45dp"
                     android:layout_height="45dp"
-                    android:src="@drawable/call"
+                    android:layout_marginRight="10dp"
                     android:background="@drawable/bg_img_item"
-                    android:layout_marginRight="10dp"/>
+                    android:src="@drawable/call" />
+
                 <TextView
                     android:id="@+id/tv_sdt_nguoi_nhan"
                     android:layout_width="match_parent"
                     android:layout_height="45dp"
+                    android:background="@drawable/bg_img_item"
+                    android:backgroundTint="#DDD"
+                    android:gravity="center"
                     android:paddingLeft="5dp"
-                    android:text="So Dien Thoai Nguoi Nhan"
+                    android:text="0384756476"
                     android:textSize="21dp"
-                    android:textStyle="bold"
-                    android:gravity="center_vertical"
-                    android:background="@drawable/bg_img_item"/>
+                    android:textStyle="bold" />
             </LinearLayout>
+
             <TextView
                 android:id="@+id/tv_dia_chi_nhan"
                 android:layout_width="match_parent"
-                android:layout_height="45dp"
-                android:paddingLeft="5dp"
+                android:layout_height="65dp"
+                android:background="@drawable/bg_img_item"
+                android:backgroundTint="#DDD"
+                android:gravity="top"
+                android:paddingHorizontal="10dp"
+                android:paddingVertical="5dp"
                 android:text="Dia Chi Nguoi Nhan"
                 android:textSize="21dp"
-                android:textStyle="bold"
-                android:gravity="center_vertical"
-                android:background="@drawable/bg_img_item"/>
+                android:textStyle="bold" />
 
-            <androidx.recyclerview.widget.RecyclerView
-                android:id="@+id/rc_chi_tiet_don"
-                android:layout_marginTop="5dp"
+            <TextView
+                android:id="@+id/tv_ngay_tao"
                 android:layout_width="match_parent"
-                android:layout_height="300dp"/>
+                android:layout_height="wrap_content"
+                android:layout_marginTop="5dp"
+                android:background="@drawable/bg_img_item"
+                android:backgroundTint="#DDD"
+                android:paddingTop="5dp"
+                android:paddingBottom="10dp"
+                android:gravity="center"
+                android:text="Ngày Tạo: 20/10/2024"
+                android:textSize="21dp"
+                android:textStyle="bold" />
+        </LinearLayout>
+
+        <androidx.recyclerview.widget.RecyclerView
+            android:id="@+id/rc_chi_tiet_don"
+            android:layout_width="match_parent"
+            android:layout_height="260dp"
+            android:paddingHorizontal="5dp"/>
+
+        <LinearLayout
+            android:layout_width="match_parent"
+            android:layout_height="match_parent"
+            android:layout_marginHorizontal="10dp"
+            android:layout_marginTop="5dp"
+            android:orientation="vertical">
 
             <LinearLayout
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
-                android:orientation="horizontal"
-                android:layout_marginTop="8dp"
                 android:layout_marginBottom="5dp"
                 android:background="@drawable/bg_detail"
                 android:backgroundTint="#0DF"
+                android:orientation="horizontal"
                 android:padding="10dp">
+
                 <TextView
                     android:layout_width="wrap_content"
                     android:layout_height="40dp"
                     android:gravity="center_vertical"
                     android:text="Tổng Cộng: "
-                    android:textStyle="bold"
-                    android:textSize="21dp"/>
+                    android:textSize="21dp"
+                    android:textStyle="bold" />
+
                 <TextView
                     android:id="@+id/tv_tong_tien"
                     android:layout_width="match_parent"
                     android:layout_height="match_parent"
                     android:gravity="center_vertical"
                     android:text="200.000.000"
-                    android:textStyle="bold"
+                    android:textColor="#F00"
                     android:textSize="25dp"
-                    android:textColor="#F00"/>
+                    android:textStyle="bold" />
             </LinearLayout>
 
             <Button
                 android:id="@+id/btn_trang_thai"
                 android:layout_width="match_parent"
                 android:layout_height="50dp"
+                android:backgroundTint="#4000FF"
                 android:text="Trang Thai Giao Hang"
-                android:textSize="20dp"/>
+                android:textSize="20dp" />
+
             <Button
                 android:id="@+id/btn_trang_thai_tt"
                 android:layout_width="match_parent"
                 android:layout_height="50dp"
+                android:backgroundTint="#4000FF"
                 android:text="Trang Thai Thanh Toan"
-                android:textSize="20dp"/>
+                android:textSize="20dp" />
         </LinearLayout>
-    </ScrollView>
+    </LinearLayout>
 
 </FrameLayout>
