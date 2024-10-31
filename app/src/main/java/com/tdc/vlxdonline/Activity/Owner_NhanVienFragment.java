@@ -98,6 +98,13 @@ public class Owner_NhanVienFragment extends Fragment {
     }
 
     private void getNhanVienData() {
+
+        // TODO: Thoát ứng dụng khi chưa đăng nhập mà vào được trang quản lý
+        if (emailLogin == null) {
+            Toast.makeText(getContext(), "Bạn không có quyền truy cập \nQuản lý Nhân Viên", Toast.LENGTH_SHORT).show();
+            // requireActivity().finishAffinity();
+        }
+
         // Firebase: Khởi tạo databaseReference và lấy dữ liệu từ Firebase
         databaseReference = FirebaseDatabase.getInstance().getReference("nhanvien");
         databaseReference.addValueEventListener(new ValueEventListener() {
@@ -116,21 +123,19 @@ public class Owner_NhanVienFragment extends Fragment {
                         nhanVien.setIdnv(snapshot.getKey());
 
                         // Lọc theo nhân viên của Chủ CH theo email
-                        // Nếu emailUser là admin, thêm tất cả nhân viên mà không kiểm tra điều kiện khác
-                        if ("admin@tdc.com".equals(emailLogin)) {
+                        // Nếu emailUser là admin, hiển thị tất cả nhân viên có trong Firebase
+                        if (emailLogin != null && "admin@tdc.com".equals(emailLogin)) {
                             nhanVienAdapter.getNhanVienList().add(nhanVien);
                             originalList.add(nhanVien); // Lưu vào danh sách gốc
-                        } else if (emailLogin != null && nhanVien.getEmailchu().equals(emailLogin)) {
-                            // Điều kiện email chủ thông thường
-                            nhanVienAdapter.getNhanVienList().add(nhanVien);
-                            originalList.add(nhanVien); // Lưu vào danh sách gốc
-                        } else {
-                            Toast.makeText(getContext(), "Bạn không có quyền truy cập \nQuản lý Nhân Viên", Toast.LENGTH_SHORT).show();
-
-                            // TODO: Thoát ứng dụng khi chưa đăng nhập mà vào được trang quản lý
-//                            requireActivity().finishAffinity();
                         }
-                    }
+
+                        // Chủ cửa hàng đăng nhập, hiển thị nhân viên của chủ cửa hàng
+                        if (emailLogin != null && nhanVien.getEmailchu().equals(emailLogin)) {
+                            nhanVienAdapter.getNhanVienList().add(nhanVien);
+                            originalList.add(nhanVien); // Lưu vào danh sách gốc
+                        }
+                    } else
+                        Toast.makeText(getContext(), "Danh Sách Nhân Viên Rỗng", Toast.LENGTH_SHORT).show();
                 }
 
                 // Sắp xếp danh sách theo mã NV
