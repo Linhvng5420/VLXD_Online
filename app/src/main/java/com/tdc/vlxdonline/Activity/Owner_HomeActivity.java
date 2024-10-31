@@ -100,8 +100,9 @@ public class Owner_HomeActivity extends AppCompatActivity {
                 .setCancelable(false)
                 .setPositiveButton("Có", new DialogInterface.OnClickListener() {
                     public void onClick(DialogInterface dialog, int id) {
-                        // Thoát ứng dụng
-                        finishAffinity(); // Đóng tất cả các activity và thoát ứng dụng
+                        // Đóng tất cả các activity và thoát ứng dụng
+                        finishAffinity();
+                        onDestroy();
                     }
                 })
                 .setNegativeButton("Không", new DialogInterface.OnClickListener() {
