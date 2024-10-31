@@ -4,150 +4,167 @@
     android:id="@+id/fragment_container"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
+    android:background="#f8f8f8"
     tools:context=".Activity.ThongTinNhanHang_Fragment">
 
     <LinearLayout
         android:layout_width="match_parent"
         android:layout_height="match_parent"
-        android:orientation="vertical">
+        android:orientation="vertical"
+        android:padding="16dp">
 
+        <!-- Phone number section -->
+        <TextView
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_marginBottom="4dp"
+            android:text="Số điện thoại chủ đơn:"
+            android:textColor="#333333"
+            android:textSize="16sp" />
+
+        <EditText
+            android:id="@+id/edt_nhapSDT"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:background="@drawable/edit_text_tt"
+            android:hint="Nhập số điện thoại"
+            android:inputType="number"
+            android:padding="12dp"
+            android:textSize="16sp" />
+
+        <!-- Receiver Info Header -->
+        <TextView
+            android:id="@+id/tv_thongTinNguoiNhan"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_marginTop="12dp"
+            android:padding="10dp"
+            android:background="@drawable/edit_text"
+            android:paddingVertical="10dp"
+            android:text="Thông tin người nhận"
+            android:textColor="#000000"
+            android:textSize="18sp"
+            android:textStyle="bold" />
+
+        <!-- Receiver Name -->
+        <TextView
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_marginTop="12dp"
+            android:text="Tên người nhận hàng"
+            android:textColor="#333333"
+            android:textSize="16sp" />
+
+        <EditText
+            android:id="@+id/edt_tenNguoiNhan"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:background="@drawable/edit_text_tt"
+            android:hint="Nhập tên người nhận hàng"
+            android:padding="12dp"
+            android:textSize="16sp" />
+
+        <!-- Receiver Phone -->
+        <TextView
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_marginTop="12dp"
+            android:text="Số điện thoại người nhận hàng:"
+            android:textColor="#333333"
+            android:textSize="16sp" />
+
+        <EditText
+            android:id="@+id/edt_nhapSoĐTNguoiNhan"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:background="@drawable/edit_text_tt"
+            android:hint="Nhập số điện thoại"
+            android:inputType="number"
+            android:padding="12dp"
+            android:textSize="16sp" />
+
+        <!-- Receiver Address -->
+        <TextView
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_marginTop="12dp"
+            android:text="Địa chỉ nhận hàng:"
+            android:textColor="#333333"
+            android:textSize="16sp" />
+
+        <EditText
+            android:id="@+id/edt_nhapDiaChi"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:background="@drawable/edit_text_tt"
+            android:hint="Nhập địa chỉ"
+            android:padding="12dp"
+            android:textSize="16sp" />
+
+        <!-- Payment Method Section -->
         <LinearLayout
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:orientation="vertical"
-            android:padding="10dp">
-
-            <TextView
-                android:layout_width="match_parent"
-                android:layout_height="wrap_content"
-                android:text="Số điện thoại chủ đơn:"
-                android:textSize="16dp" />
-
-            <EditText
-                android:id="@+id/edt_nhapSDT"
-                android:layout_width="match_parent"
-                android:layout_height="wrap_content"
-                android:background="@drawable/edit_thongtin"
-                android:hint="Nhập số điện thoại"
-                android:inputType="number" />
-
-            <TextView
-                android:id="@+id/tv_thongTinNguoiNhan"
-                android:text="Nhìn concac"
-                android:textSize="18dp"
-                android:layout_width="match_parent"
-                android:layout_height="wrap_content"
-                android:layout_marginTop="7dp"
-                android:background="@drawable/edit_donhang" />
-
-            <TextView
-                android:layout_width="match_parent"
-                android:layout_height="wrap_content"
-                android:layout_marginTop="6dp"
-                android:text="Tên người nhận hàng"
-                android:textSize="16dp" />
-
-            <EditText
-                android:id="@+id/edt_tenNguoiNhan"
-                android:layout_width="match_parent"
-                android:layout_height="wrap_content"
-                android:hint="Nhập tên người nhận hàng"
-                android:background="@drawable/edit_thongtin" />
-
-            <TextView
-                android:layout_width="match_parent"
-                android:layout_height="wrap_content"
-                android:layout_marginTop="6dp"
-                android:text="Số điện thoại người nhận hàng:"
-                android:textSize="16dp" />
-
-            <EditText
-                android:id="@+id/edt_nhapSoĐTNguoiNhan"
-                android:layout_width="match_parent"
-                android:layout_height="wrap_content"
-                android:inputType="number"
-                android:background="@drawable/edit_thongtin"
-                android:hint="Nhập số điện thoại" />
-
-            <TextView
-                android:layout_width="match_parent"
-                android:layout_height="wrap_content"
-                android:layout_marginTop="6dp"
-                android:text="Địa chỉ nhận hàng:"
-                android:textSize="16dp" />
-
-            <EditText
-                android:id="@+id/edt_nhapDiaChi"
-                android:layout_width="match_parent"
-                android:layout_height="wrap_content"
-                android:background="@drawable/edit_thongtin"
-                android:hint="Nhập địa chỉ" />
-        </LinearLayout>
-
-        <LinearLayout
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:layout_gravity="center"
+            android:layout_marginTop="16dp"
+            android:background="@drawable/edit_text_tt"
+            android:gravity="center_vertical"
             android:orientation="horizontal">
 
             <TextView
-                android:layout_width="match_parent"
+                android:layout_width="0dp"
                 android:layout_height="wrap_content"
-                android:layout_marginTop="6dp"
-                android:layout_marginRight="40dp"
+                android:layout_weight="1"
+                android:paddingLeft="10dp"
                 android:text="Phương thức thanh toán"
-                android:textSize="15dp" />
+                android:textColor="#333333"
+                android:textSize="16sp" />
 
             <Spinner
                 android:id="@+id/sp_thanhToan"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
-                android:layout_marginTop="7dp"
-                android:hint="Nhập địa chỉ"
-                android:spinnerMode="dropdown" />
+                android:layout_marginStart="8dp"
+                android:backgroundTint="#2196F3" />
         </LinearLayout>
 
+        <!-- Total Price Section -->
         <LinearLayout
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:layout_marginTop="10dp"
-            android:layout_gravity="center"
-            android:background="@drawable/edit_tongtien"
-            android:orientation="horizontal">
+            android:layout_marginTop="20dp"
+            android:background="@drawable/bg_total"
+            android:gravity="center"
+            android:orientation="horizontal"
+            android:padding="12dp">
 
             <TextView
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
-                android:layout_gravity="center"
-                android:layout_marginLeft="50dp"
-                android:gravity="center"
-                android:padding="10dp"
                 android:text="Tổng tiền:"
-                android:textSize="20dp"
+                android:textColor="#333333"
+                android:textSize="18sp"
                 android:textStyle="bold" />
 
             <TextView
-                android:layout_width="match_parent"
-                android:layout_height="match_parent"
-                android:layout_gravity="center"
-                android:gravity="center"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_marginStart="10dp"
                 android:text="95000"
-                android:textSize="20dp"
-                android:textStyle="bold"
-                />
+                android:textColor="#333333"
+                android:textSize="18sp"
+                android:textStyle="bold" />
         </LinearLayout>
 
+        <!-- Confirm Button -->
         <Button
             android:id="@+id/btn_XacNhan"
             android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            android:layout_marginLeft="20dp"
-            android:layout_marginTop="10dp"
-            android:layout_marginRight="20dp"
-            android:text="Xác Nhận" />
-
-
+            android:layout_height="50dp"
+            android:layout_marginTop="20dp"
+            android:backgroundTint="#4CAF50"
+            android:text="Xác Nhận"
+            android:textColor="#FFFFFF"
+            android:textSize="18sp"
+            android:textStyle="bold" />
     </LinearLayout>
-
-
 </FrameLayout>

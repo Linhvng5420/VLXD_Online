@@ -158,6 +158,13 @@ public class TaoDonNhapHangFragment extends Fragment {
                 }
             }
         });
+        binding.btnBack.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                // Quay lại fragment trước đó
+                requireActivity().onBackPressed();
+            }
+        });
 
 //        btnXacNhan = binding.btnXacNhan; // Ensure binding is initialized
 //        btnXacNhan.setOnClickListener(new View.OnClickListener() {

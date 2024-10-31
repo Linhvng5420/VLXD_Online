@@ -65,7 +65,7 @@ public class Warehouse_HomeActivity extends AppCompatActivity {
                 ReplaceFragment(new Fragment());
             } else if (itemId == R.id.nav_warehouse_donhang) {
              //   ReplaceFragment(new ThongTinNhanHang_Fragment());
-                ReplaceFragment(new TaoDonNhapHangFragment());
+                ReplaceFragment(new GiaoDienDonHang_Fragment());
             }
 
             return true;

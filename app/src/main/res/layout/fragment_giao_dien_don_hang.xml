@@ -1,0 +1,57 @@
+<?xml version="1.0" encoding="utf-8"?>
+<FrameLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:id="@+id/fragment_container"
+    tools:context=".Activity.GiaoDienDonHang_Fragment">
+
+    <LinearLayout
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        android:orientation="vertical">
+
+        <LinearLayout
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:background="@drawable/edit_text_tt"
+            android:paddingTop="5dp"
+            android:paddingBottom="8dp"
+            android:layout_gravity="center"
+            android:gravity="center"
+            android:orientation="horizontal">
+
+            <Button
+                android:id="@+id/btn_addDonHang"
+                android:layout_width="50dp"
+                android:layout_height="50dp"
+                android:layout_marginRight="80dp"
+                android:layout_marginLeft="45dp"
+                android:background="@drawable/add_donhang" />
+
+            <TextView
+                android:id="@+id/tv_chiTiet"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_marginRight="60dp"
+                android:text="Đơn Hàng"
+                android:textSize="25sp"
+                android:textStyle="bold" />
+
+            <Button
+                android:id="@+id/btn_loadDH"
+                android:layout_width="50dp"
+                android:layout_height="50dp"
+                android:layout_marginLeft="10dp"
+                android:layout_marginRight="38dp"
+                android:background="@drawable/reload" />
+
+
+        </LinearLayout>
+        <androidx.recyclerview.widget.RecyclerView
+            android:id="@+id/rcv_donhang"
+            android:layout_width="match_parent"
+            android:layout_height="match_parent"
+            android:paddingTop="10dp" />
+    </LinearLayout>
+</FrameLayout>

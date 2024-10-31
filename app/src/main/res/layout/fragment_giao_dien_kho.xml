@@ -5,7 +5,7 @@
     android:id="@+id/main"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
-    android:background="@color/white"
+    android:background="@color/light_gray"
     android:orientation="vertical"
     tools:context=".Activity.Warehouse_HomeActivity">
 
@@ -16,23 +16,21 @@
         android:orientation="vertical">
 
         <SearchView
-            android:layout_marginTop="10dp"
-            android:layout_marginBottom="10dp"
-            android:layout_marginLeft="10dp"
-            android:layout_marginRight="10dp"
+            android:layout_margin="12dp"
             android:id="@+id/sv_customer_home"
             android:layout_width="match_parent"
             android:layout_height="50dp"
             android:background="@drawable/bg_detail"
             android:iconifiedByDefault="false"
+            android:queryHint="Tìm kiếm sản phẩm"
             android:searchIcon="@drawable/search" />
 
         <androidx.cardview.widget.CardView
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:layout_marginVertical="5dp"
-            app:cardCornerRadius="8dp"
-            app:cardElevation="10dp">
+            android:layout_margin="10dp"
+            app:cardCornerRadius="10dp"
+            app:cardElevation="8dp">
 
             <androidx.recyclerview.widget.RecyclerView
                 android:id="@+id/rcv_category"
@@ -45,6 +43,6 @@
             android:id="@+id/rcv_sanpham1"
             android:layout_width="match_parent"
             android:layout_height="match_parent"
-            android:layout_marginHorizontal="10dp" />
+            android:layout_marginHorizontal="12dp" />
     </LinearLayout>
 </LinearLayout>
