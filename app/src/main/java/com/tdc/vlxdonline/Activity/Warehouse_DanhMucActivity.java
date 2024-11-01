@@ -95,12 +95,11 @@ public class Warehouse_DanhMucActivity extends AppCompatActivity {
             public void onClick(View v) {
                 if (
                         uri == null ||
-                                edtNhapDM.getText().toString().trim().isEmpty())
-                {
+                                edtNhapDM.getText().toString().trim().isEmpty()) {
 
                     Toast.makeText(Warehouse_DanhMucActivity.this,
                             "Vui lòng điền đầy đủ thông tin sản phẩm!", Toast.LENGTH_SHORT).show();
-                } else{
+                } else {
                     uploadData();
                 }
             }
@@ -131,6 +130,7 @@ public class Warehouse_DanhMucActivity extends AppCompatActivity {
         btnSuaDM.setEnabled(false);
         btnXoaDM.setEnabled(false);
         btnThemDM.setEnabled(true);
+
         // Đảm bảo Adapter đã được khởi tạo trước khi thiết lập sự kiện click
         if (adapter != null) {
             adapter.setOnItemClickListener(new CategoryAdapter.OnItemClickListener() {
@@ -217,6 +217,7 @@ public class Warehouse_DanhMucActivity extends AppCompatActivity {
                     resetSelection();
                 }
             });
+
         } else {
             String newCategoryId = reference.child("category").push().getKey();
             category.setId(newCategoryId);
@@ -229,6 +230,7 @@ public class Warehouse_DanhMucActivity extends AppCompatActivity {
                 }
             });
         }
+        uri = null;
     }
 
     private void deleteProduct(String id) {

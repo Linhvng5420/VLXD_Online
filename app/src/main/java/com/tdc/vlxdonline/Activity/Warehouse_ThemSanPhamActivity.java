@@ -300,7 +300,6 @@ public class Warehouse_ThemSanPhamActivity extends AppCompatActivity {
             Toast.makeText(this, "Adapter chưa được khởi tạo", Toast.LENGTH_SHORT).show();
         }
     }
-
     private void saveDate() {
         if (sanPhamModel.getId() == null) sanPhamModel.setId(System.currentTimeMillis() + "");
         sanPhamModel.setTen(edtNhapten.getText().toString());
@@ -318,8 +317,8 @@ public class Warehouse_ThemSanPhamActivity extends AppCompatActivity {
                         Toast.makeText(this, "Thêm sản phẩm thành công", Toast.LENGTH_SHORT).show();
                     }
                 });
+        uri = null;
     }
-
     public void uploadData() {
         if (uri != null) {
             StorageReference storageReference = FirebaseStorage.getInstance().getReference().child("SanPham Images")
@@ -340,7 +339,6 @@ public class Warehouse_ThemSanPhamActivity extends AppCompatActivity {
             clearSelection();
         }
     }
-
     private void deleteProduct(String id) {
         DatabaseReference productRef = FirebaseDatabase.getInstance().getReference("products").child(id);
         productRef.removeValue().addOnCompleteListener(new OnCompleteListener<Void>() {
@@ -355,7 +353,6 @@ public class Warehouse_ThemSanPhamActivity extends AppCompatActivity {
             }
         });
     }
-
     private void clearSelection() {
         sanPhamModel = new SanPham_Model();
         edtNhapten.setText("");
@@ -370,7 +367,6 @@ public class Warehouse_ThemSanPhamActivity extends AppCompatActivity {
         btnSua.setEnabled(false);
         btnThem.setEnabled(true);
     }
-
     private void setControl() {
         edtNhapten = findViewById(R.id.edtNhapTen);
         edtNhapgiaban = findViewById(R.id.edtNhapgiaban);

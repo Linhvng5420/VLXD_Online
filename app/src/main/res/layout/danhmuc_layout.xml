@@ -5,7 +5,7 @@
     android:layout_width="match_parent"
     android:layout_height="match_parent"
     android:orientation="vertical"
-    android:background="#D5F1F8"
+    android:background="@drawable/back3"
     tools:context=".Activity.Warehouse_DanhMucActivity">
 
 
@@ -87,7 +87,7 @@
                     android:id="@+id/edtNhapDM"
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
-                    android:hint="Nhập Danh Muc"
+                    android:hint="Nhập Danh Mục"
                     android:padding="12dp" />
 
                 <LinearLayout
@@ -152,8 +152,7 @@
             android:layout_height="match_parent"
             android:layout_marginTop="5dp"
             android:layout_marginBottom="5dp"
-            android:background="@color/white"
-            android:backgroundTint="#E0E0E0"
+            android:background="@drawable/back3"
             android:elevation="10dp"
             android:padding="8dp"
             android:gravity="center"/>

@@ -50,7 +50,6 @@ dependencies {
     androidTestImplementation(libs.espresso.core)
     implementation(libs.firebase.database)
 
-
     // Import the BoM for the Firebase platform
     implementation(platform("com.google.firebase:firebase-bom:33.4.0"))
 

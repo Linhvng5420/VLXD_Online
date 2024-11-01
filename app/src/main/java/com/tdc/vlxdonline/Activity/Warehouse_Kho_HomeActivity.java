@@ -6,11 +6,14 @@ import android.view.View;
 import android.widget.TextView;
 
 import androidx.appcompat.app.AppCompatActivity;
+import androidx.fragment.app.Fragment;
 
+import com.google.android.material.bottomnavigation.BottomNavigationView;
 import com.tdc.vlxdonline.R;
 
 public class Warehouse_Kho_HomeActivity extends AppCompatActivity {
-    TextView tvQLSP,tvQLDM,tvQLDV,tvQLAnhSP,tvQLBanner;
+
+    TextView tvQLSP, tvQLDM, tvQLDV, tvQLAnhSP, tvQLBanner;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -58,7 +61,8 @@ public class Warehouse_Kho_HomeActivity extends AppCompatActivity {
         });
 
     }
-//Bắt sự kiện nhấn Navbar Bottom
+
+    //Bắt sự kiện nhấn Navbar Bottom
 //    private void EventNavigationBottom() {
 //        warehouseHomeBinding.navWarehouse.setOnItemSelectedListener(item -> {
 //            int itemId = item.getItemId();
@@ -77,7 +81,7 @@ public class Warehouse_Kho_HomeActivity extends AppCompatActivity {
 //
 //            return true;
 //        });
-//    }
+
     private void setCtronl() {
         tvQLSP = findViewById(R.id.tvQLSP);
         tvQLDM = findViewById(R.id.tvQLDM);
