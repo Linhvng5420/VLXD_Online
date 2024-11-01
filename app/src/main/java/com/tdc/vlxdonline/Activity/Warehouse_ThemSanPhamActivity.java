@@ -48,7 +48,6 @@ import java.util.List;
 import SanPham_Model.SanPham_Model;*/
 
 public class Warehouse_ThemSanPhamActivity extends AppCompatActivity {
-
     EditText edtNhapten, edtNhapgiaban, edtNhapsoluong, edtDaban, edtMoTa;
     Button btnThem, btnXoa, btnSua;
     ImageView ivImages;

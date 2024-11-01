@@ -2,6 +2,7 @@ package com.tdc.vlxdonline.Activity;
 
 import android.app.Activity;
 import android.content.Intent;
+import android.graphics.Color;
 import android.net.Uri;
 import android.os.Bundle;
 import android.util.Log;
@@ -135,7 +136,7 @@ public class Warehouse_DanhMucActivity extends AppCompatActivity {
         if (adapter != null) {
             adapter.setOnItemClickListener(new CategoryAdapter.OnItemClickListener() {
                 @Override
-                public void onItemClick(int position) {
+                public void onItemClick(View view, int position) {
                     // Xử lý sự kiện click vào sản phẩm
                     if (position != RecyclerView.NO_POSITION) {
                         if (!list_DM.get(position).getId().equals(category.getId())) {
@@ -150,6 +151,7 @@ public class Warehouse_DanhMucActivity extends AppCompatActivity {
                             Glide.with(Warehouse_DanhMucActivity.this)
                                     .load(category.getAnh())
                                     .into(ivAnhDM);
+//                           view.setBackgroundColor(Color.rgb(0,255,255));
                         } else {
                             clearSelection();
                         }
@@ -167,7 +169,7 @@ public class Warehouse_DanhMucActivity extends AppCompatActivity {
         adapter = new CategoryAdapter(Warehouse_DanhMucActivity.this, list_DM);
         recyclerView.setAdapter(adapter);
         reference = FirebaseDatabase.getInstance().getReference();
-        listener = reference.child("category").addValueEventListener(new ValueEventListener() {
+        listener = reference.child("categorys").addValueEventListener(new ValueEventListener() {
             @Override
             public void onDataChange(@NonNull DataSnapshot snapshot) {
                 list_DM.clear();
@@ -189,7 +191,7 @@ public class Warehouse_DanhMucActivity extends AppCompatActivity {
     public void uploadData() {
         if (!edtNhapDM.getText().toString().isEmpty()) {
             if (uri != null) {
-                StorageReference storageReference = FirebaseStorage.getInstance().getReference().child("category Images")
+                StorageReference storageReference = FirebaseStorage.getInstance().getReference().child("categorys Images")
                         .child(uri.getLastPathSegment());
                 storageReference.putFile(uri).addOnSuccessListener(new OnSuccessListener<UploadTask.TaskSnapshot>() {
                     @Override
@@ -210,7 +212,7 @@ public class Warehouse_DanhMucActivity extends AppCompatActivity {
         if (category.getId() != null) {
             category.setTen(edtNhapDM.getText().toString());
             category.setAnh(uri != null ? imagesUrl : category.getAnh());
-            reference.child("category").child(category.getId()).setValue(category).addOnCompleteListener(task -> {
+            reference.child("categorys").child(category.getId()).setValue(category).addOnCompleteListener(task -> {
                 if (task.isSuccessful()) {
                     Toast.makeText(this, "Cập nhật thành công", Toast.LENGTH_SHORT).show();
                     clearSelection();
@@ -218,11 +220,11 @@ public class Warehouse_DanhMucActivity extends AppCompatActivity {
             });
 
         } else {
-            String newCategoryId = reference.child("category").push().getKey();
+            String newCategoryId = reference.child("categorys").push().getKey();
             category.setId(newCategoryId);
             category.setTen(edtNhapDM.getText().toString());
             category.setAnh(uri != null ? imagesUrl : null);
-            reference.child("category").child(newCategoryId).setValue(category).addOnCompleteListener(task -> {
+            reference.child("categorys").child(newCategoryId).setValue(category).addOnCompleteListener(task -> {
                 if (task.isSuccessful()) {
                     Toast.makeText(this, "Thêm danh mục thành công", Toast.LENGTH_SHORT).show();
                     clearSelection();

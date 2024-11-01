@@ -24,7 +24,7 @@ public class CategoryAdapter  extends RecyclerView.Adapter<Category_ViewHolder> 
 
     private CategoryAdapter.OnItemClickListener listener;
     public interface OnItemClickListener {
-        void onItemClick(int position);
+        void onItemClick(View view, int position);
     }
     public void setOnItemClickListener(CategoryAdapter.OnItemClickListener listener) {
         this.listener = listener;
@@ -50,7 +50,7 @@ public class CategoryAdapter  extends RecyclerView.Adapter<Category_ViewHolder> 
             @Override
             public void onClick(View v) {
                 if (listener != null) {
-                    listener.onItemClick(holder.getAdapterPosition()); // Dùng getAdapterPosition() thay vì position
+                    listener.onItemClick(v, holder.getAdapterPosition()); // Dùng getAdapterPosition() thay vì position
                 }
             }
         });

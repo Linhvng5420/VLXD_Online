@@ -114,7 +114,6 @@ public class Warehouse_HomeActivity extends AppCompatActivity {
             return true;
         });
     }
-
     private void ReplaceFragment(Fragment fragment) {
         FragmentManager fragmentManager = getSupportFragmentManager();
         FragmentTransaction fragmentTransaction = fragmentManager.beginTransaction();

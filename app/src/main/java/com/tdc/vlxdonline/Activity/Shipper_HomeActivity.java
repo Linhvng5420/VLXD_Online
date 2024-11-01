@@ -39,11 +39,9 @@ public class Shipper_HomeActivity extends AppCompatActivity {
             } else if (itemId == R.id.nav_owner_kho) {
                 ReplaceFragment(new Fragment());
             }
-
             return true;
         });
     }
-
     private void ReplaceFragment(Fragment fragment) {
         FragmentManager fragmentManager = getSupportFragmentManager();
         FragmentTransaction fragmentTransaction = fragmentManager.beginTransaction();
