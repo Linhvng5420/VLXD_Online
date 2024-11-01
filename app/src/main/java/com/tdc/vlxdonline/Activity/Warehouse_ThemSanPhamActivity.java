@@ -158,7 +158,6 @@ public class Warehouse_ThemSanPhamActivity extends AppCompatActivity {
             }
 
         });
-
     }
 
     private void getDate() {
@@ -300,6 +299,7 @@ public class Warehouse_ThemSanPhamActivity extends AppCompatActivity {
             Toast.makeText(this, "Adapter chưa được khởi tạo", Toast.LENGTH_SHORT).show();
         }
     }
+
     private void saveDate() {
         if (sanPhamModel.getId() == null) sanPhamModel.setId(System.currentTimeMillis() + "");
         sanPhamModel.setTen(edtNhapten.getText().toString());
@@ -314,11 +314,12 @@ public class Warehouse_ThemSanPhamActivity extends AppCompatActivity {
         reference.child("products").child(sanPhamModel.getId()).setValue(sanPhamModel)
                 .addOnCompleteListener(task -> {
                     if (task.isSuccessful()) {
-                        Toast.makeText(this, "Thêm sản phẩm thành công", Toast.LENGTH_SHORT).show();
+                        Toast.makeText(this, "Cập nhật sản phẩm thành công", Toast.LENGTH_SHORT).show();
                     }
                 });
         uri = null;
     }
+
     public void uploadData() {
         if (uri != null) {
             StorageReference storageReference = FirebaseStorage.getInstance().getReference().child("SanPham Images")
@@ -339,6 +340,7 @@ public class Warehouse_ThemSanPhamActivity extends AppCompatActivity {
             clearSelection();
         }
     }
+
     private void deleteProduct(String id) {
         DatabaseReference productRef = FirebaseDatabase.getInstance().getReference("products").child(id);
         productRef.removeValue().addOnCompleteListener(new OnCompleteListener<Void>() {
@@ -346,13 +348,15 @@ public class Warehouse_ThemSanPhamActivity extends AppCompatActivity {
             public void onComplete(@NonNull Task<Void> task) {
                 if (task.isSuccessful()) {
                     Toast.makeText(Warehouse_ThemSanPhamActivity.this, "Xóa sản phẩm thành công", Toast.LENGTH_SHORT).show();
-                    clearSelection(); // Clear selection after deleting
+                    clearSelection();
                 } else {
                     Toast.makeText(Warehouse_ThemSanPhamActivity.this, "Xóa sản phẩm thất bại", Toast.LENGTH_SHORT).show();
                 }
             }
         });
     }
+
+    // clear trạng thái
     private void clearSelection() {
         sanPhamModel = new SanPham_Model();
         edtNhapten.setText("");

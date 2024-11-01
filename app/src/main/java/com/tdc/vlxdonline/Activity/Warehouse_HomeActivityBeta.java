@@ -100,7 +100,6 @@ public class Warehouse_HomeActivityBeta extends AppCompatActivity {
             } else if (itemId == R.id.nav_owner_kho) {
                 ReplaceFragment(new Fragment());
             }
-
             return true;
         });
     }

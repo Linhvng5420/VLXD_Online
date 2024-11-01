@@ -151,7 +151,7 @@ public class Warehouse_DanhMucActivity extends AppCompatActivity {
                                     .load(category.getAnh())
                                     .into(ivAnhDM);
                         } else {
-                            resetSelection();
+                            clearSelection();
                         }
                     }
                 }
@@ -214,7 +214,7 @@ public class Warehouse_DanhMucActivity extends AppCompatActivity {
             reference.child("category").child(category.getId()).setValue(category).addOnCompleteListener(task -> {
                 if (task.isSuccessful()) {
                     Toast.makeText(this, "Cập nhật thành công", Toast.LENGTH_SHORT).show();
-                    resetSelection();
+                    clearSelection();
                 }
             });
 
@@ -226,7 +226,7 @@ public class Warehouse_DanhMucActivity extends AppCompatActivity {
             reference.child("category").child(newCategoryId).setValue(category).addOnCompleteListener(task -> {
                 if (task.isSuccessful()) {
                     Toast.makeText(this, "Thêm danh mục thành công", Toast.LENGTH_SHORT).show();
-                    resetSelection();
+                    clearSelection();
                 }
             });
         }
@@ -238,14 +238,14 @@ public class Warehouse_DanhMucActivity extends AppCompatActivity {
         productRef.removeValue().addOnCompleteListener(task -> {
             if (task.isSuccessful()) {
                 Toast.makeText(Warehouse_DanhMucActivity.this, "Xóa sản phẩm thành công", Toast.LENGTH_SHORT).show();
-                resetSelection();
+                clearSelection();
             } else {
                 Toast.makeText(Warehouse_DanhMucActivity.this, "Xóa sản phẩm thất bại", Toast.LENGTH_SHORT).show();
             }
         });
     }
 
-    private void resetSelection() {
+    private void clearSelection() {
         category = new Categorys();
         edtNhapDM.setText("");
         ivAnhDM.setImageResource(R.drawable.add_a_photo_24);
