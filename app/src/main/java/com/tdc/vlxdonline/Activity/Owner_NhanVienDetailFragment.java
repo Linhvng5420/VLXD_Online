@@ -17,6 +17,7 @@ import androidx.appcompat.app.AppCompatActivity;
 import androidx.appcompat.widget.Toolbar;
 import androidx.fragment.app.Fragment;
 
+import com.bumptech.glide.Glide;
 import com.google.firebase.database.DataSnapshot;
 import com.google.firebase.database.DatabaseError;
 import com.google.firebase.database.DatabaseReference;
@@ -78,12 +79,12 @@ public class Owner_NhanVienDetailFragment extends Fragment {
         nhanvienDetailBinding.spinnerChucVu.setAdapter(chucVuAdapter);
 
         // Lấy danh sách chức vụ từ Firebase và cập nhật vào Spinner
-        // layTatCaDSChucVuTuFirebase();
         setEventSpinner();
 
         // Lấy ID nhân viên từ Bundle rồi truy xuất thông tin nhân viên từ firebase và Hiển thị lên giao diện
         //Set Spinner Item theo Chức Vụ của nhân viên
         nhanIDNhanVienTuBundle();
+        hienthiAnhCCCD();
 
         // Bắt sự kiện các Button
         setupEditButton();
@@ -407,6 +408,36 @@ public class Owner_NhanVienDetailFragment extends Fragment {
         } else Log.d("l.d", "docIDChucVuBangTen: listChucVuFireBase NULL, tên cv: " + tenChucVu);
 
         return "Lỗi: docIDChucVuBangTen";
+    }
+
+    // Hàm để hiển thị ảnh CC
+    private void hienthiAnhCCCD() {
+        // Lấy dữ liệu của nhân viên từ Firebase
+        databaseReference.child(selectedIDNhanVien).addListenerForSingleValueEvent(new ValueEventListener() {
+            @Override
+            public void onDataChange(@NonNull DataSnapshot dataSnapshot) {
+                // Kiểm tra nếu có dữ liệu
+                if (dataSnapshot.exists()) {
+                    // Lấy dữ liệu của nhân viên
+                    String anhCC1 = dataSnapshot.child("anhcc1").getValue(String.class);
+                    String anhCC2 = dataSnapshot.child("anhcc2").getValue(String.class);
+
+                    // Hiển thị hình ảnh
+                    Glide.with(getContext())
+                            .load(anhCC1) // Tải ảnh từ URL
+                            .into(nhanvienDetailBinding.ivCCCD1); // imageViewCC là ID của ImageView trong layout
+                    Glide.with(getContext())
+                            .load(anhCC2) // Tải ảnh từ URL
+                            .into(nhanvienDetailBinding.ivCCCD2); // imageViewCC2 là ID của ImageView trong layout
+                }
+            }
+
+            @Override
+            public void onCancelled(@NonNull DatabaseError databaseError) {
+                // Xử lý lỗi nếu có
+                Log.e("Owner_NhanVienDetail", "Database error: " + databaseError.getMessage());
+            }
+        });
     }
 
     // CUỐI: BẮT ĐIỀU KIỆN DỮ LIỆU ĐẦU VÀO

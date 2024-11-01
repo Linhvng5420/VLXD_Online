@@ -95,70 +95,90 @@
       "emailchu": "chu1@m.c",
       "emailnv": "nguyenvana@gmail.com",
       "sdt": "0912345678",
-      "tennv": "Nguyễn Văn A"
+      "tennv": "Nguyễn Văn A",
+      "anhcc1": "https://images2.thanhnien.vn/528068263637045248/2023/11/27/doi-ten-the-can-cuoc-1701048226664995346108.jpg",
+      "anhcc2": "https://cdn.tgdd.vn/Files/2021/04/14/1343316/khong-doi-can-cuoc-cong-dan-co-bi-phat-khong-202104141346162664.jpg"
     },
     "0987654321": {
       "chucvu": "cv1",
       "emailchu": "chu2@m.c",
       "emailnv": "tranvanb@gmail.com",
       "sdt": "0912345679",
-      "tennv": "Trần Văn B"
+      "tennv": "Trần Văn B",
+      "anhcc1": "",
+      "anhcc2": ""
     },
     "1122334455": {
       "chucvu": "cv2",
       "emailchu": "chu3@m.c",
       "emailnv": "levanh@gmail.com",
       "sdt": "0912345680",
-      "tennv": "Lê Văn H"
+      "tennv": "Lê Văn H",
+      "anhcc1": "",
+      "anhcc2": ""
     },
     "2233445566": {
       "chucvu": "cv3",
       "emailchu": "chu1@m.c",
       "emailnv": "phamvanx@gmail.com",
       "sdt": "0912345681",
-      "tennv": "Phạm Văn X"
+      "tennv": "Phạm Văn X",
+      "anhcc1": "",
+      "anhcc2": ""
     },
     "3344556677": {
       "chucvu": "cv4",
       "emailchu": "chu2@m.c",
       "emailnv": "doanvanh@gmail.com",
       "sdt": "0912345682",
-      "tennv": "Đoàn Văn H"
+      "tennv": "Đoàn Văn H",
+      "anhcc1": "",
+      "anhcc2": ""
     },
     "4455667788": {
       "chucvu": "cv5",
       "emailchu": "chu3@m.c",
       "emailnv": "nguyenvana2@gmail.com",
       "sdt": "0912345683",
-      "tennv": "Nguyễn Văn A2"
+      "tennv": "Nguyễn Văn A2",
+      "anhcc1": "",
+      "anhcc2": ""
     },
     "5566778899": {
       "chucvu": "cv6",
       "emailchu": "chu1@m.c",
       "emailnv": "nguyenvana3@gmail.com",
       "sdt": "0912345684",
-      "tennv": "Nguyễn Văn A3"
+      "tennv": "Nguyễn Văn A3",
+      "anhcc1": "",
+      "anhcc2": ""
     },
     "6677889900": {
       "chucvu": "cv7",
       "emailchu": "chu2@m.c",
       "emailnv": "nguyenvana4@gmail.com",
       "sdt": "0912345685",
-      "tennv": "Nguyễn Văn A4"
+      "tennv": "Nguyễn Văn A4",
+      "anhcc1": "",
+      "anhcc2": ""
     },
     "7788990011": {
       "chucvu": "cv8",
       "emailchu": "chu3@m.c",
       "emailnv": "nguyenvana5@gmail.com",
       "sdt": "0912345686",
-      "tennv": "Nguyễn Văn A5"
+      "tennv": "Nguyễn Văn A5",
+      "anhcc1": "",
+      "anhcc2": ""
     },
     "8899001122": {
       "chucvu": "cv9",
       "emailchu": "chu1@m.c",
       "emailnv": "nguyenvana6@gmail.com",
       "sdt": "0912345687",
-      "tennv": "Nguyễn Văn A6"
+      "tennv": "Nguyễn Văn A6",
+      "anhcc1": "",
+      "anhcc2": ""
     }
   },
   "customers": {
