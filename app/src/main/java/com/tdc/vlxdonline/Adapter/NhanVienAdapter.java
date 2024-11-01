@@ -89,7 +89,7 @@ public class NhanVienAdapter extends RecyclerView.Adapter<NhanVienAdapter.NhanVi
         // Phương thức bind để gán dữ liệu nhân viên vào các view trong item
         public void bind(NhanVien nhanVien) {
             // Hiển thị ID của nhân viên
-            binding.tvId.setText(nhanVien.getIdnv());
+            binding.tvId.setText(nhanVien.getCccd());
 
             // Hiển thị tên nhân viên
             binding.tvTenNV.setText(nhanVien.getTennv());
@@ -141,8 +141,8 @@ public class NhanVienAdapter extends RecyclerView.Adapter<NhanVienAdapter.NhanVi
             @Override
             public int compare(NhanVien nv1, NhanVien nv2) {
                 // Lấy phần số của mã NV và so sánh
-                String id1 = nv1.getIdnv().replaceAll("[^0-9]", ""); // Lấy số từ mã NV1
-                String id2 = nv2.getIdnv().replaceAll("[^0-9]", ""); // Lấy số từ mã NV2
+                String id1 = nv1.getCccd().replaceAll("[^0-9]", ""); // Lấy số từ mã NV1
+                String id2 = nv2.getCccd().replaceAll("[^0-9]", ""); // Lấy số từ mã NV2
 
                 // So sánh các số sử dụng Long để tránh lỗi số quá lớn
                 return Long.compare(Long.parseLong(id1), Long.parseLong(id2));

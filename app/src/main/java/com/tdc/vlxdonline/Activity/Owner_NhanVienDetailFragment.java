@@ -88,7 +88,7 @@ public class Owner_NhanVienDetailFragment extends Fragment {
         // Bắt sự kiện các Button
         setupEditButton();
         setupSaveButton();
-        setupDeleteButton();
+        setupDeleteButton(selectedIDNhanVien);
         setupCancelButton();
     }
 
@@ -152,8 +152,7 @@ public class Owner_NhanVienDetailFragment extends Fragment {
                     if (dataSnapshot.exists()) {
                         // Lấy thông tin nhân viên từ firebase và ánh xạ vào đối tượng NhanVien
                         nhanVien = dataSnapshot.getValue(NhanVien.class);
-                        nhanVien.setIdnv(dataSnapshot.getKey());
-                        Log.d("l.d", "Firebase: " + nhanVien.toString());
+                        nhanVien.setCccd(dataSnapshot.getKey());
 
                         if (nhanVien != null) {
                             nhanvienDetailBinding.etTenNhanVien.setText(nhanVien.getTennv());
@@ -284,24 +283,48 @@ public class Owner_NhanVienDetailFragment extends Fragment {
         });
     }
 
-    private void setupDeleteButton() {
+    private void setupDeleteButton(String idNhanVien) {
         nhanvienDetailBinding.btnXoa.setOnClickListener(view -> {
             // Tạo hộp thoại xác nhận
-            new AlertDialog.Builder(getContext()).setTitle("Xác Nhận").setMessage("Bạn có chắc chắn muốn xóa nhân viên không?").setPositiveButton("Có", (dialog, which) -> {
-                        // Xóa nhân viên khỏi Firebase có document = selectedIDNhanVien
-                        DatabaseReference databaseReference = FirebaseDatabase.getInstance().getReference("nhanvien").child(selectedIDNhanVien);
+            new AlertDialog.Builder(getContext())
+                    .setTitle("Xác Nhận")
+                    .setMessage("Bạn có chắc chắn muốn ẩn nhân viên không?")
+                    .setPositiveButton("Có", (dialog, which) -> {
 
-                        databaseReference.removeValue().addOnSuccessListener(aVoid -> {
-                            // Hiển thị thông báo đã xóa thành công
-                            Toast.makeText(getContext(), "Đã xóa nhân viên!", Toast.LENGTH_SHORT).show();
+                        DatabaseReference databaseReference = FirebaseDatabase.getInstance().getReference();
 
-                            // Quay lại màn hình quản lý nhân viên sau khi xóa
-                            getParentFragmentManager().popBackStack();
-                        }).addOnFailureListener(e -> {
-                            // Hiển thị thông báo lỗi nếu không xóa được
-                            Toast.makeText(getContext(), "Lỗi khi xóa nhân viên: ", Toast.LENGTH_SHORT).show();
+                        // Mã key mới bạn muốn đổi
+                        String newKey = "@" + idNhanVien;
+                        String oldKey = idNhanVien;
+
+                        // Xóa Account
+                        databaseReference.child("account").child(oldKey).removeValue();
+
+                        // Đổi mã nhân viên
+                        databaseReference.child("nhanvien").child(oldKey).get().addOnCompleteListener(task -> {
+                            if (task.isSuccessful()) {
+                                DataSnapshot dataSnapshot = task.getResult();
+                                if (dataSnapshot.exists()) {
+                                    // Ghi dữ liệu vào key mới
+                                    databaseReference.child("nhanvien").child(newKey).setValue(dataSnapshot.getValue()).addOnCompleteListener(task1 -> {
+                                        if (task1.isSuccessful()) {
+                                            // Xóa key cũ
+                                            databaseReference.child("nhanvien").child(oldKey).removeValue();
+
+                                            Toast.makeText(getContext(), "Ẩn NV thành công", Toast.LENGTH_SHORT).show();
+
+                                            // Quay lại màn hình quản lý nhân viên sau khi xóa
+                                            getParentFragmentManager().popBackStack();
+                                        } else
+                                            Toast.makeText(getContext(), "Ẩn NV không thành công", Toast.LENGTH_SHORT).show();
+                                    });
+                                }
+                            }
                         });
-                    }).setNegativeButton("Không", null) // Không làm gì khi người dùng nhấn "Không"
+
+
+                    })
+                    .setNegativeButton("Không", null)
                     .show();
         });
     }
@@ -319,12 +342,10 @@ public class Owner_NhanVienDetailFragment extends Fragment {
             Log.d("l.d", "setupSaveButton: tenChucVuMoi Spinner = " + tenChucVuMoi);
             nhanVienUpdate.setChucvu(docIDChucVuBangTen(tenChucVuMoi));
 
-            nhanVienUpdate.setIdnv(nhanVien.getIdnv());
             nhanVienUpdate.setTennv(nhanvienDetailBinding.etTenNhanVien.getText().toString());
             nhanVienUpdate.setEmailnv(nhanVien.getEmailnv());
             nhanVienUpdate.setEmailchu(nhanVien.getEmailchu());
             nhanVienUpdate.setSdt(nhanVien.getSdt());
-            nhanVienUpdate.setCccd(nhanVien.getCccd());
 
             if (batDieuKienDuLieuDauVao(nhanVienUpdate, newSDT, newCCCD) == true && nhanvienDetailBinding.etSDT.getError() == null && nhanvienDetailBinding.etCCCD.getError() == null) {
                 // Tạo hộp thoại xác nhận
@@ -332,7 +353,7 @@ public class Owner_NhanVienDetailFragment extends Fragment {
 
                     // Cập nhật thông tin nhân viên trong Firebase (Realtime Database)
                     DatabaseReference dbRef = FirebaseDatabase.getInstance().getReference("nhanvien");
-                    dbRef.child(nhanVien.getIdnv()).setValue(nhanVienUpdate).addOnSuccessListener(aVoid -> {
+                    dbRef.child(nhanVien.getCccd()).setValue(nhanVienUpdate).addOnSuccessListener(aVoid -> {
                         // Xử lý thành công
                         Toast.makeText(getContext(), "Cập nhật thành công", Toast.LENGTH_SHORT).show();
 
@@ -444,7 +465,7 @@ public class Owner_NhanVienDetailFragment extends Fragment {
                 for (DataSnapshot snapshot : dataSnapshot.getChildren()) {
                     // Bỏ qua nhân viên hiện tại
                     String currentId = snapshot.getKey();
-                    if (currentId.equals(nhanVienUpdate.getIdnv())) {
+                    if (currentId.equals(nhanVienUpdate.getCccd())) {
                         continue;
                     }
 

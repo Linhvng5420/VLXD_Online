@@ -370,11 +370,6 @@ public class Owner_NhanVienAddFragment extends Fragment {
                 Log.d("l.e", "setupSaveButton: tenChucVuMoi Spinner = " + tenChucVuMoi);
                 docIDChucVuBangTen(tenChucVuMoi);
 
-                // Tạo mã nhân viên mới bằng timestamp
-                long timestamp = System.currentTimeMillis();
-                String maNhanVien = "nv" + timestamp;
-
-                nhanVien.setIdnv(maNhanVien);
                 nhanVien.setTennv(binding.etTenNhanVien.getText().toString());
                 nhanVien.setSdt(binding.etSDT.getText().toString());
                 nhanVien.setEmailchu(loginEmailUser);
@@ -383,7 +378,7 @@ public class Owner_NhanVienAddFragment extends Fragment {
 
                 // Lưu nhân viên vào Firebase với key
                 DatabaseReference dbrfNhanvien = FirebaseDatabase.getInstance().getReference("nhanvien");
-                dbrfNhanvien.child(maNhanVien).setValue(nhanVien) //Thêm nv mới vào firebase với Key(document)=idnv, các value còn lại tự thêm.
+                dbrfNhanvien.child(nhanVien.getCccd()).setValue(nhanVien) //Thêm nv mới vào firebase với Key = nhanVien.getCccd(), các value còn lại tự thêm.
                         .addOnSuccessListener(aVoid -> {
                             Toast.makeText(getContext(), "Thêm nhân viên thành công", Toast.LENGTH_SHORT).show();
                             //getParentFragmentManager().popBackStack(); // Quay lại Fragment trước
@@ -400,7 +395,7 @@ public class Owner_NhanVienAddFragment extends Fragment {
                 Users usersNhanVienMoi = new Users(userNhanVien, passwordNhanVien, "nv");
 
                 DatabaseReference dbrfAccount = FirebaseDatabase.getInstance().getReference("account");
-                dbrfAccount.child(maNhanVien).setValue(usersNhanVienMoi)
+                dbrfAccount.child(nhanVien.getCccd()).setValue(usersNhanVienMoi)
                         .addOnSuccessListener(new OnSuccessListener<Void>() {
                             @Override
                             public void onSuccess(Void unused) {

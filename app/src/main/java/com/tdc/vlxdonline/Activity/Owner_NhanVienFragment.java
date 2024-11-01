@@ -120,7 +120,7 @@ public class Owner_NhanVienFragment extends Fragment {
                     NhanVien nhanVien = snapshot.getValue(NhanVien.class);
                     if (nhanVien != null) {
                         // Set ID NV là snapshot key
-                        nhanVien.setIdnv(snapshot.getKey());
+                        nhanVien.setCccd(snapshot.getKey());
 
                         // Lọc theo nhân viên của Chủ CH theo email
                         // Nếu emailUser là admin, hiển thị tất cả nhân viên có trong Firebase
@@ -157,7 +157,7 @@ public class Owner_NhanVienFragment extends Fragment {
         nhanVienAdapter.setOnItemClickListener(nhanVien -> {
             // Tạo Bundle để truyền thông tin nhân viên được chọn qua Fragment Detail
             Bundle bundleIDNhanVien = new Bundle();
-            bundleIDNhanVien.putSerializable("selectedIDNhanVien", nhanVien.getIdnv()); // Đưa dữ liệu ID nhân viên vào Bundle
+            bundleIDNhanVien.putSerializable("selectedIDNhanVien", nhanVien.getCccd()); // Đưa dữ liệu ID nhân viên vào Bundle
 
             // Tạo một instance, nó giúp chúng ta chuyển đổi dữ liệu từ Fragment này sang Fragment khác
             Owner_NhanVienDetailFragment nhanVienDetailFragment = new Owner_NhanVienDetailFragment();
@@ -238,7 +238,7 @@ public class Owner_NhanVienFragment extends Fragment {
         for (NhanVien nhanVien : originalList) {
             // Kiểm tra nếu tên hoặc ID của nhân viên chứa từ khóa tìm kiếm (không phân biệt chữ hoa/chữ thường)
             if (nhanVien.getTennv().toLowerCase().contains(query.toLowerCase()) ||
-                    nhanVien.getIdnv().toLowerCase().contains(query.toLowerCase())) {
+                    nhanVien.getCccd().toLowerCase().contains(query.toLowerCase())) {
                 filteredList.add(nhanVien);
             }
         }

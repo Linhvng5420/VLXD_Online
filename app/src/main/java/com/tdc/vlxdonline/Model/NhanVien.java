@@ -4,7 +4,6 @@ import java.io.Serializable;
 
 // Lớp NhanVien implement giao diện Serializable để dùng Bundle truyền dữ liệu giữa các Activity hoặc Fragment
 public class NhanVien {
-    private String idnv;
     private String cccd;
     private String chucvu;
     private String emailnv;
@@ -15,22 +14,13 @@ public class NhanVien {
     // Constructor rỗng (cần thiết cho Firebase)
     public NhanVien() {}
 
-    public NhanVien(String idnv, String cccd, String chucvu, String emailnv, String emailchu, String sdt, String tennv) {
-        this.idnv = idnv;
+    public NhanVien(String cccd, String chucvu, String emailnv, String emailchu, String sdt, String tennv) {
         this.cccd = cccd;
         this.chucvu = chucvu;
         this.emailnv = emailnv;
         this.emailchu = emailchu;
         this.sdt = sdt;
         this.tennv = tennv;
-    }
-
-    public String getIdnv() {
-        return idnv;
-    }
-
-    public void setIdnv(String idnv) {
-        this.idnv = idnv;
     }
 
     public String getCccd() {
@@ -79,18 +69,5 @@ public class NhanVien {
 
     public void setTennv(String tennv) {
         this.tennv = tennv;
-    }
-
-    @Override
-    public String toString() {
-        return "NhanVien{" +
-                "idnv='" + idnv + '\'' +
-                ", cccd='" + cccd + '\'' +
-                ", chucvu='" + chucvu + '\'' +
-                ", emailnv='" + emailnv + '\'' +
-                ", emailchu='" + emailchu + '\'' +
-                ", sdt='" + sdt + '\'' +
-                ", tennv='" + tennv + '\'' +
-                '}';
     }
 }
