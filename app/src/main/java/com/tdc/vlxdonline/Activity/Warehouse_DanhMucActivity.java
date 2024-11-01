@@ -206,7 +206,6 @@ public class Warehouse_DanhMucActivity extends AppCompatActivity {
             }
         }
     }
-
     private void saveData() {
         if (category.getId() != null) {
             category.setTen(edtNhapDM.getText().toString());
