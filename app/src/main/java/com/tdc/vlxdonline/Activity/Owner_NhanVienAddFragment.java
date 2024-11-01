@@ -25,6 +25,8 @@ import androidx.appcompat.app.AppCompatActivity;
 import androidx.appcompat.widget.Toolbar;
 import androidx.fragment.app.Fragment;
 
+import com.google.android.gms.tasks.OnFailureListener;
+import com.google.android.gms.tasks.OnSuccessListener;
 import com.google.firebase.database.DataSnapshot;
 import com.google.firebase.database.DatabaseError;
 import com.google.firebase.database.DatabaseReference;
@@ -96,7 +98,7 @@ public class Owner_NhanVienAddFragment extends Fragment {
         setEventSpinner();
 
         // Bắt sự kiện các Button
-        setupSaveButton();
+        setupAddButton();
 
         // Bắt sự kiện nhập dữ liệu đầu vào
         binding.etTenNhanVien.addTextChangedListener(new TextWatcher() {
@@ -217,8 +219,7 @@ public class Owner_NhanVienAddFragment extends Fragment {
                             Toast.makeText(getContext(), "Lỗi kiểm tra email", Toast.LENGTH_SHORT).show();
                         }
                     });
-                }
-                else {
+                } else {
                     binding.etEmail.setError("Email không hợp lệ");
                     setVisibilitySaveButton(false);
                 }
@@ -357,7 +358,7 @@ public class Owner_NhanVienAddFragment extends Fragment {
         });
     }
 
-    private void setupSaveButton() {
+    private void setupAddButton() {
         binding.btnThemNhanVien.setOnClickListener(v -> {
             // Bắt điều kiện dữ liệu đầu vào
             if (!batDieuKienDuLieuDauVao()) return;
@@ -399,32 +400,38 @@ public class Owner_NhanVienAddFragment extends Fragment {
                 Users usersNhanVienMoi = new Users(userNhanVien, passwordNhanVien, "nv");
 
                 DatabaseReference dbrfAccount = FirebaseDatabase.getInstance().getReference("account");
-                dbrfAccount.push().setValue(usersNhanVienMoi)
-                        .addOnSuccessListener(aVoid -> {
-                            Toast.makeText(getContext(), "Tạo tài khoản cho nhân viên thành công", Toast.LENGTH_SHORT).show();
+                dbrfAccount.child(maNhanVien).setValue(usersNhanVienMoi)
+                        .addOnSuccessListener(new OnSuccessListener<Void>() {
+                            @Override
+                            public void onSuccess(Void unused) {
+                                Toast.makeText(getContext(), "Tạo tài khoản cho nhân viên thành công", Toast.LENGTH_SHORT).show();
 
-                            // Tạo hộp thoại hiển thị thông tin tài khoản và mật khẩu với nút copy
-                            AlertDialog.Builder builder = new AlertDialog.Builder(getContext());
-                            builder.setTitle("Thông tin tài khoản nhân viên")
-                                    .setMessage("User: " + userNhanVien + "\nPassword: " + passwordNhanVien)
-                                    .setPositiveButton("OK", (dialogInterface, i) -> {
-                                        getParentFragmentManager().popBackStack(); // Quay lại Fragment trước
-                                    });
+                                // Tạo hộp thoại hiển thị thông tin tài khoản và mật khẩu với nút copy
+                                AlertDialog.Builder builder = new AlertDialog.Builder(getContext());
+                                builder.setTitle("Thông tin tài khoản nhân viên")
+                                        .setMessage("User: " + userNhanVien + "\nPassword: " + passwordNhanVien)
+                                        .setPositiveButton("OK", (dialogInterface, i) -> {
+                                            getParentFragmentManager().popBackStack(); // Quay lại Fragment trước
+                                        });
 
-                            // Thêm nút Copy
-                            builder.setNeutralButton("Copy", (dialogInterface, i) -> {
-                                // Sao chép User và Password vào Clipboard
-                                ClipboardManager clipboard = (ClipboardManager) getContext().getSystemService(Context.CLIPBOARD_SERVICE);
-                                ClipData clip = ClipData.newPlainText("User & Password", "User: " + userNhanVien + "\nPassword: " + passwordNhanVien);
-                                clipboard.setPrimaryClip(clip);
-                                getParentFragmentManager().popBackStack(); // Quay lại Fragment trước
-                                Toast.makeText(getContext(), "Đã sao chép User và Password vào clipboard", Toast.LENGTH_SHORT).show();
-                            });
+                                // Thêm nút Copy
+                                builder.setNeutralButton("Copy", (dialogInterface, i) -> {
+                                    // Sao chép User và Password vào Clipboard
+                                    ClipboardManager clipboard = (ClipboardManager) getContext().getSystemService(Context.CLIPBOARD_SERVICE);
+                                    ClipData clip = ClipData.newPlainText("User & Password", userNhanVien + "\n" + passwordNhanVien);
+                                    clipboard.setPrimaryClip(clip);
+                                    getParentFragmentManager().popBackStack(); // Quay lại Fragment trước
+                                    Toast.makeText(getContext(), "Đã sao chép User và Password vào clipboard", Toast.LENGTH_SHORT).show();
+                                });
 
-                            // Hiển thị hộp thoại
-                            builder.show();
-                        }).addOnFailureListener(e -> {
-                            Toast.makeText(getContext(), "Thêm nhân viên thất bại: " + e.getMessage(), Toast.LENGTH_SHORT).show();
+                                // Hiển thị hộp thoại
+                                builder.show();
+                            }
+                        }).addOnFailureListener(new OnFailureListener() {
+                            @Override
+                            public void onFailure(@NonNull Exception e) {
+                                Toast.makeText(getContext(), "Tạo TK nhân viên thất bại: " + e.getMessage(), Toast.LENGTH_SHORT).show();
+                            }
                         });
             }).setNegativeButton("Không", null).show();
         });
