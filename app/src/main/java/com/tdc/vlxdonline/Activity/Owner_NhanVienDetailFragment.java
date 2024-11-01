@@ -141,7 +141,6 @@ public class Owner_NhanVienDetailFragment extends Fragment {
             // Hiển thị thông tin ID nhân viên lên giao diện
             Toast.makeText(getContext(), "ID Nhân Viên\n" + selectedIDNhanVien, Toast.LENGTH_SHORT).show();
             Log.d("l.d", "nhanIDNhanVienTuBundle: " + selectedIDNhanVien.toString());
-            nhanvienDetailBinding.tvIDNhanVien.setText(selectedIDNhanVien);
 
             // Lấy thông tin nhân viên từ firebase thông qua ID
             databaseReference = FirebaseDatabase.getInstance().getReference("nhanvien");
