@@ -11,11 +11,11 @@ import android.view.View;
 import android.view.ViewGroup;
 
 import com.tdc.vlxdonline.R;
-import com.tdc.vlxdonline.databinding.FragmentCartBinding;
+import com.tdc.vlxdonline.databinding.FragmentDatHangGioHangBinding;
 
-public class CartFragment extends Fragment {
+public class DatHangGioHangFragment extends Fragment {
 
-    FragmentCartBinding binding;
+    FragmentDatHangGioHangBinding binding;
 
     @Override
     public void onCreate(Bundle savedInstanceState) {
@@ -25,14 +25,15 @@ public class CartFragment extends Fragment {
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container,
                              Bundle savedInstanceState) {
+        binding = FragmentDatHangGioHangBinding.inflate(inflater, container, false);
         // Inflate the layout for this fragment
-        binding = FragmentCartBinding.inflate(inflater, container, false);
         return binding.getRoot();
     }
 
     @Override
     public void onViewCreated(@NonNull View view, @Nullable Bundle savedInstanceState) {
         super.onViewCreated(view, savedInstanceState);
+        
     }
 
     @Override

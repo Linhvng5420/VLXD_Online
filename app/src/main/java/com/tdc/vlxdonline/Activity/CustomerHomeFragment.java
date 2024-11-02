@@ -172,6 +172,7 @@ public class CustomerHomeFragment extends Fragment {
                     // Duyệt qua từng prod trong DataSnapshot
                     for (DataSnapshot snapshot : dataSnapshot.getChildren()) {
                         Products product = snapshot.getValue(Products.class);
+                        product.setId(snapshot.getKey());
                         if (!category.isEmpty() && !category.equals(product.getDanhMuc())) continue;
                         if (!tuKhoa.isEmpty() && !product.getTen().contains(tuKhoa) && !product.getMoTa().contains(tuKhoa)) continue;
                         if (binding.spLoc.getSelectedItemPosition() == 1 && Double.parseDouble(product.getSoSao()) > 3) continue;
@@ -298,6 +299,7 @@ public class CustomerHomeFragment extends Fragment {
                     // Duyệt qua từng User trong DataSnapshot
                     for (DataSnapshot snapshot : dataSnapshot.getChildren()) {
                         Categorys category = snapshot.getValue(Categorys.class);
+                        category.setId(snapshot.getKey());
                         dataCategorys.add(category); // Thêm User vào danh sách
                     }
 
@@ -319,8 +321,8 @@ public class CustomerHomeFragment extends Fragment {
             @Override
             public int compare(Products p1, Products p2) {
                 int typeSort = binding.spXapSep.getSelectedItemPosition();
-                int gia1 = Integer.parseInt(p1.getGia());
-                int gia2 = Integer.parseInt(p2.getGia());
+                int gia1 = Integer.parseInt(p1.getGiaBan());
+                int gia2 = Integer.parseInt(p2.getGiaBan());
                 double sao1 = Double.parseDouble(p1.getSoSao());
                 double sao2 = Double.parseDouble(p2.getSoSao());
                 if (typeSort == 1) {

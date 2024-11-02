@@ -42,7 +42,7 @@ public class ProductAdapter extends RecyclerView.Adapter<ProductAdapter.ProductH
         Products product = data.get(position);
         Glide.with(context).load(product.getAnh()).into(holder.binding.imgItem);
         holder.binding.tvNameItem.setText(product.getTen());
-        StringBuilder chuoi = new StringBuilder(product.getGia());
+        StringBuilder chuoi = new StringBuilder(product.getGiaBan());
         if (chuoi.length() > 3) {
             int dem = 0;
             int doDai = chuoi.length() - 1;

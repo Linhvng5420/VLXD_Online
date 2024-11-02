@@ -44,6 +44,7 @@ dependencies {
 //    implementation(libs.android.mail)
 //    implementation(libs.android.activation)
     implementation(libs.glide)
+    implementation(libs.firebase.database)
     annotationProcessor(libs.compiler)
 
     implementation(libs.appcompat)

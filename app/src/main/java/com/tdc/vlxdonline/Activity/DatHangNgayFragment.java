@@ -181,7 +181,7 @@ public class DatHangNgayFragment extends Fragment {
             binding.edtSlDat.setText(soLuong + "");
         }
         chiTietDon.setSoLuong(soLuong);
-        int tong = Integer.parseInt(prod.getGia()) * soLuong;
+        int tong = Integer.parseInt(prod.getGiaBan()) * soLuong;
         donHang.setTongTien(tong);
         binding.tvTongDatNgay.setText(chuyenChuoi(tong));
     }
@@ -219,17 +219,17 @@ public class DatHangNgayFragment extends Fragment {
                         prod = product;
                         chiTietDon.setTen(product.getTen());
                         chiTietDon.setAnh(product.getAnh());
-                        chiTietDon.setGia(Integer.parseInt(product.getGia()));
+                        chiTietDon.setGia(Integer.parseInt(product.getGiaBan()));
                         donHang.setIdChu(product.getIdChu());
                         donHang.setAnh(product.getAnh());
-                        donHang.setTongTien(Integer.parseInt(product.getGia()) * soLuong);
+                        donHang.setTongTien(Integer.parseInt(product.getGiaBan()) * soLuong);
                         Glide.with(getActivity()).load(product.getAnh()).into(binding.imgDatHangNgay);
                         binding.tvNameDatHangNgay.setText(product.getTen());
-                        binding.tvGiaDatHangNgay.setText(chuyenChuoi(Integer.parseInt(product.getGia())) + " đ");
+                        binding.tvGiaDatHangNgay.setText(chuyenChuoi(Integer.parseInt(product.getGiaBan())) + " đ");
                         binding.tvDesDatNgay.setText(product.getMoTa());
                         if (product.getTonKho().equals("0")) soLuong = 0;
                         binding.edtSlDat.setText(soLuong + "");
-                        binding.tvTongDatNgay.setText(chuyenChuoi(Integer.parseInt(product.getGia()) * soLuong));
+                        binding.tvTongDatNgay.setText(chuyenChuoi(Integer.parseInt(product.getGiaBan()) * soLuong));
                     } else {
                         Toast.makeText(getActivity(), "Sản Phẩm Đã Bị Xóa!", Toast.LENGTH_SHORT).show();
                     }

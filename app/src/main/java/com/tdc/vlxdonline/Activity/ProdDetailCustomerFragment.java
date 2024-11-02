@@ -38,9 +38,6 @@ public class ProdDetailCustomerFragment extends Fragment {
     private String idProd = "";
     private Products prod;
     private int soLuong = 1;
-    // danh sach product de cu
-    ArrayList<Products> dataProds = new ArrayList<>();
-    ProductAdapter productAdapter;
     // Danh sach anh mo ta cua san pham dc chon
     ArrayList<String> dataAnh = new ArrayList<>();
     ImageAdapter imageAdapter;
@@ -61,7 +58,6 @@ public class ProdDetailCustomerFragment extends Fragment {
                              Bundle savedInstanceState) {
         // Inflate the layout for this fragment
         binding = FragmentProdDetailCustomerBinding.inflate(inflater, container, false);
-        setAdapterProduct();
         setAdapterAnh();
         setUpDisplay();
         return binding.getRoot();
@@ -133,54 +129,9 @@ public class ProdDetailCustomerFragment extends Fragment {
         }
     }
 
-    private void setAdapterProduct(){
-        // Event Click Product
-        productAdapter = new ProductAdapter(getActivity(), dataProds, View.GONE);
-        productAdapter.setOnItemProductClickListener(new ProductAdapter.OnItemProductClickListener() {
-            @Override
-            public void OnItemClick(View view, int position) {
-                Products product = dataProds.get(position);
-                ((Customer_HomeActivity) getActivity()).ReplaceFragment(new ProdDetailCustomerFragment(product.getId()));
-            }
-
-            @Override
-            public void OnBtnBuyClick(View view, int position) {
-            }
-        });
-        binding.rcOfferProd.setLayoutManager(new GridLayoutManager(getActivity(), 2));
-        binding.rcOfferProd.setAdapter(productAdapter);
-    }
-
-    private void setHienThiSanPham() {
-        referDetailProd.child("products").addValueEventListener(new ValueEventListener() {
-            @Override
-            public void onDataChange(DataSnapshot dataSnapshot) {
-                try {
-                    dataProds.clear(); // Xóa danh sách cũ trước khi cập nhật
-
-                    // Duyệt qua từng User trong DataSnapshot
-                    for (DataSnapshot snapshot : dataSnapshot.getChildren()) {
-                        Products product = snapshot.getValue(Products.class);
-                        dataProds.add(product); // Thêm User vào danh sách
-                    }
-
-                    productAdapter.notifyDataSetChanged();
-                } catch (Exception e) {
-
-                }
-            }
-
-            @Override
-            public void onCancelled(DatabaseError databaseError) {
-                Toast.makeText(getActivity(), "Lỗi Rồi Nè Má!", Toast.LENGTH_SHORT).show();
-            }
-        });
-    }
-
     private void setUpDisplay() {
         referDetailProd = FirebaseDatabase.getInstance().getReference();
         readProdFromDatabase();
-        setHienThiSanPham();
         setHienThiAnh();
     }
 
@@ -237,7 +188,7 @@ public class ProdDetailCustomerFragment extends Fragment {
                         prod = product;
                         Glide.with(getActivity()).load(product.getAnh()).into(binding.ivAnhChinh);
                         binding.tvTenSpDetail.setText(product.getTen());
-                        binding.tvGiaSpDetail.setText(chuyenChuoi(product.getGia()) + " VND");
+                        binding.tvGiaSpDetail.setText(chuyenChuoi(product.getGiaBan()) + " VND");
                         binding.tvTonKhoDetail.setText("Kho: " + product.getTonKho());
                         if (product.getTonKho().equals("0")) {
                             soLuong = 0;

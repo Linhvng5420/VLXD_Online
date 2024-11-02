@@ -116,16 +116,8 @@ public class ChiTietDonFragment extends Fragment {
                             }
                             if (trangThaiVc == 1) {
                                 binding.btnTrangThai.setText(R.string.cho_nhan_don);
-                                if (LoginActivity.typeUser == 2) {
-                                    binding.btnTrangThai.setEnabled(true);
-                                    binding.btnTrangThai.setText("Nhận Giao Đơn Hàng");
-                                }
                             } else if (trangThaiVc == 2) {
                                 binding.btnTrangThai.setText(R.string.dang_van_chuyen);
-                                if (LoginActivity.typeUser == 2) {
-                                    binding.btnTrangThai.setEnabled(true);
-                                    binding.btnTrangThai.setText("Xác Nhận Giao Thành Công");
-                                }
                             } else if (trangThaiVc == 3) {
                                 binding.btnTrangThai.setText(R.string.cho_nhan_hang);
                                 if (LoginActivity.typeUser == 1) {

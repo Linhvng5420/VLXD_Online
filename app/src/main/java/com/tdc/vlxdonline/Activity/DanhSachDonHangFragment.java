@@ -58,11 +58,6 @@ public class DanhSachDonHangFragment extends Fragment {
                              Bundle savedInstanceState) {
         // Inflate the layout for this fragment
         binding = FragmentDanhSachDonHangBinding.inflate(inflater, container, false);
-        // Nếu là nhân viên giao hàng thì tắt phân loại trạng thái
-        if (LoginActivity.typeEmployee == 1) {
-            binding.btnDaHoanThanh.setVisibility(View.GONE);
-            binding.btnChuaHoanThanh.setVisibility(View.GONE);
-        }
         referDanhSachDon = FirebaseDatabase.getInstance().getReference();
         setAdapterDonHang();
         draw = getActivity().getDrawable(R.drawable.bg_detail);
@@ -129,49 +124,37 @@ public class DanhSachDonHangFragment extends Fragment {
         referDanhSachDon.child("bills").addValueEventListener(eventDocData);
     }
 
-    private void setValueEventDon(){
+    private void setValueEventDon() {
         eventDocData = new ValueEventListener() {
             @Override
             public void onDataChange(DataSnapshot dataSnapshot) {
-                try{
+                try {
                     data.clear(); // Xóa danh sách cũ trước khi cập nhật
 
                     // Duyệt qua trong DataSnapshot
                     for (DataSnapshot snapshot : dataSnapshot.getChildren()) {
                         DonHang don = snapshot.getValue(DonHang.class);
-                        if (!tuKhoa.isEmpty() && !don.getTenKhach().contains(tuKhoa) && !don.getDiaChi().contains(tuKhoa)) continue;
+                        if (!tuKhoa.isEmpty() && !don.getTenKhach().contains(tuKhoa) && !don.getDiaChi().contains(tuKhoa))
+                            continue;
                         int vc = don.getTrangThai();
                         int tt = don.getTrangThaiTT();
-                        if (LoginActivity.typeEmployee != 1){
-                            // 0 la chua hoan thanh, continue neu don da xac nhan hoan thanh
-                            if (trangThaiLoc == 0 && vc == 4 && tt == 2) continue;
-                                // 1 la chua da hoan thanh, continue neu don chua xac nhan hoan thanh
-                            else if (trangThaiLoc == 1) {
-                                if (vc < 4) continue;
-                                else if (tt < 2) continue;
-                            }
+                        // 0 la chua hoan thanh, continue neu don da xac nhan hoan thanh
+                        if (trangThaiLoc == 0 && vc == 4 && tt == 2) continue;
+                        // 1 la chua da hoan thanh, continue neu don chua xac nhan hoan thanh
+                        else if (trangThaiLoc == 1) {
+                            if (vc < 4) continue;
+                            else if (tt < 2) continue;
                         }
 
                         if (LoginActivity.typeUser == 0) continue;
-                        else if (LoginActivity.typeUser == 1 && !don.getIdKhach().equals(Customer_HomeActivity.info.getID())) continue;
+                        else if (LoginActivity.typeUser == 1 && !don.getIdKhach().equals(Customer_HomeActivity.info.getID()))
+                            continue;
                         else if (LoginActivity.typeEmployee == 0) continue;
-                        else if (LoginActivity.typeEmployee == 1) {
-                            // Xac nhan neu khong phai chu thi continue
-                            if (true) continue;
-                            // 0 la chua nhan don
-                            if (trangThaiLoc == 0) if(vc != 1) continue;
-                                // Neu khong phai don cua nhan vien nay thi continue
-                            else if (true) continue;
-                                // 1 la dang giao
-                            else if (trangThaiLoc == 1) if (vc != 2 && vc != 3) continue;
-                                // 2 la giao hoan tat
-                            else if (trangThaiLoc == 2) if (vc < 4) continue;
-                        }
                         data.add(don); // Thêm User vào danh sách
                     }
 
                     adapter.notifyDataSetChanged();
-                }catch (Exception e) {
+                } catch (Exception e) {
 
                 }
             }
@@ -183,7 +166,7 @@ public class DanhSachDonHangFragment extends Fragment {
         };
     }
 
-    private void setAdapterDonHang(){
+    private void setAdapterDonHang() {
         adapter = new DonHangAdapter(getActivity(), data);
         // Event Click Don Hang
         adapter.setOnItemDonHangClick(new DonHangAdapter.OnItemDonHangClick() {
@@ -206,7 +189,7 @@ public class DanhSachDonHangFragment extends Fragment {
 
     @Override
     public void onDestroyView() {
-        draw.setTint(Color.rgb(215,215,215));
+        draw.setTint(Color.rgb(215, 215, 215));
 
         binding = null;
 

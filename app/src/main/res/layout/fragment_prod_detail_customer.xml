@@ -174,16 +174,8 @@
                         android:textColor="@color/black"
                         android:textSize="21dp"
                         android:textStyle="bold" />
-
-                    <androidx.recyclerview.widget.RecyclerView
-                        android:id="@+id/rc_offer_prod"
-                        android:layout_width="match_parent"
-                        android:layout_height="570dp" />
-
                 </LinearLayout>
-
             </LinearLayout>
-
         </ScrollView>
 
         <LinearLayout

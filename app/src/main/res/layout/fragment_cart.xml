@@ -10,6 +10,63 @@
         android:layout_height="match_parent"
         android:orientation="vertical">
 
+        <TextView
+            android:layout_width="match_parent"
+            android:layout_height="50dp"
+            android:background="@drawable/back6"
+            android:gravity="center"
+            android:text="GIỎ HÀNG"
+            android:textColor="#D7D7D7"
+            android:textSize="30dp"
+            android:textStyle="bold" />
+
+        <androidx.recyclerview.widget.RecyclerView
+            android:id="@+id/rc_cart"
+            android:layout_width="match_parent"
+            android:layout_height="0dp"
+            android:layout_weight="30" />
+
+        <LinearLayout
+            android:layout_width="match_parent"
+            android:layout_height="0dp"
+            android:layout_weight="2"
+            android:paddingHorizontal="10dp">
+
+            <CheckBox
+                android:id="@+id/cb_all_cart"
+                android:layout_width="150dp"
+                android:layout_height="match_parent"
+                android:text="Chọn Tất Cả"
+                android:textColor="@color/black"/>
+
+            <TextView
+                android:layout_width="wrap_content"
+                android:layout_height="match_parent"
+                android:gravity="center_vertical"
+                android:text="Tổng Tiền: "
+                android:textSize="18dp"
+                android:textColor="@color/black"/>
+
+            <TextView
+                android:id="@+id/tv_tong_cart"
+                android:layout_width="match_parent"
+                android:layout_height="match_parent"
+                android:gravity="center_vertical"
+                android:text="9.000.000.000"
+                android:textColor="#F00"
+                android:textSize="18dp"
+                android:textStyle="bold" />
+        </LinearLayout>
+
+        <Button
+            android:id="@+id/btn_dat_cart"
+            android:layout_width="match_parent"
+            android:layout_height="0dp"
+            android:layout_weight="3"
+            android:text="Đặt Hàng"
+            android:textStyle="bold"
+            android:textSize="25dp"
+            android:backgroundTint="#601F"/>
     </LinearLayout>
 
 </FrameLayout>

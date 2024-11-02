@@ -47,6 +47,8 @@ public class Customer_HomeActivity extends AppCompatActivity {
                     KhachHang khach = dataSnapshot.getValue(KhachHang.class);
                     if (khach != null) {
                         Customer_HomeActivity.info = khach;
+                        Customer_HomeActivity.info.setEmail(email);
+                        Customer_HomeActivity.info.setID(email.substring(0, email.indexOf('@')));
                         Toast.makeText(Customer_HomeActivity.this, "Hello " + info.getTen(), Toast.LENGTH_LONG).show();
                     }else{
                         Toast.makeText(Customer_HomeActivity.this, "Tài Khoản Đã Bị Xóa!", Toast.LENGTH_LONG).show();
@@ -132,7 +134,7 @@ public class Customer_HomeActivity extends AppCompatActivity {
         drawableIcon.setTint(Color.RED);
         builder.setIcon(drawableIcon);
         Drawable drawableBg = getResources().getDrawable(R.drawable.bg_item_lg);
-        drawableBg.setTint(Color.rgb(130, 130, 130));
+        drawableBg.setTint(Color.rgb(100,220,255));
         AlertDialog alertDialog = builder.create();
         alertDialog.getWindow().setBackgroundDrawable(drawableBg);
         alertDialog.show();

@@ -2,17 +2,18 @@ package com.tdc.vlxdonline.Model;
 
 public class Products {
     private String ten, moTa, donVi, anh;
-    private String id, idChu, gia, danhMuc, tonKho, daBan = "0";
+    private String id, idChu, giaBan, giaNhap, danhMuc, tonKho, daBan = "0";
     private String soSao = "0";
 
-    public Products(String ten, String donVi, String moTa, String idChu, String id, String anh, String gia, String soSao, String danhMuc, String tonKho, String daBan) {
+    public Products(String ten, String donVi, String moTa, String idChu, String id, String anh, String giaBan, String giaNhap, String soSao, String danhMuc, String tonKho, String daBan) {
         this.ten = ten;
         this.donVi = donVi;
         this.moTa = moTa;
         this.idChu = idChu;
         this.id = id;
         this.anh = anh;
-        this.gia = gia;
+        this.giaBan = giaBan;
+        this.giaNhap = giaNhap;
         this.soSao = soSao;
         this.danhMuc = danhMuc;
         this.tonKho = tonKho;
@@ -20,6 +21,22 @@ public class Products {
     }
 
     public Products() {
+    }
+
+    public String getGiaNhap() {
+        return giaNhap;
+    }
+
+    public void setGiaNhap(String giaNhap) {
+        this.giaNhap = giaNhap;
+    }
+
+    public String getGiaBan() {
+        return giaBan;
+    }
+
+    public void setGiaBan(String giaBan) {
+        this.giaBan = giaBan;
     }
 
     public String getIdChu() {
@@ -76,14 +93,6 @@ public class Products {
 
     public void setAnh(String anh) {
         this.anh = anh;
-    }
-
-    public String getGia() {
-        return gia;
-    }
-
-    public void setGia(String gia) {
-        this.gia = gia;
     }
 
     public String getDanhMuc() {
