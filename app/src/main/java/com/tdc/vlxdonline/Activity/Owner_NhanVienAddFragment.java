@@ -47,6 +47,8 @@ import com.tdc.vlxdonline.Model.Users;
 import com.tdc.vlxdonline.R;
 import com.tdc.vlxdonline.databinding.FragmentOwnerNhanVienAddBinding;
 
+import java.security.MessageDigest;
+import java.security.NoSuchAlgorithmException;
 import java.util.ArrayList;
 import java.util.List;
 
@@ -380,21 +382,21 @@ public class Owner_NhanVienAddFragment extends Fragment {
             // Bắt điều kiện dữ liệu đầu vào
             if (!batDieuKienDuLieuDauVao()) return;
 
+            // Up ảnh lên Firebase Storage
+            nhanVien = new NhanVien();
+            String cccd = binding.etCCCD.getText().toString();
+            nhanVien.setCccd(cccd);
+            uploadAnhVaLuuLinkDown();
+
             // Hộp thoại xác nhận
             new AlertDialog.Builder(getContext()).setTitle("Xác nhận").setMessage("Bạn có muốn thêm nhân viên này?").setPositiveButton("Có", (dialog, which) -> {
                 // Lưu giá trị mới
-                nhanVien = new NhanVien();
-
                 String tenChucVu = binding.spinnerChucVu.getSelectedItem().toString();
                 nhanVien.setTennv(binding.etTenNhanVien.getText().toString());
                 setIDChucVuNhanVien(tenChucVu);
                 nhanVien.setSdt(binding.etSDT.getText().toString());
                 nhanVien.setEmailchu(loginEmailUser);
                 nhanVien.setEmailnv(binding.etEmail.getText().toString());
-                String cccd = binding.etCCCD.getText().toString();
-                nhanVien.setCccd(cccd);
-
-                uploadImagesAndSaveEmployee();
 
                 // Lưu nhân viên vào Firebase với key
                 nhanVien.setCccd(null);
@@ -407,13 +409,12 @@ public class Owner_NhanVienAddFragment extends Fragment {
                             Toast.makeText(getContext(), "Thêm nhân viên thất bại: " + e.getMessage(), Toast.LENGTH_SHORT).show();
                         });
 
-                // Thêm nhân viên vào Firebase với mã ngẫu nhiên (Dài và xấu)
-                // databaseReference.push().setValue(nhanVien);
-
-                // Tạo tài khoản mật khẩu 6 số ngẫu nhiên cho nhân viên
+                // Tạo tài khoản với mật khẩu ngẫu nhiên và mã hóa
                 String userNhanVien = nhanVien.getEmailnv();
-                String passwordNhanVien = String.valueOf((int) (Math.random() * 1000000)); // ép kiểu int để chỉ lấy số nguyên
-                Users usersNhanVienMoi = new Users(userNhanVien, passwordNhanVien, "nv");
+                String passwordNhanVien = String.valueOf((int) (Math.random() * 1000000)); // Tạo mật khẩu ngẫu nhiên 6 chữ số
+                String hashedPassword = hashPassword(passwordNhanVien); // Mã hóa mật khẩu
+
+                Users usersNhanVienMoi = new Users(userNhanVien, hashedPassword, "nv");
 
                 DatabaseReference dbrfAccount = FirebaseDatabase.getInstance().getReference("account");
                 dbrfAccount.child(cccd).setValue(usersNhanVienMoi)
@@ -512,44 +513,24 @@ public class Owner_NhanVienAddFragment extends Fragment {
         }
     }
 
-    private void uploadImagesAndSaveEmployee() {
+    private void uploadAnhVaLuuLinkDown() {
         StorageReference storageRef = FirebaseStorage.getInstance().getReference("CCCD");
 
-        if (anhCCCDTruoc != null) {
-            StorageReference frontImageRef = storageRef.child(nhanVien.getCccd() + "_Truoc" + ".jpg");
-            frontImageRef.putFile(anhCCCDTruoc)
-                    .addOnSuccessListener(taskSnapshot -> frontImageRef.getDownloadUrl().addOnSuccessListener(uri -> {
-                        nhanVien.setAnhcc1(uri.toString());
-                        // Kiểm tra nếu cả hai ảnh đã được upload thành công thì lưu nhân viên
-                        checkAndSaveEmployee();
-                    }))
-                    .addOnFailureListener(e -> Toast.makeText(getContext(), "Upload ảnh trước thất bại: " + e.getMessage(), Toast.LENGTH_SHORT).show());
-        }
+        StorageReference frontImageRef = storageRef.child(nhanVien.getCccd() + "_Truoc" + ".jpg");
+        frontImageRef.putFile(anhCCCDTruoc)
+                .addOnSuccessListener(taskSnapshot -> frontImageRef.getDownloadUrl().addOnSuccessListener(uri -> {
+                    Log.d("l.d", "uploadAnhVaLuuLinkDown: " + uri.toString());
+                    nhanVien.setAnhcc1(uri.toString());
+                }))
+                .addOnFailureListener(e -> Toast.makeText(getContext(), "Upload ảnh trước thất bại: " + e.getMessage(), Toast.LENGTH_SHORT).show());
 
-        if (anhCCCDSau != null) {
-            StorageReference backImageRef = storageRef.child(nhanVien.getCccd() + "_Sau" + ".jpg");
-            backImageRef.putFile(anhCCCDSau)
-                    .addOnSuccessListener(taskSnapshot -> backImageRef.getDownloadUrl().addOnSuccessListener(uri -> {
-                        nhanVien.setAnhcc2(uri.toString());
-                        // Kiểm tra nếu cả hai ảnh đã được upload thành công thì lưu nhân viên
-                        checkAndSaveEmployee();
-                    }))
-                    .addOnFailureListener(e -> Toast.makeText(getContext(), "Upload ảnh sau thất bại: " + e.getMessage(), Toast.LENGTH_SHORT).show());
-        }
-    }
-
-    private void checkAndSaveEmployee() {
-        // Kiểm tra nếu cả hai URL ảnh đã có
-        if (nhanVien.getAnhcc1() != null && nhanVien.getAnhcc2() != null) {
-            saveEmployeeToFirebase();
-        }
-    }
-
-    private void saveEmployeeToFirebase() {
-        DatabaseReference dbrfNhanvien = FirebaseDatabase.getInstance().getReference("nhanvien");
-        dbrfNhanvien.child(nhanVien.getCccd()).setValue(nhanVien)
-                .addOnSuccessListener(aVoid -> Toast.makeText(getContext(), "Thêm nhân viên thành công", Toast.LENGTH_SHORT).show())
-                .addOnFailureListener(e -> Toast.makeText(getContext(), "Thêm nhân viên thất bại", Toast.LENGTH_SHORT).show());
+        StorageReference backImageRef = storageRef.child(nhanVien.getCccd() + "_Sau" + ".jpg");
+        backImageRef.putFile(anhCCCDSau)
+                .addOnSuccessListener(taskSnapshot -> backImageRef.getDownloadUrl().addOnSuccessListener(uri -> {
+                    Log.d("l.d", "uploadAnhVaLuuLinkDown: " + uri.toString());
+                    nhanVien.setAnhcc2(uri.toString());
+                }))
+                .addOnFailureListener(e -> Toast.makeText(getContext(), "Upload ảnh sau thất bại: " + e.getMessage(), Toast.LENGTH_SHORT).show());
     }
 
     // ẢNH: KIỂM TRA VÀ YÊU CẦU QUYỀN TRUY CẬP
@@ -558,6 +539,25 @@ public class Owner_NhanVienAddFragment extends Fragment {
         if (ContextCompat.checkSelfPermission(getContext(), Manifest.permission.READ_EXTERNAL_STORAGE) != PackageManager.PERMISSION_GRANTED) {
             // Nếu chưa có quyền, yêu cầu quyền truy cập từ người dùng
             ActivityCompat.requestPermissions(getActivity(), new String[]{Manifest.permission.READ_EXTERNAL_STORAGE}, PICK_IMAGE_FRONT_ID);
+        }
+    }
+
+    private String hashPassword(String password) {
+        try {
+            MessageDigest md = MessageDigest.getInstance("SHA-256");
+            byte[] hash = md.digest(password.getBytes());
+            StringBuilder hexString = new StringBuilder();
+
+            for (byte b : hash) {
+                String hex = Integer.toHexString(0xff & b);
+                if (hex.length() == 1) hexString.append('0');
+                hexString.append(hex);
+            }
+
+            return hexString.toString();
+        } catch (NoSuchAlgorithmException e) {
+            e.printStackTrace();
+            return null;
         }
     }
 
