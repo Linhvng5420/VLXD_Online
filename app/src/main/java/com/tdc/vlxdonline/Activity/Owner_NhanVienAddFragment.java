@@ -1,8 +1,13 @@
 package com.tdc.vlxdonline.Activity;
 
+import android.Manifest;
+import android.app.Activity;
 import android.content.ClipData;
 import android.content.ClipboardManager;
 import android.content.Context;
+import android.content.Intent;
+import android.content.pm.PackageManager;
+import android.net.Uri;
 import android.os.Bundle;
 import android.text.Editable;
 import android.text.SpannableString;
@@ -23,8 +28,11 @@ import androidx.annotation.Nullable;
 import androidx.appcompat.app.AlertDialog;
 import androidx.appcompat.app.AppCompatActivity;
 import androidx.appcompat.widget.Toolbar;
+import androidx.core.app.ActivityCompat;
+import androidx.core.content.ContextCompat;
 import androidx.fragment.app.Fragment;
 
+import com.bumptech.glide.Glide;
 import com.google.android.gms.tasks.OnFailureListener;
 import com.google.android.gms.tasks.OnSuccessListener;
 import com.google.firebase.database.DataSnapshot;
@@ -54,6 +62,13 @@ public class Owner_NhanVienAddFragment extends Fragment {
     private Spinner spinnerChucVu;
     private ArrayAdapter<String> chucVuAdapter;
     private ArrayList<String> listChucVuSpinner;
+
+    // Mã yêu cầu cho việc chọn ảnh
+    private static final int PICK_IMAGE_FRONT_ID = 2;
+    private static final int PICK_IMAGE_BACK_ID = 3;
+
+    // Uri để lưu trữ đường dẫn đến ảnh được chọn
+    private Uri anhCCCDTruoc, anhCCCDSau;
 
     @Override
     public void onCreate(Bundle savedInstanceState) {
@@ -94,13 +109,14 @@ public class Owner_NhanVienAddFragment extends Fragment {
         binding.spinnerChucVu.setAdapter(chucVuAdapter);
 
         // Lấy danh sách chức vụ từ Firebase và cập nhật vào Spinner
-        //layTatCaDSChucVuTuFirebase();
         setEventSpinner();
 
         // Bắt sự kiện các Button
         setupAddButton();
 
         // Bắt sự kiện nhập dữ liệu đầu vào
+        binding.ivCCCD1.setOnClickListener(v1 -> openImagePicker(PICK_IMAGE_FRONT_ID));
+        binding.ivCCCD2.setOnClickListener(v1 -> openImagePicker(PICK_IMAGE_BACK_ID));
         binding.etTenNhanVien.addTextChangedListener(new TextWatcher() {
             @Override
             public void beforeTextChanged(CharSequence charSequence, int i, int i1, int i2) {
@@ -458,6 +474,46 @@ public class Owner_NhanVienAddFragment extends Fragment {
                 Log.d("l.e", "Không tìm thấy chức vụ với tên: " + tenChucVu);
             }
         } else Log.d("l.e", "docIDChucVuBangTen: listChucVuFireBase NULL, tên cv: " + tenChucVu);
+    }
+
+    // ẢNH: MỞ TRÌNH CHỌN ẢNH
+    private void openImagePicker(int requestCode) {
+        //ACTION_GET_CONTENT: cho phép chọn một tệp từ bất kỳ nguồn nào, bao gồm cả trình quản lý tệp và các ứng dụng khác.
+        Intent intent = new Intent(Intent.ACTION_GET_CONTENT);
+        intent.setType("image/*"); // Chỉ định loại tệp là hình ảnh
+        intent.addCategory(Intent.CATEGORY_OPENABLE); // Thêm thể loại này để đảm bảo rằng trình quản lý tệp hiển thị các tệp có thể mở được.
+        startActivityForResult(Intent.createChooser(intent, "Chọn ảnh"), requestCode); // Mở trình hộp thoại chọn ảnh
+    }
+
+    // ẢNH: XỬ LÝ ẢNH SAU KHI CHỌN
+    @Override
+    public void onActivityResult(int requestCode, int resultCode, @Nullable Intent data) {
+        super.onActivityResult(requestCode, resultCode, data);
+        // Kiểm tra kết quả trả về từ hoạt động chọn ảnh
+        if (resultCode == Activity.RESULT_OK && data != null) {
+            // Lấy Uri của ảnh đã chọn từ Intent data
+            Uri selectedImageUri = data.getData();
+
+            // Dựa vào mã yêu cầu để xác định ảnh nào đã được chọn
+            if (requestCode == PICK_IMAGE_FRONT_ID) {
+                // Lưu Uri ảnh CMND trước và hiển thị ảnh trong ImageView
+                anhCCCDTruoc = selectedImageUri;
+                binding.ivCCCD1.setImageURI(anhCCCDTruoc); // Hiển thị ảnh CMND trước
+            } else if (requestCode == PICK_IMAGE_BACK_ID) {
+                // Lưu Uri ảnh CMND sau và hiển thị ảnh trong ImageView
+                anhCCCDSau = selectedImageUri;
+                binding.ivCCCD2.setImageURI(anhCCCDSau); // Hiển thị ảnh CMND sau
+            }
+        }
+    }
+
+    // ẢNH: KIỂM TRA VÀ YÊU CẦU QUYỀN TRUY CẬP
+    private void checkPermissions() {
+        // Kiểm tra xem ứng dụng có quyền truy cập vào bộ nhớ ngoài hay không
+        if (ContextCompat.checkSelfPermission(getContext(), Manifest.permission.READ_EXTERNAL_STORAGE) != PackageManager.PERMISSION_GRANTED) {
+            // Nếu chưa có quyền, yêu cầu quyền truy cập từ người dùng
+            ActivityCompat.requestPermissions(getActivity(), new String[]{Manifest.permission.READ_EXTERNAL_STORAGE}, PICK_IMAGE_FRONT_ID);
+        }
     }
 
     // CUỐI: BẮT ĐIỀU KIỆN DỮ LIỆU ĐẦU VÀO

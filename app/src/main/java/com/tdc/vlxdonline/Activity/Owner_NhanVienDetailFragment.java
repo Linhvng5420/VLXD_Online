@@ -1,5 +1,10 @@
 package com.tdc.vlxdonline.Activity;
 
+import android.Manifest;
+import android.app.Activity;
+import android.content.Intent;
+import android.content.pm.PackageManager;
+import android.net.Uri;
 import android.os.Bundle;
 import android.util.Log;
 import android.view.LayoutInflater;
@@ -15,6 +20,8 @@ import androidx.annotation.Nullable;
 import androidx.appcompat.app.AlertDialog;
 import androidx.appcompat.app.AppCompatActivity;
 import androidx.appcompat.widget.Toolbar;
+import androidx.core.app.ActivityCompat;
+import androidx.core.content.ContextCompat;
 import androidx.fragment.app.Fragment;
 
 import com.bumptech.glide.Glide;
@@ -32,7 +39,7 @@ import java.util.ArrayList;
 import java.util.List;
 
 public class Owner_NhanVienDetailFragment extends Fragment {
-    private FragmentOwnerNhanvienDetailBinding nhanvienDetailBinding;
+    private FragmentOwnerNhanvienDetailBinding binding;
 
     //Khai báo DatabaseReference để kết nối với Firebase
     private DatabaseReference databaseReference;
@@ -49,6 +56,13 @@ public class Owner_NhanVienDetailFragment extends Fragment {
     private ArrayList<String> listChucVuSpinner = new ArrayList<>();
     private String luuLaiTenChucVu = "N/A";
 
+    // Mã yêu cầu cho việc chọn ảnh
+    private static final int PICK_IMAGE_FRONT_ID = 2;
+    private static final int PICK_IMAGE_BACK_ID = 3;
+
+    // Uri để lưu trữ đường dẫn đến ảnh được chọn
+    private Uri anhCCCDTruoc, anhCCCDSau;
+
     @Override
     public void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -62,8 +76,8 @@ public class Owner_NhanVienDetailFragment extends Fragment {
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState) {
         // Gán binding cho layout fragment_owner_nhanvien_detail.xml bằng cách sử dụng phương thức inflate()
-        nhanvienDetailBinding = FragmentOwnerNhanvienDetailBinding.inflate(inflater, container, false);
-        return nhanvienDetailBinding.getRoot(); // Trả về toàn bộ giao diện của fragment
+        binding = FragmentOwnerNhanvienDetailBinding.inflate(inflater, container, false);
+        return binding.getRoot(); // Trả về toàn bộ giao diện của fragment
     }
 
     //TODO: HÀM XỬ LÝ CHỨC NĂNG CỦA VIEW APP
@@ -76,7 +90,7 @@ public class Owner_NhanVienDetailFragment extends Fragment {
         // Khởi tạo Spinner và Adapter
         chucVuAdapter = new ArrayAdapter<>(getContext(), android.R.layout.simple_spinner_item, listChucVuSpinner);
         chucVuAdapter.setDropDownViewResource(android.R.layout.simple_spinner_dropdown_item);
-        nhanvienDetailBinding.spinnerChucVu.setAdapter(chucVuAdapter);
+        binding.spinnerChucVu.setAdapter(chucVuAdapter);
 
         // Lấy danh sách chức vụ từ Firebase và cập nhật vào Spinner
         setEventSpinner();
@@ -155,10 +169,10 @@ public class Owner_NhanVienDetailFragment extends Fragment {
                         nhanVien.setCccd(dataSnapshot.getKey());
 
                         if (nhanVien != null) {
-                            nhanvienDetailBinding.etTenNhanVien.setText(nhanVien.getTennv());
-                            nhanvienDetailBinding.etSDT.setText(nhanVien.getSdt());
-                            nhanvienDetailBinding.etEmail.setText(nhanVien.getEmailnv());
-                            nhanvienDetailBinding.etCCCD.setText(nhanVien.getCccd());
+                            binding.etTenNhanVien.setText(nhanVien.getTennv());
+                            binding.etSDT.setText(nhanVien.getSdt());
+                            binding.etEmail.setText(nhanVien.getEmailnv());
+                            binding.etCCCD.setText(nhanVien.getCccd());
 
                             // Lấy tên chức vụ và gán nó vào Spinner
                             docTenChucVuBangID(nhanVien.getChucvu());
@@ -186,7 +200,7 @@ public class Owner_NhanVienDetailFragment extends Fragment {
     private void docTenChucVuBangID(String chucVuId) {
         if (chucVuId == null || chucVuId.isEmpty()) {
             // Nếu chucVuId null hoặc rỗng, hiển thị thông báo lỗi
-            nhanvienDetailBinding.etChucVu.setText("Lỗi Database [chucvu], Liên hệ Adminstrator.");
+            binding.etChucVu.setText("Lỗi Database [chucvu], Liên hệ Adminstrator.");
             Log.d("l.d", "Lỗi Database không có Field Chức Vụ.");
             return;
         }
@@ -203,10 +217,10 @@ public class Owner_NhanVienDetailFragment extends Fragment {
 
             if (tenChucVu != null) {
                 luuLaiTenChucVu = tenChucVu;
-                nhanvienDetailBinding.etChucVu.setText(tenChucVu);
+                binding.etChucVu.setText(tenChucVu);
                 Log.d("l.d", "docDuLieuChucVu: Lấy được chức vụ với ID = " + chucVuId + ", Tên = " + tenChucVu + ", luuLaiTenChucVu = " + luuLaiTenChucVu);
             } else {
-                nhanvienDetailBinding.etChucVu.setText("Chức vụ Mã \"" + chucVuId + "\" không có trong CSDL.");
+                binding.etChucVu.setText("Chức vụ Mã \"" + chucVuId + "\" không có trong CSDL.");
                 Log.d("l.d", "Không tìm thấy chức vụ với ID: " + chucVuId);
             }
         } else Log.d("l.d", "docDuLieuChucVu: listChucVuFireBase NULL, idcv: " + chucVuId);
@@ -214,7 +228,7 @@ public class Owner_NhanVienDetailFragment extends Fragment {
 
     // BẮT SỰ KIỆN SPINNER
     private void setEventSpinner() {
-        nhanvienDetailBinding.spinnerChucVu.setOnItemSelectedListener(new AdapterView.OnItemSelectedListener() {
+        binding.spinnerChucVu.setOnItemSelectedListener(new AdapterView.OnItemSelectedListener() {
             @Override
             public void onItemSelected(AdapterView<?> parent, View view, int position, long id) {
                 // Lấy tên chức vụ được chọn
@@ -233,49 +247,53 @@ public class Owner_NhanVienDetailFragment extends Fragment {
 
     // THIẾT LẬP SỰ KIỆN CHO CÁC NÚT
     private void setupEditButton() {
-        nhanvienDetailBinding.btnChinhSua.setOnClickListener(v -> {
+        binding.btnChinhSua.setOnClickListener(v -> {
             // Kích hoạt chỉnh sửa cho các trường thông tin
-            nhanvienDetailBinding.etTenNhanVien.setEnabled(true);
-            nhanvienDetailBinding.etSDT.setEnabled(true);
-            nhanvienDetailBinding.etCCCD.setEnabled(true);
+            binding.etTenNhanVien.setEnabled(true);
+            binding.etSDT.setEnabled(true);
+            binding.etCCCD.setEnabled(true);
 
             // Hiển thị Spinner chọn chức vụ
-            nhanvienDetailBinding.tilChucVu.setVisibility(View.INVISIBLE);
-            nhanvienDetailBinding.etChucVu.setVisibility(View.INVISIBLE);
-            nhanvienDetailBinding.spinnerChucVu.setVisibility(View.VISIBLE);
-            nhanvienDetailBinding.tvChucVu.setVisibility(View.VISIBLE);
-            nhanvienDetailBinding.tvChucVu.setText("Chức Vụ");
+            binding.tilChucVu.setVisibility(View.INVISIBLE);
+            binding.etChucVu.setVisibility(View.INVISIBLE);
+            binding.spinnerChucVu.setVisibility(View.VISIBLE);
+            binding.tvChucVu.setVisibility(View.VISIBLE);
+            binding.tvChucVu.setText("Chức Vụ");
 
             // Hiển thị nút Lưu Lại, Xóa, Hủy. Ẩn nút Chỉnh Sửa
-            nhanvienDetailBinding.btnLuuLai.setVisibility(View.VISIBLE);
-            nhanvienDetailBinding.btnXoa.setVisibility(View.VISIBLE);
-            nhanvienDetailBinding.btnHuy.setVisibility(View.VISIBLE);
-            nhanvienDetailBinding.btnChinhSua.setVisibility(View.INVISIBLE);
+            binding.btnLuuLai.setVisibility(View.VISIBLE);
+            binding.btnXoa.setVisibility(View.VISIBLE);
+            binding.btnHuy.setVisibility(View.VISIBLE);
+            binding.btnChinhSua.setVisibility(View.INVISIBLE);
+
+            // Cho phép người dùng chọn ảnh khi nhấn vào các ImageView
+            binding.ivCCCD1.setOnClickListener(v1 -> openImagePicker(PICK_IMAGE_FRONT_ID));
+            binding.ivCCCD2.setOnClickListener(v1 -> openImagePicker(PICK_IMAGE_BACK_ID));
         });
     }
 
     private void setupCancelButton() {
-        nhanvienDetailBinding.btnHuy.setOnClickListener(v -> {
+        binding.btnHuy.setOnClickListener(v -> {
             // Tạo hộp thoại xác nhận
             new AlertDialog.Builder(getContext()).setTitle("Xác Nhận").setMessage("Bạn có chắc chắn muốn hủy thay đổi không?").setPositiveButton("Hủy", (dialog, which) -> {
 
                         // Vô hiệu hóa các trường chỉnh sửa sau khi hủy
-                        nhanvienDetailBinding.etTenNhanVien.setEnabled(false);
-                        nhanvienDetailBinding.etSDT.setEnabled(false);
-                        nhanvienDetailBinding.etCCCD.setEnabled(false);
+                        binding.etTenNhanVien.setEnabled(false);
+                        binding.etSDT.setEnabled(false);
+                        binding.etCCCD.setEnabled(false);
 
                         // Ẩn Spinner và hiển thị TextView cho chức vụ
-                        nhanvienDetailBinding.tilChucVu.setVisibility(View.VISIBLE);
-                        nhanvienDetailBinding.etChucVu.setVisibility(View.VISIBLE);
-                        nhanvienDetailBinding.spinnerChucVu.setVisibility(View.INVISIBLE);
-                        nhanvienDetailBinding.tvChucVu.setVisibility(View.INVISIBLE);
+                        binding.tilChucVu.setVisibility(View.VISIBLE);
+                        binding.etChucVu.setVisibility(View.VISIBLE);
+                        binding.spinnerChucVu.setVisibility(View.INVISIBLE);
+                        binding.tvChucVu.setVisibility(View.INVISIBLE);
 
                         // Ẩn nút Lưu Lại, Xóa, Hủy và Hiển thị nút Sửa sau khi Hủy
-                        nhanvienDetailBinding.btnLuuLai.setVisibility(View.INVISIBLE);
-                        nhanvienDetailBinding.btnHuy.setVisibility(View.VISIBLE);
-                        nhanvienDetailBinding.btnXoa.setVisibility(View.INVISIBLE);
-                        nhanvienDetailBinding.btnHuy.setVisibility(View.INVISIBLE);
-                        nhanvienDetailBinding.btnChinhSua.setVisibility(View.VISIBLE);
+                        binding.btnLuuLai.setVisibility(View.INVISIBLE);
+                        binding.btnHuy.setVisibility(View.VISIBLE);
+                        binding.btnXoa.setVisibility(View.INVISIBLE);
+                        binding.btnHuy.setVisibility(View.INVISIBLE);
+                        binding.btnChinhSua.setVisibility(View.VISIBLE);
 
                         nhanIDNhanVienTuBundle();
                     }).setNegativeButton("Không Hủy", null) // Hiển thị hộp thoại
@@ -284,7 +302,7 @@ public class Owner_NhanVienDetailFragment extends Fragment {
     }
 
     private void setupDeleteButton(String idNhanVien) {
-        nhanvienDetailBinding.btnXoa.setOnClickListener(view -> {
+        binding.btnXoa.setOnClickListener(view -> {
             // Tạo hộp thoại xác nhận
             new AlertDialog.Builder(getContext())
                     .setTitle("Xác Nhận")
@@ -330,24 +348,26 @@ public class Owner_NhanVienDetailFragment extends Fragment {
     }
 
     private void setupSaveButton() {
-        nhanvienDetailBinding.btnLuuLai.setOnClickListener(v -> {
+        binding.btnLuuLai.setOnClickListener(v -> {
             // Kiểm tra trước khi hiện xác nhận
             NhanVien nhanVienUpdate = new NhanVien();
 
-            String newSDT = nhanvienDetailBinding.etSDT.getText().toString();
-            String newCCCD = nhanvienDetailBinding.etCCCD.getText().toString();
+            // Dữ liệu mới
+            String newSDT = binding.etSDT.getText().toString();
+            String newCCCD = binding.etCCCD.getText().toString();
+            String tenChucVuMoi = binding.spinnerChucVu.getSelectedItem().toString();
 
-            // Lưu giá trị Chức vụ từ Spinner
-            String tenChucVuMoi = nhanvienDetailBinding.spinnerChucVu.getSelectedItem().toString();
-            Log.d("l.d", "setupSaveButton: tenChucVuMoi Spinner = " + tenChucVuMoi);
+            // Nhân viên mới
+            nhanVienUpdate.setTennv(binding.etTenNhanVien.getText().toString());
             nhanVienUpdate.setChucvu(docIDChucVuBangTen(tenChucVuMoi));
-
-            nhanVienUpdate.setTennv(nhanvienDetailBinding.etTenNhanVien.getText().toString());
+            nhanVienUpdate.setSdt(nhanVien.getSdt());
             nhanVienUpdate.setEmailnv(nhanVien.getEmailnv());
             nhanVienUpdate.setEmailchu(nhanVien.getEmailchu());
-            nhanVienUpdate.setSdt(nhanVien.getSdt());
+            nhanVienUpdate.setCccd(nhanVien.getCccd());
+            nhanVienUpdate.setAnhcc1(nhanVien.getAnhcc1());
+            nhanVienUpdate.setAnhcc2(nhanVien.getAnhcc2());
 
-            if (batDieuKienDuLieuDauVao(nhanVienUpdate, newSDT, newCCCD) == true && nhanvienDetailBinding.etSDT.getError() == null && nhanvienDetailBinding.etCCCD.getError() == null) {
+            if (batDieuKienDuLieuDauVao(nhanVienUpdate, newSDT, newCCCD) == true && binding.etSDT.getError() == null && binding.etCCCD.getError() == null) {
                 // Tạo hộp thoại xác nhận
                 new AlertDialog.Builder(getContext()).setTitle("Xác Nhận").setMessage("Bạn có chắc chắn muốn lưu thay đổi không?").setPositiveButton("Có", (dialog, which) -> {
 
@@ -358,21 +378,26 @@ public class Owner_NhanVienDetailFragment extends Fragment {
                         Toast.makeText(getContext(), "Cập nhật thành công", Toast.LENGTH_SHORT).show();
 
                         // Vô hiệu hóa các trường chỉnh sửa sau khi lưu
-                        nhanvienDetailBinding.etTenNhanVien.setEnabled(false);
-                        nhanvienDetailBinding.etSDT.setEnabled(false);
+                        binding.etTenNhanVien.setEnabled(false);
+                        binding.etSDT.setEnabled(false);
 
                         // Ẩn Spinner và hiển thị TextView cho chức vụ
-                        nhanvienDetailBinding.tilChucVu.setVisibility(View.VISIBLE);
-                        nhanvienDetailBinding.etChucVu.setVisibility(View.VISIBLE);
-                        nhanvienDetailBinding.spinnerChucVu.setVisibility(View.INVISIBLE);
-                        nhanvienDetailBinding.tvChucVu.setVisibility(View.INVISIBLE);
+                        binding.tilChucVu.setVisibility(View.VISIBLE);
+                        binding.etChucVu.setVisibility(View.VISIBLE);
+                        binding.spinnerChucVu.setVisibility(View.INVISIBLE);
+                        binding.tvChucVu.setVisibility(View.INVISIBLE);
 
                         // Ẩn nút Lưu Lại, Xóa, Hủy và Hiển thị nút Sửa sau khi lưu
-                        nhanvienDetailBinding.btnLuuLai.setVisibility(View.INVISIBLE);
-                        nhanvienDetailBinding.btnHuy.setVisibility(View.VISIBLE);
-                        nhanvienDetailBinding.btnXoa.setVisibility(View.INVISIBLE);
-                        nhanvienDetailBinding.btnHuy.setVisibility(View.INVISIBLE);
-                        nhanvienDetailBinding.btnChinhSua.setVisibility(View.VISIBLE);
+                        binding.btnLuuLai.setVisibility(View.INVISIBLE);
+                        binding.btnHuy.setVisibility(View.VISIBLE);
+                        binding.btnXoa.setVisibility(View.INVISIBLE);
+                        binding.btnHuy.setVisibility(View.INVISIBLE);
+                        binding.btnChinhSua.setVisibility(View.VISIBLE);
+
+                        // Vô hiệu hóa sự kiện onClick của các ImageView (ngăn người dùng chọn ảnh sau khi lưu)
+                        binding.ivCCCD1.setOnClickListener(null);
+                        binding.ivCCCD2.setOnClickListener(null);
+
                     }).addOnFailureListener(e -> {
                         Toast.makeText(getContext(), "Cập nhật thất bại: " + e.getMessage(), Toast.LENGTH_SHORT).show();
                     });
@@ -410,7 +435,7 @@ public class Owner_NhanVienDetailFragment extends Fragment {
         return "Lỗi: docIDChucVuBangTen";
     }
 
-    // Hàm để hiển thị ảnh CC
+    // ẢNH: HÀM ĐỂ HIỂN THỊ ẢNH CC
     private void hienthiAnhCCCD() {
         // Lấy dữ liệu của nhân viên từ Firebase
         databaseReference.child(selectedIDNhanVien).addListenerForSingleValueEvent(new ValueEventListener() {
@@ -425,10 +450,10 @@ public class Owner_NhanVienDetailFragment extends Fragment {
                     // Hiển thị hình ảnh
                     Glide.with(getContext())
                             .load(anhCC1) // Tải ảnh từ URL
-                            .into(nhanvienDetailBinding.ivCCCD1); // imageViewCC là ID của ImageView trong layout
+                            .into(binding.ivCCCD1); // imageViewCC là ID của ImageView trong layout
                     Glide.with(getContext())
                             .load(anhCC2) // Tải ảnh từ URL
-                            .into(nhanvienDetailBinding.ivCCCD2); // imageViewCC2 là ID của ImageView trong layout
+                            .into(binding.ivCCCD2); // imageViewCC2 là ID của ImageView trong layout
                 }
             }
 
@@ -440,34 +465,74 @@ public class Owner_NhanVienDetailFragment extends Fragment {
         });
     }
 
+    // ẢNH: MỞ TRÌNH CHỌN ẢNH
+    private void openImagePicker(int requestCode) {
+        //ACTION_GET_CONTENT: cho phép chọn một tệp từ bất kỳ nguồn nào, bao gồm cả trình quản lý tệp và các ứng dụng khác.
+        Intent intent = new Intent(Intent.ACTION_GET_CONTENT);
+        intent.setType("image/*"); // Chỉ định loại tệp là hình ảnh
+        intent.addCategory(Intent.CATEGORY_OPENABLE); // Thêm thể loại này để đảm bảo rằng trình quản lý tệp hiển thị các tệp có thể mở được.
+        startActivityForResult(Intent.createChooser(intent, "Chọn ảnh"), requestCode); // Mở trình hộp thoại chọn ảnh
+    }
+
+    // ẢNH: XỬ LÝ ẢNH SAU KHI CHỌN
+    @Override
+    public void onActivityResult(int requestCode, int resultCode, @Nullable Intent data) {
+        super.onActivityResult(requestCode, resultCode, data);
+        // Kiểm tra kết quả trả về từ hoạt động chọn ảnh
+        if (resultCode == Activity.RESULT_OK && data != null) {
+            // Lấy Uri của ảnh đã chọn từ Intent data
+            Uri selectedImageUri = data.getData();
+
+            // Dựa vào mã yêu cầu để xác định ảnh nào đã được chọn
+            if (requestCode == PICK_IMAGE_FRONT_ID) {
+                // Lưu Uri ảnh CMND trước và hiển thị ảnh trong ImageView
+                anhCCCDTruoc = selectedImageUri;
+                binding.ivCCCD1.setImageURI(anhCCCDTruoc); // Hiển thị ảnh CMND trước
+            } else if (requestCode == PICK_IMAGE_BACK_ID) {
+                // Lưu Uri ảnh CMND sau và hiển thị ảnh trong ImageView
+                anhCCCDSau = selectedImageUri;
+                binding.ivCCCD2.setImageURI(anhCCCDSau); // Hiển thị ảnh CMND sau
+            }
+        }
+    }
+
+    // ẢNH: KIỂM TRA VÀ YÊU CẦU QUYỀN TRUY CẬP
+    private void checkPermissions() {
+        // Kiểm tra xem ứng dụng có quyền truy cập vào bộ nhớ ngoài hay không
+        if (ContextCompat.checkSelfPermission(getContext(), Manifest.permission.READ_EXTERNAL_STORAGE) != PackageManager.PERMISSION_GRANTED) {
+            // Nếu chưa có quyền, yêu cầu quyền truy cập từ người dùng
+            ActivityCompat.requestPermissions(getActivity(), new String[]{Manifest.permission.READ_EXTERNAL_STORAGE}, PICK_IMAGE_FRONT_ID);
+        }
+    }
+
     // CUỐI: BẮT ĐIỀU KIỆN DỮ LIỆU ĐẦU VÀO
     private boolean batDieuKienDuLieuDauVao(NhanVien nhanVienUpdate, String newSDT, String newCCD) {
         // kiểm tra có ký tự số trong tên nhân viên
-        String tenNhanVien = nhanvienDetailBinding.etTenNhanVien.getText().toString();
+        String tenNhanVien = binding.etTenNhanVien.getText().toString();
         for (int i = 0; i < tenNhanVien.length(); i++) {
             if (Character.isDigit(tenNhanVien.charAt(i))) {
-                nhanvienDetailBinding.etTenNhanVien.setError("Vui lòng không nhập số vào tên nhân viên");
+                binding.etTenNhanVien.setError("Vui lòng không nhập số vào tên nhân viên");
                 return false;
             }
         }
 
-        if (nhanvienDetailBinding.etTenNhanVien.getText().toString().isEmpty()) {
-            nhanvienDetailBinding.etTenNhanVien.setError("Vui lòng nhập đủ họ tên nhân viên");
+        if (binding.etTenNhanVien.getText().toString().isEmpty()) {
+            binding.etTenNhanVien.setError("Vui lòng nhập đủ họ tên nhân viên");
             return false;
         }
 
-        if (nhanvienDetailBinding.etSDT.getText().toString().isEmpty() || nhanvienDetailBinding.etSDT.getText().toString().length() != 10) {
-            nhanvienDetailBinding.etSDT.setError("Vui lòng nhập số điện thoại 10 số");
+        if (binding.etSDT.getText().toString().isEmpty() || binding.etSDT.getText().toString().length() != 10) {
+            binding.etSDT.setError("Vui lòng nhập số điện thoại 10 số");
             return false;
         }
 
-        if (nhanvienDetailBinding.etEmail.getText().toString().isEmpty() || !nhanvienDetailBinding.etEmail.getText().toString().contains("@") || !nhanvienDetailBinding.etEmail.getText().toString().contains(".")) {
-            nhanvienDetailBinding.etEmail.setError("Vui lòng nhập đúng email");
+        if (binding.etEmail.getText().toString().isEmpty() || !binding.etEmail.getText().toString().contains("@") || !binding.etEmail.getText().toString().contains(".")) {
+            binding.etEmail.setError("Vui lòng nhập đúng email");
             return false;
         }
 
-        if (nhanvienDetailBinding.etCCCD.getText().toString().isEmpty() || nhanvienDetailBinding.etCCCD.getText().toString().length() != 10) {
-            nhanvienDetailBinding.etCCCD.setError("Vui lòng nhập CCCD (10 số)");
+        if (binding.etCCCD.getText().toString().isEmpty() || binding.etCCCD.getText().toString().length() != 10) {
+            binding.etCCCD.setError("Vui lòng nhập CCCD (10 số)");
             return false;
         }
 
@@ -518,11 +583,11 @@ public class Owner_NhanVienDetailFragment extends Fragment {
                 }
 
                 if (sdtExists) {
-                    nhanvienDetailBinding.etSDT.setError("Số điện thoại đã được sử dụng");
+                    binding.etSDT.setError("Số điện thoại đã được sử dụng");
                     Toast.makeText(getContext(), "Số điện thoại đã được sử dụng.", Toast.LENGTH_SHORT).show();
                 }
                 if (cccdExists) {
-                    nhanvienDetailBinding.etCCCD.setError("CCCD đã được sử dụng");
+                    binding.etCCCD.setError("CCCD đã được sử dụng");
                     Toast.makeText(getContext(), "CCCD đã được sử dụng.", Toast.LENGTH_SHORT).show();
                 }
 

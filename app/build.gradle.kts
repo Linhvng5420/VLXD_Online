@@ -39,6 +39,7 @@ android {
 dependencies {
     implementation(libs.glide)
     implementation(libs.firebase.database)
+    implementation(libs.firebase.storage)
     annotationProcessor(libs.compiler)
 
     implementation(libs.appcompat)
@@ -54,4 +55,5 @@ dependencies {
     implementation ("com.google.firebase:firebase-database")
     implementation(platform("com.google.firebase:firebase-bom:33.4.0"))
     implementation("com.google.firebase:firebase-analytics")
+    implementation ("com.google.firebase:firebase-storage:21.0.1")
 }
