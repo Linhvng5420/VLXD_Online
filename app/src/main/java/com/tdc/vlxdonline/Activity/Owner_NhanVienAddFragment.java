@@ -32,7 +32,6 @@ import androidx.core.app.ActivityCompat;
 import androidx.core.content.ContextCompat;
 import androidx.fragment.app.Fragment;
 
-import com.bumptech.glide.Glide;
 import com.google.android.gms.tasks.OnFailureListener;
 import com.google.android.gms.tasks.OnSuccessListener;
 import com.google.firebase.database.DataSnapshot;
@@ -40,6 +39,8 @@ import com.google.firebase.database.DatabaseError;
 import com.google.firebase.database.DatabaseReference;
 import com.google.firebase.database.FirebaseDatabase;
 import com.google.firebase.database.ValueEventListener;
+import com.google.firebase.storage.FirebaseStorage;
+import com.google.firebase.storage.StorageReference;
 import com.tdc.vlxdonline.Model.ChucVu;
 import com.tdc.vlxdonline.Model.NhanVien;
 import com.tdc.vlxdonline.Model.Users;
@@ -381,20 +382,24 @@ public class Owner_NhanVienAddFragment extends Fragment {
 
             // Hộp thoại xác nhận
             new AlertDialog.Builder(getContext()).setTitle("Xác nhận").setMessage("Bạn có muốn thêm nhân viên này?").setPositiveButton("Có", (dialog, which) -> {
-                // Lưu giá trị Chức vụ từ Spinner
-                String tenChucVuMoi = binding.spinnerChucVu.getSelectedItem().toString();
-                Log.d("l.e", "setupSaveButton: tenChucVuMoi Spinner = " + tenChucVuMoi);
-                docIDChucVuBangTen(tenChucVuMoi);
+                // Lưu giá trị mới
+                nhanVien = new NhanVien();
 
+                String tenChucVu = binding.spinnerChucVu.getSelectedItem().toString();
                 nhanVien.setTennv(binding.etTenNhanVien.getText().toString());
+                setIDChucVuNhanVien(tenChucVu);
                 nhanVien.setSdt(binding.etSDT.getText().toString());
                 nhanVien.setEmailchu(loginEmailUser);
                 nhanVien.setEmailnv(binding.etEmail.getText().toString());
-                nhanVien.setCccd(binding.etCCCD.getText().toString());
+                String cccd = binding.etCCCD.getText().toString();
+                nhanVien.setCccd(cccd);
+
+                uploadImagesAndSaveEmployee();
 
                 // Lưu nhân viên vào Firebase với key
+                nhanVien.setCccd(null);
                 DatabaseReference dbrfNhanvien = FirebaseDatabase.getInstance().getReference("nhanvien");
-                dbrfNhanvien.child(nhanVien.getCccd()).setValue(nhanVien) //Thêm nv mới vào firebase với Key = nhanVien.getCccd(), các value còn lại tự thêm.
+                dbrfNhanvien.child(cccd).setValue(nhanVien) //Thêm nv mới vào firebase với Key = nhanVien.getCccd(), các value còn lại tự thêm.
                         .addOnSuccessListener(aVoid -> {
                             Toast.makeText(getContext(), "Thêm nhân viên thành công", Toast.LENGTH_SHORT).show();
                             //getParentFragmentManager().popBackStack(); // Quay lại Fragment trước
@@ -411,7 +416,7 @@ public class Owner_NhanVienAddFragment extends Fragment {
                 Users usersNhanVienMoi = new Users(userNhanVien, passwordNhanVien, "nv");
 
                 DatabaseReference dbrfAccount = FirebaseDatabase.getInstance().getReference("account");
-                dbrfAccount.child(nhanVien.getCccd()).setValue(usersNhanVienMoi)
+                dbrfAccount.child(cccd).setValue(usersNhanVienMoi)
                         .addOnSuccessListener(new OnSuccessListener<Void>() {
                             @Override
                             public void onSuccess(Void unused) {
@@ -449,7 +454,7 @@ public class Owner_NhanVienAddFragment extends Fragment {
     }
 
     // Truy xuất FireBase: Lưu ID chức vụ được chọn cho nhân viên
-    private void docIDChucVuBangTen(String tenChucVu) {
+    private void setIDChucVuNhanVien(String tenChucVu) {
         if (tenChucVu == null || tenChucVu.isEmpty()) {
             Log.d("l.e", "docIDChucVuBangTen: Item Spinner.");
             return;
@@ -507,6 +512,46 @@ public class Owner_NhanVienAddFragment extends Fragment {
         }
     }
 
+    private void uploadImagesAndSaveEmployee() {
+        StorageReference storageRef = FirebaseStorage.getInstance().getReference("CCCD");
+
+        if (anhCCCDTruoc != null) {
+            StorageReference frontImageRef = storageRef.child(nhanVien.getCccd() + "_Truoc" + ".jpg");
+            frontImageRef.putFile(anhCCCDTruoc)
+                    .addOnSuccessListener(taskSnapshot -> frontImageRef.getDownloadUrl().addOnSuccessListener(uri -> {
+                        nhanVien.setAnhcc1(uri.toString());
+                        // Kiểm tra nếu cả hai ảnh đã được upload thành công thì lưu nhân viên
+                        checkAndSaveEmployee();
+                    }))
+                    .addOnFailureListener(e -> Toast.makeText(getContext(), "Upload ảnh trước thất bại: " + e.getMessage(), Toast.LENGTH_SHORT).show());
+        }
+
+        if (anhCCCDSau != null) {
+            StorageReference backImageRef = storageRef.child(nhanVien.getCccd() + "_Sau" + ".jpg");
+            backImageRef.putFile(anhCCCDSau)
+                    .addOnSuccessListener(taskSnapshot -> backImageRef.getDownloadUrl().addOnSuccessListener(uri -> {
+                        nhanVien.setAnhcc2(uri.toString());
+                        // Kiểm tra nếu cả hai ảnh đã được upload thành công thì lưu nhân viên
+                        checkAndSaveEmployee();
+                    }))
+                    .addOnFailureListener(e -> Toast.makeText(getContext(), "Upload ảnh sau thất bại: " + e.getMessage(), Toast.LENGTH_SHORT).show());
+        }
+    }
+
+    private void checkAndSaveEmployee() {
+        // Kiểm tra nếu cả hai URL ảnh đã có
+        if (nhanVien.getAnhcc1() != null && nhanVien.getAnhcc2() != null) {
+            saveEmployeeToFirebase();
+        }
+    }
+
+    private void saveEmployeeToFirebase() {
+        DatabaseReference dbrfNhanvien = FirebaseDatabase.getInstance().getReference("nhanvien");
+        dbrfNhanvien.child(nhanVien.getCccd()).setValue(nhanVien)
+                .addOnSuccessListener(aVoid -> Toast.makeText(getContext(), "Thêm nhân viên thành công", Toast.LENGTH_SHORT).show())
+                .addOnFailureListener(e -> Toast.makeText(getContext(), "Thêm nhân viên thất bại", Toast.LENGTH_SHORT).show());
+    }
+
     // ẢNH: KIỂM TRA VÀ YÊU CẦU QUYỀN TRUY CẬP
     private void checkPermissions() {
         // Kiểm tra xem ứng dụng có quyền truy cập vào bộ nhớ ngoài hay không
@@ -542,6 +587,15 @@ public class Owner_NhanVienAddFragment extends Fragment {
         if (binding.etTenNhanVien.getText().toString().isEmpty() || binding.etTenNhanVien.getText().toString().length() < 2) {
             binding.etTenNhanVien.setError("Vui lòng nhập đủ họ tên nhân viên");
             return false;
+        }
+
+        if (binding.ivCCCD1.getDrawable() == null || binding.ivCCCD2.getDrawable() == null) {
+            binding.tvCCCD1.setError("Chưa chọn ảnh CCCD Trước");
+            binding.tvCCCD2.setError("Chưa chọn ảnh CCCD Sau");
+            return false;
+        } else {
+            binding.tvCCCD1.setError(null);
+            binding.tvCCCD2.setError(null);
         }
 
         return true;
