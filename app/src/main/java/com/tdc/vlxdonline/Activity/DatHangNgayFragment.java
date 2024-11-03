@@ -227,7 +227,10 @@ public class DatHangNgayFragment extends Fragment {
                         binding.tvNameDatHangNgay.setText(product.getTen());
                         binding.tvGiaDatHangNgay.setText(chuyenChuoi(Integer.parseInt(product.getGiaBan())) + " đ");
                         binding.tvDesDatNgay.setText(product.getMoTa());
-                        if (product.getTonKho().equals("0")) soLuong = 0;
+                        if (product.getTonKho().equals("0")){
+                            Toast.makeText(getActivity(), "Sản Phẩm Này Đã Hết Hàng!", Toast.LENGTH_SHORT).show();
+                            getActivity().getSupportFragmentManager().popBackStack();
+                        }
                         binding.edtSlDat.setText(soLuong + "");
                         binding.tvTongDatNgay.setText(chuyenChuoi(Integer.parseInt(product.getGiaBan()) * soLuong));
                     } else {

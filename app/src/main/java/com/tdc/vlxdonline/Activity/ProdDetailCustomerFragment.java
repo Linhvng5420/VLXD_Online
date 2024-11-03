@@ -5,7 +5,6 @@ import android.os.Bundle;
 import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
 import androidx.fragment.app.Fragment;
-import androidx.recyclerview.widget.GridLayoutManager;
 import androidx.recyclerview.widget.LinearLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
 
@@ -23,9 +22,8 @@ import com.google.firebase.database.DatabaseReference;
 import com.google.firebase.database.FirebaseDatabase;
 import com.google.firebase.database.ValueEventListener;
 import com.tdc.vlxdonline.Adapter.ImageAdapter;
-import com.tdc.vlxdonline.Adapter.ProductAdapter;
 import com.tdc.vlxdonline.Model.AnhSanPham;
-import com.tdc.vlxdonline.Model.DonHang;
+import com.tdc.vlxdonline.Model.CartItem;
 import com.tdc.vlxdonline.Model.Products;
 import com.tdc.vlxdonline.databinding.FragmentProdDetailCustomerBinding;
 
@@ -34,6 +32,7 @@ import java.util.ArrayList;
 public class ProdDetailCustomerFragment extends Fragment {
 
     FragmentProdDetailCustomerBinding binding;
+    private String idKhach;
     // Id product duoc chon
     private String idProd = "";
     private Products prod;
@@ -46,6 +45,7 @@ public class ProdDetailCustomerFragment extends Fragment {
 
     public ProdDetailCustomerFragment(String idProduct) {
         idProd = idProduct;
+        idKhach = Customer_HomeActivity.info.getID();
     }
 
     @Override
@@ -70,8 +70,10 @@ public class ProdDetailCustomerFragment extends Fragment {
         binding.btnDatHangNgay.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                if (soLuong > 0) ((Customer_HomeActivity) getActivity()).ReplaceFragment(new DatHangNgayFragment(idProd, soLuong));
-                else Toast.makeText(getActivity(), "Hiện Tại Sản Phẩm Đã Bán Hết!", Toast.LENGTH_SHORT).show();
+                if (soLuong > 0)
+                    ((Customer_HomeActivity) getActivity()).ReplaceFragment(new DatHangNgayFragment(idProd, soLuong));
+                else
+                    Toast.makeText(getActivity(), "Hiện Tại Sản Phẩm Đã Bán Hết!", Toast.LENGTH_SHORT).show();
             }
         });
         // Su Kien Tang Giam SL
@@ -101,7 +103,7 @@ public class ProdDetailCustomerFragment extends Fragment {
             public void onTextChanged(CharSequence s, int start, int before, int count) {
                 if (!binding.edtSoLuong.getText().toString().isEmpty()) {
                     checkSoLuong();
-                }else{
+                } else {
                     binding.edtSoLuong.setText("1");
                 }
             }
@@ -114,12 +116,34 @@ public class ProdDetailCustomerFragment extends Fragment {
         binding.btnAddToCart.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
+                addToCart();
+            }
+        });
+    }
+
+    private void addToCart() {
+        referDetailProd.child("carts").child(idKhach).child(idProd).addListenerForSingleValueEvent(new ValueEventListener() {
+            @Override
+            public void onDataChange(@NonNull DataSnapshot snapshot) {
+                try {
+                    CartItem temp = snapshot.getValue(CartItem.class);
+                    int soLuongLuu = 0;
+                    if (temp != null) soLuongLuu = soLuong + temp.getSoLuong();
+                    else soLuongLuu = soLuong;
+
+                    referDetailProd.child("carts").child(idKhach).child(idProd).child("soLuong").setValue(soLuongLuu);
+                    Toast.makeText(getActivity(), "Đã Thêm Vào Giỏ Hàng!", Toast.LENGTH_SHORT).show();
+                } catch (Exception e) {}
+            }
+
+            @Override
+            public void onCancelled(@NonNull DatabaseError error) {
 
             }
         });
     }
 
-    private void checkSoLuong(){
+    private void checkSoLuong() {
         soLuong = Integer.parseInt(binding.edtSoLuong.getText().toString());
         int kho = Integer.parseInt(prod.getTonKho());
         if (soLuong > kho) {
@@ -135,7 +159,7 @@ public class ProdDetailCustomerFragment extends Fragment {
         setHienThiAnh();
     }
 
-    private void setAdapterAnh(){
+    private void setAdapterAnh() {
         // Adapter Anh Mo Ta
         imageAdapter = new ImageAdapter(getActivity(), dataAnh);
         imageAdapter.setOnItemImageClick(new ImageAdapter.OnItemImageClick() {
@@ -192,10 +216,8 @@ public class ProdDetailCustomerFragment extends Fragment {
                         binding.tvTonKhoDetail.setText("Kho: " + product.getTonKho());
                         if (product.getTonKho().equals("0")) {
                             soLuong = 0;
-                            binding.edtSoLuong.setText("0");
-                        }else{
-                            binding.edtSoLuong.setText(soLuong + "");
                         }
+                        binding.edtSoLuong.setText(soLuong + "");
                         binding.tvDaBanDetail.setText("Đã Bán: " + product.getDaBan());
                         binding.tvDonViDetail.setText(product.getDonVi());
                         binding.tvMoTaDetail.setText(product.getMoTa());

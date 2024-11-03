@@ -17,6 +17,9 @@ public class CartItem {
         this.selected = selected;
     }
 
+    public CartItem() {
+    }
+
     public boolean isSelected() {
         return selected;
     }
@@ -31,9 +34,6 @@ public class CartItem {
 
     public void setMoTa(String moTa) {
         this.moTa = moTa;
-    }
-
-    public CartItem() {
     }
 
     public String getIdKhach() {
