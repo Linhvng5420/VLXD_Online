@@ -247,7 +247,6 @@ public class Owner_NhanVienDetailFragment extends Fragment {
             // Kích hoạt chỉnh sửa cho các trường thông tin
             binding.etTenNhanVien.setEnabled(true);
             binding.etSDT.setEnabled(true);
-            binding.etCCCD.setEnabled(true);
 
             // Hiển thị Spinner chọn chức vụ
             binding.tilChucVu.setVisibility(View.INVISIBLE);
@@ -276,7 +275,6 @@ public class Owner_NhanVienDetailFragment extends Fragment {
                         // Vô hiệu hóa các trường chỉnh sửa sau khi hủy
                         binding.etTenNhanVien.setEnabled(false);
                         binding.etSDT.setEnabled(false);
-                        binding.etCCCD.setEnabled(false);
 
                         // Ẩn Spinner và hiển thị TextView cho chức vụ
                         binding.tilChucVu.setVisibility(View.VISIBLE);
@@ -349,30 +347,31 @@ public class Owner_NhanVienDetailFragment extends Fragment {
 
     private void setupSaveButton() {
         binding.btnLuuLai.setOnClickListener(v -> {
-            // Up ảnh lên Firebase Storage
-            NhanVien nhanVien = new NhanVien();
-            String cccd = binding.etCCCD.getText().toString();
-            nhanVien.setCccd(cccd);
-            uploadAnhVaLuuLinkDown();
-
             // Dữ liệu mới
-            String newSDT = binding.etSDT.getText().toString();
-            String tenChucVuMoi = binding.spinnerChucVu.getSelectedItem().toString();
-
-            // Nhân viên mới
             nhanVien.setTennv(binding.etTenNhanVien.getText().toString());
-            nhanVien.setChucvu(setIDChucVuNhanVien(tenChucVuMoi));
-            nhanVien.setSdt(newSDT);
+            nhanVien.setChucvu(setIDChucVuNhanVien(binding.spinnerChucVu.getSelectedItem().toString()));
+            nhanVien.setSdt(binding.etSDT.getText().toString());
             nhanVien.setEmailchu(nhanVien.getEmailchu());
             nhanVien.setEmailnv(nhanVien.getEmailnv());
+            String cccd = nhanVien.getCccd();
+            nhanVien.setAnhcc1("N/A");
+            nhanVien.setAnhcc2("N/A");
 
-            if (batDieuKienDuLieuDauVao(nhanVien, newSDT) == true && binding.etSDT.getError() == null && binding.etCCCD.getError() == null) {
+//            if (batDieuKienDuLieuDauVao(nhanVien) == true && binding.etSDT.getError() == null && binding.etCCCD.getError() == null) {
+            if (batDieuKienDuLieuDauVao(nhanVien) == true) {
                 // Tạo hộp thoại xác nhận
                 new AlertDialog.Builder(getContext()).setTitle("Xác Nhận").setMessage("Bạn có chắc chắn muốn lưu thay đổi không?").setPositiveButton("Có", (dialog, which) -> {
 
+                    // Gọi hàm upload ảnh
+                    uploadAnh();
+
                     // Cập nhật thông tin nhân viên trong Firebase (Realtime Database)
-                    DatabaseReference dbRef = FirebaseDatabase.getInstance().getReference("nhanvien");
-                    dbRef.child(nhanVien.getCccd()).setValue(nhanVien).addOnSuccessListener(aVoid -> {
+                    DatabaseReference dbNhanVien = FirebaseDatabase.getInstance().getReference("nhanvien");
+
+                    // Trong fb không có field cccd
+                    nhanVien.setCccd(null);
+
+                    dbNhanVien.child(cccd).setValue(nhanVien).addOnSuccessListener(aVoid -> {
                         // Xử lý thành công
                         Toast.makeText(getContext(), "Cập nhật thành công", Toast.LENGTH_SHORT).show();
 
@@ -496,13 +495,11 @@ public class Owner_NhanVienDetailFragment extends Fragment {
         }
     }
 
-    private void uploadAnhVaLuuLinkDown() {
+    private void uploadAnh() {
         StorageReference storageRef = FirebaseStorage.getInstance().getReference("CCCD");
-
         StorageReference frontImageRef = storageRef.child(nhanVien.getCccd() + "_Truoc" + ".jpg");
         frontImageRef.putFile(anhCCCDTruoc)
                 .addOnSuccessListener(taskSnapshot -> frontImageRef.getDownloadUrl().addOnSuccessListener(uri -> {
-                    Log.d("l.d", "uploadAnhVaLuuLinkDown: " + uri.toString());
                     nhanVien.setAnhcc1(uri.toString());
                 }))
                 .addOnFailureListener(e -> Toast.makeText(getContext(), "Upload ảnh trước thất bại: " + e.getMessage(), Toast.LENGTH_SHORT).show());
@@ -510,7 +507,6 @@ public class Owner_NhanVienDetailFragment extends Fragment {
         StorageReference backImageRef = storageRef.child(nhanVien.getCccd() + "_Sau" + ".jpg");
         backImageRef.putFile(anhCCCDSau)
                 .addOnSuccessListener(taskSnapshot -> backImageRef.getDownloadUrl().addOnSuccessListener(uri -> {
-                    Log.d("l.d", "uploadAnhVaLuuLinkDown: " + uri.toString());
                     nhanVien.setAnhcc2(uri.toString());
                 }))
                 .addOnFailureListener(e -> Toast.makeText(getContext(), "Upload ảnh sau thất bại: " + e.getMessage(), Toast.LENGTH_SHORT).show());
@@ -526,7 +522,7 @@ public class Owner_NhanVienDetailFragment extends Fragment {
     }
 
     // CUỐI: BẮT ĐIỀU KIỆN DỮ LIỆU ĐẦU VÀO
-    private boolean batDieuKienDuLieuDauVao(NhanVien nhanVienUpdate, String newSDT) {
+    private boolean batDieuKienDuLieuDauVao(NhanVien nhanVienUpdate) {
         // kiểm tra có ký tự số trong tên nhân viên
         String tenNhanVien = binding.etTenNhanVien.getText().toString();
         for (int i = 0; i < tenNhanVien.length(); i++) {
@@ -551,9 +547,57 @@ public class Owner_NhanVienDetailFragment extends Fragment {
             return false;
         }
 
+        // Yêu cầu user phải chọn ảnh cccd
+        if (binding.ivCCCD1.getDrawable() == null || binding.ivCCCD2.getDrawable() == null) {
+            binding.tvCCCD1.setError("Chưa chọn ảnh CCCD Trước");
+            binding.tvCCCD2.setError("Chưa chọn ảnh CCCD Sau");
+            return false;
+        } else {
+            binding.tvCCCD1.setError(null);
+            binding.tvCCCD2.setError(null);
+        }
+
         // Kiểm tra trùng lặp SDT
-        kiemTraSDTEmailTruocKhiLuu(nhanVienUpdate, newSDT);
-        Log.d("l.d", "batDieuKienDuLieuDauVao: " + nhanVienUpdate.toString());
+        DatabaseReference dbNhanVien = FirebaseDatabase.getInstance().getReference("nhanvien");
+        dbNhanVien.addListenerForSingleValueEvent(new ValueEventListener() {
+            @Override
+            public void onDataChange(@NonNull DataSnapshot dataSnapshot) {
+                boolean sdtExists = false;
+
+                for (DataSnapshot snapshot : dataSnapshot.getChildren()) {
+                    // Bỏ qua nhân viên hiện tại
+                    if (snapshot.getKey().equals(nhanVienUpdate.getCccd())) {
+                        continue;
+                    }
+
+                    // Lấy thông tin NhanVien
+                    NhanVien nhanVien = snapshot.getValue(NhanVien.class);
+                    if (nhanVien != null) {
+                        // Kiểm tra trùng lặp sdt và email
+                        if (nhanVien.getSdt().equals(nhanVienUpdate.getSdt())) {
+                            sdtExists = true;
+                            break;
+                        }
+                    }
+                }
+
+                if (sdtExists) {
+                    binding.etSDT.setError("Số điện thoại đã được sử dụng");
+                    Toast.makeText(getContext(), "Số điện thoại đã được sử dụng.", Toast.LENGTH_SHORT).show();
+                }
+
+                // Nếu không có trùng lặp, tiến hành cập nhật dữ liệu
+                if (!sdtExists) {
+                    binding.etSDT.setError(null);
+                    Log.d("l.d", "kiemTraSDTEmailTruocKhiLuu: " + nhanVienUpdate.toString());
+                }
+            }
+
+            @Override
+            public void onCancelled(@NonNull DatabaseError databaseError) {
+                Log.e("Firebase", "Lỗi khi kiểm tra trùng lặp: " + databaseError.getMessage());
+            }
+        });
 
         if (binding.ivCCCD1.getDrawable() == null || binding.ivCCCD2.getDrawable() == null) {
             binding.tvCCCD1.setError("Chưa chọn ảnh CCCD Trước");
@@ -565,55 +609,6 @@ public class Owner_NhanVienDetailFragment extends Fragment {
         }
 
         return true;
-    }
-
-    private void kiemTraSDTEmailTruocKhiLuu(NhanVien nhanVienUpdate, String newSDT) {
-        DatabaseReference nhanVienRef = FirebaseDatabase.getInstance().getReference("nhanvien");
-
-        nhanVienRef.addListenerForSingleValueEvent(new ValueEventListener() {
-            @Override
-            public void onDataChange(@NonNull DataSnapshot dataSnapshot) {
-                boolean sdtExists = false;
-
-                for (DataSnapshot snapshot : dataSnapshot.getChildren()) {
-                    // Bỏ qua nhân viên hiện tại
-                    String currentId = snapshot.getKey();
-                    if (currentId.equals(nhanVienUpdate.getCccd())) {
-                        continue;
-                    }
-
-                    // Lấy thông tin NhanVien
-                    NhanVien nhanVien = snapshot.getValue(NhanVien.class);
-                    if (nhanVien != null) {
-                        // Kiểm tra trùng lặp sdt và email
-                        if (newSDT.equals(nhanVien.getSdt())) {
-                            sdtExists = true;
-                        }
-                    }
-
-                    // Dừng vòng lặp sớm nếu đã phát hiện trùng lặp
-                    if (sdtExists) {
-                        break;
-                    }
-                }
-
-                if (sdtExists) {
-                    binding.etSDT.setError("Số điện thoại đã được sử dụng");
-                    Toast.makeText(getContext(), "Số điện thoại đã được sử dụng.", Toast.LENGTH_SHORT).show();
-                }
-
-                // Nếu không có trùng lặp, tiến hành cập nhật dữ liệu
-                if (!sdtExists) {
-                    nhanVien.setSdt(newSDT);
-                    Log.d("l.d", "kiemTraSDTEmailTruocKhiLuu: " + nhanVienUpdate.toString());
-                }
-            }
-
-            @Override
-            public void onCancelled(@NonNull DatabaseError databaseError) {
-                Log.e("Firebase", "Lỗi khi kiểm tra trùng lặp: " + databaseError.getMessage());
-            }
-        });
     }
 
     // CUỐI: THIẾT LẬP TOOLBAR VÀ ĐIỀU HƯỚNG
