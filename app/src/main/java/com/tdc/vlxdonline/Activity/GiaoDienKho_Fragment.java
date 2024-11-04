@@ -7,7 +7,6 @@ import android.os.Bundle;
 import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
 import androidx.fragment.app.Fragment;
-import androidx.fragment.app.FragmentTransaction;
 import androidx.recyclerview.widget.GridLayoutManager;
 import androidx.recyclerview.widget.LinearLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
@@ -16,7 +15,6 @@ import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
-import android.widget.LinearLayout;
 import android.widget.SearchView;
 import android.widget.Toast;
 
@@ -26,7 +24,6 @@ import com.google.firebase.database.DatabaseReference;
 import com.google.firebase.database.FirebaseDatabase;
 import com.google.firebase.database.ValueEventListener;
 import com.tdc.vlxdonline.Adapter.CategoryAdapter;
-import com.tdc.vlxdonline.Adapter.DonHangAdapter;
 import com.tdc.vlxdonline.Adapter.ProductAdapter;
 import com.tdc.vlxdonline.Model.Categorys;
 import com.tdc.vlxdonline.Model.ChiTietNhap;
@@ -35,7 +32,6 @@ import com.tdc.vlxdonline.R;
 import com.tdc.vlxdonline.databinding.FragmentGiaoDienKhoBinding;
 
 import java.util.ArrayList;
-import java.util.List;
 
 public class GiaoDienKho_Fragment extends Fragment {
 
@@ -58,6 +54,7 @@ public class GiaoDienKho_Fragment extends Fragment {
     @Override
     public void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
+
     }
 
     @Override
@@ -96,38 +93,45 @@ public class GiaoDienKho_Fragment extends Fragment {
         eventDocDanhSach = new ValueEventListener() {
             @Override
             public void onDataChange(DataSnapshot dataSnapshot) {
-                dsSanPham.clear(); // Xóa danh sách sản phẩm cũ trước khi cập nhật
+                try {
+                    dsSanPham.clear(); // Xóa danh sách sản phẩm cũ trước khi cập nhật
 
-                // Duyệt qua từng sản phẩm trong DataSnapshot
-                for (DataSnapshot snapshot : dataSnapshot.getChildren()) {
-                    Products product = snapshot.getValue(Products.class);
-                    // Kiểm tra danh mục và từ khóa tìm kiếm
-                    if (!category.isEmpty() && !category.equals(product.getDanhMuc())) continue;
-                    if (!tuKhoa.isEmpty() && !product.getTen().contains(tuKhoa) && !product.getMoTa().contains(tuKhoa))
-                        continue;
-                    dsSanPham.add(product); // Thêm sản phẩm vào danh sách
+                    // Duyệt qua từng sản phẩm trong DataSnapshot
+                    for (DataSnapshot snapshot : dataSnapshot.getChildren()) {
+                        Products product = snapshot.getValue(Products.class);
+                        product.setId(snapshot.getKey());
+                        // Kiểm tra danh mục và từ khóa tìm kiếm
+                        if (!category.isEmpty() && !category.equals(product.getDanhMuc())) continue;
+                        if (!tuKhoa.isEmpty() && !product.getTen().contains(tuKhoa) && !product.getMoTa().contains(tuKhoa))
+                            continue;
+                        dsSanPham.add(product); // Thêm sản phẩm vào danh sách
+                    }
+
+                    // Khởi tạo adapter cho sản phẩm
+                    adapterCate = new CategoryAdapter(getActivity(), dsCategory);
+                    adapter = new ProductAdapter(getActivity(), dsSanPham, View.GONE);
+
+                    // Xử lý sự kiện khi sản phẩm được nhấp
+                    adapter.setOnItemProductClickListener(new ProductAdapter.OnItemProductClickListener() {
+                        @Override
+                        public void OnItemClick(View view, int position) {
+                            products = dsSanPham.get(position); // Lấy sản phẩm được chọn
+                            ((Warehouse_HomeActivity) getActivity()).ReplaceFragment(new ChiTietSPKho_Fragment(products.getId())); // Chuyển đến fragment chi tiết sản phẩm
+                        }
+
+                        @Override
+                        public void OnBtnBuyClick(View view, int position) {
+                            // Xử lý sự kiện khi nút mua được nhấp
+                        }
+                    });
+
+                    binding.rcvSanpham1.setLayoutManager(new GridLayoutManager(getActivity(), 2
+
+                    )); // Thiết lập layout cho RecyclerView
+                    binding.rcvSanpham1.setAdapter(adapter); // Gán adapter cho RecyclerView
+                }catch (Exception e){
+                    Log.e("Lỗi", "Lỗi khi thay đổi giá: " + e.getMessage());
                 }
-
-                // Khởi tạo adapter cho sản phẩm
-                adapterCate = new CategoryAdapter(getActivity(), dsCategory);
-                adapter = new ProductAdapter(getActivity(), dsSanPham, View.GONE);
-
-                // Xử lý sự kiện khi sản phẩm được nhấp
-                adapter.setOnItemProductClickListener(new ProductAdapter.OnItemProductClickListener() {
-                    @Override
-                    public void OnItemClick(View view, int position) {
-                        products = dsSanPham.get(position); // Lấy sản phẩm được chọn
-                        ((Warehouse_HomeActivity) getActivity()).ReplaceFragment(new ChiTietSPKho_Fragment(products.getId())); // Chuyển đến fragment chi tiết sản phẩm
-                    }
-
-                    @Override
-                    public void OnBtnBuyClick(View view, int position) {
-                        // Xử lý sự kiện khi nút mua được nhấp
-                    }
-                });
-
-                binding.rcvSanpham1.setLayoutManager(new GridLayoutManager(getActivity(), 2)); // Thiết lập layout cho RecyclerView
-                binding.rcvSanpham1.setAdapter(adapter); // Gán adapter cho RecyclerView
             }
 
             @Override
@@ -167,7 +171,8 @@ public class GiaoDienKho_Fragment extends Fragment {
                                 category = dsCategory.get(position).getId(); // Cập nhật danh mục hiện tại
                                 Drawable drawable = getActivity().getDrawable(R.drawable.bg_detail); // Lấy hình nền
                                 view.setBackground(drawable); // Thiết lập màu nền cho view hiện tại
-                                if (preView != null) preView.setBackgroundColor(Color.TRANSPARENT); // Đặt màu nền view trước đó về trong suốt
+                                if (preView != null)
+                                    preView.setBackgroundColor(Color.TRANSPARENT); // Đặt màu nền view trước đó về trong suốt
                                 preView = view; // Cập nhật view trước đó
                             }
                             reference.child("products").addListenerForSingleValueEvent(eventDocDanhSach); // Tải lại danh sách sản phẩm
@@ -196,5 +201,17 @@ public class GiaoDienKho_Fragment extends Fragment {
         binding = FragmentGiaoDienKhoBinding.inflate(inflater, container, false); // Tạo binding cho fragment
         // Inflate the layout cho fragment này
         return binding.getRoot(); // Trả về root view
+    }
+
+    @Override
+    public void onDestroyView() {
+        super.onDestroyView();
+        binding = null;
+
+        if (eventDocDanhSach != null) {
+            reference.removeEventListener(eventDocDanhSach);
+        }
+        eventDocDanhSach = null;
+        reference = null;
     }
 }

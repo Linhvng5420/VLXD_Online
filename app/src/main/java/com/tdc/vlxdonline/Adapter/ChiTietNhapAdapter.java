@@ -17,12 +17,12 @@ import com.tdc.vlxdonline.R;
 
 import java.util.ArrayList;
 
-public class DonHangAdapter extends RecyclerView.Adapter<DonHangAdapter.ChiTietViewHolder> {
+public class ChiTietNhapAdapter extends RecyclerView.Adapter<ChiTietNhapAdapter.ChiTietViewHolder> {
 
     private Context context;
     private ArrayList<ChiTietNhap> dsChiTiet;
 
-    public DonHangAdapter(Context context, ArrayList<ChiTietNhap> dsChiTiet) {
+    public ChiTietNhapAdapter(Context context, ArrayList<ChiTietNhap> dsChiTiet) {
         this.context = context;
         this.dsChiTiet = dsChiTiet;
     }

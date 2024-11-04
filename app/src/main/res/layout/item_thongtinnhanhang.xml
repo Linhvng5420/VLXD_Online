@@ -24,6 +24,7 @@
             android:textSize="16dp" />
 
         <TextView
+            android:id="@+id/tv_maNhap"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:text=" 1900-1000"
@@ -43,13 +44,14 @@
         <TextView
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:text="Địa Chỉ: "
+            android:text="Ngày nhập: "
             android:textSize="16dp" />
 
         <TextView
+            android:id="@+id/tv_ngayNhap"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:text="TP.HCM"
+            android:text="20/11/2002"
             android:textSize="16dp"
 
             />
@@ -63,37 +65,19 @@
         <TextView
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:text="Sản Phẩm: "
+            android:text="Tổng tiền: "
             android:textSize="16dp" />
 
         <TextView
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:text="20"
+            android:id="@+id/tv_tongTien_nhap"
+            android:layout_width="match_parent"
+            android:layout_height="match_parent"
+            android:text="500.000"
             android:textSize="16dp"
 
             />
 
-        <LinearLayout
-            android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            android:layout_marginLeft="50dp"
-            android:orientation="horizontal">
 
-            <TextView
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:text="Số lượng: "
-                android:textSize="16dp" />
-
-            <TextView
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:text="100"
-                android:textSize="16dp"
-
-                />
-        </LinearLayout>
 
     </LinearLayout>
 

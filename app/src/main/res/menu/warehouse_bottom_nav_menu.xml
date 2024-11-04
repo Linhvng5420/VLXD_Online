@@ -13,6 +13,12 @@
         android:title="Đơn Hàng" />
 
     <item
+        android:id="@+id/nav_warehouse_nhapkho"
+        android:icon="@drawable/add_donhang"
+        android:orderInCategory="3"
+        android:title="Nhập Kho" />
+
+    <item
         android:id="@+id/nav_warehouse_daxuat"
         android:icon="@drawable/nav_dagiao"
         android:orderInCategory="3"

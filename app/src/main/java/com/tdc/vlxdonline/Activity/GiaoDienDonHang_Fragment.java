@@ -1,30 +1,22 @@
 package com.tdc.vlxdonline.Activity;
 
-import android.graphics.Color;
 import android.os.Bundle;
 
 import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
 import androidx.fragment.app.Fragment;
-import androidx.recyclerview.widget.GridLayoutManager;
-import androidx.recyclerview.widget.LinearLayoutManager;
-import androidx.recyclerview.widget.RecyclerView;
 
-import android.text.Editable;
-import android.text.TextWatcher;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
-import android.widget.Toast;
 
 import com.tdc.vlxdonline.R;
 import com.tdc.vlxdonline.databinding.FragmentGiaoDienDonHangBinding;
 
-import java.util.ArrayList;
-
 public class GiaoDienDonHang_Fragment extends Fragment {
 
     FragmentGiaoDienDonHangBinding binding;
+
 
     public GiaoDienDonHang_Fragment() {
         // Required empty public constructor
@@ -51,12 +43,7 @@ public class GiaoDienDonHang_Fragment extends Fragment {
             @Override
             public void onClick(View v) {
                 // Gọi phương thức để chuyển sang Fragment khác
-                TaoDonNhapHangFragment taoDonNhapHangFragment = new TaoDonNhapHangFragment();
-                getActivity().getSupportFragmentManager()
-                        .beginTransaction()
-                        .replace(R.id.fragment_container, taoDonNhapHangFragment) // Đảm bảo ID này đúng với container của bạn
-                        .addToBackStack(null) // Thêm vào back stack để có thể quay lại
-                        .commit();
+                ((Warehouse_HomeActivity)getActivity()).ReplaceFragment(new TaoDonNhapHangFragment());
             }
         });
         binding.btnLoadDH.setOnClickListener(new View.OnClickListener() {

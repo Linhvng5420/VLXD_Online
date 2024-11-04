@@ -1,34 +1,24 @@
 package com.tdc.vlxdonline.Activity;
 
 // Các import cần thiết
-import android.app.Activity;
 import android.content.Context;
-import android.content.Intent;
-import android.content.pm.PackageManager;
 import android.graphics.Color;
-import android.net.Uri;
 import android.os.Bundle;
 
 import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
-import androidx.core.app.ActivityCompat;
-import androidx.core.content.ContextCompat;
 import androidx.fragment.app.Fragment;
 import androidx.recyclerview.widget.GridLayoutManager;
 import androidx.recyclerview.widget.LinearLayoutManager;
 
 import android.text.Editable;
 import android.text.TextWatcher;
-import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.MotionEvent;
 import android.view.View;
 import android.view.ViewGroup;
 import android.view.inputmethod.InputMethodManager;
-import android.widget.Button;
-import android.widget.ImageView;
 import android.widget.SearchView;
-import android.widget.Spinner;
 import android.widget.Toast;
 
 import com.google.firebase.database.DataSnapshot;
@@ -36,14 +26,12 @@ import com.google.firebase.database.DatabaseError;
 import com.google.firebase.database.DatabaseReference;
 import com.google.firebase.database.FirebaseDatabase;
 import com.google.firebase.database.ValueEventListener;
-import com.tdc.vlxdonline.Adapter.CategoryAdapter;
-import com.tdc.vlxdonline.Adapter.DonHangAdapter;
+import com.tdc.vlxdonline.Adapter.ChiTietNhapAdapter;
 import com.tdc.vlxdonline.Adapter.ProductAdapter;
 
 import com.tdc.vlxdonline.Model.ChiTietNhap;
 import com.tdc.vlxdonline.Model.DonNhap;
 import com.tdc.vlxdonline.Model.Products;
-import com.tdc.vlxdonline.R;
 import com.tdc.vlxdonline.databinding.FragmentTaoDonNhapHangBinding;
 
 import java.util.ArrayList;
@@ -52,7 +40,7 @@ public class TaoDonNhapHangFragment extends Fragment {
     FragmentTaoDonNhapHangBinding binding; // Binding để kết nối với layout
     ArrayList<Products> dsSanPham = new ArrayList<>(); // Danh sách sản phẩm
     ProductAdapter adapter; // Adapter cho danh sách sản phẩm
-    DonHangAdapter donHangAdapter; // Adapter cho đơn hàng
+    ChiTietNhapAdapter chiTietNhapAdapter; // Adapter cho đơn hàng
     ArrayList<ChiTietNhap> dsChiTiet = new ArrayList<>(); // Danh sách chi tiết nhập
     ChiTietNhap temp; // Thông tin chi tiết nhập tạm thời
     Products products = new Products(); // Sản phẩm hiện tại
@@ -63,6 +51,7 @@ public class TaoDonNhapHangFragment extends Fragment {
     View preView = null; // View trước đó để quản lý giao diện
     int SoLuong = 0; // Số lượng sản phẩm
     DonNhap donNhap = new DonNhap(); // Đơn nhập hiện tại
+    int viTri = -1;
 
     @Override
     public void onCreate(Bundle savedInstanceState) {
@@ -78,9 +67,9 @@ public class TaoDonNhapHangFragment extends Fragment {
         reference = FirebaseDatabase.getInstance().getReference(); // Khởi tạo tham chiếu đến Firebase
         setHienThiSanPham(); // Thiết lập hiển thị sản phẩm
 
-        donHangAdapter = new DonHangAdapter(getActivity(), dsChiTiet); // Khởi tạo adapter cho chi tiết đơn hàng
+        chiTietNhapAdapter = new ChiTietNhapAdapter(getActivity(), dsChiTiet); // Khởi tạo adapter cho chi tiết đơn hàng
         binding.rcvChitiet.setLayoutManager(new LinearLayoutManager(getActivity())); // Thiết lập layout cho RecyclerView
-        binding.rcvChitiet.setAdapter(donHangAdapter); // Gán adapter vào RecyclerView
+        binding.rcvChitiet.setAdapter(chiTietNhapAdapter); // Gán adapter vào RecyclerView
 
         // Thêm sự kiện tìm kiếm cho SearchView
         binding.svDonhang.setOnQueryTextListener(new SearchView.OnQueryTextListener() {
@@ -122,104 +111,117 @@ public class TaoDonNhapHangFragment extends Fragment {
             public void afterTextChanged(Editable editable) {}
         });
 
-        // Theo dõi sự thay đổi giá nhập
-        binding.edtGia.addTextChangedListener(new TextWatcher() {
-            @Override
-            public void beforeTextChanged(CharSequence charSequence, int i, int i1, int i2) {}
-
-            @Override
-            public void onTextChanged(CharSequence charSequence, int i, int i1, int i2) {
-                String chuoi = binding.edtGia.getText().toString();
-                if (chuoi.isEmpty()) {
-                    binding.edtGia.setText("1"); // Mặc định giá là 1
-                }
-            }
-
-            @Override
-            public void afterTextChanged(Editable editable) {}
-        });
-
         // Thêm sản phẩm vào đơn nhập
         binding.btnThem.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
                 String sl = binding.edtSoLuong.getText().toString();
-                String gia = binding.edtGia.getText().toString();
-                if (!sl.isEmpty() && !gia.isEmpty() && temp.getTen() != null) {
+                if (!sl.isEmpty() && temp.getTen() != null) {
                     temp.setSoLuong(Integer.parseInt(sl)); // Cập nhật số lượng
-                    temp.setGia(Integer.parseInt(gia)); // Cập nhật giá
                     dsChiTiet.add(temp); // Thêm vào danh sách chi tiết nhập
                     donNhap.setTongTien(donNhap.getTongTien() + (temp.getSoLuong() * temp.getGia())); // Cập nhật tổng tiền
                     temp = new ChiTietNhap(donNhap.getId()); // Tạo đối tượng chi tiết nhập mới
-                    donHangAdapter.notifyDataSetChanged(); // Cập nhật adapter
+                    chiTietNhapAdapter.notifyDataSetChanged(); // Cập nhật adapter
                 } else {
                     Toast.makeText(getActivity(), "Hãy chọn sản phẩm và nhâp đủ thông tin !!!", Toast.LENGTH_SHORT).show(); // Thông báo lỗi
                 }
             }
         });
 
-        // Quay lại fragment trước đó
+        // Quay về giao diện trước
         binding.btnBack.setOnClickListener(new View.OnClickListener() {
             @Override
-            public void onClick(View v) {
-                requireActivity().onBackPressed();
+            public void onClick(View view) {
+                ((Warehouse_HomeActivity)getActivity()).ReplaceFragment(new GiaoDienDonHang_Fragment());
             }
         });
+
+        // Quay lại fragment trước đó
+//        binding.btnBack.setOnClickListener(new View.OnClickListener() {
+//            @Override
+//            public void onClick(View v) {
+//                requireActivity().onBackPressed();
+//            }
+//        });
     }
 
     // Phương thức để tải lên đơn nhập
     private void upLoad() {
         if (dsChiTiet.size() > 0) { // Kiểm tra danh sách chi tiết nhập
-            reference.child("donnhap").child(donNhap.getId() + "").setValue(donNhap); // Lưu đơn nhập vào Firebase
+            reference.child("donNhap").child(donNhap.getId() + "").setValue(donNhap); // Lưu đơn nhập vào Firebase
             for (int i = 0; i < dsChiTiet.size(); i++) {
-                reference.child("chiTietNhap").child(donNhap.getId() + "").child(dsChiTiet.get(i).getIdSanPham()).setValue(dsChiTiet.get(i)); // Lưu chi tiết nhập
+                String idSP = dsChiTiet.get(i).getIdSanPham();
+                reference.child("products").child(idSP).child("tonKho").setValue(dsChiTiet.get(i).getSoLuong() + Integer.parseInt(laySP(idSP).getTonKho()) + "");
+                reference.child("chiTietNhap").child(donNhap.getId() + "").child(idSP).setValue(dsChiTiet.get(i)); // Lưu chi tiết nhập
             }
             Toast.makeText(getActivity(), "Tạo đơn nhập kho thành công", Toast.LENGTH_SHORT).show(); // Thông báo thành công
             donNhap = new DonNhap(); // Tạo đơn nhập mới
             temp = new ChiTietNhap(donNhap.getId()); // Tạo đối tượng chi tiết nhập mới
             dsChiTiet.clear(); // Xóa danh sách chi tiết nhập
-            donHangAdapter.notifyDataSetChanged(); // Cập nhật adapter
+            chiTietNhapAdapter.notifyDataSetChanged(); // Cập nhật adapter
         } else {
             Toast.makeText(getActivity(), "Chưa có thông tin nhập hàng", Toast.LENGTH_SHORT).show(); // Thông báo chưa có thông tin
         }
     }
 
+    private Products laySP(String id){
+        for (int i = 0; i < dsSanPham.size(); i++) {
+            Products p = dsSanPham.get(i);
+            if (p.getId().equals(id)){
+                return p;
+            }
+        }
+        return null;
+    }
     // Phương thức thiết lập hiển thị sản phẩm
     private void setHienThiSanPham() {
         temp = new ChiTietNhap(donNhap.getId()); // Khởi tạo chi tiết nhập
         eventDocDanhSach = new ValueEventListener() {
             @Override
             public void onDataChange(DataSnapshot dataSnapshot) {
-                dsSanPham.clear(); // Xóa danh sách cũ
-                for (DataSnapshot snapshot : dataSnapshot.getChildren()) {
-                    Products product = snapshot.getValue(Products.class); // Lấy sản phẩm từ snapshot
-                    if (!category.isEmpty() && !category.equals(product.getDanhMuc())) continue; // Kiểm tra danh mục
-                    if (!tuKhoa.isEmpty() && !product.getTen().contains(tuKhoa) && !product.getMoTa().contains(tuKhoa)) continue; // Kiểm tra từ khóa
-                    dsSanPham.add(product); // Thêm sản phẩm vào danh sách
-                }
-
-                adapter = new ProductAdapter(getActivity(), dsSanPham, View.GONE); // Khởi tạo adapter cho sản phẩm
-
-                // Sự kiện khi nhấn vào sản phẩm
-                adapter.setOnItemProductClickListener(new ProductAdapter.OnItemProductClickListener() {
-                    @Override
-                    public void OnItemClick(View view, int position) {
-                        products = dsSanPham.get(position); // Lấy sản phẩm đã chọn
-                        Toast.makeText(getActivity(), "Bạn đã chọn sản phẩm " + products.getTen(), Toast.LENGTH_SHORT).show(); // Thông báo sản phẩm đã chọn
-                        temp.setAnh(products.getAnh()); // Cập nhật ảnh
-                        temp.setTen(products.getTen()); // Cập nhật tên
-                        temp.setIdSanPham(products.getId()); // Cập nhật ID sản phẩm
-                        view.setBackgroundColor(Color.rgb(0, 255, 255)); // Đổi màu nền cho sản phẩm đã chọn
+                try {
+                    dsSanPham.clear(); // Xóa danh sách cũ
+                    for (DataSnapshot snapshot : dataSnapshot.getChildren()) {
+                        Products product = snapshot.getValue(Products.class); // Lấy sản phẩm từ snapshot
+                        product.setId(snapshot.getKey());
+                        if (!category.isEmpty() && !category.equals(product.getDanhMuc())) continue; // Kiểm tra danh mục
+                        if (!tuKhoa.isEmpty() && !product.getTen().contains(tuKhoa) && !product.getMoTa().contains(tuKhoa)) continue; // Kiểm tra từ khóa
+                        dsSanPham.add(product); // Thêm sản phẩm vào danh sách
                     }
 
-                    @Override
-                    public void OnBtnBuyClick(View view, int position) {
-                        // Có thể thêm logic cho nút mua nếu cần
-                    }
-                });
+                    adapter = new ProductAdapter(getActivity(), dsSanPham, View.GONE); // Khởi tạo adapter cho sản phẩm
 
-                binding.rcvSanpham.setLayoutManager(new GridLayoutManager(getActivity(), 2)); // Thiết lập layout cho RecyclerView sản phẩm
-                binding.rcvSanpham.setAdapter(adapter); // Gán adapter vào RecyclerView
+                    // Sự kiện khi nhấn vào sản phẩm
+                    adapter.setOnItemProductClickListener(new ProductAdapter.OnItemProductClickListener() {
+                        @Override
+                        public void OnItemClick(View view, int position) {
+                            if (viTri != position){
+                                if (preView != null) preView.setBackgroundColor(Color.TRANSPARENT);
+                                preView = view;
+                                viTri = position;
+                                products = dsSanPham.get(position); // Lấy sản phẩm đã chọn
+                                Toast.makeText(getActivity(), "Bạn đã chọn sản phẩm " + products.getTen(), Toast.LENGTH_SHORT).show(); // Thông báo sản phẩm đã chọn
+                                temp.setAnh(products.getAnh()); // Cập nhật ảnh
+                                temp.setTen(products.getTen()); // Cập nhật tên
+                                temp.setIdSanPham(products.getId()); // Cập nhật ID sản phẩm
+                                temp.setGia(Integer.parseInt(products.getGiaNhap()));
+                                view.setBackgroundColor(Color.rgb(0, 255, 255)); // Đổi màu nền cho sản phẩm đã chọn
+                            }else {
+                                preView.setBackgroundColor(Color.TRANSPARENT);
+                                preView = null;
+                                viTri = -1;
+                            }
+                        }
+
+                        @Override
+                        public void OnBtnBuyClick(View view, int position) {
+                            // Có thể thêm logic cho nút mua nếu cần
+                        }
+                    });
+
+                    binding.rcvSanpham.setLayoutManager(new GridLayoutManager(getActivity(), 2)); // Thiết lập layout cho RecyclerView sản phẩm
+                    binding.rcvSanpham.setAdapter(adapter); // Gán adapter vào RecyclerView
+                }catch (Exception e){}
             }
 
             @Override
@@ -230,6 +232,7 @@ public class TaoDonNhapHangFragment extends Fragment {
 
         reference.child("products").addValueEventListener(eventDocDanhSach); // Lắng nghe thay đổi trong danh sách sản phẩm
     }
+
 
     // Phương thức để ẩn bàn phím
     public void hideKeyboard(View view) {

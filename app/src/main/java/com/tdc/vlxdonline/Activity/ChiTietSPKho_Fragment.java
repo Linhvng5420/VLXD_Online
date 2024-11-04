@@ -4,9 +4,10 @@ import android.app.AlertDialog;
 import android.content.DialogInterface;
 import android.os.Bundle;
 
-import androidx.annotation.NonNull;
 import androidx.fragment.app.Fragment;
 
+import android.text.Editable;
+import android.text.TextWatcher;
 import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
@@ -20,7 +21,6 @@ import com.google.firebase.database.DatabaseReference;
 import com.google.firebase.database.FirebaseDatabase;
 import com.google.firebase.database.ValueEventListener;
 import com.tdc.vlxdonline.Model.Products;
-import com.tdc.vlxdonline.R;
 import com.tdc.vlxdonline.databinding.FragmentChiTietSpKhoBinding;
 
 public class ChiTietSPKho_Fragment extends Fragment {
@@ -53,6 +53,25 @@ public class ChiTietSPKho_Fragment extends Fragment {
                 requireActivity().onBackPressed(); // Quay về activity trước
             }
         });
+        binding.edtThayDoiGia.addTextChangedListener(new TextWatcher() {
+            @Override
+            public void beforeTextChanged(CharSequence charSequence, int i, int i1, int i2) {
+
+            }
+
+            @Override
+            public void onTextChanged(CharSequence charSequence, int i, int i1, int i2) {
+                String gia = binding.edtThayDoiGia.getText().toString();
+                if (gia.length() > 10) {
+                    binding.edtThayDoiGia.setText(gia.substring(0, 10));
+                }
+            }
+
+            @Override
+            public void afterTextChanged(Editable editable) {
+
+            }
+        });
 
         // Listener cho nút thêm số lượng
         binding.btnThemSoLuong.setOnClickListener(new View.OnClickListener() {
@@ -63,9 +82,6 @@ public class ChiTietSPKho_Fragment extends Fragment {
         });
 
         // Listener cho nút giảm số lượng
-        binding.btnGiamSoLuong.setOnClickListener(view -> {
-            showConfirm1(); // Hiển thị hộp thoại xác nhận giảm số lượng
-        });
 
         // Inflate layout cho fragment này
         return binding.getRoot();
@@ -74,11 +90,11 @@ public class ChiTietSPKho_Fragment extends Fragment {
     // Phương thức để hiển thị hộp thoại xác nhận cho việc thêm số lượng
     private void showConfirm() {
         AlertDialog.Builder builder = new AlertDialog.Builder(getActivity());
-        builder.setMessage("Bạn có chắc chắn thêm số lượng ?") // Thông điệp bằng tiếng Việt
+        builder.setMessage("Bạn có chắc chắn thay đổi giá ?") // Thông điệp bằng tiếng Việt
                 .setCancelable(false)
                 .setPositiveButton("Có", new DialogInterface.OnClickListener() {
                     public void onClick(DialogInterface dialog, int id) {
-                        themSoLuong(); // Gọi phương thức thêm số lượng
+                        thayDoiGia(); // Gọi phương thức thêm số lượng
                     }
                 })
                 .setNegativeButton("Không", new DialogInterface.OnClickListener() {
@@ -91,50 +107,38 @@ public class ChiTietSPKho_Fragment extends Fragment {
     }
 
     // Phương thức để hiển thị hộp thoại xác nhận cho việc giảm số lượng
-    private void showConfirm1() {
-        AlertDialog.Builder builder = new AlertDialog.Builder(getActivity());
-        builder.setMessage("Bạn có chắc chắn giảm số lượng ?") // Thông điệp bằng tiếng Việt
-                .setCancelable(false)
-                .setPositiveButton("Có", new DialogInterface.OnClickListener() {
-                    public void onClick(DialogInterface dialog, int id) {
-                        giamSoLuong(); // Gọi phương thức giảm số lượng
-                    }
-                })
-                .setNegativeButton("Không", new DialogInterface.OnClickListener() {
-                    public void onClick(DialogInterface dialog, int id) {
-                        dialog.cancel(); // Đóng hộp thoại
-                    }
-                });
-        AlertDialog alert = builder.create();
-        alert.show(); // Hiển thị hộp thoại
-    }
+
 
     // Phương thức để thêm số lượng vào kho sản phẩm
-    private void themSoLuong() {
-        String soLuongNhap = binding.edtNhapsoluong.getText().toString(); // Lấy số lượng nhập vào
+    private void thayDoiGia() {
+        String giaBanMoi = binding.edtThayDoiGia.getText().toString(); // Lấy số lượng nhập vào
 
-        if (!soLuongNhap.isEmpty()) {
-            int soLuongThem = Integer.parseInt(soLuongNhap); // Chuyển đổi số lượng nhập thành số nguyên
+        if (!giaBanMoi.isEmpty()) {
+
+            int giaMoi = Integer.parseInt(giaBanMoi); // Chuyển đổi số lượng nhập thành số nguyên
             DatabaseReference reference = FirebaseDatabase.getInstance().getReference();
+
 
             // Lấy số lượng hiện có từ Firebase
             reference.child("products").child(idProduct).addListenerForSingleValueEvent(new ValueEventListener() {
                 @Override
                 public void onDataChange(DataSnapshot snapshot) {
-                    Products product = snapshot.getValue(Products.class); // Lấy thông tin sản phẩm
-                    if (product != null) {
-                        int currentStock = Integer.parseInt(product.getTonKho()); // Lấy số lượng hiện tại
-                        int updatedStock = currentStock + soLuongThem; // Tính toán số lượng đã cập nhật
+                    try {
+                        Products product = snapshot.getValue(Products.class); // Lấy thông tin sản phẩm
+                        if (product != null) {
 
-                        // Cập nhật số lượng trong kho lên Firebase
-                        reference.child("products").child(idProduct).child("tonKho").setValue(String.valueOf(updatedStock))
-                                .addOnSuccessListener(aVoid -> {
-                                    Toast.makeText(getActivity(), "Đã thêm số lượng vào kho!", Toast.LENGTH_SHORT).show();
-                                    binding.tvTonKhoDetail.setText("Kho: " + updatedStock); // Cập nhật UI
-                                    binding.edtNhapsoluong.setText(""); // Xóa ô nhập
-                                })
-                                .addOnFailureListener(e ->
-                                        Toast.makeText(getActivity(), "Không thể cập nhật số lượng!", Toast.LENGTH_SHORT).show()); // Xử lý lỗi
+                            // Cập nhật số lượng trong kho lên Firebase
+                            reference.child("products").child(idProduct).child("giaBan").setValue(String.valueOf(giaMoi))
+                                    .addOnSuccessListener(aVoid -> {
+                                        Toast.makeText(getActivity(), "Đã thay doi gia san pham!", Toast.LENGTH_SHORT).show();
+                                        binding.tvGiaSpDetail.setText(giaMoi + " VND"); // Cập nhật UI
+                                        binding.edtThayDoiGia.setText(""); // Xóa ô nhập
+                                    })
+                                    .addOnFailureListener(e ->
+                                            Toast.makeText(getActivity(), "Không thể cập nhật gia!", Toast.LENGTH_SHORT).show()); // Xử lý lỗi
+                        }
+                    }catch (Exception e){
+                        Log.e("Lỗi", "Lỗi khi thay đổi giá: " + e.getMessage());
                     }
                 }
 
@@ -144,47 +148,10 @@ public class ChiTietSPKho_Fragment extends Fragment {
                 }
             });
 
+
         } else {
-            Toast.makeText(getActivity(), "Vui lòng nhập số lượng!", Toast.LENGTH_SHORT).show(); // Yêu cầu nhập số lượng
+            Toast.makeText(getActivity(), "Vui lòng nhập giá cần đổi!", Toast.LENGTH_SHORT).show(); // Yêu cầu nhập số lượng
         }
-    }
-
-    // Phương thức để giảm số lượng từ kho sản phẩm
-    private void giamSoLuong() {
-        String inputQuantityStr = binding.edtNhapsoluong.getText().toString().trim(); // Lấy số lượng nhập vào
-
-        if (inputQuantityStr.isEmpty()) {
-            Toast.makeText(getActivity(), "Vui lòng nhập số lượng cần giảm!", Toast.LENGTH_SHORT).show(); // Yêu cầu nhập số lượng
-            return;
-        }
-        int inputQuantity = Integer.parseInt(inputQuantityStr); // Chuyển đổi số lượng nhập thành số nguyên
-
-        DatabaseReference reference = FirebaseDatabase.getInstance().getReference();
-        // Lấy số lượng hiện có từ Firebase
-        reference.child("products").child(idProduct).addListenerForSingleValueEvent(new ValueEventListener() {
-            @Override
-            public void onDataChange(@NonNull DataSnapshot dataSnapshot) {
-                Products product = dataSnapshot.getValue(Products.class); // Lấy thông tin sản phẩm
-                if (product != null) {
-                    // Lấy số lượng hiện tại và giảm số lượng nhập vào, đảm bảo không âm
-                    int currentStock = Integer.parseInt(product.getTonKho());
-                    if (inputQuantity <= currentStock) {
-                        currentStock -= inputQuantity; // Cập nhật số lượng
-                        reference.child("products").child(idProduct).child("tonKho").setValue(String.valueOf(currentStock)); // Cập nhật Firebase
-                        binding.tvTonKhoDetail.setText("Kho: " + currentStock); // Cập nhật UI
-                        Toast.makeText(getActivity(), "Giảm thành công!", Toast.LENGTH_SHORT).show(); // Thông báo thành công
-                        binding.edtNhapsoluong.setText(""); // Xóa ô nhập
-                    } else {
-                        Toast.makeText(getActivity(), "Số lượng > 0", Toast.LENGTH_SHORT).show(); // Lỗi số lượng không hợp lệ
-                    }
-                }
-            }
-
-            @Override
-            public void onCancelled(@NonNull DatabaseError databaseError) {
-                Toast.makeText(getActivity(), "Lỗi khi cập nhật số lượng", Toast.LENGTH_SHORT).show(); // Xử lý lỗi
-            }
-        });
     }
 
     // Phương thức để tải dữ liệu sản phẩm từ Firebase
@@ -200,7 +167,7 @@ public class ChiTietSPKho_Fragment extends Fragment {
                         Glide.with(getActivity()).load(product.getAnh()).into(binding.ivAnhChinh);
                         Glide.with(getActivity()).load(product.getAnh()).into(binding.imgDetail);
                         binding.tvTenSpDetail.setText(product.getTen());
-                        binding.tvGiaSpDetail.setText(product.getGia() + " VND");
+                        binding.tvGiaSpDetail.setText(product.getGiaBan() + " VND");
                         binding.tvTonKhoDetail.setText("Kho: " + product.getTonKho());
                         binding.tvDaBanDetail.setText("Đã Bán: " + product.getDaBan());
                         binding.tvDonViDetail.setText(product.getDonVi());
