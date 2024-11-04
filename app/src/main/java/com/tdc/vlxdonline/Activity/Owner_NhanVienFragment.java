@@ -39,7 +39,7 @@ public class Owner_NhanVienFragment extends Fragment {
     String emailLogin = null;
 
     // Lưu lại danh sách nhân viên ban đầu trước khi tìm kiếm
-    private List<NhanVien> dsNhanVienBanDau = new ArrayList<>();
+    private List<NhanVien> dsNhanVien = new ArrayList<>();
 
     @Override
     public void onCreate(@Nullable Bundle savedInstanceState) {
@@ -75,7 +75,7 @@ public class Owner_NhanVienFragment extends Fragment {
         ownerNhanvienBinding.ownerRcvNhanVien.setAdapter(nhanVienAdapter);
 
         // Firebase: lấy dữ liệu từ Firebase
-        getNhanVienData();
+        hienThiDSNhanVien();
 
         // Bắt sự kiện khi nhấn vào recycleview nhân viên
         nhanVaoItemNhanVien();
@@ -94,7 +94,7 @@ public class Owner_NhanVienFragment extends Fragment {
         });
     }
 
-    private void getNhanVienData() {
+    private void hienThiDSNhanVien() {
 
         // TODO: Thoát ứng dụng khi chưa đăng nhập mà vào được trang quản lý
         if (emailLogin == null) {
@@ -109,7 +109,7 @@ public class Owner_NhanVienFragment extends Fragment {
             public void onDataChange(@NonNull DataSnapshot dataSnapshot) {
                 // Xóa danh sách cũ trước khi thêm dữ liệu mới
                 nhanVienAdapter.getNhanVienList().clear();
-                dsNhanVienBanDau.clear(); // Xóa danh sách gốc để thêm dữ liệu mới
+                dsNhanVien.clear();
 
                 // Lặp qua tất cả các DataSnapshot con để lấy thông tin nhân viên
                 for (DataSnapshot snapshot : dataSnapshot.getChildren()) {
@@ -123,14 +123,13 @@ public class Owner_NhanVienFragment extends Fragment {
                         // Nếu emailUser là admin, hiển thị tất cả nhân viên có trong Firebase
                         if (emailLogin != null && "admin@tdc.com".equals(emailLogin)) {
                             nhanVienAdapter.getNhanVienList().add(nhanVien);
-                            dsNhanVienBanDau.add(nhanVien); // Lưu vào danh sách gốc
-                        }
-
-                        // Chủ cửa hàng đăng nhập, hiển thị nhân viên của chủ cửa hàng
-                        if (emailLogin != null && nhanVien.getEmailchu().equals(emailLogin)) {
-                            nhanVienAdapter.getNhanVienList().add(nhanVien);
-                            dsNhanVienBanDau.add(nhanVien); // Lưu vào danh sách gốc
-                        }
+                            dsNhanVien.add(nhanVien); // Lưu vào danh sách gốc
+                        } else
+                            // Chủ cửa hàng đăng nhập, hiển thị nhân viên của chủ cửa hàng
+                            if (emailLogin != null && nhanVien.getEmailchu().equals(emailLogin)) {
+                                nhanVienAdapter.getNhanVienList().add(nhanVien);
+                                dsNhanVien.add(nhanVien); // Lưu vào danh sách gốc
+                            }
                     } else
                         Toast.makeText(getContext(), "Danh Sách Nhân Viên Rỗng", Toast.LENGTH_SHORT).show();
                 }
@@ -212,7 +211,7 @@ public class Owner_NhanVienFragment extends Fragment {
             public boolean onQueryTextChange(String newText) {
                 // Kiểm tra nếu từ khóa rỗng, trả lại danh sách ban đầu
                 if (newText.isEmpty()) {
-                    nhanVienAdapter.updateList(new ArrayList<>(dsNhanVienBanDau)); // Cập nhật lại danh sách ban đầu
+                    nhanVienAdapter.updateList(new ArrayList<>(dsNhanVien)); // Cập nhật lại danh sách ban đầu
                 } else {
                     // Gọi hàm filter để tìm kiếm nhân viên
                     filterNhanVien(newText);
@@ -232,7 +231,7 @@ public class Owner_NhanVienFragment extends Fragment {
     private void filterNhanVien(String query) {
         List<NhanVien> filteredList = new ArrayList<>();
 
-        for (NhanVien nhanVien : dsNhanVienBanDau) {
+        for (NhanVien nhanVien : dsNhanVien) {
             // Kiểm tra nếu tên hoặc ID của nhân viên chứa từ khóa tìm kiếm (không phân biệt chữ hoa/chữ thường)
             if (nhanVien.getTennv().toLowerCase().contains(query.toLowerCase()) ||
                     nhanVien.getCccd().toLowerCase().contains(query.toLowerCase()) ||
