@@ -2,6 +2,7 @@ package com.tdc.vlxdonline.Activity;
 
 import android.Manifest;
 import android.app.Activity;
+import android.app.ProgressDialog;
 import android.content.Intent;
 import android.content.pm.PackageManager;
 import android.net.Uri;
@@ -347,61 +348,86 @@ public class Owner_NhanVienDetailFragment extends Fragment {
 
     private void setupSaveButton() {
         binding.btnLuuLai.setOnClickListener(v -> {
-            // Dữ liệu mới
             nhanVien.setTennv(binding.etTenNhanVien.getText().toString());
             nhanVien.setChucvu(setIDChucVuNhanVien(binding.spinnerChucVu.getSelectedItem().toString()));
             nhanVien.setSdt(binding.etSDT.getText().toString());
             nhanVien.setEmailchu(nhanVien.getEmailchu());
             nhanVien.setEmailnv(nhanVien.getEmailnv());
             String cccd = nhanVien.getCccd();
-            nhanVien.setAnhcc1("N/A");
-            nhanVien.setAnhcc2("N/A");
 
-//            if (batDieuKienDuLieuDauVao(nhanVien) == true && binding.etSDT.getError() == null && binding.etCCCD.getError() == null) {
             if (batDieuKienDuLieuDauVao(nhanVien) == true) {
-                // Tạo hộp thoại xác nhận
-                new AlertDialog.Builder(getContext()).setTitle("Xác Nhận").setMessage("Bạn có chắc chắn muốn lưu thay đổi không?").setPositiveButton("Có", (dialog, which) -> {
+                new AlertDialog.Builder(getContext()).setTitle("Xác Nhận")
+                        .setMessage("Bạn có chắc chắn muốn lưu thay đổi không?")
+                        .setPositiveButton("Có", (dialog, which) -> {
 
-                    // Gọi hàm upload ảnh
-                    uploadAnh();
+                            // Tạo và hiển thị ProgressDialog
+                            ProgressDialog progressDialog = new ProgressDialog(getContext());
+                            progressDialog.setMessage("Đang tải ảnh lên...");
+                            progressDialog.setCancelable(false);  // Ngăn người dùng đóng dialog khi đang tải
+                            progressDialog.show();
 
-                    // Cập nhật thông tin nhân viên trong Firebase (Realtime Database)
-                    DatabaseReference dbNhanVien = FirebaseDatabase.getInstance().getReference("nhanvien");
+                            // Gọi hàm upload ảnh và cập nhật nhanVien sau khi ảnh đã upload
+                            uploadAnh(() -> {
+                                // Đóng ProgressDialog sau khi upload hoàn tất
+                                progressDialog.dismiss();
 
-                    // Trong fb không có field cccd
-                    nhanVien.setCccd(null);
+                                // Sau khi upload thành công, cập nhật thông tin nhân viên trong Firebase
+                                DatabaseReference dbNhanVien = FirebaseDatabase.getInstance().getReference("nhanvien");
 
-                    dbNhanVien.child(cccd).setValue(nhanVien).addOnSuccessListener(aVoid -> {
-                        // Xử lý thành công
-                        Toast.makeText(getContext(), "Cập nhật thành công", Toast.LENGTH_SHORT).show();
+                                // Trong fb không có field cccd
+                                nhanVien.setCccd(null);
 
-                        // Vô hiệu hóa các trường chỉnh sửa sau khi lưu
-                        binding.etTenNhanVien.setEnabled(false);
-                        binding.etSDT.setEnabled(false);
-
-                        // Ẩn Spinner và hiển thị TextView cho chức vụ
-                        binding.tilChucVu.setVisibility(View.VISIBLE);
-                        binding.etChucVu.setVisibility(View.VISIBLE);
-                        binding.spinnerChucVu.setVisibility(View.INVISIBLE);
-                        binding.tvChucVu.setVisibility(View.INVISIBLE);
-
-                        // Ẩn nút Lưu Lại, Xóa, Hủy và Hiển thị nút Sửa sau khi lưu
-                        binding.btnLuuLai.setVisibility(View.INVISIBLE);
-                        binding.btnHuy.setVisibility(View.VISIBLE);
-                        binding.btnXoa.setVisibility(View.INVISIBLE);
-                        binding.btnHuy.setVisibility(View.INVISIBLE);
-                        binding.btnChinhSua.setVisibility(View.VISIBLE);
-
-                        // Vô hiệu hóa sự kiện onClick của các ImageView (ngăn người dùng chọn ảnh sau khi lưu)
-                        binding.ivCCCD1.setOnClickListener(null);
-                        binding.ivCCCD2.setOnClickListener(null);
-
-                    }).addOnFailureListener(e -> {
-                        Toast.makeText(getContext(), "Cập nhật thất bại: " + e.getMessage(), Toast.LENGTH_SHORT).show();
-                    });
-                }).setNegativeButton("Không", null).show();
+                                dbNhanVien.child(cccd).setValue(nhanVien)
+                                        .addOnSuccessListener(aVoid -> {
+                                            Toast.makeText(getContext(), "Cập nhật thành công", Toast.LENGTH_SHORT).show();
+                                            binding.etTenNhanVien.setEnabled(false);
+                                            binding.etSDT.setEnabled(false);
+                                            binding.tilChucVu.setVisibility(View.VISIBLE);
+                                            binding.etChucVu.setVisibility(View.VISIBLE);
+                                            binding.spinnerChucVu.setVisibility(View.INVISIBLE);
+                                            binding.tvChucVu.setVisibility(View.INVISIBLE);
+                                            binding.btnLuuLai.setVisibility(View.INVISIBLE);
+                                            binding.btnHuy.setVisibility(View.VISIBLE);
+                                            binding.btnXoa.setVisibility(View.INVISIBLE);
+                                            binding.btnHuy.setVisibility(View.INVISIBLE);
+                                            binding.btnChinhSua.setVisibility(View.VISIBLE);
+                                            binding.ivCCCD1.setOnClickListener(null);
+                                            binding.ivCCCD2.setOnClickListener(null);
+                                        })
+                                        .addOnFailureListener(e -> {
+                                            Toast.makeText(getContext(), "Cập nhật thất bại: " + e.getMessage(), Toast.LENGTH_SHORT).show();
+                                        });
+                            }, progressDialog);  // Truyền ProgressDialog vào hàm uploadAnh
+                        })
+                        .setNegativeButton("Không", null)
+                        .show();
             }
         });
+    }
+
+    private void uploadAnh(Runnable onUploadComplete, ProgressDialog progressDialog) {
+        StorageReference storageRef = FirebaseStorage.getInstance().getReference("CCCD");
+        StorageReference frontImageRef = storageRef.child(nhanVien.getCccd() + "_Truoc.jpg");
+        StorageReference backImageRef = storageRef.child(nhanVien.getCccd() + "_Sau.jpg");
+
+        frontImageRef.putFile(anhCCCDTruoc)
+                .addOnSuccessListener(taskSnapshot -> frontImageRef.getDownloadUrl().addOnSuccessListener(uri -> {
+                    nhanVien.setAnhcc1(uri.toString());
+
+                    backImageRef.putFile(anhCCCDSau)
+                            .addOnSuccessListener(taskSnapshot2 -> backImageRef.getDownloadUrl().addOnSuccessListener(uri2 -> {
+                                nhanVien.setAnhcc2(uri2.toString());
+                                onUploadComplete.run();  // Gọi callback sau khi cả hai ảnh đã upload xong
+                            }))
+                            .addOnFailureListener(e -> {
+                                progressDialog.dismiss();
+                                Toast.makeText(getContext(), "Upload ảnh sau thất bại: " + e.getMessage(), Toast.LENGTH_SHORT).show();
+                            });
+                }))
+                .addOnFailureListener(e -> {
+                    progressDialog.dismiss();
+                    Toast.makeText(getContext(), "Upload ảnh trước thất bại: " + e.getMessage(), Toast.LENGTH_SHORT).show();
+                });
     }
 
     // TÌM VÀ ĐỌC ID CHỨC VỤ TRONG listChucVuFireBase BẰNG TÊN CHỨC VỤ TRUYỀN VÀO
@@ -493,23 +519,6 @@ public class Owner_NhanVienDetailFragment extends Fragment {
                 binding.ivCCCD2.setImageURI(anhCCCDSau); // Hiển thị ảnh CMND sau
             }
         }
-    }
-
-    private void uploadAnh() {
-        StorageReference storageRef = FirebaseStorage.getInstance().getReference("CCCD");
-        StorageReference frontImageRef = storageRef.child(nhanVien.getCccd() + "_Truoc" + ".jpg");
-        frontImageRef.putFile(anhCCCDTruoc)
-                .addOnSuccessListener(taskSnapshot -> frontImageRef.getDownloadUrl().addOnSuccessListener(uri -> {
-                    nhanVien.setAnhcc1(uri.toString());
-                }))
-                .addOnFailureListener(e -> Toast.makeText(getContext(), "Upload ảnh trước thất bại: " + e.getMessage(), Toast.LENGTH_SHORT).show());
-
-        StorageReference backImageRef = storageRef.child(nhanVien.getCccd() + "_Sau" + ".jpg");
-        backImageRef.putFile(anhCCCDSau)
-                .addOnSuccessListener(taskSnapshot -> backImageRef.getDownloadUrl().addOnSuccessListener(uri -> {
-                    nhanVien.setAnhcc2(uri.toString());
-                }))
-                .addOnFailureListener(e -> Toast.makeText(getContext(), "Upload ảnh sau thất bại: " + e.getMessage(), Toast.LENGTH_SHORT).show());
     }
 
     // ẢNH: KIỂM TRA VÀ YÊU CẦU QUYỀN TRUY CẬP
