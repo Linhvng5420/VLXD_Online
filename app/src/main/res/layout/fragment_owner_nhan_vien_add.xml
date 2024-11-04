@@ -42,6 +42,7 @@
             android:hint="Tên Nhân Viên"
             android:inputType="text|textPersonName"
             android:maxLength="40"
+            android:text="a"
             android:textColor="#1EA323"
             android:textStyle="bold"
             android:visibility="visible" />
@@ -94,6 +95,7 @@
             android:layout_height="wrap_content"
             android:hint="Số điện thoại"
             android:inputType="number|numberSigned"
+            android:text="03457666"
             android:maxLength="10"
             android:textColor="#1EA323"
             android:textStyle="bold" />
@@ -117,6 +119,7 @@
             android:layout_height="wrap_content"
             android:hint="Email"
             android:inputType="text|textEmailAddress"
+            android:text="a@a.m"
             android:maxLength="40"
             android:textColor="#1EA323"
             android:textStyle="bold" />
@@ -139,6 +142,7 @@
             android:layout_height="match_parent"
             android:hint="CCCD"
             android:inputType="number|numberSigned"
+            android:text="92614836"
             android:maxLength="10"
             android:textColor="#1EA323"
             android:textStyle="bold" />
@@ -154,12 +158,13 @@
         android:contentDescription="Căn cước mặt trước"
         android:padding="10dp"
         android:scaleType="fitCenter"
+        android:src="@android:drawable/ic_menu_report_image"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toBottomOf="@+id/tilCCCD" />
 
     <TextView
         android:id="@+id/tvCCCD1"
-        android:layout_width="180dp"
+        android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:layout_marginTop="16dp"
         android:text="CCCD Mặt Trước"
@@ -179,12 +184,13 @@
         android:contentDescription="Căn cước mặt sau"
         android:padding="10dp"
         android:scaleType="fitCenter"
+        android:src="@android:drawable/ic_menu_report_image"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintTop_toBottomOf="@+id/tilCCCD" />
 
     <TextView
         android:id="@+id/tvCCCD2"
-        android:layout_width="180dp"
+        android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:layout_marginTop="16dp"
         android:text="CCCD Mặt Sau"
