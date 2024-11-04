@@ -131,6 +131,12 @@ public class ProdDetailCustomerFragment extends Fragment {
                     if (temp != null) soLuongLuu = soLuong + temp.getSoLuong();
                     else soLuongLuu = soLuong;
 
+                    int tk = Integer.parseInt(prod.getTonKho());
+                    if (soLuongLuu > tk) {
+                        soLuongLuu = tk;
+                        Toast.makeText(getActivity(), "Đã Điều Chỉnh Số Lượng Phù Hợp Với Số Sản Phẩm Tồn Kho!", Toast.LENGTH_LONG).show();
+                    }
+
                     referDetailProd.child("carts").child(idKhach).child(idProd).child("soLuong").setValue(soLuongLuu);
                     Toast.makeText(getActivity(), "Đã Thêm Vào Giỏ Hàng!", Toast.LENGTH_SHORT).show();
                 } catch (Exception e) {}

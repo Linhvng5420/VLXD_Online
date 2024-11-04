@@ -55,7 +55,7 @@ public class CartItemAdapter extends RecyclerView.Adapter<CartItemAdapter.CartIt
             }
         }
         holder.binding.tvPrice.setText(chuoi);
-        holder.binding.tvSl.setText(item.getSoLuong());
+        holder.binding.tvSl.setText(item.getSoLuong() + "");
         holder.binding.cbCart.setChecked(item.isSelected());
         final int pos = position;
         holder.position = pos;
