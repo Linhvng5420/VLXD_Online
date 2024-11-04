@@ -2,6 +2,7 @@ package com.tdc.vlxdonline.Activity;
 
 import android.Manifest;
 import android.app.Activity;
+import android.app.ProgressDialog;
 import android.content.ClipData;
 import android.content.ClipboardManager;
 import android.content.Context;
@@ -382,93 +383,116 @@ public class Owner_NhanVienAddFragment extends Fragment {
             // Bắt điều kiện dữ liệu đầu vào
             if (!batDieuKienDuLieuDauVao()) return;
 
-            // Up ảnh lên Firebase Storage
+            // Khởi tạo nhân viên mới
             nhanVien = new NhanVien();
 
             // Hộp thoại xác nhận
-            new AlertDialog.Builder(getContext()).setTitle("Xác nhận").setMessage("Bạn có muốn thêm nhân viên này?").setPositiveButton("Có", (dialog, which) -> {
-                // Lưu giá trị mới
-                nhanVien.setTennv(binding.etTenNhanVien.getText().toString());
-                setIDChucVuNhanVien(binding.spinnerChucVu.getSelectedItem().toString());
-                nhanVien.setSdt(binding.etSDT.getText().toString());
-                nhanVien.setEmailchu(loginEmailUser);
-                nhanVien.setEmailnv(binding.etEmail.getText().toString());
-                String cccd = binding.etCCCD.getText().toString();
-                nhanVien.setCccd(cccd);
-                uploadAnh();
+            new AlertDialog.Builder(getContext())
+                    .setTitle("Xác nhận")
+                    .setMessage("Bạn có muốn thêm nhân viên này?")
+                    .setPositiveButton("Có", (dialog, which) -> {
+                        // Lưu giá trị mới
+                        nhanVien.setTennv(binding.etTenNhanVien.getText().toString());
+                        setIDChucVuNhanVien(binding.spinnerChucVu.getSelectedItem().toString());
+                        nhanVien.setSdt(binding.etSDT.getText().toString());
+                        nhanVien.setEmailchu(loginEmailUser);
+                        nhanVien.setEmailnv(binding.etEmail.getText().toString());
+                        String cccd = binding.etCCCD.getText().toString();
+                        nhanVien.setCccd(cccd);
 
-                // Lưu nhân viên vào Firebase với key
-                nhanVien.setCccd(null);
-                DatabaseReference dbrfNhanvien = FirebaseDatabase.getInstance().getReference("nhanvien");
-                dbrfNhanvien.child(cccd).setValue(nhanVien) //Thêm nv mới vào firebase với Key = nhanVien.getCccd(), các value còn lại tự thêm.
-                        .addOnSuccessListener(aVoid -> {
-                            Toast.makeText(getContext(), "Thêm nhân viên thành công", Toast.LENGTH_SHORT).show();
-                        }).addOnFailureListener(e -> {
-                            Toast.makeText(getContext(), "Thêm nhân viên thất bại: " + e.getMessage(), Toast.LENGTH_SHORT).show();
-                            return;
-                        });
+                        // Hiển thị ProgressDialog
+                        ProgressDialog progressDialog = new ProgressDialog(getContext());
+                        progressDialog.setMessage("Đang upload ảnh, vui lòng chờ...");
+                        progressDialog.setCancelable(false);
+                        progressDialog.show();
 
-                // Tạo tài khoản với mật khẩu ngẫu nhiên và mã hóa
-                String userNhanVien = nhanVien.getEmailnv();
-                String passwordNhanVien = String.valueOf((int) (Math.random() * 1000000)); // Tạo mật khẩu ngẫu nhiên 6 chữ số
-                String hashedPassword = hashPassword(passwordNhanVien); // Mã hóa mật khẩu
-
-                Users usersNhanVienMoi = new Users(userNhanVien, hashedPassword, "nv");
-
-                DatabaseReference dbrfAccount = FirebaseDatabase.getInstance().getReference("account");
-                dbrfAccount.child(cccd).setValue(usersNhanVienMoi)
-                        .addOnSuccessListener(new OnSuccessListener<Void>() {
-                            @Override
-                            public void onSuccess(Void unused) {
-                                Toast.makeText(getContext(), "Tạo tài khoản cho nhân viên thành công", Toast.LENGTH_SHORT).show();
-
-                                // Tạo hộp thoại hiển thị thông tin tài khoản và mật khẩu với nút copy
-                                AlertDialog.Builder builder = new AlertDialog.Builder(getContext());
-                                builder.setTitle("Thông tin tài khoản nhân viên")
-                                        .setMessage("User: " + userNhanVien + "\nPassword: " + passwordNhanVien)
-                                        .setPositiveButton("OK", (dialogInterface, i) -> {
-                                            getParentFragmentManager().popBackStack(); // Quay lại Fragment trước
-                                        });
-
-                                // Thêm nút Copy
-                                builder.setNeutralButton("Copy", (dialogInterface, i) -> {
-                                    // Sao chép User và Password vào Clipboard
-                                    ClipboardManager clipboard = (ClipboardManager) getContext().getSystemService(Context.CLIPBOARD_SERVICE);
-                                    ClipData clip = ClipData.newPlainText("User & Password", userNhanVien + "\n" + passwordNhanVien);
-                                    clipboard.setPrimaryClip(clip);
-                                    getParentFragmentManager().popBackStack(); // Quay lại Fragment trước
-                                    Toast.makeText(getContext(), "Đã sao chép User và Password vào clipboard", Toast.LENGTH_SHORT).show();
-                                });
-
-                                // Hiển thị hộp thoại
-                                builder.show();
-                            }
-                        }).addOnFailureListener(new OnFailureListener() {
-                            @Override
-                            public void onFailure(@NonNull Exception e) {
-                                Toast.makeText(getContext(), "Tạo TK nhân viên thất bại: " + e.getMessage(), Toast.LENGTH_SHORT).show();
-                            }
-                        });
-            }).setNegativeButton("Không", null).show();
+                        // Upload ảnh
+                        uploadAnh(progressDialog, cccd); // Truyền dialog vào phương thức upload
+                    })
+                    .setNegativeButton("Không", null)
+                    .show();
         });
     }
 
-    private void uploadAnh() {
+    private void uploadAnh(ProgressDialog progressDialog, String cccd) {
         StorageReference storageRef = FirebaseStorage.getInstance().getReference("CCCD");
-        StorageReference frontImageRef = storageRef.child(nhanVien.getCccd() + "_Truoc" + ".jpg");
+        StorageReference frontImageRef = storageRef.child(cccd + "_Truoc" + ".jpg");
         frontImageRef.putFile(anhCCCDTruoc)
                 .addOnSuccessListener(taskSnapshot -> frontImageRef.getDownloadUrl().addOnSuccessListener(uri -> {
                     nhanVien.setAnhcc1(uri.toString());
+                    // Khi upload ảnh trước thành công, tiếp tục upload ảnh sau
+                    StorageReference backImageRef = storageRef.child(cccd + "_Sau" + ".jpg");
+                    backImageRef.putFile(anhCCCDSau)
+                            .addOnSuccessListener(taskSnapshot1 -> backImageRef.getDownloadUrl().addOnSuccessListener(uri1 -> {
+                                nhanVien.setAnhcc2(uri1.toString());
+                                // Sau khi upload cả hai ảnh xong
+                                progressDialog.dismiss(); // Ẩn ProgressDialog
+                                saveNhanVien(cccd); // Gọi hàm lưu nhân viên
+                            }))
+                            .addOnFailureListener(e -> {
+                                progressDialog.dismiss(); // Ẩn ProgressDialog nếu thất bại
+                                Toast.makeText(getContext(), "Upload ảnh sau thất bại: " + e.getMessage(), Toast.LENGTH_SHORT).show();
+                            });
                 }))
-                .addOnFailureListener(e -> Toast.makeText(getContext(), "Upload ảnh trước thất bại: " + e.getMessage(), Toast.LENGTH_SHORT).show());
-
-        StorageReference backImageRef = storageRef.child(nhanVien.getCccd() + "_Sau" + ".jpg");
-        backImageRef.putFile(anhCCCDSau)
-                .addOnSuccessListener(taskSnapshot -> backImageRef.getDownloadUrl().addOnSuccessListener(uri -> {
-                    nhanVien.setAnhcc2(uri.toString());
-                }))
-                .addOnFailureListener(e -> Toast.makeText(getContext(), "Upload ảnh sau thất bại: " + e.getMessage(), Toast.LENGTH_SHORT).show());
+                .addOnFailureListener(e -> {
+                    progressDialog.dismiss(); // Ẩn ProgressDialog nếu thất bại
+                    Toast.makeText(getContext(), "Upload ảnh trước thất bại: " + e.getMessage(), Toast.LENGTH_SHORT).show();
+                });
     }
+
+    private void saveNhanVien(String cccd) {
+        // Lưu nhân viên vào Firebase với key
+        nhanVien.setCccd(null);
+        DatabaseReference dbrfNhanvien = FirebaseDatabase.getInstance().getReference("nhanvien");
+        dbrfNhanvien.child(cccd).setValue(nhanVien) // Thêm nv mới vào firebase với Key = nhanVien.getCccd()
+                .addOnSuccessListener(aVoid -> {
+                    Toast.makeText(getContext(), "Thêm nhân viên thành công", Toast.LENGTH_SHORT).show();
+                    // Tiếp tục tạo tài khoản cho nhân viên
+                    createAccountForNhanVien(cccd);
+                })
+                .addOnFailureListener(e -> {
+                    Toast.makeText(getContext(), "Thêm nhân viên thất bại: " + e.getMessage(), Toast.LENGTH_SHORT).show();
+                });
+    }
+
+    private void createAccountForNhanVien(String cccd) {
+        // Tạo tài khoản với mật khẩu ngẫu nhiên và mã hóa
+        String userNhanVien = nhanVien.getEmailnv();
+        String passwordNhanVien = String.valueOf((int) (Math.random() * 1000000)); // Tạo mật khẩu ngẫu nhiên 6 chữ số
+        String hashedPassword = hashPassword(passwordNhanVien); // Mã hóa mật khẩu
+
+        Users usersNhanVienMoi = new Users(userNhanVien, hashedPassword, "nv");
+
+        DatabaseReference dbrfAccount = FirebaseDatabase.getInstance().getReference("account");
+        dbrfAccount.child(cccd).setValue(usersNhanVienMoi)
+                .addOnSuccessListener(unused -> {
+                    Toast.makeText(getContext(), "Tạo tài khoản cho nhân viên thành công", Toast.LENGTH_SHORT).show();
+                    // Hiển thị hộp thoại thông tin tài khoản
+                    showAccountInfoDialog(userNhanVien, passwordNhanVien);
+                })
+                .addOnFailureListener(e -> {
+                    Toast.makeText(getContext(), "Tạo TK nhân viên thất bại: " + e.getMessage(), Toast.LENGTH_SHORT).show();
+                });
+    }
+
+    private void showAccountInfoDialog(String userNhanVien, String passwordNhanVien) {
+        AlertDialog.Builder builder = new AlertDialog.Builder(getContext());
+        builder.setTitle("Thông tin tài khoản nhân viên")
+                .setMessage("User: " + userNhanVien + "\nPassword: " + passwordNhanVien)
+                .setPositiveButton("OK", (dialogInterface, i) -> {
+                    getParentFragmentManager().popBackStack(); // Quay lại Fragment trước
+                })
+                .setNeutralButton("Copy", (dialogInterface, i) -> {
+                    // Sao chép User và Password vào Clipboard
+                    ClipboardManager clipboard = (ClipboardManager) getContext().getSystemService(Context.CLIPBOARD_SERVICE);
+                    ClipData clip = ClipData.newPlainText("User & Password", userNhanVien + "\n" + passwordNhanVien);
+                    clipboard.setPrimaryClip(clip);
+                    getParentFragmentManager().popBackStack(); // Quay lại Fragment trước
+                    Toast.makeText(getContext(), "Đã sao chép User và Password vào clipboard", Toast.LENGTH_SHORT).show();
+                });
+        builder.show();
+    }
+
 
     // Truy xuất FireBase: Lưu ID chức vụ được chọn cho nhân viên
     private void setIDChucVuNhanVien(String tenChucVu) {
