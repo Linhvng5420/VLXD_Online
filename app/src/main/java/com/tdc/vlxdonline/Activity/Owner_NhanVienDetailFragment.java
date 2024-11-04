@@ -473,12 +473,19 @@ public class Owner_NhanVienDetailFragment extends Fragment {
                     String anhCC2 = dataSnapshot.child("anhcc2").getValue(String.class);
 
                     // Hiển thị hình ảnh
-                    Glide.with(getContext())
-                            .load(anhCC1) // Tải ảnh từ URL
-                            .into(binding.ivCCCD1); // imageViewCC là ID của ImageView trong layout
-                    Glide.with(getContext())
-                            .load(anhCC2) // Tải ảnh từ URL
-                            .into(binding.ivCCCD2); // imageViewCC2 là ID của ImageView trong layout
+                    if (!anhCC1.equals("N/A")) {
+                        Glide.with(getContext())
+                                .load(anhCC1) // Tải ảnh từ URL
+                                .into(binding.ivCCCD1); // imageViewCC là ID của ImageView trong layout
+                    } else
+                        binding.ivCCCD1.setImageDrawable(getResources().getDrawable(android.R.drawable.ic_menu_report_image));
+
+                    if (!anhCC2.equals("N/A")) {
+                        Glide.with(getContext())
+                                .load(anhCC2) // Tải ảnh từ URL
+                                .into(binding.ivCCCD2); // imageViewCC2 là ID của ImageView trong layout
+                    } else
+                        binding.ivCCCD1.setImageDrawable(getResources().getDrawable(android.R.drawable.ic_menu_report_image));
                 }
             }
 
