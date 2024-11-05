@@ -1,10 +1,10 @@
 package com.tdc.vlxdonline.Model;
 
 public class CartItem {
-    private String idKhach, idSanPham;
-    private int gia, soLuong;
-    private String tenSP, moTa, anh;
-    private boolean selected = false;
+    public String idKhach, idSanPham;
+    public int gia, soLuong;
+    public String tenSP, moTa, anh;
+    public boolean selected = false;
 
     public CartItem(String idKhach, String idSanPham, String anh, int gia, int soLuong, String tenSP, String moTa, boolean selected) {
         this.idKhach = idKhach;

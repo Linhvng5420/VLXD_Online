@@ -52,7 +52,7 @@
                 android:layout_width="match_parent"
                 android:layout_height="match_parent"
                 android:gravity="center_vertical"
-                android:text="9.000.000.000"
+                android:text="0"
                 android:textColor="#F00"
                 android:textSize="18dp"
                 android:textStyle="bold" />
