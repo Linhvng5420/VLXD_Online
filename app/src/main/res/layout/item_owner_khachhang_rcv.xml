@@ -78,7 +78,7 @@
                     android:textStyle="bold" />
 
                 <TextView
-                    android:id="@+id/tvChucVu"
+                    android:id="@+id/tvLoaiKH"
                     android:layout_width="0dp"
                     android:layout_height="match_parent"
                     android:layout_weight="1"

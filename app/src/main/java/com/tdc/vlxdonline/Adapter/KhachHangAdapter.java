@@ -11,6 +11,7 @@ import com.google.firebase.database.DatabaseError;
 import com.google.firebase.database.DatabaseReference;
 import com.google.firebase.database.FirebaseDatabase;
 import com.google.firebase.database.ValueEventListener;
+import com.tdc.vlxdonline.Activity.LoginActivity;
 import com.tdc.vlxdonline.Model.KhachHang;
 import com.tdc.vlxdonline.databinding.ItemOwnerKhachhangRcvBinding;
 
@@ -95,31 +96,35 @@ public class KhachHangAdapter extends RecyclerView.Adapter<KhachHangAdapter.Khac
             binding.tvTenNV.setText(khachHang.getTen());
 
             //TODO: Hiển thị loại khách hàng
-
+            loaiKH(khachHang.getID());
         }
 
         // Hiển thị loại khách hàng từ Firebase
-        private void chucVuTuFireBase(String chucVuId) {
-            /*DatabaseReference chucVuRef = FirebaseDatabase.getInstance().getReference("chucvu").child(chucVuId);
+        private void loaiKH(String khachHangId) {
+            DatabaseReference databaseRef = FirebaseDatabase.getInstance().getReference("duyetkhachhang");
 
-            // Lấy dữ liệu tên chức vụ từ Firebase
-            chucVuRef.addListenerForSingleValueEvent(new ValueEventListener() {
-                @Override
-                public void onDataChange(@NonNull DataSnapshot dataSnapshot) {
-                    if (dataSnapshot.exists()) {
-                        // Lấy tên chức vụ từ Firebase
-                        String tenChucVu = dataSnapshot.child("ten").getValue(String.class);
-                        binding.tvChucVu.setText(tenChucVu != null ? tenChucVu : "N/A"); // Gán tên chức vụ vào TextView
-                    } else {
-                        binding.tvChucVu.setText("N/A"); // Nếu không tìm thấy chức vụ, hiển thị "N/A"
-                    }
-                }
+            databaseRef.child(LoginActivity.idUser.toString()).child(khachHangId).child("trangthai")
+                    .addListenerForSingleValueEvent(new ValueEventListener() {
+                        @Override
+                        public void onDataChange(@NonNull DataSnapshot dataSnapshot) {
+                            String status = dataSnapshot.getValue(String.class);
+                            if (status != null) {
+                                if (status.equals("1")) {
+                                    binding.tvLoaiKH.setText("Đã Duyệt");
+                                } else {
+                                    binding.tvLoaiKH.setText("Chưa Duyệt");
+                                }
+                            } else {
+                                binding.tvLoaiKH.setText("Không xác định");
+                            }
+                        }
 
-                @Override
-                public void onCancelled(@NonNull DatabaseError databaseError) {
-                    binding.tvChucVu.setText("N/A"); // Xử lý lỗi nếu có
-                }
-            });*/
+                        @Override
+                        public void onCancelled(@NonNull DatabaseError databaseError) {
+                            // Handle potential errors
+                            binding.tvLoaiKH.setText("Lỗi truy xuất dữ liệu");
+                        }
+                    });
         }
     }
 
@@ -129,7 +134,7 @@ public class KhachHangAdapter extends RecyclerView.Adapter<KhachHangAdapter.Khac
         notifyDataSetChanged(); // Thông báo cho adapter biết dữ liệu đã thay đổi
     }
 
-    // Thêm phương thức sắp xếp danh sách khách hàng theo mã NV
+    // Thêm phương thức sắp xếp danh sách khách hàng theo mã
     public void sortKhachHangList() {
         Collections.sort(khachHangList, new Comparator<KhachHang>() {
             @Override
