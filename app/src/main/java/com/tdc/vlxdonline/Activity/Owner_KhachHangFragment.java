@@ -35,12 +35,13 @@ public class Owner_KhachHangFragment extends Fragment {
     String emailLogin = LoginActivity.idUser;
 
     // Lưu lại danh sách khách hàng ban đầu trước khi tìm kiếm
-    private List<KhachHang> dsKhachHang = new ArrayList<>();
+    private List<KhachHang> dsKhachHang;
 
 
     @Override
     public void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
+        dsKhachHang = new ArrayList<>();
         Log.d("l.d", "Owner_KhachHangFragment > onCreate: emailLogin: " + emailLogin);
     }
 
@@ -123,12 +124,16 @@ public class Owner_KhachHangFragment extends Fragment {
 
             @Override
             public void onCancelled(@NonNull DatabaseError databaseError) {
+                Log.d("l.d", "Database error: " + databaseError.getMessage());
             }
         });
     }
 
     private void layThongTinKH(List<String> customerIds) {
         DatabaseReference db = FirebaseDatabase.getInstance().getReference("customers");
+
+        // Xóa danh sách khách hàng trước khi tải mới để tránh trùng lặp
+        dsKhachHang.clear();
 
         // Dùng biến đếm để kiểm tra khi nào hoàn thành việc lấy tất cả dữ liệu khách hàng
         final int[] counter = {0};
