@@ -9,8 +9,7 @@
 
     <LinearLayout
         android:layout_width="match_parent"
-        android:layout_height="0dp"
-        android:layout_weight="0.8">
+        android:layout_height="60dp">
         <!-- Thanh Toolbar -->
         <androidx.appcompat.widget.Toolbar
             android:id="@+id/toolbar"
@@ -27,27 +26,47 @@
 
     <ScrollView
         android:layout_width="match_parent"
-        android:layout_height="0dp"
-        android:layout_weight="9">
+        android:layout_height="match_parent">
 
         <androidx.constraintlayout.widget.ConstraintLayout
             android:layout_width="match_parent"
             android:layout_height="match_parent">
 
-            <!-- Avatar của Khách Hàng -->
-            <ImageView
-                android:id="@+id/ivAvata"
-                android:layout_width="180dp"
-                android:layout_height="130dp"
-                android:layout_marginTop="16dp"
-                android:background="@drawable/common_google_signin_btn_icon_dark_normal_background"
-                android:contentDescription="Căn cước mặt trước"
-                android:padding="10dp"
-                android:scaleType="fitCenter"
-                android:src="@android:drawable/ic_menu_report_image"
+            <LinearLayout
+                android:id="@+id/lnAvataAuthenticated"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_margin="10dp"
+                android:gravity="center"
+                android:orientation="horizontal"
                 app:layout_constraintEnd_toEndOf="parent"
                 app:layout_constraintStart_toStartOf="parent"
-                app:layout_constraintTop_toTopOf="parent" />
+                app:layout_constraintTop_toTopOf="parent">
+
+                <!-- Avatar của Khách Hàng -->
+                <ImageView
+                    android:id="@+id/ivAvata"
+                    android:layout_width="0dp"
+                    android:layout_height="150dp"
+                    android:layout_marginRight="10dp"
+                    android:layout_weight="8.5"
+                    android:background="@drawable/common_google_signin_btn_icon_dark_normal_background"
+                    android:contentDescription="Căn cước mặt trước"
+                    android:scaleType="fitCenter"
+                    android:src="@android:drawable/ic_menu_report_image" />
+
+                <ImageView
+                    android:id="@+id/ivAuthenticated"
+                    android:layout_width="0dp"
+                    android:layout_height="100dp"
+                    android:layout_weight="1.5"
+                    android:background="@android:drawable/progress_horizontal"
+                    android:backgroundTint="#4CAF50"
+                    android:contentDescription="Xác Minh Tài Khoản"
+                    android:scaleType="fitCenter"
+                    android:src="?android:attr/fingerprintAuthDrawable"
+                    app:tint="@color/black" />
+            </LinearLayout>
 
             <!-- EditText Tên Khách Hàng (Mặc định: Không Cho Sửa)-->
             <com.google.android.material.textfield.TextInputLayout
@@ -62,7 +81,7 @@
                 app:layout_constraintEnd_toEndOf="parent"
                 app:layout_constraintHorizontal_bias="0.5"
                 app:layout_constraintStart_toStartOf="parent"
-                app:layout_constraintTop_toBottomOf="@+id/ivAvata">
+                app:layout_constraintTop_toBottomOf="@+id/lnAvataAuthenticated">
 
                 <com.google.android.material.textfield.TextInputEditText
                     android:id="@+id/etID"
@@ -191,9 +210,9 @@
             <!-- Hình Căn Cước -->
             <ImageView
                 android:id="@+id/ivCCCD1"
-                android:layout_width="180dp"
+                android:layout_width="200dp"
                 android:layout_height="130dp"
-                android:layout_marginStart="10dp"
+                android:layout_marginStart="5dp"
                 android:layout_marginTop="24dp"
                 android:background="@drawable/common_google_signin_btn_icon_dark_normal_background"
                 android:contentDescription="Căn cước mặt trước"
@@ -218,10 +237,10 @@
             <!-- Hình Căn Cước -->
             <ImageView
                 android:id="@+id/ivCCCD2"
-                android:layout_width="180dp"
+                android:layout_width="200dp"
                 android:layout_height="130dp"
                 android:layout_marginTop="24dp"
-                android:layout_marginEnd="8dp"
+                android:layout_marginEnd="5dp"
                 android:background="@drawable/common_google_signin_btn_icon_dark_normal_background"
                 android:contentDescription="Căn cước mặt sau"
                 android:padding="10dp"
