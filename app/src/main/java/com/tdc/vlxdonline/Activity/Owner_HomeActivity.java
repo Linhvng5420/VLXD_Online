@@ -22,7 +22,7 @@ public class Owner_HomeActivity extends AppCompatActivity {
         super.onCreate(savedInstanceState);
         ownerHomeBinding = ActivityOwnerHomeBinding.inflate(getLayoutInflater());
         setContentView(ownerHomeBinding.getRoot());
-        
+
         //Bắt sự kiện
         EventNavigationBottom();
 
@@ -52,7 +52,7 @@ public class Owner_HomeActivity extends AppCompatActivity {
             } else if (itemId == R.id.nav_owner_nhanvien) {
                 ReplaceFragment(new Fragment());
             } else if (itemId == R.id.nav_owner_khachhang) {
-                ReplaceFragment(new Fragment());
+                ReplaceFragment(new Owner_KhachHangFragment());
             } else if (itemId == R.id.nav_owner_donhang) {
                 ReplaceFragment(new Fragment());
             } else if (itemId == R.id.nav_owner_kho) {
@@ -66,7 +66,7 @@ public class Owner_HomeActivity extends AppCompatActivity {
     private void ReplaceFragment(Fragment fragment) {
         FragmentManager fragmentManager = getSupportFragmentManager();
         FragmentTransaction fragmentTransaction = fragmentManager.beginTransaction();
-//        fragmentTransaction.replace(R.id."Thay Thế Tên Fragment_.xml vào đây", fragment);
+        fragmentTransaction.replace(R.id.fragment_owner, fragment);
         fragmentTransaction.commit();
     }
 

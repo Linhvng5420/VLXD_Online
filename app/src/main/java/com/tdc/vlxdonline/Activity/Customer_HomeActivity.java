@@ -52,7 +52,7 @@ public class Customer_HomeActivity extends AppCompatActivity {
             } else if (itemId == R.id.nav_owner_nhanvien) {
                 ReplaceFragment(new Fragment());
             } else if (itemId == R.id.nav_owner_khachhang) {
-                ReplaceFragment(new Fragment());
+                ReplaceFragment(new Owner_KhachHangFragment());
             } else if (itemId == R.id.nav_owner_donhang) {
                 ReplaceFragment(new Fragment());
             } else if (itemId == R.id.nav_owner_kho) {

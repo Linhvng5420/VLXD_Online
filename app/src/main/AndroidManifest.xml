@@ -18,25 +18,7 @@
         android:theme="@style/Theme.VLXDOnline"
         tools:targetApi="31">
         <activity
-            android:name=".activity_login"
-            android:exported="false" />
-        <activity
-            android:name=".Activity.LoginActivity"
-            android:exported="false" />
-        <activity
-            android:name=".Activity.Warehouse_HomeActivity"
-            android:exported="false" />
-        <activity
-            android:name=".Activity.RegisterActivity"
-            android:exported="false" />
-        <activity
-            android:name=".Activity.Shipper_HomeActivity"
-            android:exported="false" />
-        <activity
             android:name=".Activity.Owner_HomeActivity"
-            android:exported="false" />
-        <activity
-            android:name=".MainActivity"
             android:exported="true"
             android:screenOrientation="portrait"
             android:windowSoftInputMode="adjustPan">
