@@ -45,11 +45,12 @@ dependencies {
     androidTestImplementation(libs.ext.junit)
     androidTestImplementation(libs.espresso.core)
 
-    // Import the Firebase - Storage
+    // Load Picture
+    implementation(libs.glide)
+    implementation(libs.compiler)
+
+    // Import the Firebase
     implementation(libs.firebase.database)
     implementation(libs.firebase.storage)
     implementation(libs.firebase.bom)
-
-    // Load Picture
-    implementation(libs.glide)
 }
