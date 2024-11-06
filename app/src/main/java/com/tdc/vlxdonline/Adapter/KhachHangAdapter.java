@@ -90,10 +90,13 @@ public class KhachHangAdapter extends RecyclerView.Adapter<KhachHangAdapter.Khac
         // Phương thức bind để gán dữ liệu khách hàng vào các view trong item
         public void bind(KhachHang khachHang) {
             // Hiển thị ID của khách hàng
-            binding.tvcccd.setText(khachHang.getID());
+            binding.tvID.setText(khachHang.getID());
 
             // Hiển thị tên khách hàng
-            binding.tvTenNV.setText(khachHang.getTen());
+            binding.tvTen.setText(khachHang.getTen());
+
+            // Hiển thị tên khách hàng
+            binding.tvsdt.setText(khachHang.getSdt());
 
             //TODO: Hiển thị loại khách hàng
             loaiKH(khachHang.getID());
@@ -103,7 +106,8 @@ public class KhachHangAdapter extends RecyclerView.Adapter<KhachHangAdapter.Khac
         private void loaiKH(String khachHangId) {
             DatabaseReference databaseRef = FirebaseDatabase.getInstance().getReference("duyetkhachhang");
 
-            databaseRef.child(LoginActivity.idUser.toString()).child(khachHangId).child("trangthai")
+            String key = LoginActivity.idUser.substring(0, LoginActivity.idUser.indexOf("@"));
+            databaseRef.child(key).child(khachHangId).child("trangthai")
                     .addListenerForSingleValueEvent(new ValueEventListener() {
                         @Override
                         public void onDataChange(@NonNull DataSnapshot dataSnapshot) {
