@@ -11,6 +11,19 @@
         android:layout_height="match_parent"
         android:background="@color/white">
 
+        <TextView
+            android:id="@+id/textView2"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:paddingTop="10dp"
+            android:text="Quản Lý Khách Hàng"
+            android:textAlignment="center"
+            android:textColor="#1A6D1D"
+            android:textSize="32sp"
+            android:textStyle="bold"
+            app:layout_constraintTop_toTopOf="parent"
+            tools:layout_editor_absoluteX="-5dp" />
+
         <!-- SearchView với bo góc và mở rộng phạm vi nhấn -->
         <SearchView
             android:id="@+id/searchView"
@@ -28,41 +41,42 @@
             app:layout_constraintStart_toStartOf="parent"
             app:layout_constraintTop_toBottomOf="@+id/textView2" />
 
-        <!-- Thêm Nhân Viên -->
-        <Button
-            android:id="@+id/btnThemNhanVien"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:layout_marginTop="16dp"
-            android:layout_marginEnd="16dp"
-            android:backgroundTint="#327735"
-            android:drawableRight="@drawable/people_add"
-            android:drawableTint="@color/white"
-            android:text="Nhân Viên Mới"
-            android:textSize="18sp"
-            android:visibility="gone"
-            app:layout_constraintEnd_toEndOf="parent"
-            app:layout_constraintTop_toBottomOf="@+id/searchView" />
-
-        <TextView
-            android:id="@+id/textView2"
+        <!-- Thông báo -->
+        <LinearLayout
+            android:id="@+id/lnThongBao"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:paddingTop="10dp"
-            android:text="Quản Lý Khách Hàng"
-            android:textAlignment="center"
-            android:textColor="#1A6D1D"
-            android:textSize="32sp"
-            android:textStyle="bold"
-            app:layout_constraintTop_toTopOf="parent"
-            tools:layout_editor_absoluteX="-5dp" />
+            android:layout_marginStart="24dp"
+            android:layout_marginTop="8dp"
+            android:layout_marginEnd="20dp"
+            android:gravity="center|end"
+            android:orientation="horizontal"
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintTop_toBottomOf="@+id/searchView">
+
+            <TextView
+                android:layout_width="wrap_content"
+                android:layout_height="match_parent"
+                android:gravity="center"
+                android:text="Thông Báo"
+                android:textSize="20sp"
+                android:textStyle="bold" />
+
+            <ImageButton
+                android:id="@+id/ibThongBao"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:backgroundTint="@color/white"
+                android:src="@android:drawable/ic_popup_reminder"
+                app:tint="#D32F2F" />
+        </LinearLayout>
 
         <!--Danh Sách Nhân Viên-->
         <LinearLayout
             android:id="@+id/linearLayout"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:layout_marginTop="16dp"
             android:background="@drawable/common_google_signin_btn_text_light_normal_background"
             android:backgroundTint="#6851A5"
             android:gravity="center"
@@ -70,8 +84,7 @@
             android:padding="8dp"
             app:layout_constraintEnd_toEndOf="parent"
             app:layout_constraintStart_toStartOf="parent"
-            app:layout_constraintTop_toBottomOf="@+id/btnThemNhanVien">
-
+            app:layout_constraintTop_toBottomOf="@+id/lnThongBao">
 
             <TextView
                 android:layout_width="match_parent"
