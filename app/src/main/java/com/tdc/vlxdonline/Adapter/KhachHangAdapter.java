@@ -13,6 +13,7 @@ import com.google.firebase.database.FirebaseDatabase;
 import com.google.firebase.database.ValueEventListener;
 import com.tdc.vlxdonline.Activity.LoginActivity;
 import com.tdc.vlxdonline.Model.KhachHang;
+import com.tdc.vlxdonline.R;
 import com.tdc.vlxdonline.databinding.ItemOwnerKhachhangRcvBinding;
 
 import java.util.Collections;
@@ -117,6 +118,7 @@ public class KhachHangAdapter extends RecyclerView.Adapter<KhachHangAdapter.Khac
                                     binding.tvLoaiKH.setText("Đã Duyệt");
                                 } else {
                                     binding.tvLoaiKH.setText("Chưa Duyệt");
+                                    binding.tvLoaiKH.setTextColor(binding.tvLoaiKH.getContext().getResources().getColor(R.color.black));
                                 }
                             } else {
                                 binding.tvLoaiKH.setText("Không xác định");

@@ -200,7 +200,7 @@ public class Owner_KhachHangFragment extends Fragment {
         for (KhachHang khachHang : dsKhachHang) {
             // Kiểm tra nếu tên hoặc ID của khách hàng chứa từ khóa tìm kiếm (không phân biệt chữ hoa/chữ thường)
             if (khachHang.getTen().toLowerCase().contains(query.toLowerCase()) ||
-                    khachHang.getSoCCCD().toLowerCase().contains(query.toLowerCase()) ||
+                    khachHang.getID().toLowerCase().contains(query.toLowerCase()) ||
                     khachHang.getSdt().toLowerCase().contains(query.toLowerCase())) {
                 filteredList.add(khachHang);
             }
