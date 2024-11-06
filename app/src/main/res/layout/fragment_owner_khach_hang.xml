@@ -94,7 +94,7 @@
             app:layout_constraintTop_toBottomOf="@+id/linearLayout" />
 
         <androidx.recyclerview.widget.RecyclerView
-            android:id="@+id/ownerRcvNhanVien"
+            android:id="@+id/ownerRcvKhachHang"
             android:layout_width="0dp"
             android:layout_height="0dp"
             android:layout_marginTop="2dp"
@@ -105,7 +105,7 @@
             app:layout_constraintHorizontal_bias="0.5"
             app:layout_constraintStart_toStartOf="parent"
             app:layout_constraintTop_toBottomOf="@+id/linearLayout"
-            tools:listitem="@layout/item_owner_nhanvien_rcv" />
+            tools:listitem="@layout/item_owner_khachhang_rcv" />
 
     </androidx.constraintlayout.widget.ConstraintLayout>
 
