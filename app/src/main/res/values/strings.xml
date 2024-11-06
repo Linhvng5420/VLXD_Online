@@ -2,6 +2,7 @@
     <string name="app_name">VLXDOnline</string>
     <!-- TODO: Remove or change this placeholder text -->
     <string name="hello_blank_fragment">Hello blank fragment</string>
+    <!-- TODO: Remove or change this placeholder text -->
     <string name="thoat"><font color="#000">Thoát</font></string>
     <string name="quay_lai"><font color="#000">Quay Lại</font></string>
     <string name="cho_xac_nhan">Chờ Xác Minh</string>

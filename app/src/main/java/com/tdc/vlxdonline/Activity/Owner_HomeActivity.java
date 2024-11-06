@@ -2,6 +2,7 @@ package com.tdc.vlxdonline.Activity;
 
 import android.content.DialogInterface;
 import android.os.Bundle;
+import android.util.Log;
 
 import androidx.activity.OnBackPressedCallback;
 import androidx.appcompat.app.AlertDialog;
@@ -14,20 +15,24 @@ import com.tdc.vlxdonline.R;
 import com.tdc.vlxdonline.databinding.ActivityOwnerHomeBinding;
 
 public class Owner_HomeActivity extends AppCompatActivity {
-    // Binding
     ActivityOwnerHomeBinding ownerHomeBinding;
     String emailUser = null;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
+        // Sử dụng View Binding để lấy layout (ActivityOwnerHomeBinding) và gán vào ownerHomeBinding
         ownerHomeBinding = ActivityOwnerHomeBinding.inflate(getLayoutInflater());
+        // Thiết lập nội dung hiển thị của Activity từ layout đã được binding
         setContentView(ownerHomeBinding.getRoot());
+        // Thiết lập Fragment mặc định (Hiển thị màn hình mặc định ban đầu của ứng dụng)
+        //ReplaceFragment(new Owner_NhanVienFragment());
 
         // Bắt instance
         emailUser = getIntent().getStringExtra("emailUser");
+        Log.d("l.e", "onCreate: emailUser = " + emailUser);
 
-        //Bắt sự kiện
+        // TODO: Gọi phương thức bắt sự kiện khi nhấn các nút trên thanh điều hướng (Bottom Navigation Bar)
         EventNavigationBottom();
 
         // Sử dụng OnBackPressedDispatcher để tùy chỉnh hành vi khi nhấn nút back
@@ -46,15 +51,24 @@ public class Owner_HomeActivity extends AppCompatActivity {
         });
     }
 
-    // Bắt sự kiện nhấn Navbar Bottom
+    // Phương thức bắt sự kiện cho Bottom Navigation Bar khi người dùng nhấn vào các mục
     private void EventNavigationBottom() {
+        // Thiết lập listener cho sự kiện chọn item trong Bottom Navigation
         ownerHomeBinding.navOwner.setOnItemSelectedListener(item -> {
+            // Lấy ID của mục được chọn
             int itemId = item.getItemId();
 
+            // Kiểm tra ID và thay thế fragment tương ứng
             if (itemId == R.id.nav_owner_dashboard) {
                 ReplaceFragment(new Fragment());
             } else if (itemId == R.id.nav_owner_nhanvien) {
-                ReplaceFragment(new Fragment());
+                // Khởi tạo Fragment và truyền emailUser
+                Owner_NhanVienFragment ownerNhanVienFragment = new Owner_NhanVienFragment();
+                Bundle bundle = new Bundle();
+                bundle.putString("emailUser", emailUser);
+                ownerNhanVienFragment.setArguments(bundle);
+                // Thay thế fragment
+                ReplaceFragment(ownerNhanVienFragment);
             } else if (itemId == R.id.nav_owner_khachhang) {
                 ReplaceFragment(new Fragment());
             } else if (itemId == R.id.nav_owner_donhang) {
@@ -67,10 +81,15 @@ public class Owner_HomeActivity extends AppCompatActivity {
         });
     }
 
+    // Phương thức thay thế (replace) Fragment hiển thị trên màn hình
     private void ReplaceFragment(Fragment fragment) {
+        // Lấy FragmentManager để quản lý các fragment trong Activity
         FragmentManager fragmentManager = getSupportFragmentManager();
+        // Bắt đầu một giao dịch Fragment (FragmentTransaction)
         FragmentTransaction fragmentTransaction = fragmentManager.beginTransaction();
+        // Thay thế Fragment hiện tại bằng Fragment mới được truyền vào
         fragmentTransaction.replace(R.id.fragment_owner, fragment);
+        // Xác nhận thay đổi Fragment bằng cách commit giao dịch
         fragmentTransaction.commit();
     }
 
@@ -81,8 +100,9 @@ public class Owner_HomeActivity extends AppCompatActivity {
                 .setCancelable(false)
                 .setPositiveButton("Có", new DialogInterface.OnClickListener() {
                     public void onClick(DialogInterface dialog, int id) {
-                        // Thoát ứng dụng
-                        finishAffinity(); // Đóng tất cả các activity và thoát ứng dụng
+                        // Đóng tất cả các activity và thoát ứng dụng
+                        finishAffinity();
+                        onDestroy();
                     }
                 })
                 .setNegativeButton("Không", new DialogInterface.OnClickListener() {

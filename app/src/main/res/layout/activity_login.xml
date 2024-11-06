@@ -31,7 +31,8 @@
         android:id="@+id/edt_email_lg"
         style="@style/item_lg"
         android:hint="Nhập Email ....."
-        android:inputType="text|textEmailAddress" />
+        android:inputType="text|textEmailAddress"
+        android:text="admin@tdc.com" />
 
     <TextView
         android:layout_width="match_parent"
@@ -41,11 +42,14 @@
         android:gravity="center"
         android:textSize="21dp"
         android:textStyle="bold"/>
+
     <EditText
-        style="@style/item_lg"
         android:id="@+id/edt_pass_lg"
+        style="@style/item_lg"
         android:hint="Nhập Mật khẩu ....."
-        android:inputType="textPassword"/>
+        android:imeOptions="actionDone"
+        android:inputType="textPassword"
+        android:text="a" />
 
     <CheckBox
         android:id="@+id/cb_dis_pass"

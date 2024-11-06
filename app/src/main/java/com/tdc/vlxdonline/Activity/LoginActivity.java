@@ -5,6 +5,7 @@ import android.graphics.Paint;
 import android.os.Bundle;
 import android.text.InputType;
 import android.view.View;
+import android.widget.AdapterView;
 import android.widget.Toast;
 
 import androidx.appcompat.app.AppCompatActivity;
@@ -28,85 +29,99 @@ public class LoginActivity extends AppCompatActivity {
         binding = ActivityLoginBinding.inflate(getLayoutInflater());
         setContentView(binding.getRoot());
         binding.tvSignup.setPaintFlags(binding.tvSignup.getPaintFlags() | Paint.UNDERLINE_TEXT_FLAG);
+
         setEvents();
     }
 
+    // Trong hàm setEvents
     private void setEvents() {
-        // Login
-        binding.btnLg.setOnClickListener(new View.OnClickListener() {
+        // Sự kiện nhấn "Enter" trên ô mật khẩu
+        binding.edtPassLg.setOnEditorActionListener((v, actionId, event) -> {
+            if (actionId == android.view.inputmethod.EditorInfo.IME_ACTION_DONE) {
+                performLogin(); // Hàm thực hiện đăng nhập
+                return true;
+            }
+            return false;
+        });
+
+        // Sự kiện nhấn nút đăng nhập
+        binding.btnLg.setOnClickListener(v -> performLogin());
+
+        // Hiển thị/Ẩn mật khẩu
+        binding.cbDisPass.setOnClickListener(v -> {
+            if (binding.cbDisPass.isChecked()) {
+                binding.edtPassLg.setInputType(InputType.TYPE_CLASS_TEXT);
+            } else {
+                binding.edtPassLg.setInputType(InputType.TYPE_CLASS_TEXT | InputType.TYPE_TEXT_VARIATION_PASSWORD);
+            }
+        });
+    }
+
+    // Tách logic đăng nhập vào hàm riêng
+    private void performLogin() {
+        String email = binding.edtEmailLg.getText().toString();
+        String pass = binding.edtPassLg.getText().toString();
+
+        if (email.isEmpty() || pass.isEmpty()) {
+            Toast.makeText(LoginActivity.this, "Vui lòng nhập đầy đủ thông tin", Toast.LENGTH_SHORT).show();
+            return;
+        }
+
+        DatabaseReference dbRef = FirebaseDatabase.getInstance().getReference("account");
+        dbRef.addListenerForSingleValueEvent(new ValueEventListener() {
             @Override
-            public void onClick(View v) {
-                String email = binding.edtEmailLg.getText().toString();
-                String pass = binding.edtPassLg.getText().toString();
+            public void onDataChange(DataSnapshot dataSnapshot) {
+                boolean isValid = false;
+                for (DataSnapshot snapshot : dataSnapshot.getChildren()) {
+                    Object emailObj = snapshot.child("email").getValue();
+                    Object passObj = snapshot.child("pass").getValue();
+                    Object typeObj = snapshot.child("type").getValue();
 
-                // Kiểm tra rỗng
-                if (email.isEmpty() || pass.isEmpty()) {
-                    Toast.makeText(LoginActivity.this, "Vui lòng nhập đầy đủ thông tin", Toast.LENGTH_SHORT).show();
-                    return;
-                }
+                    String dbEmail = emailObj != null ? emailObj.toString() : null;
+                    String dbPass = passObj != null ? passObj.toString() : null;
+                    String dbType = typeObj != null ? typeObj.toString() : null;
 
-                // Truy vấn Firebase
-                DatabaseReference dbRef = FirebaseDatabase.getInstance().getReference("account");
-                dbRef.addListenerForSingleValueEvent(new ValueEventListener() {
-                    @Override
-                    public void onDataChange(DataSnapshot dataSnapshot) {
-                        boolean isValid = false;
-                        for (DataSnapshot snapshot : dataSnapshot.getChildren()) {
-                            String dbEmail = snapshot.child("email").getValue(String.class);
-                            String dbPass = snapshot.child("pass").getValue(String.class);
-                            String dbType = snapshot.child("type").getValue(String.class);
-
-                            // Kiểm tra email và mật khẩu
-                            if (dbEmail.equals(email) && dbPass.equals(pass)) {
-                                isValid = true;
-                                switch (dbType) {
-                                    case "chu":
-                                        typeUser = 0;
-                                        break;
-                                    case "nv":
-                                        typeUser = 1;
-                                        break;
-                                    case "kh":
-                                        typeUser = 2;
-                                        break;
-                                }
-                                // Lưu idUser cho người dùng đã đăng nhập
-                                idUser = dbEmail;
+                    if (dbEmail != null && dbEmail.equals(email) && dbPass != null && dbPass.equals(pass)) {
+                        isValid = true;
+                        switch (dbType) {
+                            case "chu":
+                                typeUser = 0;
                                 break;
-                            }
+                            case "nv":
+                                typeUser = 1;
+                                break;
+                            case "kh":
+                                typeUser = 2;
+                                break;
                         }
-
-                        if (isValid) {
-                            // Chuyển đến màn hình chủ
-                            if (typeUser == 0) {
-                                Intent intent = new Intent(LoginActivity.this, Owner_HomeActivity.class);
-                                Toast.makeText(LoginActivity.this, "Hello [ User: " + idUser + " ]", Toast.LENGTH_LONG).show();
-                                startActivity(intent);
-                            }
-                        } else {
-                            // Thông báo lỗi đăng nhập
-                            Toast.makeText(LoginActivity.this, "Sai thông tin đăng nhập!", Toast.LENGTH_SHORT).show();
-                        }
+                        idUser = dbEmail;
+                        break;
                     }
+                }
 
-                    @Override
-                    public void onCancelled(DatabaseError databaseError) {
-                        Toast.makeText(LoginActivity.this, "Có lỗi xảy ra!", Toast.LENGTH_SHORT).show();
-                    }
-                });
-            }
-        });
-
-        // Show-Hide pass
-        binding.cbDisPass.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View v) {
-                if (binding.cbDisPass.isChecked()) {
-                    binding.edtPassLg.setInputType(InputType.TYPE_CLASS_TEXT);
+                if (isValid) {
+                    if (typeUser == 0) {
+                        Toast.makeText(LoginActivity.this, "Hello [ User: " + idUser + " ]", Toast.LENGTH_LONG).show();
+                        Intent intent = new Intent(LoginActivity.this, Owner_HomeActivity.class);
+                        intent.putExtra("emailUser", idUser);
+                        startActivity(intent);
+                    } else Toast.makeText(LoginActivity.this, "Đã Đăng Nhập Thành Công \nNhưng hiện chưa hỗ trợ chức năng này", Toast.LENGTH_LONG).show();
                 } else {
-                    binding.edtPassLg.setInputType(InputType.TYPE_CLASS_TEXT | InputType.TYPE_TEXT_VARIATION_PASSWORD);
+                    Toast.makeText(LoginActivity.this, "Sai thông tin đăng nhập!", Toast.LENGTH_SHORT).show();
                 }
             }
+
+            @Override
+            public void onCancelled(DatabaseError databaseError) {
+                Toast.makeText(LoginActivity.this, "Có lỗi xảy ra!", Toast.LENGTH_SHORT).show();
+            }
         });
+    }
+
+    @Override
+    public void onBackPressed() {
+        super.onBackPressed();
+        onDestroy();
+//        finishAffinity();
     }
 }

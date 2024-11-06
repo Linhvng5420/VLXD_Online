@@ -37,10 +37,6 @@ android {
 }
 
 dependencies {
-    implementation(libs.glide)
-    implementation(libs.firebase.database)
-    annotationProcessor(libs.compiler)
-
     implementation(libs.appcompat)
     implementation(libs.material)
     implementation(libs.activity)
@@ -49,6 +45,12 @@ dependencies {
     androidTestImplementation(libs.ext.junit)
     androidTestImplementation(libs.espresso.core)
 
-    implementation("com.google.firebase:firebase-database")
-    implementation(platform("com.google.firebase:firebase-bom:33.2.0"))
+    // Load Picture
+    implementation(libs.glide)
+    implementation(libs.compiler)
+
+    // Import the Firebase
+    implementation(libs.firebase.database)
+    implementation(libs.firebase.storage)
+    implementation(libs.firebase.bom)
 }

@@ -2,12 +2,12 @@ package com.tdc.vlxdonline.Model;
 
 public class Users {
     private String email, pass;
-    private String type_user;
+    private String type;
 
-    public Users(String email, String pass, String type_user) {
+    public Users(String email, String pass, String type) {
         this.email = email;
         this.pass = pass;
-        this.type_user = type_user;
+        this.type = type;
     }
 
     public Users() {
@@ -29,11 +29,11 @@ public class Users {
         this.pass = pass;
     }
 
-    public String getType_user() {
-        return type_user;
+    public String getType() {
+        return type;
     }
 
-    public void setType_user(String type_user) {
-        this.type_user = type_user;
+    public void setType(String type) {
+        this.type = type;
     }
 }
