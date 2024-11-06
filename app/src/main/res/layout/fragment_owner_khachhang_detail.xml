@@ -89,7 +89,6 @@
                     android:layout_height="wrap_content"
                     android:enabled="false"
                     android:hint="ID Khách Hàng"
-                    android:maxLength="40"
                     android:textColor="@color/black"
                     android:visibility="visible" />
 
@@ -159,7 +158,6 @@
                     android:enabled="false"
                     android:hint="Email Khách Hàng Đăng Nhập"
                     android:inputType="text|textEmailAddress"
-                    android:maxLength="40"
                     android:textColor="#F80000" />
             </com.google.android.material.textfield.TextInputLayout>
 
@@ -202,7 +200,6 @@
                     android:enabled="false"
                     android:hint="Địa Chỉ"
                     android:inputType="number|numberSigned"
-                    android:maxLength="10"
                     android:textColor="@color/black" />
 
             </com.google.android.material.textfield.TextInputLayout>
