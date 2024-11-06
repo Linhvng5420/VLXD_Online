@@ -68,10 +68,6 @@ public class Owner_KhachHangDetailFragment extends Fragment {
             // Lấy thông tin khách hàng từ Bundle
             idKH = getArguments().getSerializable("idKH").toString();
 
-            // Hiển thị thông tin ID khách hàng lên giao diện
-            Toast.makeText(getContext(), "ID Khach Hang\n" + idKH, Toast.LENGTH_SHORT).show();
-            Log.d("l.d", "nhanIDKhachHangTuBundle: " + idKH.toString());
-
             // Lấy thông tin khách hàng từ firebase thông qua ID
             DatabaseReference db = FirebaseDatabase.getInstance().getReference("customers");
             db.child(idKH).addValueEventListener(new ValueEventListener() {
@@ -188,15 +184,33 @@ public class Owner_KhachHangDetailFragment extends Fragment {
     }
 
     private void setupButtons() {
-        binding.ivAvata.setOnClickListener(v -> {
-            Toast.makeText(getContext(), "Click Avata", Toast.LENGTH_SHORT).show();
-            new AlertDialog.Builder(getContext()).setTitle("Xác Thực Khách Hàng").setMessage("Bạn có muốn xác thực khách hàng này không?").setPositiveButton("Có", (dialog, which) -> {
-                DatabaseReference db = FirebaseDatabase.getInstance().getReference("duyetkhachhang");
-
-
-            });
-
+        // Lắng nghe sự kiện khi nhấn vào ivAuthenticated
+        binding.ivAuthenticated.setOnClickListener(v -> {
+            // Hiển thị hộp thoại xác nhận
+            new AlertDialog.Builder(getContext())
+                    .setTitle("Xác Thực Khách Hàng")
+                    .setMessage("Bạn có muốn thay đổi trạng thái xác thực của khách hàng này không?")
+                    .setPositiveButton("Xác Thực", (dialog, which) -> updateAuthenticationStatus("1")) // "1" cho Xác Thực
+                    .setNegativeButton("Hủy Xác Thực", (dialog, which) -> updateAuthenticationStatus("0")) // "0" cho Hủy Xác Thực
+                    .show();
         });
+    }
+
+    private void updateAuthenticationStatus(String status) {
+        DatabaseReference db = FirebaseDatabase.getInstance().getReference("duyetkhachhang");
+        db.child(idChuLogin).child(idKH).child("trangthai").setValue(status)
+                .addOnSuccessListener(aVoid -> {
+                    // Cập nhật màu của ivAuthenticated theo trạng thái mới
+                    if ("1".equals(status)) {
+                        binding.ivAuthenticated.setBackgroundTintList(ColorStateList.valueOf(Color.parseColor("#4CAF50")));
+                        Toast.makeText(getContext(), "Xác thực thành công", Toast.LENGTH_SHORT).show();
+                    } else {
+                        binding.ivAuthenticated.setBackgroundTintList(ColorStateList.valueOf(Color.parseColor("#F44336")));
+                        Toast.makeText(getContext(), "Hủy xác thực thành công", Toast.LENGTH_SHORT).show();
+                    }
+                    Log.d("l.d", "Trạng thái xác thực đã được cập nhật thành công.");
+                })
+                .addOnFailureListener(e -> Log.d("l.d", "Lỗi cập nhật trạng thái xác thực: " + e.getMessage()));
     }
 
     // CUỐI: THIẾT LẬP TOOLBAR VÀ ĐIỀU HƯỚNG
