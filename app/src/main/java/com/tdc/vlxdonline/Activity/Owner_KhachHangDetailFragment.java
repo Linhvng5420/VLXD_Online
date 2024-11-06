@@ -1,5 +1,8 @@
 package com.tdc.vlxdonline.Activity;
 
+import android.app.AlertDialog;
+import android.content.res.ColorStateList;
+import android.graphics.Color;
 import android.os.Bundle;
 import android.util.Log;
 import android.view.LayoutInflater;
@@ -27,6 +30,7 @@ public class Owner_KhachHangDetailFragment extends Fragment {
     FragmentOwnerKhachhangDetailBinding binding;
 
     KhachHang khachHang;
+    String idChuLogin = LoginActivity.idUser.substring(0, LoginActivity.idUser.indexOf("@"));
     String idKH;
 
     @Override
@@ -35,8 +39,7 @@ public class Owner_KhachHangDetailFragment extends Fragment {
     }
 
     @Override
-    public View onCreateView(LayoutInflater inflater, ViewGroup container,
-                             Bundle savedInstanceState) {
+    public View onCreateView(LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState) {
         // Inflate the layout for this fragment
         binding = FragmentOwnerKhachhangDetailBinding.inflate(getLayoutInflater(), container, false);
         return binding.getRoot();
@@ -52,6 +55,9 @@ public class Owner_KhachHangDetailFragment extends Fragment {
 
         // Lấy ID khách hàng từ Bundle rồi truy xuất thông tin khách hàng từ firebase và Hiển thị lên giao diện
         getDataKhachHang();
+
+        // Buttons
+        setupButtons();
     }
 
     // NHẬN ID TỪ BUNDLE, TRUY XUẤT FIREBASE VÀ HIỂN THỊ THÔNG TIN LÊN GIAO DIỆN
@@ -68,14 +74,13 @@ public class Owner_KhachHangDetailFragment extends Fragment {
 
             // Lấy thông tin khách hàng từ firebase thông qua ID
             DatabaseReference db = FirebaseDatabase.getInstance().getReference("customers");
-
             db.child(idKH).addValueEventListener(new ValueEventListener() {
                 @Override
                 public void onDataChange(@NonNull DataSnapshot dataSnapshot) {
                     if (dataSnapshot.exists()) {
                         // Lấy thông tin khách hàng từ firebase và ánh xạ vào đối tượng KhachHang
                         khachHang = dataSnapshot.getValue(KhachHang.class);
-                        khachHang.setID(dataSnapshot.getKey());
+                        khachHang.setID(idKH);
                         Log.d("l.d", "nhanIDKhachHangTuBundle: " + khachHang.toString());
 
                         if (khachHang != null) {
@@ -85,6 +90,8 @@ public class Owner_KhachHangDetailFragment extends Fragment {
                             binding.etEmail.setText(khachHang.getEmail());
                             binding.etCCCD.setText(khachHang.getSoCCCD());
                             binding.etDiaChi.setText(khachHang.getDiaChi());
+
+                            setupAuthenticated(idKH);
 
                         } else {
                             Log.d("l.d", "khách hàng không tồn tại trong cơ sở dữ liệu.");
@@ -106,6 +113,37 @@ public class Owner_KhachHangDetailFragment extends Fragment {
         }
     }
 
+    private void setupAuthenticated(String idKH) {
+        DatabaseReference db = FirebaseDatabase.getInstance().getReference("duyetkhachhang");
+        db.child(idChuLogin).child(idKH).addListenerForSingleValueEvent(new ValueEventListener() {
+            @Override
+            public void onDataChange(@NonNull DataSnapshot snapshot) {
+                if (snapshot.exists()) {
+                    // Lấy trạng thái xác thực của khách hàng từ trường "trangthai"
+                    String authStatus = snapshot.child("trangthai").getValue(String.class);
+
+                    if ("1".equals(authStatus)) {
+                        // Nếu trạng thái là "1", đặt màu backgroundTint thành xanh lá (#4CAF50)
+                        binding.ivAuthenticated.setBackgroundTintList(ColorStateList.valueOf(Color.parseColor("#4CAF50")));
+                    } else if ("0".equals(authStatus)) {
+                        // Nếu trạng thái là "0", đặt màu backgroundTint thành Đỏ (#F44336)
+                        binding.ivAuthenticated.setBackgroundTintList(ColorStateList.valueOf(Color.parseColor("#F44336")));
+                    } else {
+                        Log.d("l.d", "khách hàng không xác định được trạng thái xác thực.");
+                    }
+                } else {
+                    Log.d("l.d", "khách hàng không tồn tại trong cơ sở dữ liệu.");
+                }
+            }
+
+            @Override
+            public void onCancelled(@NonNull DatabaseError error) {
+                Log.d("l.d", "Đã xảy ra lỗi khi truy cập database: " + error.getMessage());
+            }
+        });
+    }
+
+
     // ẢNH: HÀM ĐỂ HIỂN THỊ ẢNH CC
     private void hienthiAnhCCCD() {
         // Lấy dữ liệu của nhân viên từ Firebase
@@ -122,22 +160,19 @@ public class Owner_KhachHangDetailFragment extends Fragment {
 
                     // Hiển thị hình ảnh
                     if (!anhAvata.equals("N/A")) {
-                        Glide.with(getContext())
-                                .load(anhAvata) // Tải ảnh từ URL
+                        Glide.with(getContext()).load(anhAvata) // Tải ảnh từ URL
                                 .into(binding.ivAvata); // imageViewCC là ID của ImageView trong layout
                     } else
                         binding.ivAvata.setImageDrawable(getResources().getDrawable(android.R.drawable.ic_menu_report_image));
 
                     if (!anhCC1.equals("N/A")) {
-                        Glide.with(getContext())
-                                .load(anhCC1) // Tải ảnh từ URL
+                        Glide.with(getContext()).load(anhCC1) // Tải ảnh từ URL
                                 .into(binding.ivCCCD1); // imageViewCC là ID của ImageView trong layout
                     } else
                         binding.ivCCCD1.setImageDrawable(getResources().getDrawable(android.R.drawable.ic_menu_report_image));
 
                     if (!anhCC2.equals("N/A")) {
-                        Glide.with(getContext())
-                                .load(anhCC2) // Tải ảnh từ URL
+                        Glide.with(getContext()).load(anhCC2) // Tải ảnh từ URL
                                 .into(binding.ivCCCD2); // imageViewCC2 là ID của ImageView trong layout
                     } else
                         binding.ivCCCD2.setImageDrawable(getResources().getDrawable(android.R.drawable.ic_menu_report_image));
@@ -149,6 +184,18 @@ public class Owner_KhachHangDetailFragment extends Fragment {
                 // Xử lý lỗi nếu có
                 Log.e("Owner_NhanVienDetail", "Database error: " + databaseError.getMessage());
             }
+        });
+    }
+
+    private void setupButtons() {
+        binding.ivAvata.setOnClickListener(v -> {
+            Toast.makeText(getContext(), "Click Avata", Toast.LENGTH_SHORT).show();
+            new AlertDialog.Builder(getContext()).setTitle("Xác Thực Khách Hàng").setMessage("Bạn có muốn xác thực khách hàng này không?").setPositiveButton("Có", (dialog, which) -> {
+                DatabaseReference db = FirebaseDatabase.getInstance().getReference("duyetkhachhang");
+
+
+            });
+
         });
     }
 
