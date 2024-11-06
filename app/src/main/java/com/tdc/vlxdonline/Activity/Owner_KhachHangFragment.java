@@ -83,7 +83,7 @@ public class Owner_KhachHangFragment extends Fragment {
         adapter.setOnItemClickListener(khachHang -> {
             // Tạo Bundle để truyền thông tin nhân viên được chọn qua Fragment Detail
             Bundle bundleIDKhachHang = new Bundle();
-            bundleIDKhachHang.putSerializable("selectedIDKhachHang", khachHang.getID()); // Đưa dữ liệu ID nhân viên vào Bundle
+            bundleIDKhachHang.putSerializable("idKH", khachHang.getID()); // Đưa dữ liệu ID nhân viên vào Bundle
 
             // Tạo một instance, nó giúp chúng ta chuyển đổi dữ liệu từ Fragment này sang Fragment khác
             Owner_KhachHangDetailFragment khachHangDetailFragment = new Owner_KhachHangDetailFragment();

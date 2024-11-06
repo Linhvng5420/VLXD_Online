@@ -46,8 +46,8 @@ dependencies {
     androidTestImplementation(libs.espresso.core)
 
     // Load Picture
-//    implementation("com.github.bumptech.glide:glide")
-//    implementation("com.github.bumptech.glide:compiler")
+    implementation("com.github.bumptech.glide:glide:4.15.1")
+    annotationProcessor("com.github.bumptech.glide:compiler:4.15.1")
 
     // Import the Firebase
     implementation("com.google.firebase:firebase-database")
