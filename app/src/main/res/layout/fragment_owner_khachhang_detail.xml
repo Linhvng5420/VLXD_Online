@@ -1,0 +1,274 @@
+<?xml version="1.0" encoding="utf-8"?>
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:orientation="vertical"
+    tools:context=".Activity.Owner_KhachHangDetailFragment">
+
+    <LinearLayout
+        android:layout_width="match_parent"
+        android:layout_height="0dp"
+        android:layout_weight="0.8">
+        <!-- Thanh Toolbar -->
+        <androidx.appcompat.widget.Toolbar
+            android:id="@+id/toolbar"
+            android:layout_width="match_parent"
+            android:layout_height="match_parent"
+            android:background="?attr/colorPrimary"
+            android:elevation="4dp"
+            android:theme="@style/ThemeOverlay.AppCompat.Dark.ActionBar"
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintTop_toTopOf="parent"
+            app:title="Chi tiết Khách Hàng" />
+    </LinearLayout>
+
+    <ScrollView
+        android:layout_width="match_parent"
+        android:layout_height="0dp"
+        android:layout_weight="9">
+
+        <androidx.constraintlayout.widget.ConstraintLayout
+            android:layout_width="match_parent"
+            android:layout_height="match_parent">
+
+            <!-- Avatar của Khách Hàng -->
+            <ImageView
+                android:id="@+id/ivAvata"
+                android:layout_width="180dp"
+                android:layout_height="130dp"
+                android:layout_marginTop="16dp"
+                android:background="@drawable/common_google_signin_btn_icon_dark_normal_background"
+                android:contentDescription="Căn cước mặt trước"
+                android:padding="10dp"
+                android:scaleType="fitCenter"
+                android:src="@android:drawable/ic_menu_report_image"
+                app:layout_constraintEnd_toEndOf="parent"
+                app:layout_constraintStart_toStartOf="parent"
+                app:layout_constraintTop_toTopOf="parent" />
+
+            <!-- EditText Tên Khách Hàng (Mặc định: Không Cho Sửa)-->
+            <com.google.android.material.textfield.TextInputLayout
+                android:id="@+id/tilID"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_marginLeft="10dp"
+                android:layout_marginTop="12dp"
+                android:layout_marginRight="10dp"
+                android:background="@color/white"
+                android:visibility="visible"
+                app:layout_constraintEnd_toEndOf="parent"
+                app:layout_constraintHorizontal_bias="0.5"
+                app:layout_constraintStart_toStartOf="parent"
+                app:layout_constraintTop_toBottomOf="@+id/ivAvata">
+
+                <com.google.android.material.textfield.TextInputEditText
+                    android:id="@+id/etID"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:enabled="false"
+                    android:hint="ID Khách Hàng"
+                    android:maxLength="40"
+                    android:textColor="@color/black"
+                    android:visibility="visible" />
+
+            </com.google.android.material.textfield.TextInputLayout>
+
+            <!-- EditText Chức Vụ -->
+            <com.google.android.material.textfield.TextInputLayout
+                android:id="@+id/tilTen"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_margin="10dp"
+                android:background="@color/white"
+                android:visibility="visible"
+                app:layout_constraintEnd_toEndOf="parent"
+                app:layout_constraintStart_toStartOf="parent"
+                app:layout_constraintTop_toBottomOf="@id/tilID">
+
+                <com.google.android.material.textfield.TextInputEditText
+                    android:id="@+id/etTen"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:enabled="false"
+                    android:hint="Tên Khách Hàng"
+                    android:textColor="@color/black"
+                    android:visibility="visible" />
+            </com.google.android.material.textfield.TextInputLayout>
+
+            <!-- EditText Số điện thoại -->
+            <com.google.android.material.textfield.TextInputLayout
+                android:id="@+id/tilSDT"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_margin="10dp"
+                android:layout_marginTop="5dp"
+                android:background="@color/white"
+                app:layout_constraintEnd_toEndOf="parent"
+                app:layout_constraintStart_toStartOf="parent"
+                app:layout_constraintTop_toBottomOf="@+id/tilTen">
+
+                <com.google.android.material.textfield.TextInputEditText
+                    android:id="@+id/etSDT"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:enabled="false"
+                    android:hint="Số điện thoại"
+                    android:inputType="number|numberSigned"
+                    android:maxLength="10"
+                    android:textColor="@color/black" />
+            </com.google.android.material.textfield.TextInputLayout>
+
+            <!-- EditText Email -->
+            <com.google.android.material.textfield.TextInputLayout
+                android:id="@+id/tilEmail"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_margin="10dp"
+                android:background="@color/white"
+                android:textColorHint="#EE0000"
+                app:layout_constraintEnd_toEndOf="parent"
+                app:layout_constraintStart_toStartOf="parent"
+                app:layout_constraintTop_toBottomOf="@id/tilSDT">
+
+                <com.google.android.material.textfield.TextInputEditText
+                    android:id="@+id/etEmail"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:enabled="false"
+                    android:hint="Email Khách Hàng Đăng Nhập"
+                    android:inputType="text|textEmailAddress"
+                    android:maxLength="40"
+                    android:textColor="#F80000" />
+            </com.google.android.material.textfield.TextInputLayout>
+
+            <com.google.android.material.textfield.TextInputLayout
+                android:id="@+id/tilCCCD"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_margin="10dp"
+                android:background="@color/white"
+                app:layout_constraintEnd_toEndOf="parent"
+                app:layout_constraintStart_toStartOf="parent"
+                app:layout_constraintTop_toBottomOf="@+id/tilEmail">
+
+                <com.google.android.material.textfield.TextInputEditText
+                    android:id="@+id/etCCCD"
+                    android:layout_width="match_parent"
+                    android:layout_height="match_parent"
+                    android:enabled="false"
+                    android:hint="CCCD"
+                    android:inputType="number|numberSigned"
+                    android:maxLength="10"
+                    android:textColor="@color/black" />
+
+            </com.google.android.material.textfield.TextInputLayout>
+
+            <com.google.android.material.textfield.TextInputLayout
+                android:id="@+id/tilDiaChi"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_margin="10dp"
+                android:background="@color/white"
+                app:layout_constraintEnd_toEndOf="parent"
+                app:layout_constraintStart_toStartOf="parent"
+                app:layout_constraintTop_toBottomOf="@+id/tilCCCD">
+
+                <com.google.android.material.textfield.TextInputEditText
+                    android:id="@+id/etDiaChi"
+                    android:layout_width="match_parent"
+                    android:layout_height="match_parent"
+                    android:enabled="false"
+                    android:hint="Địa Chỉ"
+                    android:inputType="number|numberSigned"
+                    android:maxLength="10"
+                    android:textColor="@color/black" />
+
+            </com.google.android.material.textfield.TextInputLayout>
+
+            <!-- Hình Căn Cước -->
+            <ImageView
+                android:id="@+id/ivCCCD1"
+                android:layout_width="180dp"
+                android:layout_height="130dp"
+                android:layout_marginStart="10dp"
+                android:layout_marginTop="24dp"
+                android:background="@drawable/common_google_signin_btn_icon_dark_normal_background"
+                android:contentDescription="Căn cước mặt trước"
+                android:padding="10dp"
+                android:scaleType="fitCenter"
+                android:src="@android:drawable/ic_menu_report_image"
+                app:layout_constraintStart_toStartOf="parent"
+                app:layout_constraintTop_toBottomOf="@+id/tilDiaChi" />
+
+            <TextView
+                android:id="@+id/tvCCCD1"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_marginTop="8dp"
+                android:text="CCCD Mặt Trước"
+                android:textAlignment="center"
+                android:textStyle="bold"
+                app:layout_constraintEnd_toEndOf="@+id/ivCCCD1"
+                app:layout_constraintStart_toStartOf="@+id/ivCCCD1"
+                app:layout_constraintTop_toBottomOf="@+id/ivCCCD1" />
+
+            <!-- Hình Căn Cước -->
+            <ImageView
+                android:id="@+id/ivCCCD2"
+                android:layout_width="180dp"
+                android:layout_height="130dp"
+                android:layout_marginTop="24dp"
+                android:layout_marginEnd="8dp"
+                android:background="@drawable/common_google_signin_btn_icon_dark_normal_background"
+                android:contentDescription="Căn cước mặt sau"
+                android:padding="10dp"
+                android:scaleType="fitCenter"
+                android:src="@android:drawable/ic_menu_report_image"
+                app:layout_constraintEnd_toEndOf="parent"
+                app:layout_constraintTop_toBottomOf="@+id/tilDiaChi" />
+
+            <TextView
+                android:id="@+id/tvCCCD2"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_marginTop="8dp"
+                android:text="CCCD Mặt Sau"
+                android:textAlignment="center"
+                android:textStyle="bold"
+                app:layout_constraintEnd_toEndOf="@+id/ivCCCD2"
+                app:layout_constraintStart_toStartOf="@+id/ivCCCD2"
+                app:layout_constraintTop_toBottomOf="@+id/ivCCCD2" />
+
+            <LinearLayout
+                android:id="@+id/lnTraGop"
+                android:layout_width="match_parent"
+                android:layout_height="match_parent"
+                android:layout_marginTop="32dp"
+                android:orientation="vertical"
+                android:visibility="gone"
+                app:layout_constraintEnd_toEndOf="parent"
+                app:layout_constraintTop_toBottomOf="@+id/tvCCCD2">
+
+                <TextView
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:background="@android:drawable/editbox_dropdown_light_frame"
+                    android:backgroundTint="@android:color/holo_green_light"
+                    android:text="Danh Sách Trả Góp"
+                    android:textAlignment="center"
+                    android:textColor="@color/material_dynamic_neutral20"
+                    android:textSize="24sp"
+                    android:textStyle="bold" />
+
+                <androidx.recyclerview.widget.RecyclerView
+                    android:layout_width="match_parent"
+                    android:layout_height="200dp"
+                    android:minHeight="300dp"
+                    tools:listitem="@layout/item_owner_khachhang_tragop_rcv" />
+            </LinearLayout>
+        </androidx.constraintlayout.widget.ConstraintLayout>
+    </ScrollView>
+</LinearLayout>

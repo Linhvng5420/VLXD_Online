@@ -21,6 +21,7 @@ import com.google.firebase.database.FirebaseDatabase;
 import com.google.firebase.database.ValueEventListener;
 import com.tdc.vlxdonline.Adapter.KhachHangAdapter;
 import com.tdc.vlxdonline.Model.KhachHang;
+import com.tdc.vlxdonline.R;
 import com.tdc.vlxdonline.databinding.FragmentOwnerKhachHangBinding;
 
 import java.util.ArrayList;
@@ -65,13 +66,39 @@ public class Owner_KhachHangFragment extends Fragment {
         hienThiDSKhachHang();
 
         // Thiết lập tìm kiếm
-        timKiemNhanVien();
+        timKiemKhachHang();
+
+        // Bắt sự kiện khi nhấn vào recycleview nhân viên
+        nhanVaoItemKhachHang();
 
         // Lắng nghe sự kiện nhấn ra ngoài thanh tìm kiếm để tắt con trỏ và ẩn bàn phím
         binding.getRoot().setOnTouchListener((v, event) -> {
             hideKeyboard(v); // Ẩn bàn phím
             binding.searchView.clearFocus(); // Xóa focus để tắt con trỏ trong SearchView
             return false;
+        });
+    }
+
+    private void nhanVaoItemKhachHang() {
+        adapter.setOnItemClickListener(khachHang -> {
+            // Tạo Bundle để truyền thông tin nhân viên được chọn qua Fragment Detail
+            Bundle bundleIDKhachHang = new Bundle();
+            bundleIDKhachHang.putSerializable("selectedIDKhachHang", khachHang.getID()); // Đưa dữ liệu ID nhân viên vào Bundle
+
+            // Tạo một instance, nó giúp chúng ta chuyển đổi dữ liệu từ Fragment này sang Fragment khác
+            Owner_KhachHangDetailFragment khachHangDetailFragment = new Owner_KhachHangDetailFragment();
+            // Gán Bundle (chứa thông tin id nhân viên) vào cho Fragment chi tiết
+            khachHangDetailFragment.setArguments(bundleIDKhachHang);
+
+            // Thực hiện chuyển đổi sang Fragment chi tiết, thay thế Fragment hiện tại
+            getParentFragmentManager().beginTransaction()
+                    .replace(R.id.fragment_owner, khachHangDetailFragment) // Thay thế fragment_owner hiện tại bằng fragment chi tiết
+                    .addToBackStack(null) // Cho phép quay lại màn hình trước khi nhấn nút Back
+                    .commit(); // Thực hiện chuyển đổi
+
+            // Xóa văn bản tìm kiếm khi một nhân viên được chọn
+            binding.searchView.setQuery("", false); // Xóa văn bản tìm kiếm
+            binding.searchView.clearFocus(); // Ẩn con trỏ
         });
     }
 
@@ -133,7 +160,7 @@ public class Owner_KhachHangFragment extends Fragment {
     }
 
     // CHỨC NĂNG TÌM KIẾM KHACH HANG
-    private void timKiemNhanVien() {
+    private void timKiemKhachHang() {
         binding.searchView.setOnQueryTextListener(new SearchView.OnQueryTextListener() {
             @Override
             public boolean onQueryTextSubmit(String query) {
@@ -148,7 +175,7 @@ public class Owner_KhachHangFragment extends Fragment {
                     adapter.updateList(new ArrayList<>(dsKhachHang)); // Cập nhật lại danh sách ban đầu
                 } else {
                     // Gọi hàm filter để tìm kiếm nhân viên
-                    filterNhanVien(newText);
+                    filterKhachHang(newText);
                 }
                 return true;
             }
@@ -162,7 +189,7 @@ public class Owner_KhachHangFragment extends Fragment {
         });
     }
 
-    private void filterNhanVien(String query) {
+    private void filterKhachHang(String query) {
         List<KhachHang> filteredList = new ArrayList<>();
 
         for (KhachHang khachHang : dsKhachHang) {
