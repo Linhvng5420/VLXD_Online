@@ -1,0 +1,83 @@
+<?xml version="1.0" encoding="utf-8"?>
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:id="@+id/main"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    tools:context=".Activity.LoginActivity"
+    android:orientation="vertical"
+    android:gravity="center">
+
+    <TextView
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:text="VLXD Online"
+        android:gravity="center"
+        android:textSize="50dp"
+        android:textStyle="bold"/>
+
+    <TextView
+        android:layout_marginTop="34dp"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_marginBottom="10dp"
+        android:text="Email"
+        android:gravity="center"
+        android:textSize="21dp"
+        android:textStyle="bold"/>
+
+    <EditText
+        android:id="@+id/edt_email_lg"
+        style="@style/item_lg"
+        android:hint="Nhập Email ....."
+        android:inputType="text|textEmailAddress"
+        android:text="admin@tdc.com" />
+
+    <TextView
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_marginVertical="10dp"
+        android:text="Mật Khẩu"
+        android:gravity="center"
+        android:textSize="21dp"
+        android:textStyle="bold"/>
+
+    <EditText
+        android:id="@+id/edt_pass_lg"
+        style="@style/item_lg"
+        android:hint="Nhập Mật khẩu ....."
+        android:imeOptions="actionDone"
+        android:inputType="textPassword"
+        android:text="a" />
+
+    <CheckBox
+        android:id="@+id/cb_dis_pass"
+        android:layout_marginTop="10dp"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:text="Hiển thị mật khẩu"
+        android:layout_gravity="center"/>
+
+    <Button
+        android:id="@+id/btn_lg"
+        android:layout_marginTop="10dp"
+        android:layout_width="wrap_content"
+        android:layout_height="50dp"
+        android:text="ĐĂNG NHẬP"
+        android:textSize="21dp"
+        android:textStyle="bold"
+        android:backgroundTint="#00897B"/>
+
+    <TextView
+        android:id="@+id/tv_signup"
+        android:layout_marginTop="5dp"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:text="Đăng Ký Tài Khoản Ngay"
+        android:textSize="18dp"
+        android:textStyle="bold"
+        android:textColor="#00F"
+        />
+    
+</LinearLayout>

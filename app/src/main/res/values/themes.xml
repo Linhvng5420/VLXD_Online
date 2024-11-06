@@ -13,8 +13,9 @@
         <item name="android:layout_marginLeft">5dp</item>
     </style>
     <style name="StyleDropdownSearch">
-        <item name="android:layout_width">200dp</item>
+        <item name="android:layout_width">0dp</item>
         <item name="android:layout_height">34dp</item>
+        <item name="android:layout_weight">1</item>
         <item name="android:background">@drawable/bg_img_item</item>
         <item name="android:textAlignment">center</item>
     </style>
