@@ -47,52 +47,53 @@
                 <ImageView
                     android:id="@+id/ivAvata"
                     android:layout_width="0dp"
-                    android:layout_height="150dp"
+                    android:layout_height="200dp"
                     android:layout_marginRight="10dp"
-                    android:layout_weight="8.5"
-                    android:background="@drawable/common_google_signin_btn_icon_dark_normal_background"
+                    android:layout_weight="5"
+                    android:background="@drawable/common_google_signin_btn_icon_light_normal_background"
                     android:contentDescription="Căn cước mặt trước"
                     android:scaleType="fitCenter"
                     android:src="@android:drawable/ic_menu_report_image" />
 
-                <ImageView
-                    android:id="@+id/ivAuthenticated"
+                <LinearLayout
                     android:layout_width="0dp"
-                    android:layout_height="100dp"
-                    android:layout_weight="1.5"
-                    android:background="@android:drawable/progress_horizontal"
-                    android:backgroundTint="#4CAF50"
-                    android:contentDescription="Xác Minh Tài Khoản"
-                    android:scaleType="fitCenter"
-                    android:src="?android:attr/fingerprintAuthDrawable"
-                    app:tint="@color/black" />
+                    android:layout_height="match_parent"
+                    android:layout_weight="5"
+                    android:gravity="center"
+                    android:orientation="vertical">
+
+                    <!-- EditText Tên Khách Hàng (Mặc định: Không Cho Sửa)-->
+                    <com.google.android.material.textfield.TextInputLayout
+                        android:id="@+id/tilID"
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content"
+                        android:background="@color/white"
+                        android:visibility="visible">
+
+                        <com.google.android.material.textfield.TextInputEditText
+                            android:id="@+id/etID"
+                            android:layout_width="match_parent"
+                            android:layout_height="wrap_content"
+                            android:enabled="false"
+                            android:hint="ID Khách Hàng"
+                            android:textColor="@color/black"
+                            android:visibility="visible" />
+                    </com.google.android.material.textfield.TextInputLayout>
+
+                    <ImageView
+                        android:id="@+id/ivAuthenticated"
+                        android:layout_width="match_parent"
+                        android:layout_height="50dp"
+                        android:layout_marginTop="20dp"
+                        android:background="@android:drawable/progress_horizontal"
+                        android:backgroundTint="#4CAF50"
+                        android:contentDescription="Xác Minh Tài Khoản"
+                        android:scaleType="fitCenter"
+                        android:src="?android:attr/fingerprintAuthDrawable"
+                        app:tint="@color/black" />
+                </LinearLayout>
             </LinearLayout>
 
-            <!-- EditText Tên Khách Hàng (Mặc định: Không Cho Sửa)-->
-            <com.google.android.material.textfield.TextInputLayout
-                android:id="@+id/tilID"
-                android:layout_width="match_parent"
-                android:layout_height="wrap_content"
-                android:layout_marginLeft="10dp"
-                android:layout_marginTop="12dp"
-                android:layout_marginRight="10dp"
-                android:background="@color/white"
-                android:visibility="visible"
-                app:layout_constraintEnd_toEndOf="parent"
-                app:layout_constraintHorizontal_bias="0.5"
-                app:layout_constraintStart_toStartOf="parent"
-                app:layout_constraintTop_toBottomOf="@+id/lnAvataAuthenticated">
-
-                <com.google.android.material.textfield.TextInputEditText
-                    android:id="@+id/etID"
-                    android:layout_width="match_parent"
-                    android:layout_height="wrap_content"
-                    android:enabled="false"
-                    android:hint="ID Khách Hàng"
-                    android:textColor="@color/black"
-                    android:visibility="visible" />
-
-            </com.google.android.material.textfield.TextInputLayout>
 
             <!-- EditText Chức Vụ -->
             <com.google.android.material.textfield.TextInputLayout
@@ -104,7 +105,7 @@
                 android:visibility="visible"
                 app:layout_constraintEnd_toEndOf="parent"
                 app:layout_constraintStart_toStartOf="parent"
-                app:layout_constraintTop_toBottomOf="@id/tilID">
+                app:layout_constraintTop_toBottomOf="@id/lnAvataAuthenticated">
 
                 <com.google.android.material.textfield.TextInputEditText
                     android:id="@+id/etTen"

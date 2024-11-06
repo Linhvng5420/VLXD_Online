@@ -76,6 +76,7 @@ public class Owner_KhachHangDetailFragment extends Fragment {
                         // Lấy thông tin khách hàng từ firebase và ánh xạ vào đối tượng KhachHang
                         khachHang = dataSnapshot.getValue(KhachHang.class);
                         khachHang.setID(dataSnapshot.getKey());
+                        Log.d("l.d", "nhanIDKhachHangTuBundle: " + khachHang.toString());
 
                         if (khachHang != null) {
                             binding.etID.setText(khachHang.getID());
@@ -120,6 +121,13 @@ public class Owner_KhachHangDetailFragment extends Fragment {
                     String anhCC2 = dataSnapshot.child("cccdMatSau").getValue(String.class);
 
                     // Hiển thị hình ảnh
+                    if (!anhAvata.equals("N/A")) {
+                        Glide.with(getContext())
+                                .load(anhAvata) // Tải ảnh từ URL
+                                .into(binding.ivAvata); // imageViewCC là ID của ImageView trong layout
+                    } else
+                        binding.ivAvata.setImageDrawable(getResources().getDrawable(android.R.drawable.ic_menu_report_image));
+
                     if (!anhCC1.equals("N/A")) {
                         Glide.with(getContext())
                                 .load(anhCC1) // Tải ảnh từ URL
@@ -132,7 +140,7 @@ public class Owner_KhachHangDetailFragment extends Fragment {
                                 .load(anhCC2) // Tải ảnh từ URL
                                 .into(binding.ivCCCD2); // imageViewCC2 là ID của ImageView trong layout
                     } else
-                        binding.ivCCCD1.setImageDrawable(getResources().getDrawable(android.R.drawable.ic_menu_report_image));
+                        binding.ivCCCD2.setImageDrawable(getResources().getDrawable(android.R.drawable.ic_menu_report_image));
                 }
             }
 

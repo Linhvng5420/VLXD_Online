@@ -68,7 +68,7 @@ public class Owner_KhachHangFragment extends Fragment {
         // Thiết lập tìm kiếm
         timKiemKhachHang();
 
-        // Bắt sự kiện khi nhấn vào recycleview nhân viên
+        // Bắt sự kiện khi nhấn vào recycleview khách hàng
         nhanVaoItemKhachHang();
 
         // Lắng nghe sự kiện nhấn ra ngoài thanh tìm kiếm để tắt con trỏ và ẩn bàn phím
@@ -81,13 +81,13 @@ public class Owner_KhachHangFragment extends Fragment {
 
     private void nhanVaoItemKhachHang() {
         adapter.setOnItemClickListener(khachHang -> {
-            // Tạo Bundle để truyền thông tin nhân viên được chọn qua Fragment Detail
+            // Tạo Bundle để truyền thông tin khách hàng được chọn qua Fragment Detail
             Bundle bundleIDKhachHang = new Bundle();
-            bundleIDKhachHang.putSerializable("idKH", khachHang.getID()); // Đưa dữ liệu ID nhân viên vào Bundle
+            bundleIDKhachHang.putSerializable("idKH", khachHang.getID()); // Đưa dữ liệu ID khách hàng vào Bundle
 
             // Tạo một instance, nó giúp chúng ta chuyển đổi dữ liệu từ Fragment này sang Fragment khác
             Owner_KhachHangDetailFragment khachHangDetailFragment = new Owner_KhachHangDetailFragment();
-            // Gán Bundle (chứa thông tin id nhân viên) vào cho Fragment chi tiết
+            // Gán Bundle (chứa thông tin id khách hàng) vào cho Fragment chi tiết
             khachHangDetailFragment.setArguments(bundleIDKhachHang);
 
             // Thực hiện chuyển đổi sang Fragment chi tiết, thay thế Fragment hiện tại
@@ -96,7 +96,7 @@ public class Owner_KhachHangFragment extends Fragment {
                     .addToBackStack(null) // Cho phép quay lại màn hình trước khi nhấn nút Back
                     .commit(); // Thực hiện chuyển đổi
 
-            // Xóa văn bản tìm kiếm khi một nhân viên được chọn
+            // Xóa văn bản tìm kiếm khi một khách hàng được chọn
             binding.searchView.setQuery("", false); // Xóa văn bản tìm kiếm
             binding.searchView.clearFocus(); // Ẩn con trỏ
         });
@@ -174,7 +174,7 @@ public class Owner_KhachHangFragment extends Fragment {
                 if (newText.isEmpty()) {
                     adapter.updateList(new ArrayList<>(dsKhachHang)); // Cập nhật lại danh sách ban đầu
                 } else {
-                    // Gọi hàm filter để tìm kiếm nhân viên
+                    // Gọi hàm filter để tìm kiếm khách hàng
                     filterKhachHang(newText);
                 }
                 return true;
@@ -193,7 +193,7 @@ public class Owner_KhachHangFragment extends Fragment {
         List<KhachHang> filteredList = new ArrayList<>();
 
         for (KhachHang khachHang : dsKhachHang) {
-            // Kiểm tra nếu tên hoặc ID của nhân viên chứa từ khóa tìm kiếm (không phân biệt chữ hoa/chữ thường)
+            // Kiểm tra nếu tên hoặc ID của khách hàng chứa từ khóa tìm kiếm (không phân biệt chữ hoa/chữ thường)
             if (khachHang.getTen().toLowerCase().contains(query.toLowerCase()) ||
                     khachHang.getSoCCCD().toLowerCase().contains(query.toLowerCase()) ||
                     khachHang.getSdt().toLowerCase().contains(query.toLowerCase())) {
