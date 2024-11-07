@@ -1,9 +1,13 @@
 package com.tdc.vlxdonline.Activity;
 
+import android.content.DialogInterface;
+import android.graphics.Color;
+import android.graphics.drawable.Drawable;
 import android.os.Bundle;
 
 import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
+import androidx.appcompat.app.AlertDialog;
 import androidx.fragment.app.Fragment;
 import androidx.recyclerview.widget.LinearLayoutManager;
 
@@ -148,6 +152,7 @@ public class CartFragment extends Fragment {
                                                     checkFirst = false;
                                                 }
                                             } else {
+                                                ThongBaoXoa(snapshot.getKey());
                                                 if (check[1]) tempCarts.clear();
                                                 referCart.child("carts").child(idKhach).child(cartItem.getIdSanPham()).removeValue();
                                                 check[0] = false;
@@ -236,18 +241,41 @@ public class CartFragment extends Fragment {
             @Override
             public void OnDeleteClick(View view, int position) {
                 CartItem temp = dataCart.get(position);
-                referCart.child("carts").child(idKhach).child(temp.getIdSanPham()).removeValue().addOnCompleteListener(new OnCompleteListener<Void>() {
+                AlertDialog.Builder builder = new AlertDialog.Builder(getActivity());
+                builder.setTitle("Xác Nhận Xóa!").setMessage("Xác Nhận Xóa Sản Phẩm " + temp.getTenSP() + " Khỏi Giỏ Hàng?");
+
+                builder.setPositiveButton(android.R.string.yes, new DialogInterface.OnClickListener() {
                     @Override
-                    public void onComplete(@NonNull Task<Void> task) {
-                        if (task.isSuccessful()) {
-                            // Đã xóa thành công
-                            Toast.makeText(getActivity(), "Đã xóa sản phẩm khỏi giỏ hàng!", Toast.LENGTH_LONG).show();
-                        } else {
-                            // Xảy ra lỗi
-                            Toast.makeText(getActivity(), "Đã xảy ra lỗi khi xóa!", Toast.LENGTH_LONG).show();
-                        }
+                    public void onClick(DialogInterface dialog, int which) {
+                        referCart.child("carts").child(idKhach).child(temp.getIdSanPham()).removeValue().addOnCompleteListener(new OnCompleteListener<Void>() {
+                            @Override
+                            public void onComplete(@NonNull Task<Void> task) {
+                                if (task.isSuccessful()) {
+                                    // Đã xóa thành công
+                                    Toast.makeText(getActivity(), "Đã xóa sản phẩm khỏi giỏ hàng!", Toast.LENGTH_LONG).show();
+                                } else {
+                                    // Xảy ra lỗi
+                                    Toast.makeText(getActivity(), "Đã xảy ra lỗi khi xóa!", Toast.LENGTH_LONG).show();
+                                }
+                            }
+                        });
                     }
                 });
+                builder.setNegativeButton(R.string.quay_lai, new DialogInterface.OnClickListener() {
+                    @Override
+                    public void onClick(DialogInterface dialog, int which) {
+                        dialog.cancel();
+                    }
+                });
+
+                Drawable drawableIcon = getResources().getDrawable(android.R.drawable.ic_dialog_alert);
+                drawableIcon.setTint(Color.RED);
+                builder.setIcon(drawableIcon);
+                Drawable drawableBg = getResources().getDrawable(R.drawable.bg_item_lg);
+                drawableBg.setTint(Color.rgb(100, 220, 255));
+                AlertDialog alertDialog = builder.create();
+                alertDialog.getWindow().setBackgroundDrawable(drawableBg);
+                alertDialog.show();
             }
 
             @Override
@@ -278,7 +306,7 @@ public class CartFragment extends Fragment {
             }
         }
         if (dataDetail.size() > 0) {
-
+            ((Customer_HomeActivity) getActivity()).ReplaceFragment(new DatHangGioHangFragment(dataDetail));
         }else {
             Toast.makeText(getActivity(), "Hãy Chọn Sản Phẩm Để Đặt Mua!", Toast.LENGTH_SHORT).show();
         }
@@ -299,6 +327,28 @@ public class CartFragment extends Fragment {
         }
         return chuoi;
     }
+
+    private void ThongBaoXoa(String maSP){
+        AlertDialog.Builder builder = new AlertDialog.Builder(getActivity());
+        builder.setTitle("Thông Báo!").setMessage("Đã Xóa Sản Phẩm Mã " + maSP + " Khỏi Giỏ Hàng Vì Sản Phẩm Đã Bị Xóa!");
+
+        builder.setPositiveButton(android.R.string.yes, new DialogInterface.OnClickListener() {
+            @Override
+            public void onClick(DialogInterface dialog, int which) {
+                dialog.cancel();
+            }
+        });
+
+        Drawable drawableIcon = getResources().getDrawable(android.R.drawable.ic_dialog_alert);
+        drawableIcon.setTint(Color.RED);
+        builder.setIcon(drawableIcon);
+        Drawable drawableBg = getResources().getDrawable(R.drawable.bg_item_lg);
+        drawableBg.setTint(Color.rgb(100, 220, 255));
+        AlertDialog alertDialog = builder.create();
+        alertDialog.getWindow().setBackgroundDrawable(drawableBg);
+        alertDialog.show();
+    }
+
     @Override
     public void onDestroyView() {
         binding = null;

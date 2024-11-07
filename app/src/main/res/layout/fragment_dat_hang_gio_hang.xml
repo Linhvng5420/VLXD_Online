@@ -8,8 +8,151 @@
     <LinearLayout
         android:layout_width="match_parent"
         android:layout_height="match_parent"
+        android:background="@drawable/back3"
         android:orientation="vertical">
 
+        <TextView
+            android:layout_width="match_parent"
+            android:layout_height="50dp"
+            android:background="@drawable/back6"
+            android:gravity="center"
+            android:text="Chi Tiết Đặt Hàng"
+            android:textColor="@color/white"
+            android:textSize="30dp"
+            android:textStyle="bold" />
+
+        <LinearLayout
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:orientation="vertical"
+            android:paddingHorizontal="5dp">
+
+            <TextView
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:text="Tên Người Nhận Hàng:"
+                android:textColor="#D7D7D7"
+                android:textSize="18dp"
+                android:textStyle="bold" />
+
+            <EditText
+                android:id="@+id/edt_ten_nguoi_nhan"
+                android:layout_width="match_parent"
+                android:layout_height="45dp"
+                android:background="@drawable/bg_img_item"
+                android:backgroundTint="#DDD"
+                android:gravity="center_vertical"
+                android:hint="Ten Nguoi Nhan ..."
+                android:paddingLeft="5dp"
+                android:textSize="21dp"
+                android:textStyle="bold" />
+
+            <TextView
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_marginTop="5dp"
+                android:text="Số Điện Thoại Người Nhận Hàng:"
+                android:textColor="#D7D7D7"
+                android:textSize="18dp"
+                android:textStyle="bold" />
+
+            <LinearLayout
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:orientation="horizontal">
+
+                <ImageView
+                    android:layout_width="45dp"
+                    android:layout_height="45dp"
+                    android:layout_marginRight="10dp"
+                    android:background="@drawable/bg_img_item"
+                    android:src="@drawable/call" />
+
+                <EditText
+                    android:id="@+id/edt_sdt_nguoi_nhan"
+                    android:layout_width="match_parent"
+                    android:layout_height="45dp"
+                    android:background="@drawable/bg_img_item"
+                    android:backgroundTint="#DDD"
+                    android:gravity="center_vertical"
+                    android:hint="So Dien Thoai Nguoi Nhan ..."
+                    android:paddingLeft="5dp"
+                    android:textSize="21dp"
+                    android:textStyle="bold" />
+            </LinearLayout>
+
+            <TextView
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_marginTop="5dp"
+                android:text="Địa Chỉ Người Nhận Hàng:"
+                android:textColor="#D7D7D7"
+                android:textSize="18dp"
+                android:textStyle="bold" />
+
+            <EditText
+                android:id="@+id/edt_dia_chi_nhan"
+                android:layout_width="match_parent"
+                android:layout_height="65dp"
+                android:background="@drawable/bg_img_item"
+                android:backgroundTint="#DDD"
+                android:gravity="top"
+                android:hint="Dia Chi Nguoi Nhan ..."
+                android:padding="5dp"
+                android:textSize="21dp"
+                android:textStyle="bold" />
+        </LinearLayout>
+
+        <androidx.recyclerview.widget.RecyclerView
+            android:id="@+id/rc_chi_tiet_dat_gio"
+            android:layout_width="match_parent"
+            android:layout_height="0dp"
+            android:layout_marginVertical="5dp"
+            android:layout_weight="1" />
+
+        <LinearLayout
+            android:layout_width="match_parent"
+            android:layout_height="50dp"
+            android:background="@drawable/bg_detail"
+            android:backgroundTint="#0AF"
+            android:orientation="horizontal"
+            android:paddingHorizontal="10dp">
+
+            <TextView
+                android:layout_width="wrap_content"
+                android:layout_height="match_parent"
+                android:gravity="center_vertical"
+                android:text="Tổng Tiền: "
+                android:textSize="21dp"
+                android:textStyle="bold" />
+
+            <TextView
+                android:id="@+id/tv_tong_dat_cart"
+                android:layout_width="wrap_content"
+                android:layout_height="match_parent"
+                android:gravity="center_vertical"
+                android:text="9.000.000.000"
+                android:textColor="#F00"
+                android:textSize="25dp"
+                android:textStyle="bold" />
+
+            <TextView
+                android:layout_width="match_parent"
+                android:layout_height="match_parent"
+                android:gravity="center_vertical"
+                android:text=" VND"
+                android:textSize="25dp"
+                android:textStyle="bold" />
+        </LinearLayout>
+
+        <Button
+            android:id="@+id/btn_dat_hang"
+            android:layout_width="match_parent"
+            android:layout_height="50dp"
+            android:backgroundTint="#5000FF"
+            android:text="Xác Nhận Đặt Hàng"
+            android:textSize="21dp"
+            android:textStyle="bold" />
     </LinearLayout>
 
 </FrameLayout>

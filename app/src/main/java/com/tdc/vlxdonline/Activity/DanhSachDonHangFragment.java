@@ -142,14 +142,13 @@ public class DanhSachDonHangFragment extends Fragment {
                         if (trangThaiLoc == 0 && vc == 4 && tt == 2) continue;
                         // 1 la chua da hoan thanh, continue neu don chua xac nhan hoan thanh
                         else if (trangThaiLoc == 1) {
-                            if (vc < 4) continue;
-                            else if (tt < 2) continue;
+                            if (vc < 4 || tt < 2) continue;
                         }
 
                         if (LoginActivity.typeUser == 0) continue;
                         else if (LoginActivity.typeUser == 1 && !don.getIdKhach().equals(Customer_HomeActivity.info.getID()))
                             continue;
-                        else if (LoginActivity.typeEmployee == 0) continue;
+                        else if (LoginActivity.typeUser == 2) continue;
                         data.add(don); // Thêm User vào danh sách
                     }
 
