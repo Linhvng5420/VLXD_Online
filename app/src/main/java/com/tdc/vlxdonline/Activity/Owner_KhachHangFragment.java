@@ -12,8 +12,10 @@ import android.widget.SearchView;
 
 import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
+import androidx.appcompat.app.AlertDialog;
 import androidx.fragment.app.Fragment;
 import androidx.recyclerview.widget.LinearLayoutManager;
+import androidx.recyclerview.widget.RecyclerView;
 
 import com.google.firebase.database.DataSnapshot;
 import com.google.firebase.database.DatabaseError;
@@ -38,7 +40,7 @@ public class Owner_KhachHangFragment extends Fragment {
     // Lưu lại danh sách khách hàng ban đầu trước khi tìm kiếm
     private List<KhachHang> dsKhachHang;
 
-    // Thông báo
+    // Thông báo nếu có khách hàng nào cần xác thực tài khoản
     private ValueEventListener thongBaoListener;
 
     @Override
@@ -47,7 +49,6 @@ public class Owner_KhachHangFragment extends Fragment {
         Log.d("l.d", "Owner_KhachHangFragment > onCreate: idLogin: " + idLogin);
         idLogin = idLogin.substring(0, idLogin.indexOf("@"));
         dsKhachHang = new ArrayList<>();
-        hienThiThongBao();
     }
 
     @Override
@@ -69,6 +70,7 @@ public class Owner_KhachHangFragment extends Fragment {
         binding.ownerRcvKhachHang.setAdapter(adapter);
 
         // Firebase: lấy dữ liệu từ Firebase
+        hienThiThongBao();
         hienThiDSKhachHang();
 
         // Thiết lập tìm kiếm
@@ -156,21 +158,20 @@ public class Owner_KhachHangFragment extends Fragment {
                 boolean hasNotification = false;
 
                 for (DataSnapshot customerSnapshot : dataSnapshot.getChildren()) {
-                    Long xacthuc = customerSnapshot.child("xacthuc").getValue(Long.class);
-                    if (xacthuc != null && xacthuc == 1) {
+                    String xacthuc = String.valueOf(customerSnapshot.child("xacthuc").getValue(String.class));
+                    if (xacthuc != null && "1".equals(xacthuc)) {
                         hasNotification = true;
                         break;
                     }
                 }
 
                 if (hasNotification) {
-                    binding.lnThongBao.setBackground(getResources().getDrawable(com.google.android.gms.base.R.drawable.common_google_signin_btn_icon_dark_normal_background));
+                    binding.lnThongBao.setBackground(getResources().getDrawable(R.drawable.bg_img_detail));
                     binding.ivThongBao.setColorFilter(Color.parseColor("#F44336"));
                     binding.tvThongBao.setText("Bạn có thông báo mới!");
-                } else {
-                    binding.lnThongBao.setBackground(getResources().getDrawable(com.google.android.gms.base.R.drawable.common_google_signin_btn_icon_light_normal_background));
-                    binding.ivThongBao.setColorFilter(Color.parseColor("#00FFFFFF"));
-                    binding.tvThongBao.setText(null);
+
+                    // Xem thông báo
+                    binding.lnThongBao.setOnClickListener(v -> showThongBaoPopup());
                 }
             }
 
@@ -181,27 +182,103 @@ public class Owner_KhachHangFragment extends Fragment {
         });
     }
 
+    private void showThongBaoPopup() {
+        // Tạo danh sách để lưu thông tin khách hàng có thông báo
+        List<KhachHang> khachHangThongBaoList = new ArrayList<>();
+
+        DatabaseReference db = FirebaseDatabase.getInstance().getReference("thongbaochu").child(idLogin);
+        db.addListenerForSingleValueEvent(new ValueEventListener() {
+            @Override
+            public void onDataChange(@NonNull DataSnapshot dataSnapshot) {
+                for (DataSnapshot customerSnapshot : dataSnapshot.getChildren()) {
+                    String xacthuc = String.valueOf(customerSnapshot.child("xacthuc").getValue(String.class));
+                    if (xacthuc != null && "1".equals(xacthuc)) {
+                        String khachHangId = customerSnapshot.getKey();
+                        layThongTinKhachHang(khachHangId, khachHangThongBaoList);
+                    }
+                }
+            }
+
+            @Override
+            public void onCancelled(@NonNull DatabaseError databaseError) {
+                Log.e("FirebaseError", "Lỗi khi truy xuất thông báo từ Firebase: " + databaseError.getMessage());
+            }
+        });
+    }
+
+    // Hàm lấy thông tin khách hàng từ Firebase và thêm vào danh sách
+    private void layThongTinKhachHang(String khachHangId, List<KhachHang> khachHangThongBaoList) {
+        DatabaseReference customerDb = FirebaseDatabase.getInstance().getReference("customers").child(khachHangId);
+        customerDb.addListenerForSingleValueEvent(new ValueEventListener() {
+            @Override
+            public void onDataChange(@NonNull DataSnapshot dataSnapshot) {
+                KhachHang khachHang = dataSnapshot.getValue(KhachHang.class);
+                if (khachHang != null) {
+                    khachHang.setID(dataSnapshot.getKey());
+                    khachHangThongBaoList.add(khachHang);
+                    hienThiDanhSachThongBao(khachHangThongBaoList); // Gọi hiển thị khi có khách hàng mới được thêm vào
+                }
+            }
+
+            @Override
+            public void onCancelled(@NonNull DatabaseError databaseError) {
+                Log.e("FirebaseError", "Lỗi khi truy xuất thông tin khách hàng: " + databaseError.getMessage());
+            }
+        });
+    }
+
+    private void hienThiDanhSachThongBao(List<KhachHang> khachHangThongBaoList) {
+        // Tạo một AlertDialog.Builder
+        AlertDialog.Builder builder = new AlertDialog.Builder(getContext());
+        builder.setTitle("KHÁCH HÀNG YÊU CẦU XÁC THỰC");
+
+        // Tạo RecyclerView cho AlertDialog
+        RecyclerView recyclerView = new RecyclerView(getContext());
+        recyclerView.setLayoutManager(new LinearLayoutManager(getContext()));
+
+        // Tạo adapter cho RecyclerView và thiết lập danh sách khách hàng
+        KhachHangAdapter thongBaoAdapter = new KhachHangAdapter(khachHangThongBaoList);
+        recyclerView.setAdapter(thongBaoAdapter);
+        builder.setView(recyclerView);
+
+        builder.setPositiveButton("Đóng", (dialog, which) -> dialog.dismiss());
+
+        // Tạo và hiển thị dialog
+        AlertDialog dialog = builder.create();
+        dialog.show();
+
+        // Thiết lập listener cho mỗi item trong danh sách và đóng dialog khi nhấn vào item
+        thongBaoAdapter.setOnItemClickListener(khachHang -> {
+            dialog.dismiss(); // Đóng dialog khi nhấn vào item
+            ChuyenSangFragmentDetail(khachHang.getID()); // Chuyển đến trang chi tiết
+        });
+    }
+
     private void nhanVaoItemKhachHang() {
         adapter.setOnItemClickListener(khachHang -> {
-            // Tạo Bundle để truyền thông tin khách hàng được chọn qua Fragment Detail
-            Bundle bundleIDKhachHang = new Bundle();
-            bundleIDKhachHang.putSerializable("idKH", khachHang.getID()); // Đưa dữ liệu ID khách hàng vào Bundle
-
-            // Tạo một instance, nó giúp chúng ta chuyển đổi dữ liệu từ Fragment này sang Fragment khác
-            Owner_KhachHangDetailFragment khachHangDetailFragment = new Owner_KhachHangDetailFragment();
-            // Gán Bundle (chứa thông tin id khách hàng) vào cho Fragment chi tiết
-            khachHangDetailFragment.setArguments(bundleIDKhachHang);
-
-            // Thực hiện chuyển đổi sang Fragment chi tiết, thay thế Fragment hiện tại
-            getParentFragmentManager().beginTransaction()
-                    .replace(R.id.fragment_owner, khachHangDetailFragment) // Thay thế fragment_owner hiện tại bằng fragment chi tiết
-                    .addToBackStack(null) // Cho phép quay lại màn hình trước khi nhấn nút Back
-                    .commit(); // Thực hiện chuyển đổi
-
-            // Xóa văn bản tìm kiếm khi một khách hàng được chọn
-            binding.searchView.setQuery("", false); // Xóa văn bản tìm kiếm
-            binding.searchView.clearFocus(); // Ẩn con trỏ
+            ChuyenSangFragmentDetail(khachHang.getID());
         });
+    }
+
+    private void ChuyenSangFragmentDetail(String idKH) {
+        // Tạo Bundle để truyền thông tin khách hàng được chọn qua Fragment Detail
+        Bundle bundleIDKhachHang = new Bundle();
+        bundleIDKhachHang.putSerializable("idKH", idKH); // Đưa dữ liệu ID khách hàng vào Bundle
+
+        // Tạo một instance, nó giúp chúng ta chuyển đổi dữ liệu từ Fragment này sang Fragment khác
+        Owner_KhachHangDetailFragment khachHangDetailFragment = new Owner_KhachHangDetailFragment();
+        // Gán Bundle (chứa thông tin id khách hàng) vào cho Fragment chi tiết
+        khachHangDetailFragment.setArguments(bundleIDKhachHang);
+
+        // Thực hiện chuyển đổi sang Fragment chi tiết, thay thế Fragment hiện tại
+        getParentFragmentManager().beginTransaction()
+                .replace(R.id.fragment_owner, khachHangDetailFragment) // Thay thế fragment_owner hiện tại bằng fragment chi tiết
+                .addToBackStack(null) // Cho phép quay lại màn hình trước khi nhấn nút Back
+                .commit(); // Thực hiện chuyển đổi
+
+        // Xóa văn bản tìm kiếm khi một khách hàng được chọn
+        binding.searchView.setQuery("", false); // Xóa văn bản tìm kiếm
+        binding.searchView.clearFocus(); // Ẩn con trỏ
     }
 
     // CHỨC NĂNG TÌM KIẾM KHACH HANG

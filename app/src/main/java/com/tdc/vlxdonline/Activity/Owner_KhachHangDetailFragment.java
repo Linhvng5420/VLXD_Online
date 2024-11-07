@@ -60,6 +60,20 @@ public class Owner_KhachHangDetailFragment extends Fragment {
         setupButtons();
     }
 
+    // TODO: XỬ LÝ BUTTON
+    private void setupButtons() {
+        // Lắng nghe sự kiện khi nhấn vào ivAuthenticated
+        binding.ivAuthenticated.setOnClickListener(v -> {
+            // Hiển thị hộp thoại xác nhận
+            new AlertDialog.Builder(getContext())
+                    .setTitle("Xác Thực Khách Hàng")
+                    .setMessage("Bạn có muốn thay đổi trạng thái xác thực của khách hàng này không?")
+                    .setPositiveButton("Xác Thực", (dialog, which) -> updateAuthenticationStatus("1")) // "1" cho Xác Thực
+                    .setNegativeButton("Hủy Xác Thực", (dialog, which) -> updateAuthenticationStatus("0")) // "0" cho Hủy Xác Thực
+                    .show();
+        });
+    }
+
     // NHẬN ID TỪ BUNDLE, TRUY XUẤT FIREBASE VÀ HIỂN THỊ THÔNG TIN LÊN GIAO DIỆN
     private void getDataKhachHang() {
         // getArguments() trả về Bundle chứa thông tin được truyền từ Fragment trước
@@ -109,6 +123,7 @@ public class Owner_KhachHangDetailFragment extends Fragment {
         }
     }
 
+    // XÁC THỰC KHÁCH HÀNG: HIỂN THỊ THÔNG TIN VÀ TRẠNG THÁI XÁC THỰC
     private void setupAuthenticated(String idKH) {
         DatabaseReference db = FirebaseDatabase.getInstance().getReference("duyetkhachhang");
         db.child(idChuLogin).child(idKH).addListenerForSingleValueEvent(new ValueEventListener() {
@@ -139,6 +154,32 @@ public class Owner_KhachHangDetailFragment extends Fragment {
         });
     }
 
+    // XÁC THỰC KHÁCH HÀNG: CẬP NHẬT TRẠNG THÁI XÁC THỰC
+    private void updateAuthenticationStatus(String status) {
+
+        // Cập nhật trạng thái xác thực cho khách hàng trong cơ sở dữ liệu
+        DatabaseReference dbDuyetKhachHanng = FirebaseDatabase.getInstance().getReference("duyetkhachhang");
+        dbDuyetKhachHanng.child(idChuLogin).child(idKH).child("trangthai").setValue(status)
+                .addOnSuccessListener(aVoid -> {
+                    // Cập nhật màu của ivAuthenticated theo trạng thái mới
+                    if ("1".equals(status)) {
+                        binding.ivAuthenticated.setBackgroundTintList(ColorStateList.valueOf(Color.parseColor("#4CAF50")));
+                        Toast.makeText(getContext(), "Xác thực thành công", Toast.LENGTH_SHORT).show();
+                    } else {
+                        binding.ivAuthenticated.setBackgroundTintList(ColorStateList.valueOf(Color.parseColor("#F44336")));
+                        Toast.makeText(getContext(), "Hủy xác thực thành công", Toast.LENGTH_SHORT).show();
+                    }
+                    Log.d("l.d", "Trạng thái xác thực đã được cập nhật thành công.");
+                })
+                .addOnFailureListener(e -> Log.d("l.d", "Lỗi cập nhật trạng thái xác thực: " + e.getMessage()));
+
+        // Cập nhật trạng thái thông báo cho chu cua hang ve yeu cau xac thuc cua khach hang
+        if ("1".equals(status)) {
+            DatabaseReference dbThongBaoChu = FirebaseDatabase.getInstance().getReference("thongbaochu");
+            dbThongBaoChu.child(idChuLogin).child(idKH).child("xacthuc").setValue("0");
+        }
+
+    }
 
     // ẢNH: HÀM ĐỂ HIỂN THỊ ẢNH CC
     private void hienthiAnhCCCD() {
@@ -181,36 +222,6 @@ public class Owner_KhachHangDetailFragment extends Fragment {
                 Log.e("Owner_NhanVienDetail", "Database error: " + databaseError.getMessage());
             }
         });
-    }
-
-    private void setupButtons() {
-        // Lắng nghe sự kiện khi nhấn vào ivAuthenticated
-        binding.ivAuthenticated.setOnClickListener(v -> {
-            // Hiển thị hộp thoại xác nhận
-            new AlertDialog.Builder(getContext())
-                    .setTitle("Xác Thực Khách Hàng")
-                    .setMessage("Bạn có muốn thay đổi trạng thái xác thực của khách hàng này không?")
-                    .setPositiveButton("Xác Thực", (dialog, which) -> updateAuthenticationStatus("1")) // "1" cho Xác Thực
-                    .setNegativeButton("Hủy Xác Thực", (dialog, which) -> updateAuthenticationStatus("0")) // "0" cho Hủy Xác Thực
-                    .show();
-        });
-    }
-
-    private void updateAuthenticationStatus(String status) {
-        DatabaseReference db = FirebaseDatabase.getInstance().getReference("duyetkhachhang");
-        db.child(idChuLogin).child(idKH).child("trangthai").setValue(status)
-                .addOnSuccessListener(aVoid -> {
-                    // Cập nhật màu của ivAuthenticated theo trạng thái mới
-                    if ("1".equals(status)) {
-                        binding.ivAuthenticated.setBackgroundTintList(ColorStateList.valueOf(Color.parseColor("#4CAF50")));
-                        Toast.makeText(getContext(), "Xác thực thành công", Toast.LENGTH_SHORT).show();
-                    } else {
-                        binding.ivAuthenticated.setBackgroundTintList(ColorStateList.valueOf(Color.parseColor("#F44336")));
-                        Toast.makeText(getContext(), "Hủy xác thực thành công", Toast.LENGTH_SHORT).show();
-                    }
-                    Log.d("l.d", "Trạng thái xác thực đã được cập nhật thành công.");
-                })
-                .addOnFailureListener(e -> Log.d("l.d", "Lỗi cập nhật trạng thái xác thực: " + e.getMessage()));
     }
 
     // CUỐI: THIẾT LẬP TOOLBAR VÀ ĐIỀU HƯỚNG

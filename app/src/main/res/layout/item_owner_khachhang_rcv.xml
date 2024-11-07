@@ -87,7 +87,6 @@
                     android:gravity="center"
                     android:paddingLeft="5dp"
                     android:paddingRight="5dp"
-                    android:text="Loại Khách Hàng"
                     android:textColor="#1E88E5"
                     android:textStyle="bold" />
             </LinearLayout>

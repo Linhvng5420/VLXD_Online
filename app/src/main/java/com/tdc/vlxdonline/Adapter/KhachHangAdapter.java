@@ -115,9 +115,9 @@ public class KhachHangAdapter extends RecyclerView.Adapter<KhachHangAdapter.Khac
                             String status = dataSnapshot.getValue(String.class);
                             if (status != null) {
                                 if (status.equals("1")) {
-                                    binding.tvLoaiKH.setText("Đã Duyệt");
+                                    binding.tvLoaiKH.setText("Đã Xác Thực");
                                 } else {
-                                    binding.tvLoaiKH.setText("Chưa Duyệt");
+                                    binding.tvLoaiKH.setText("Chưa Xác Thực");
                                     binding.tvLoaiKH.setTextColor(binding.tvLoaiKH.getContext().getResources().getColor(R.color.black));
                                 }
                             } else {
