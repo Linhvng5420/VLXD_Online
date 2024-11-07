@@ -74,6 +74,9 @@ public class TaoDonXuatKhoFragment extends Fragment {
         chiTietXuatAdapter = new ChiTietXuatAdapter(getActivity(), dsChiTiet); // Khởi tạo adapter cho chi tiết đơn hàng
         binding.rcvChitiet.setLayoutManager(new LinearLayoutManager(getActivity())); // Thiết lập layout cho RecyclerView
         binding.rcvChitiet.setAdapter(chiTietXuatAdapter); // Gán adapter vào RecyclerView
+        donHang = new DonHang();
+        dsChiTiet.clear();
+        chiTietXuatAdapter.notifyDataSetChanged();
 
         // Thêm sự kiện tìm kiếm cho SearchView
         binding.svDonhang.setOnQueryTextListener(new SearchView.OnQueryTextListener() {
@@ -160,7 +163,7 @@ public class TaoDonXuatKhoFragment extends Fragment {
         if (dsChiTiet.size() > 0) { // Kiểm tra danh sách chi tiết nhập
 //            showConfirm();
 
-            ((Warehouse_HomeActivity)getActivity()).ReplaceFragment(new ThongTinNhanHang_Fragment());
+            ((Warehouse_HomeActivity)getActivity()).ReplaceFragment(new ThongTinNhanHang_Fragment(donHang, dsChiTiet));
         } else {
             Toast.makeText(getActivity(), "Chưa có thông tin xuất kho", Toast.LENGTH_SHORT).show(); // Thông báo chưa có thông tin
         }
@@ -229,32 +232,6 @@ public class TaoDonXuatKhoFragment extends Fragment {
         reference.child("products").addValueEventListener(eventDocDanhSach); // Lắng nghe thay đổi trong danh sách sản phẩm
     }
 
-//    private void showConfirm() {
-//        AlertDialog.Builder builder = new AlertDialog.Builder(getActivity());
-//        builder.setMessage("Xác nhận tạo đơn hàng ?") // Thông điệp bằng tiếng Việt
-//                .setCancelable(false)
-//                .setPositiveButton("Có", new DialogInterface.OnClickListener() {
-//                    public void onClick(DialogInterface dialog, int id) {
-//                        reference.child("bills").child(donHang.getId() + "").setValue(donHang); // Lưu đơn nhập vào Firebase
-//                        for (int i = 0; i < dsChiTiet.size(); i++) {
-//                            reference.child("BillDetails").child(donHang.getId() + "").child(dsChiTiet.get(i).getIdSanPham()).setValue(dsChiTiet.get(i)); // Lưu chi tiết nhập
-//                        }
-//                        Toast.makeText(getActivity(), "Tạo đơn thành công", Toast.LENGTH_SHORT).show(); // Thông báo thành công
-//                        donHang = new DonHang(); // Tạo đơn mới
-//                        temp = new ChiTietDon(); // Tạo đối tượng chi tiết nhập mới
-//                        temp.setIdDon(donHang.getId());
-//                        dsChiTiet.clear(); // Xóa danh sách chi tiết nhập
-//                        chiTietXuatAdapter.notifyDataSetChanged(); // Cập nhật adapter // Gọi phương thức thêm số lượng
-//                    }
-//                })
-//                .setNegativeButton("Không", new DialogInterface.OnClickListener() {
-//                    public void onClick(DialogInterface dialog, int id) {
-//                        dialog.cancel(); // Đóng hộp thoại
-//                    }
-//                });
-//        AlertDialog alert = builder.create();
-//        alert.show(); // Hiển thị hộp thoại
-//    }
 
     // Phương thức để ẩn bàn phím
     public void hideKeyboard(View view) {

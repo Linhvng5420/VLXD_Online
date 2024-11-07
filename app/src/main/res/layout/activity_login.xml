@@ -53,13 +53,6 @@
         android:text="Hiển thị mật khẩu"
         android:layout_gravity="center"/>
 
-    <Spinner
-        android:id="@+id/sp_role_lg"
-        android:layout_width="250dp"
-        android:layout_height="35dp"
-        android:background="@drawable/bg_item_lg"
-        android:elevation="5dp"/>
-
     <Button
         android:id="@+id/btn_lg"
         android:layout_marginTop="10dp"
@@ -80,5 +73,5 @@
         android:textStyle="bold"
         android:textColor="#00F"
         />
-    
+
 </LinearLayout>

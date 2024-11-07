@@ -9,7 +9,8 @@ import androidx.recyclerview.widget.RecyclerView;
 
 import com.bumptech.glide.Glide;
 import com.tdc.vlxdonline.Model.Categorys;
-import com.tdc.vlxdonline.databinding.ItemPhanLoaiBinding;
+import com.tdc.vlxdonline.databinding.ItemLoaiCategoryBinding;
+//import com.tdc.vlxdonline.databinding.ItemPhanLoaiBinding;
 
 import java.util.ArrayList;
 
@@ -31,7 +32,7 @@ public class CategoryAdapter extends RecyclerView.Adapter<CategoryAdapter.Catego
     @NonNull
     @Override
     public CategoryHolder onCreateViewHolder(@NonNull ViewGroup parent, int viewType) {
-        return new CategoryHolder(ItemPhanLoaiBinding.inflate(context.getLayoutInflater(), parent, false));
+        return new CategoryHolder(ItemLoaiCategoryBinding.inflate(context.getLayoutInflater(), parent, false));
     }
 
     @Override
@@ -49,9 +50,9 @@ public class CategoryAdapter extends RecyclerView.Adapter<CategoryAdapter.Catego
     }
 
     public class CategoryHolder extends RecyclerView.ViewHolder {
-        ItemPhanLoaiBinding binding;
+        ItemLoaiCategoryBinding binding;
         int position;
-        public CategoryHolder(@NonNull ItemPhanLoaiBinding itemView) {
+        public CategoryHolder(@NonNull ItemLoaiCategoryBinding itemView) {
             super(itemView.getRoot());
             binding = itemView;
             binding.getRoot().setOnClickListener(new View.OnClickListener() {

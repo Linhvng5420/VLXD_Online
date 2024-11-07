@@ -10,12 +10,18 @@ import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 
+import com.tdc.vlxdonline.Model.DonHang;
+import com.tdc.vlxdonline.Model.DonNhap;
 import com.tdc.vlxdonline.R;
 import com.tdc.vlxdonline.databinding.FragmentGiaoDienDonHangBinding;
+
+import java.util.ArrayList;
 
 public class GiaoDienDonHang_Fragment extends Fragment {
 
     FragmentGiaoDienDonHangBinding binding;
+    ArrayList<DonNhap> dataNhap = new ArrayList<>();
+
 
 
     public GiaoDienDonHang_Fragment() {

@@ -10,7 +10,8 @@ import androidx.recyclerview.widget.RecyclerView;
 import com.bumptech.glide.Glide;
 import com.tdc.vlxdonline.Model.Products;
 import com.tdc.vlxdonline.R;
-import com.tdc.vlxdonline.databinding.ItemProductBinding;
+//import com.tdc.vlxdonline.databinding.ItemProductBinding;
+import com.tdc.vlxdonline.databinding.ItemProductDonhangBinding;
 
 import java.util.ArrayList;
 
@@ -34,7 +35,7 @@ public class ProductAdapter extends RecyclerView.Adapter<ProductAdapter.ProductH
     @NonNull
     @Override
     public ProductHolder onCreateViewHolder(@NonNull ViewGroup parent, int viewType) {
-        return new ProductHolder(ItemProductBinding.inflate(context.getLayoutInflater(), parent, false));
+        return new ProductHolder(ItemProductDonhangBinding.inflate(context.getLayoutInflater(), parent, false));
     }
 
     @Override
@@ -95,9 +96,9 @@ public class ProductAdapter extends RecyclerView.Adapter<ProductAdapter.ProductH
     }
 
     public class ProductHolder extends RecyclerView.ViewHolder {
-        ItemProductBinding binding;
+        ItemProductDonhangBinding binding;
         int position;
-        public ProductHolder(@NonNull ItemProductBinding itemView) {
+        public ProductHolder(@NonNull ItemProductDonhangBinding itemView) {
             super(itemView.getRoot());
             binding = itemView;
             binding.getRoot().setOnClickListener(new View.OnClickListener() {
