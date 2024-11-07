@@ -1,6 +1,7 @@
 package com.tdc.vlxdonline.Activity;
 
 import android.app.Activity;
+import android.graphics.Color;
 import android.os.Bundle;
 import android.util.Log;
 import android.view.LayoutInflater;
@@ -32,17 +33,21 @@ public class Owner_KhachHangFragment extends Fragment {
     KhachHangAdapter adapter;
 
     // Email mà tài khoản quản lý đang đăng nhập
-    String emailLogin = LoginActivity.idUser;
+    String idLogin = LoginActivity.idUser;
 
     // Lưu lại danh sách khách hàng ban đầu trước khi tìm kiếm
     private List<KhachHang> dsKhachHang;
 
+    // Thông báo
+    private ValueEventListener thongBaoListener;
 
     @Override
     public void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
+        Log.d("l.d", "Owner_KhachHangFragment > onCreate: idLogin: " + idLogin);
+        idLogin = idLogin.substring(0, idLogin.indexOf("@"));
         dsKhachHang = new ArrayList<>();
-        Log.d("l.d", "Owner_KhachHangFragment > onCreate: emailLogin: " + emailLogin);
+        hienThiThongBao();
     }
 
     @Override
@@ -85,8 +90,7 @@ public class Owner_KhachHangFragment extends Fragment {
         DatabaseReference db = FirebaseDatabase.getInstance().getReference("duyetkhachhang");
         List<String> dsIDKhachHang = new ArrayList<>();
 
-        String key = emailLogin.substring(0, emailLogin.indexOf("@"));
-        db.child(key).addListenerForSingleValueEvent(new ValueEventListener() {
+        db.child(idLogin).addListenerForSingleValueEvent(new ValueEventListener() {
             @Override
             public void onDataChange(@NonNull DataSnapshot dataSnapshot) {
                 for (DataSnapshot snapshot : dataSnapshot.getChildren()) {
@@ -144,7 +148,37 @@ public class Owner_KhachHangFragment extends Fragment {
 
     // HIEN THI THONG BAO
     private void hienThiThongBao() {
+        DatabaseReference db = FirebaseDatabase.getInstance().getReference("thongbaochu");
 
+        thongBaoListener = db.child(idLogin).addValueEventListener(new ValueEventListener() {
+            @Override
+            public void onDataChange(@NonNull DataSnapshot dataSnapshot) {
+                boolean hasNotification = false;
+
+                for (DataSnapshot customerSnapshot : dataSnapshot.getChildren()) {
+                    Long xacthuc = customerSnapshot.child("xacthuc").getValue(Long.class);
+                    if (xacthuc != null && xacthuc == 1) {
+                        hasNotification = true;
+                        break;
+                    }
+                }
+
+                if (hasNotification) {
+                    binding.lnThongBao.setBackground(getResources().getDrawable(com.google.android.gms.base.R.drawable.common_google_signin_btn_icon_dark_normal_background));
+                    binding.ivThongBao.setColorFilter(Color.parseColor("#F44336"));
+                    binding.tvThongBao.setText("Bạn có thông báo mới!");
+                } else {
+                    binding.lnThongBao.setBackground(getResources().getDrawable(com.google.android.gms.base.R.drawable.common_google_signin_btn_icon_light_normal_background));
+                    binding.ivThongBao.setColorFilter(Color.parseColor("#00FFFFFF"));
+                    binding.tvThongBao.setText(null);
+                }
+            }
+
+            @Override
+            public void onCancelled(@NonNull DatabaseError databaseError) {
+                Log.e("FirebaseError", "Lỗi khi truy xuất thông báo từ Firebase: " + databaseError.getMessage());
+            }
+        });
     }
 
     private void nhanVaoItemKhachHang() {
