@@ -19,10 +19,10 @@ import com.google.firebase.database.DatabaseError;
 import com.google.firebase.database.DatabaseReference;
 import com.google.firebase.database.FirebaseDatabase;
 import com.google.firebase.database.ValueEventListener;
-import com.tdc.vlxdonline.databinding.FragmentAccountSettingBinding;
+import com.tdc.vlxdonline.databinding.FragmentOwnerAccountSettingBinding;
 
-public class AccountSettingFragment extends Fragment {
-    FragmentAccountSettingBinding binding;
+public class Owner_SettingFragment extends Fragment {
+    FragmentOwnerAccountSettingBinding binding;
 
     String idUser = null;
     int statusShop;
@@ -54,7 +54,7 @@ public class AccountSettingFragment extends Fragment {
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container,
                              Bundle savedInstanceState) {
-        binding = FragmentAccountSettingBinding.inflate(inflater, container, false);
+        binding = FragmentOwnerAccountSettingBinding.inflate(inflater, container, false);
         return binding.getRoot();
     }
 
