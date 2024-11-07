@@ -62,13 +62,7 @@ public class Owner_HomeActivity extends AppCompatActivity {
             if (itemId == R.id.nav_owner_dashboard) {
                 ReplaceFragment(new Fragment());
             } else if (itemId == R.id.nav_owner_nhanvien) {
-                // Khởi tạo Fragment và truyền emailUser
-                Owner_NhanVienFragment ownerNhanVienFragment = new Owner_NhanVienFragment();
-                Bundle bundle = new Bundle();
-                bundle.putString("emailUser", emailUser);
-                ownerNhanVienFragment.setArguments(bundle);
-                // Thay thế fragment
-                ReplaceFragment(ownerNhanVienFragment);
+                ReplaceFragment(new Fragment());
             } else if (itemId == R.id.nav_owner_khachhang) {
                 ReplaceFragment(new Fragment());
             } else if (itemId == R.id.nav_owner_donhang) {
