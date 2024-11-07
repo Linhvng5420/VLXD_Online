@@ -80,29 +80,7 @@ public class Owner_KhachHangFragment extends Fragment {
         });
     }
 
-    private void nhanVaoItemKhachHang() {
-        adapter.setOnItemClickListener(khachHang -> {
-            // Tạo Bundle để truyền thông tin khách hàng được chọn qua Fragment Detail
-            Bundle bundleIDKhachHang = new Bundle();
-            bundleIDKhachHang.putSerializable("idKH", khachHang.getID()); // Đưa dữ liệu ID khách hàng vào Bundle
-
-            // Tạo một instance, nó giúp chúng ta chuyển đổi dữ liệu từ Fragment này sang Fragment khác
-            Owner_KhachHangDetailFragment khachHangDetailFragment = new Owner_KhachHangDetailFragment();
-            // Gán Bundle (chứa thông tin id khách hàng) vào cho Fragment chi tiết
-            khachHangDetailFragment.setArguments(bundleIDKhachHang);
-
-            // Thực hiện chuyển đổi sang Fragment chi tiết, thay thế Fragment hiện tại
-            getParentFragmentManager().beginTransaction()
-                    .replace(R.id.fragment_owner, khachHangDetailFragment) // Thay thế fragment_owner hiện tại bằng fragment chi tiết
-                    .addToBackStack(null) // Cho phép quay lại màn hình trước khi nhấn nút Back
-                    .commit(); // Thực hiện chuyển đổi
-
-            // Xóa văn bản tìm kiếm khi một khách hàng được chọn
-            binding.searchView.setQuery("", false); // Xóa văn bản tìm kiếm
-            binding.searchView.clearFocus(); // Ẩn con trỏ
-        });
-    }
-
+    // HIEN THI DANH SACH KHACH HANG
     private void hienThiDSKhachHang() {
         DatabaseReference db = FirebaseDatabase.getInstance().getReference("duyetkhachhang");
         List<String> dsIDKhachHang = new ArrayList<>();
@@ -162,6 +140,34 @@ public class Owner_KhachHangFragment extends Fragment {
                 }
             });
         }
+    }
+
+    // HIEN THI THONG BAO
+    private void hienThiThongBao() {
+
+    }
+
+    private void nhanVaoItemKhachHang() {
+        adapter.setOnItemClickListener(khachHang -> {
+            // Tạo Bundle để truyền thông tin khách hàng được chọn qua Fragment Detail
+            Bundle bundleIDKhachHang = new Bundle();
+            bundleIDKhachHang.putSerializable("idKH", khachHang.getID()); // Đưa dữ liệu ID khách hàng vào Bundle
+
+            // Tạo một instance, nó giúp chúng ta chuyển đổi dữ liệu từ Fragment này sang Fragment khác
+            Owner_KhachHangDetailFragment khachHangDetailFragment = new Owner_KhachHangDetailFragment();
+            // Gán Bundle (chứa thông tin id khách hàng) vào cho Fragment chi tiết
+            khachHangDetailFragment.setArguments(bundleIDKhachHang);
+
+            // Thực hiện chuyển đổi sang Fragment chi tiết, thay thế Fragment hiện tại
+            getParentFragmentManager().beginTransaction()
+                    .replace(R.id.fragment_owner, khachHangDetailFragment) // Thay thế fragment_owner hiện tại bằng fragment chi tiết
+                    .addToBackStack(null) // Cho phép quay lại màn hình trước khi nhấn nút Back
+                    .commit(); // Thực hiện chuyển đổi
+
+            // Xóa văn bản tìm kiếm khi một khách hàng được chọn
+            binding.searchView.setQuery("", false); // Xóa văn bản tìm kiếm
+            binding.searchView.clearFocus(); // Ẩn con trỏ
+        });
     }
 
     // CHỨC NĂNG TÌM KIẾM KHACH HANG

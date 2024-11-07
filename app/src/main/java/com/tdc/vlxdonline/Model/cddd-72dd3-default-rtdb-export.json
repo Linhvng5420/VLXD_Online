@@ -29,20 +29,42 @@
         "soLuong": 15,
         "ten": "Thép Ống HP"
       }
+    },
+    "1730864128505": {
+      "1730862302381": {
+        "anh": "https://firebasestorage.googleapis.com/v0/b/cddd-72dd3.appspot.com/o/SanPham%20Images%2F1000010135?alt=media&token=17ae13b3-16a7-4938-8f4f-f73a0815f59c",
+        "gia": 50000,
+        "idDon": 1730864128505,
+        "idSanPham": "1730862302381",
+        "soLuong": 2,
+        "ten": "Pay"
+      }
+    },
+    "1730865249624": {
+      "1730833480980": {
+        "anh": "https://firebasestorage.googleapis.com/v0/b/cddd-72dd3.appspot.com/o/SanPham%20Images%2Fstorage%2Femulated%2F0%2FDownload%2Fimages%20(1).jpeg?alt=media&token=d654cb1d-37dc-489e-8fb0-185833f69d97",
+        "gia": 95000,
+        "idDon": 1730865249624,
+        "idSanPham": "1730833480980",
+        "soLuong": 1,
+        "ten": "Xi Măng"
+      }
+    },
+    "1730865249780": {
+      "1730861308277": {
+        "anh": "https://firebasestorage.googleapis.com/v0/b/cddd-72dd3.appspot.com/o/SanPham%20Images%2F1000009200?alt=media&token=e151f663-5261-45b2-b8cc-aae38d6f2c3e",
+        "gia": 100000,
+        "idDon": 1730865249780,
+        "idSanPham": "1730861308277",
+        "soLuong": 1,
+        "ten": "Gỗ"
+      }
     }
   },
   "DonVi": {
     "1730679962932": {
       "id": 1730679962932,
       "ten": "Tấm"
-    },
-    "1730679980377": {
-      "id": 1730679980377,
-      "ten": "Gạch"
-    },
-    "1730679984958": {
-      "id": 1730679984958,
-      "ten": "Thép"
     },
     "1730680264549": {
       "id": 1730680264549,
@@ -60,9 +82,25 @@
       "id": 1730684089716,
       "ten": "Bao"
     },
-    "1730833302442": {
-      "id": 1730833302442,
-      "ten": "Kilogam"
+    "1730861571029": {
+      "id": 1730861571029,
+      "ten": "Thanh"
+    },
+    "1730861902277": {
+      "id": 1730861902277,
+      "ten": "Cuộn"
+    },
+    "1730861996832": {
+      "id": 1730861996832,
+      "ten": "Khối"
+    },
+    "1730897242024": {
+      "id": 1730897242024,
+      "ten": "CM"
+    },
+    "1730897246298": {
+      "id": 1730897246298,
+      "ten": "KG"
     }
   },
   "ProdImages": {
@@ -71,8 +109,100 @@
         "anh": "https://firebasestorage.googleapis.com/v0/b/cddd-72dd3.appspot.com/o/SanPham%20Images%2Fstorage%2Femulated%2F0%2FDownload%2Fimages%20(1).jpeg?alt=media&token=d654cb1d-37dc-489e-8fb0-185833f69d97"
       }
     },
+    "1730861308277": {
+      "-1": {
+        "anh": "https://firebasestorage.googleapis.com/v0/b/cddd-72dd3.appspot.com/o/SanPham%20Images%2F1000009200?alt=media&token=e151f663-5261-45b2-b8cc-aae38d6f2c3e"
+      }
+    },
+    "1730861599507": {
+      "-1": {
+        "anh": "https://firebasestorage.googleapis.com/v0/b/cddd-72dd3.appspot.com/o/SanPham%20Images%2F1000009201?alt=media&token=38cc01e7-093c-4d71-828f-225e51146111"
+      }
+    },
+    "1730861654492": {
+      "-1": {
+        "anh": "https://firebasestorage.googleapis.com/v0/b/cddd-72dd3.appspot.com/o/SanPham%20Images%2F1000009204?alt=media&token=d7fbb72a-f18a-41c7-8608-941c0763b4b7"
+      }
+    },
+    "1730861690540": {
+      "-1": {
+        "anh": "https://firebasestorage.googleapis.com/v0/b/cddd-72dd3.appspot.com/o/SanPham%20Images%2F1000009199?alt=media&token=eb00ec02-cc7e-4016-896b-c3a8a1921e2d"
+      }
+    },
+    "1730861943981": {
+      "-1": {
+        "anh": "https://firebasestorage.googleapis.com/v0/b/cddd-72dd3.appspot.com/o/SanPham%20Images%2F1000009194?alt=media&token=abea704b-afb8-43af-ab35-e94e1b96226d"
+      }
+    },
+    "1730862249133": {
+      "-1": {
+        "anh": "https://firebasestorage.googleapis.com/v0/b/cddd-72dd3.appspot.com/o/SanPham%20Images%2F1000010131?alt=media&token=5a0d0385-f3c3-4a44-af6a-c07a4692a2b3"
+      }
+    },
+    "1730862302381": {
+      "-1": {
+        "anh": "https://firebasestorage.googleapis.com/v0/b/cddd-72dd3.appspot.com/o/SanPham%20Images%2F1000010135?alt=media&token=17ae13b3-16a7-4938-8f4f-f73a0815f59c"
+      }
+    },
+    "1730862365970": {
+      "-1": {
+        "anh": "https://firebasestorage.googleapis.com/v0/b/cddd-72dd3.appspot.com/o/SanPham%20Images%2F1000010134?alt=media&token=3d228e77-ad45-4da3-b706-3d326550d7b6"
+      }
+    },
+    "1730862459971": {
+      "-1": {
+        "anh": "https://firebasestorage.googleapis.com/v0/b/cddd-72dd3.appspot.com/o/SanPham%20Images%2F1000009196?alt=media&token=60aade71-f7e9-415c-bcfd-221c8759689c"
+      },
+      "1730864878493": {
+        "anh": "https://firebasestorage.googleapis.com/v0/b/cddd-72dd3.appspot.com/o/ProdImages%20Images%2F1000009196?alt=media&token=a5499cd1-78ab-4ff7-bc2b-c4d3e732a2b1"
+      }
+    },
+    "1730862569033": {
+      "-1": {
+        "anh": "https://firebasestorage.googleapis.com/v0/b/cddd-72dd3.appspot.com/o/SanPham%20Images%2F1000009198?alt=media&token=f051ca5d-431d-458f-a791-cb2d93e7baf7"
+      }
+    },
+    "1730862728851": {
+      "-1": {
+        "anh": "https://firebasestorage.googleapis.com/v0/b/cddd-72dd3.appspot.com/o/SanPham%20Images%2F1000009197?alt=media&token=9d83dc41-363c-4f93-b308-c0910f448ce4"
+      },
+      "1730863057167": {
+        "anh": "https://firebasestorage.googleapis.com/v0/b/cddd-72dd3.appspot.com/o/ProdImages%20Images%2F1000009197?alt=media&token=7ea9c7ff-2234-465b-8e5b-6741d3e1552e"
+      }
+    },
+    "1730862870799": {
+      "-1": {
+        "anh": "https://firebasestorage.googleapis.com/v0/b/cddd-72dd3.appspot.com/o/SanPham%20Images%2F1000010132?alt=media&token=b49ee200-3e10-47d3-bb2e-f73915dc3588"
+      }
+    },
+    "1730862989693": {
+      "-1": {
+        "anh": "https://firebasestorage.googleapis.com/v0/b/cddd-72dd3.appspot.com/o/SanPham%20Images%2F1000009202?alt=media&token=d6b590c8-380f-4998-8d76-817fc86d1b6c"
+      },
+      "1730863075615": {
+        "anh": "https://firebasestorage.googleapis.com/v0/b/cddd-72dd3.appspot.com/o/ProdImages%20Images%2F1000009202?alt=media&token=5095915a-d781-4af7-bc14-b0b54b682e41"
+      }
+    },
+    "1730897009382": {
+      "-1": {
+        "anh": "https://firebasestorage.googleapis.com/v0/b/cddd-72dd3.appspot.com/o/SanPham%20Images%2F1000010143?alt=media&token=a0a71985-fbd9-4c2b-8ceb-0389a970fcbd"
+      }
+    },
+    "1730897051724": {
+      "-1": {
+        "anh": "https://firebasestorage.googleapis.com/v0/b/cddd-72dd3.appspot.com/o/SanPham%20Images%2F1000010142?alt=media&token=4fad2968-5a62-4ebc-9425-fe871a645a42"
+      }
+    },
+    "1730897091511": {
+      "-1": {
+        "anh": "https://firebasestorage.googleapis.com/v0/b/cddd-72dd3.appspot.com/o/SanPham%20Images%2F1000010141?alt=media&token=ab9ccf02-0977-4a36-ac9e-abcdd9beb8a6"
+      }
+    },
     "prd1730188846012": {
       "2345": {
+        "anh": "https://th.bing.com/th/id/OIP.bxsJ-TOgHI0Tsnvj5wb8iwHaHa?w=190&h=190&c=7&r=0&o=5&dpr=1.3&pid=1.7"
+      },
+      "-1": {
         "anh": "https://th.bing.com/th/id/OIP.bxsJ-TOgHI0Tsnvj5wb8iwHaHa?w=190&h=190&c=7&r=0&o=5&dpr=1.3&pid=1.7"
       }
     },
@@ -83,6 +213,9 @@
     },
     "prd1730188846789": {
       "4567": {
+        "anh": "https://th.bing.com/th/id/OIP.9KTo_dpuF_8sDp07C4Mp9wHaHa?w=162&h=180&c=7&r=0&o=5&dpr=1.3&pid=1.7"
+      },
+      "-1": {
         "anh": "https://th.bing.com/th/id/OIP.9KTo_dpuF_8sDp07C4Mp9wHaHa?w=162&h=180&c=7&r=0&o=5&dpr=1.3&pid=1.7"
       }
     }
@@ -282,7 +415,7 @@
       "sdt": "0974635364",
       "tenKhach": "Nguyen Van Khach",
       "tongTien": 1000000,
-      "trangThai": 4,
+      "trangThai": 3,
       "trangThaiTT": 2
     },
     "1730527191107": {
@@ -299,7 +432,7 @@
       "tenKhach": "Nguyen Thanh Danh",
       "tongTien": 17000000,
       "trangThai": 4,
-      "trangThaiTT": 1
+      "trangThaiTT": 0
     },
     "1730685661528": {
       "anh": "https://th.bing.com/th/id/OIP.U9xoBrKG8m2mLAr82t3BYgHaHa?w=214&h=180&c=7&r=0&o=5&dpr=1.3&pid=1.7",
@@ -314,30 +447,62 @@
       "sdt": "0974635364",
       "tenKhach": "Nguyen Van Khach",
       "tongTien": 2250000,
+      "trangThai": 4,
+      "trangThaiTT": 2
+    },
+    "1730864128505": {
+      "anh": "https://firebasestorage.googleapis.com/v0/b/cddd-72dd3.appspot.com/o/SanPham%20Images%2F1000010135?alt=media&token=17ae13b3-16a7-4938-8f4f-f73a0815f59c",
+      "diaChi": "Thị trấn Tăng Bạt Hổ, Hoài Ân",
+      "id": 1730864128505,
+      "idChu": "chu1",
+      "idGiao": "123",
+      "idKhach": "kh2",
+      "idTao": " ",
+      "ngayTao": "06-11-2024",
+      "phiTraGop": 0,
+      "sdt": "0974635364",
+      "tenKhach": "Nguyen Van Khach",
+      "tongTien": 100000,
       "trangThai": 3,
+      "trangThaiTT": 0
+    },
+    "1730865249780": {
+      "anh": "https://firebasestorage.googleapis.com/v0/b/cddd-72dd3.appspot.com/o/SanPham%20Images%2Fstorage%2Femulated%2F0%2FDownload%2Fimages%20(1).jpeg?alt=media&token=d654cb1d-37dc-489e-8fb0-185833f69d97",
+      "diaChi": "Thu Duc, TP.Ho Chi Minh",
+      "id": 1730865249780,
+      "idGiao": " ",
+      "idKhach": "kh1",
+      "idTao": " ",
+      "ngayTao": "06-11-2024",
+      "phiTraGop": 0,
+      "sdt": "0384756382",
+      "tenKhach": "Tran Van Huan",
+      "tongTien": 195000,
+      "trangThai": 1,
       "trangThaiTT": 0
     }
   },
   "carts": {
     "kh1": {
-      "prd1730188846789": {
+      "1730833480980": {
         "soLuong": 100
+      },
+      "1730861654492": {
+        "soLuong": 100
+      },
+      "prd1730188846032": {
+        "soLuong": 200
       }
     }
   },
   "categorys": {
-    "1730680099659": {
-      "anh": "https://firebasestorage.googleapis.com/v0/b/cddd-72dd3.appspot.com/o/categorys%20Images%2Fstorage%2Femulated%2F0%2FDownload%2Fimages.jpeg?alt=media&token=5f28f485-48f1-4f65-abeb-922e121a3fa3",
-      "id": "1730680099659",
-      "ten": "Thanh"
-    },
     "1730680329805": {
       "anh": "https://firebasestorage.googleapis.com/v0/b/cddd-72dd3.appspot.com/o/categorys%20Images%2Fstorage%2Femulated%2F0%2FDownload%2Fimages%20(3).jpeg?alt=media&token=3b6395e4-2745-45f8-9929-80f8b3376496",
       "id": "1730680329805",
       "ten": "Gạch"
     },
     "1730680448523": {
-      "anh": "https://firebasestorage.googleapis.com/v0/b/cddd-72dd3.appspot.com/o/categorys%20Images%2Fstorage%2Femulated%2F0%2FDownload%2Ft%E1%BA%A3i%20xu%E1%BB%91ng.jpeg?alt=media&token=f81ccc35-5c17-4045-95f9-88008b0e6a7f",
+      "anh": "https://firebasestorage.googleapis.com/v0/b/cddd-72dd3.appspot.com/o/categorys%20Images%2F1000009195?alt=media&token=90d5a8d9-95fb-41cb-b3a4-89093c8e6d6a",
       "id": "1730680448523",
       "ten": "Thép"
     },
@@ -345,6 +510,36 @@
       "anh": "https://firebasestorage.googleapis.com/v0/b/cddd-72dd3.appspot.com/o/categorys%20Images%2Fstorage%2Femulated%2F0%2FDownload%2Fimages%20(1).jpeg?alt=media&token=a509428b-8c69-4fda-9629-994555cea4cf",
       "id": "1730684062713",
       "ten": "Xi Măng"
+    },
+    "1730861231070": {
+      "anh": "https://firebasestorage.googleapis.com/v0/b/cddd-72dd3.appspot.com/o/categorys%20Images%2F1000009202?alt=media&token=90043453-b1ad-4119-9661-2f6bdb7bd943",
+      "id": "1730861231070",
+      "ten": "Gỗ"
+    },
+    "1730861262000": {
+      "anh": "https://firebasestorage.googleapis.com/v0/b/cddd-72dd3.appspot.com/o/categorys%20Images%2F1000009196?alt=media&token=83182764-d680-46fb-a91a-515bc47c7cd4",
+      "id": "1730861262000",
+      "ten": "Cát"
+    },
+    "1730861617165": {
+      "anh": "https://firebasestorage.googleapis.com/v0/b/cddd-72dd3.appspot.com/o/categorys%20Images%2F1000009204?alt=media&token=abbeeb0d-360b-42f8-b438-ee2416444ab0",
+      "id": "1730861617165",
+      "ten": "Gạch Ốp"
+    },
+    "1730862191823": {
+      "anh": "https://firebasestorage.googleapis.com/v0/b/cddd-72dd3.appspot.com/o/categorys%20Images%2F1000010133?alt=media&token=f7c5939f-23e1-4df8-ae8d-92eb1901bf1c",
+      "id": "1730862191823",
+      "ten": "Dụng Cụ"
+    },
+    "1730862506022": {
+      "anh": "https://firebasestorage.googleapis.com/v0/b/cddd-72dd3.appspot.com/o/categorys%20Images%2F1000009198?alt=media&token=582beb2c-71db-4d42-a65d-de0af4a66fe2",
+      "id": "1730862506022",
+      "ten": "Đá"
+    },
+    "1730896951676": {
+      "anh": "https://firebasestorage.googleapis.com/v0/b/cddd-72dd3.appspot.com/o/categorys%20Images%2F1000010142?alt=media&token=d37dcf8d-ed8f-4d12-8ca7-02ecd8d46e36",
+      "id": "1730896951676",
+      "ten": "Tôn"
     }
   },
   "chucvu": {
@@ -357,22 +552,24 @@
   },
   "customers": {
     "kh1": {
-      "avata": "https://th.bing.com/th/id/OIP.bxsJ-TOgHI0Tsnvj5wb8iwHaHa?w=190&h=190&c=7&r=0&o=5&dpr=1.3&pid=1.7",
-      "cccdMatSau": " ",
-      "cccdMatTruoc": " ",
-      "diaChi": "Thu Duc, TP.Ho Chi Minh",
+      "avata": "https://resizing.flixster.com/-XZAfHZM39UwaGJIFWKAE8fS0ak=/v3/t/assets/508950_v9_bc.jpg",
+      "cccdMatSau": "https://idscan.net/wp-content/uploads/back-of-an-id-pdf417-barcode.png",
+      "cccdMatTruoc": "https://whyy.org/wp-content/uploads/2024/01/Sample-REAL-ID-Driver-License.jpg",
+      "diaChi": "Bejing, China",
+      "email": "kh1@m.c",
       "sdt": "0384756382",
       "soCCCD": "49371298317",
-      "ten": "Tran Van Huan"
+      "ten": "Lưu Diệc Phi"
     },
     "kh2": {
-      "avata": "https://th.bing.com/th/id/OIP.btgP01toqugcXjPwAF-k2AHaHa?w=192&h=192&c=7&r=0&o=5&dpr=1.3&pid=1.7",
-      "cccdMatSau": "",
-      "cccdMatTruoc": "",
-      "diaChi": "Thị trấn Tăng Bạt Hổ, Hoài Ân",
+      "avata": "https://d.newsweek.com/en/full/2329455/mia-khalifa.jpg?w=1600&h=1600&q=88&f=43d415f693283f2eb03392d1c0e38c4f",
+      "cccdMatSau": "https://upload.wikimedia.org/wikipedia/commons/8/89/Spanish_ID_card_%28back_side%29.webp",
+      "cccdMatTruoc": "https://storage.funjaki.com/idcard_947762810f0339b2f62440512fb17d37.jpg",
+      "diaChi": "New York, New York, United States",
+      "email": "kh2@m.c",
       "sdt": "0974635364",
       "soCCCD": "12345789087",
-      "ten": "Nguyen Van Khach"
+      "ten": "Mia Khalifa"
     }
   },
   "duyetkhachhang": {
@@ -386,10 +583,10 @@
     },
     "chu2": {
       "kh1": {
-        "trangthai": "0"
+        "trangthai": "1"
       },
       "kh2": {
-        "trangthai": "1"
+        "trangthai": "0"
       }
     }
   },
@@ -660,18 +857,260 @@
       "giaNhap": "70000",
       "id": "1730833480980",
       "idChu": "chu1",
-      "moTa": "",
+      "moTa": "xi măng bao thanh thiên chuyên dán mồm",
       "soSao": "0",
       "ten": "Xi Măng",
+      "tonKho": "110"
+    },
+    "1730861308277": {
+      "anh": "https://firebasestorage.googleapis.com/v0/b/cddd-72dd3.appspot.com/o/SanPham%20Images%2F1000009200?alt=media&token=e151f663-5261-45b2-b8cc-aae38d6f2c3e",
+      "daBan": "0",
+      "danhMuc": "1730861231070",
+      "donVi": "Tấm",
+      "gia": "100000",
+      "giaBan": "100000",
+      "giaNhap": "10000",
+      "id": "1730861308277",
+      "idChu": "chu1",
+      "moTa": "ván gỗ ép cao cép",
+      "soSao": "0",
+      "ten": "Gỗ",
+      "tonKho": "98"
+    },
+    "1730861599507": {
+      "anh": "https://firebasestorage.googleapis.com/v0/b/cddd-72dd3.appspot.com/o/SanPham%20Images%2F1000009201?alt=media&token=38cc01e7-093c-4d71-828f-225e51146111",
+      "daBan": "0",
+      "danhMuc": "1730680448523",
+      "donVi": "Thanh",
+      "gia": "199999",
+      "giaBan": "199999",
+      "giaNhap": "99999",
+      "id": "1730861599507",
+      "idChu": "chu1",
+      "moTa": "thanh sắt rỗng cao cấp ",
+      "soSao": "0",
+      "ten": "Sắt",
+      "tonKho": "1000"
+    },
+    "1730861654492": {
+      "anh": "https://firebasestorage.googleapis.com/v0/b/cddd-72dd3.appspot.com/o/SanPham%20Images%2F1000009204?alt=media&token=d7fbb72a-f18a-41c7-8608-941c0763b4b7",
+      "daBan": "0",
+      "danhMuc": "1730861617165",
+      "donVi": "Tấm",
+      "gia": "50000",
+      "giaBan": "50000",
+      "giaNhap": "20000",
+      "id": "1730861654492",
+      "idChu": "chu1",
+      "moTa": "Gạch ống tường , ốp nền",
+      "soSao": "0",
+      "ten": "Gạch Ốp",
+      "tonKho": "1000"
+    },
+    "1730861690540": {
+      "anh": "https://firebasestorage.googleapis.com/v0/b/cddd-72dd3.appspot.com/o/SanPham%20Images%2F1000009199?alt=media&token=eb00ec02-cc7e-4016-896b-c3a8a1921e2d",
+      "daBan": "0",
+      "danhMuc": "1730680329805",
+      "donVi": "Thiên",
+      "gia": "2500",
+      "giaBan": "2500",
+      "giaNhap": "900",
+      "id": "1730861690540",
+      "idChu": "chu1",
+      "moTa": "Gạch ống 4 lỗ cao cấp",
+      "soSao": "0",
+      "ten": "Gạch Ống",
+      "tonKho": "1000"
+    },
+    "1730861943981": {
+      "anh": "https://firebasestorage.googleapis.com/v0/b/cddd-72dd3.appspot.com/o/SanPham%20Images%2F1000009194?alt=media&token=abea704b-afb8-43af-ab35-e94e1b96226d",
+      "daBan": "0",
+      "danhMuc": "1730680448523",
+      "donVi": "Cuộn",
+      "gia": "500000",
+      "giaBan": "500000",
+      "giaNhap": "300000",
+      "id": "1730861943981",
+      "idChu": "chu1",
+      "moTa": "Cuộn thép dài 100 mét",
+      "soSao": "0",
+      "ten": "Cuộn Thép",
+      "tonKho": "200"
+    },
+    "1730862249133": {
+      "anh": "https://firebasestorage.googleapis.com/v0/b/cddd-72dd3.appspot.com/o/SanPham%20Images%2F1000010131?alt=media&token=5a0d0385-f3c3-4a44-af6a-c07a4692a2b3",
+      "daBan": "0",
+      "danhMuc": "1730862191823",
+      "donVi": "Cái",
+      "gia": "499999",
+      "giaBan": "499999",
+      "giaNhap": "350000",
+      "id": "1730862249133",
+      "idChu": "chu1",
+      "moTa": "Khoan tường",
+      "soSao": "0",
+      "ten": "Máy Khoan",
+      "tonKho": "200"
+    },
+    "1730862302381": {
+      "anh": "https://firebasestorage.googleapis.com/v0/b/cddd-72dd3.appspot.com/o/SanPham%20Images%2F1000010135?alt=media&token=17ae13b3-16a7-4938-8f4f-f73a0815f59c",
+      "daBan": "0",
+      "danhMuc": "1730862191823",
+      "donVi": "Cái",
+      "gia": "50000",
+      "giaBan": "50000",
+      "giaNhap": "20000",
+      "id": "1730862302381",
+      "idChu": "chu1",
+      "moTa": "xẻng(pay) xây dựng",
+      "soSao": "0",
+      "ten": "Pay",
+      "tonKho": "98"
+    },
+    "1730862365970": {
+      "anh": "https://firebasestorage.googleapis.com/v0/b/cddd-72dd3.appspot.com/o/SanPham%20Images%2F1000010134?alt=media&token=3d228e77-ad45-4da3-b706-3d326550d7b6",
+      "daBan": "0",
+      "danhMuc": "1730862191823",
+      "donVi": "Cái",
+      "gia": "5000000",
+      "giaBan": "5000000",
+      "giaNhap": "3000000",
+      "id": "1730862365970",
+      "idChu": "chu1",
+      "moTa": "máy trộn hồ",
+      "soSao": "0",
+      "ten": "Máy trộn hồ",
+      "tonKho": "300"
+    },
+    "1730862459971": {
+      "anh": "https://firebasestorage.googleapis.com/v0/b/cddd-72dd3.appspot.com/o/SanPham%20Images%2F1000009196?alt=media&token=60aade71-f7e9-415c-bcfd-221c8759689c",
+      "daBan": "0",
+      "danhMuc": "1730861262000",
+      "donVi": "Khối",
+      "gia": "500000",
+      "giaBan": "500000",
+      "giaNhap": "300000",
+      "id": "1730862459971",
+      "idChu": "chu1",
+      "moTa": "cát lấy từ sông hồng",
+      "soSao": "0",
+      "ten": "Cát Sông Hồng",
+      "tonKho": "3000"
+    },
+    "1730862569033": {
+      "anh": "https://firebasestorage.googleapis.com/v0/b/cddd-72dd3.appspot.com/o/SanPham%20Images%2F1000009198?alt=media&token=f051ca5d-431d-458f-a791-cb2d93e7baf7",
+      "daBan": "0",
+      "danhMuc": "1730862506022",
+      "donVi": "Khối",
+      "gia": "590000",
+      "giaBan": "590000",
+      "giaNhap": "300000",
+      "id": "1730862569033",
+      "idChu": "chu1",
+      "moTa": "Đá xây ",
+      "soSao": "0",
+      "ten": "Đá mi",
       "tonKho": "100"
+    },
+    "1730862728851": {
+      "anh": "https://firebasestorage.googleapis.com/v0/b/cddd-72dd3.appspot.com/o/SanPham%20Images%2F1000009197?alt=media&token=9d83dc41-363c-4f93-b308-c0910f448ce4",
+      "daBan": "0",
+      "danhMuc": "1730684062713",
+      "donVi": "Bao",
+      "gia": "100000",
+      "giaBan": "100000",
+      "giaNhap": "50000",
+      "id": "1730862728851",
+      "idChu": "chu2",
+      "moTa": "xi măng từ cty xi măng hà tiên",
+      "soSao": "0",
+      "ten": "Xi Măng Hà Tiên",
+      "tonKho": "300"
+    },
+    "1730862870799": {
+      "anh": "https://firebasestorage.googleapis.com/v0/b/cddd-72dd3.appspot.com/o/SanPham%20Images%2F1000010132?alt=media&token=b49ee200-3e10-47d3-bb2e-f73915dc3588",
+      "daBan": "0",
+      "danhMuc": "1730862191823",
+      "donVi": "Cái",
+      "gia": "7000000",
+      "giaBan": "7000000",
+      "giaNhap": "4500000",
+      "id": "1730862870799",
+      "idChu": "chu2",
+      "moTa": "máy đằm đất, bê tông, địa hình",
+      "soSao": "0",
+      "ten": "Máy Đằm",
+      "tonKho": "50"
+    },
+    "1730862989693": {
+      "anh": "https://firebasestorage.googleapis.com/v0/b/cddd-72dd3.appspot.com/o/SanPham%20Images%2F1000009202?alt=media&token=d6b590c8-380f-4998-8d76-817fc86d1b6c",
+      "daBan": "0",
+      "danhMuc": "1730861231070",
+      "donVi": "Thanh",
+      "gia": "130000",
+      "giaBan": "130000",
+      "giaNhap": "777777",
+      "id": "1730862989693",
+      "idChu": "chu2",
+      "moTa": "Thanh gỗ cao cấp ",
+      "soSao": "0",
+      "ten": "Thanh Gỗ",
+      "tonKho": "1000"
+    },
+    "1730897009382": {
+      "anh": "https://firebasestorage.googleapis.com/v0/b/cddd-72dd3.appspot.com/o/SanPham%20Images%2F1000010143?alt=media&token=a0a71985-fbd9-4c2b-8ceb-0389a970fcbd",
+      "daBan": "0",
+      "danhMuc": "1730896951676",
+      "donVi": "Tấm",
+      "gia": "99000",
+      "giaBan": "99000",
+      "giaNhap": "45000",
+      "id": "1730897009382",
+      "idChu": "chu2",
+      "moTa": "Tôn giá rẻ",
+      "soSao": "0",
+      "ten": "Tôn B1",
+      "tonKho": "499"
+    },
+    "1730897051724": {
+      "anh": "https://firebasestorage.googleapis.com/v0/b/cddd-72dd3.appspot.com/o/SanPham%20Images%2F1000010142?alt=media&token=4fad2968-5a62-4ebc-9425-fe871a645a42",
+      "daBan": "0",
+      "danhMuc": "1730896951676",
+      "donVi": "Tấm",
+      "gia": "199000",
+      "giaBan": "199000",
+      "giaNhap": "145000",
+      "id": "1730897051724",
+      "idChu": "chu2",
+      "moTa": "Tôn tầm trung",
+      "soSao": "0",
+      "ten": "Tôn A1",
+      "tonKho": "289"
+    },
+    "1730897091511": {
+      "anh": "https://firebasestorage.googleapis.com/v0/b/cddd-72dd3.appspot.com/o/SanPham%20Images%2F1000010141?alt=media&token=ab9ccf02-0977-4a36-ac9e-abcdd9beb8a6",
+      "daBan": "0",
+      "danhMuc": "1730896951676",
+      "donVi": "Tấm",
+      "gia": "378000",
+      "giaBan": "378000",
+      "giaNhap": "310000",
+      "id": "1730897091511",
+      "idChu": "chu2",
+      "moTa": "tôn cao cấp ",
+      "soSao": "0",
+      "ten": "Tôn F1",
+      "tonKho": "200"
     },
     "prd1730188846012": {
       "anh": "https://th.bing.com/th/id/OIP.bxsJ-TOgHI0Tsnvj5wb8iwHaHa?w=190&h=190&c=7&r=0&o=5&dpr=1.3&pid=1.7",
       "daBan": "100",
-      "danhMuc": "1730680448523",
+      "danhMuc": "1730862191823",
       "donVi": "Cái",
+      "gia": "100000",
       "giaBan": "100000",
       "giaNhap": "80000",
+      "id": "prd1730188846012",
       "idChu": "chu2",
       "moTa": "Mui Khoan Cao Cap Vip Pro",
       "soSao": "4",
@@ -694,15 +1133,32 @@
     "prd1730188846789": {
       "anh": "https://th.bing.com/th/id/OIP.9KTo_dpuF_8sDp07C4Mp9wHaHa?w=162&h=180&c=7&r=0&o=5&dpr=1.3&pid=1.7",
       "daBan": "20",
-      "danhMuc": "1730680329805",
-      "donVi": "Vien",
+      "danhMuc": "1730861617165",
+      "donVi": "Tấm",
+      "gia": "250000",
       "giaBan": "250000",
       "giaNhap": "180000",
+      "id": "prd1730188846789",
       "idChu": "chu2",
       "moTa": "Gạch ốp tường D7 chất lượng cao, màu than đen, giả đá.",
       "soSao": "5",
       "ten": "Gạch ốp tường D7",
       "tonKho": "850"
+    }
+  },
+  "thongbaochu": {
+    "chu1": {
+      "kh1": {
+        "xacthuc": 1
+      }
+    }
+  },
+  "thongbaokh": {
+    "chu1": {
+      "idkh": "kh1"
+    },
+    "chu2": {
+      "idkh": "kh2"
     }
   },
   "thongtinchu": {
