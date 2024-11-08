@@ -12,7 +12,7 @@ import com.google.firebase.database.DatabaseReference;
 import com.google.firebase.database.FirebaseDatabase;
 import com.google.firebase.database.ValueEventListener;
 import com.tdc.vlxdonline.Model.NhanVien;
-import com.tdc.vlxdonline.databinding.ItemOwnerNhanvienRcvBinding;
+import com.tdc.vlxdonline.databinding.ItemOwnerRecycleviewBinding;
 
 import java.util.Collections;
 import java.util.Comparator;
@@ -46,7 +46,7 @@ public class NhanVienAdapter extends RecyclerView.Adapter<NhanVienAdapter.NhanVi
     // Tạo ViewHolder bằng View Binding để hiển thị item nhân viên
     public NhanVienViewHolder onCreateViewHolder(@NonNull ViewGroup parent, int viewType) {
         // Sử dụng View Binding để inflate layout item nhân viên
-        ItemOwnerNhanvienRcvBinding binding = ItemOwnerNhanvienRcvBinding.inflate(LayoutInflater.from(parent.getContext()), parent, false);
+        ItemOwnerRecycleviewBinding binding = ItemOwnerRecycleviewBinding.inflate(LayoutInflater.from(parent.getContext()), parent, false);
         return new NhanVienViewHolder(binding); // Trả về một ViewHolder mới với binding
     }
 
@@ -78,10 +78,10 @@ public class NhanVienAdapter extends RecyclerView.Adapter<NhanVienAdapter.NhanVi
     // ViewHolder cho dữ liệu nhân viên sử dụng View Binding
     public static class NhanVienViewHolder extends RecyclerView.ViewHolder {
         // Binding liên kết với layout của từng item nhân viên
-        private final ItemOwnerNhanvienRcvBinding binding;
+        private final ItemOwnerRecycleviewBinding binding;
 
         // Constructor ViewHolder, nhận đối tượng binding
-        public NhanVienViewHolder(@NonNull ItemOwnerNhanvienRcvBinding binding) {
+        public NhanVienViewHolder(@NonNull ItemOwnerRecycleviewBinding binding) {
             super(binding.getRoot()); // Gọi hàm super để liên kết View gốc
             this.binding = binding;
         }

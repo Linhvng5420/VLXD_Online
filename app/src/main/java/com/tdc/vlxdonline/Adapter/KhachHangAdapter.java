@@ -14,7 +14,7 @@ import com.google.firebase.database.ValueEventListener;
 import com.tdc.vlxdonline.Activity.LoginActivity;
 import com.tdc.vlxdonline.Model.KhachHang;
 import com.tdc.vlxdonline.R;
-import com.tdc.vlxdonline.databinding.ItemOwnerKhachhangRcvBinding;
+import com.tdc.vlxdonline.databinding.ItemOwnerRecycleviewBinding;
 
 import java.util.Collections;
 import java.util.Comparator;
@@ -48,7 +48,7 @@ public class KhachHangAdapter extends RecyclerView.Adapter<KhachHangAdapter.Khac
     // Tạo ViewHolder bằng View Binding để hiển thị item khách hàng
     public KhachHangViewHolder onCreateViewHolder(@NonNull ViewGroup parent, int viewType) {
         // Sử dụng View Binding để inflate layout item khách hàng
-        ItemOwnerKhachhangRcvBinding binding = ItemOwnerKhachhangRcvBinding.inflate(LayoutInflater.from(parent.getContext()), parent, false);
+        ItemOwnerRecycleviewBinding binding = ItemOwnerRecycleviewBinding.inflate(LayoutInflater.from(parent.getContext()), parent, false);
         return new KhachHangViewHolder(binding); // Trả về một ViewHolder mới với binding
     }
 
@@ -80,10 +80,10 @@ public class KhachHangAdapter extends RecyclerView.Adapter<KhachHangAdapter.Khac
     // ViewHolder cho dữ liệu khách hàng sử dụng View Binding
     public static class KhachHangViewHolder extends RecyclerView.ViewHolder {
         // Binding liên kết với layout của từng item khách hàng
-        private final ItemOwnerKhachhangRcvBinding binding;
+        private final ItemOwnerRecycleviewBinding binding;
 
         // Constructor ViewHolder, nhận đối tượng binding
-        public KhachHangViewHolder(@NonNull ItemOwnerKhachhangRcvBinding binding) {
+        public KhachHangViewHolder(@NonNull ItemOwnerRecycleviewBinding binding) {
             super(binding.getRoot()); // Gọi hàm super để liên kết View gốc
             this.binding = binding;
         }

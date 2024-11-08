@@ -110,7 +110,7 @@
             app:layout_constraintHorizontal_bias="0.5"
             app:layout_constraintStart_toStartOf="parent"
             app:layout_constraintTop_toBottomOf="@+id/linearLayout"
-            tools:listitem="@layout/item_owner_khachhang_rcv" />
+            tools:listitem="@layout/item_owner_recycleview" />
 
     </androidx.constraintlayout.widget.ConstraintLayout>
 
