@@ -31,10 +31,7 @@ import com.google.firebase.storage.FirebaseStorage;
 import com.google.firebase.storage.StorageReference;
 import com.google.firebase.storage.UploadTask;
 import com.tdc.vlxdonline.Adapter.Banner_Adapter;
-import com.tdc.vlxdonline.Adapter.CategoryAdapter;
-import com.tdc.vlxdonline.Model.AnhSP;
 import com.tdc.vlxdonline.Model.Banner;
-import com.tdc.vlxdonline.Model.Categorys;
 import com.tdc.vlxdonline.R;
 
 import java.util.ArrayList;

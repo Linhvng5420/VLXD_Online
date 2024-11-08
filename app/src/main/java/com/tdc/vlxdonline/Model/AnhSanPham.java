@@ -2,10 +2,10 @@ package com.tdc.vlxdonline.Model;
 
 public class AnhSanPham {
     private String anh, idSanPham;
-    private long id = 0;
+    private long id;
 
     public AnhSanPham() {
-        id = System.currentTimeMillis();
+        //id = System.currentTimeMillis();
     }
 
     public AnhSanPham(String anh, long id, String idSanPham) {

@@ -9,7 +9,6 @@ import androidx.annotation.NonNull;
 import androidx.recyclerview.widget.RecyclerView;
 
 import com.bumptech.glide.Glide;
-import com.tdc.vlxdonline.Model.AnhSP;
 import com.tdc.vlxdonline.Model.AnhSanPham;
 import com.tdc.vlxdonline.R;
 

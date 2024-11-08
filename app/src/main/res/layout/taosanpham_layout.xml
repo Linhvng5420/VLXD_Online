@@ -98,6 +98,12 @@
                         android:hint="Nhập Giá Bán" />
 
                     <EditText
+                        android:id="@+id/edtNhapgiaNhap"
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content"
+                        android:hint="Nhập Giá Nhap" />
+
+                    <EditText
                         android:id="@+id/edtNhapsoluong"
                         android:layout_width="match_parent"
                         android:layout_height="wrap_content"

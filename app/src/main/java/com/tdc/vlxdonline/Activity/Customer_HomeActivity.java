@@ -27,7 +27,6 @@ public class Customer_HomeActivity extends AppCompatActivity {
     private void EventNavigationBottom() {
         customerHomeBinding.navCustomer.setOnItemSelectedListener(item -> {
             int itemId = item.getItemId();
-
             if (itemId == R.id.nav_owner_dashboard) {
                 ReplaceFragment(new Fragment());
             } else if (itemId == R.id.nav_owner_nhanvien) {

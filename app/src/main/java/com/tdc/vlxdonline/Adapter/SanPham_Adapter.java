@@ -43,7 +43,7 @@ public class SanPham_Adapter extends RecyclerView.Adapter<SanPham_ViewHolder> {
     public void onBindViewHolder(@NonNull SanPham_ViewHolder holder, int position) {
         Glide.with(context).load(list.get(position).getAnh()).into(holder.ivImages);
         holder.tvTenSP.setText(list.get(position).getTen());
-        StringBuilder chuoi = new StringBuilder(list.get(position).gia);
+        StringBuilder chuoi = new StringBuilder(list.get(position).giaBan);
         if (chuoi.length() > 3) {
             int dem = 0;
             int doDai = chuoi.length() - 1;

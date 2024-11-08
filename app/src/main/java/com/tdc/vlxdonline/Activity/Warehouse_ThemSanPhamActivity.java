@@ -48,7 +48,7 @@ import java.util.List;
 import SanPham_Model.SanPham_Model;*/
 
 public class Warehouse_ThemSanPhamActivity extends AppCompatActivity {
-    EditText edtNhapten, edtNhapgiaban, edtNhapsoluong, edtDaban, edtMoTa;
+    EditText edtNhapten, edtNhapgiaban,edtgiaNhap, edtNhapsoluong, edtDaban, edtMoTa;
     Button btnThem, btnXoa, btnSua;
     ImageView ivImages;
     Uri uri;
@@ -86,7 +86,7 @@ public class Warehouse_ThemSanPhamActivity extends AppCompatActivity {
 
     private void getDanhMuc() {
         reference = FirebaseDatabase.getInstance().getReference();
-        listener = reference.child("category").addValueEventListener(new ValueEventListener() {
+        listener = reference.child("categorys").addValueEventListener(new ValueEventListener() {
             @Override
             public void onDataChange(@NonNull DataSnapshot snapshot) {
                 try {
@@ -171,7 +171,8 @@ public class Warehouse_ThemSanPhamActivity extends AppCompatActivity {
                 list_SP.clear();
                 for (DataSnapshot items : snapshot.getChildren()) {
                     SanPham_Model sanPhamModel = items.getValue(SanPham_Model.class);
-                    list_SP.add(sanPhamModel);
+                    sanPhamModel.setId(items.getKey());
+                    if (sanPhamModel.getIdChu().equals(Owner_HomeActivity.infoChu.getID())) list_SP.add(sanPhamModel);
                 }
                 // Notify adapter sau khi có dữ liệu
                 adapter.notifyDataSetChanged();
@@ -217,6 +218,7 @@ public class Warehouse_ThemSanPhamActivity extends AppCompatActivity {
                         uri == null ||
                                 edtNhapten.getText().toString().trim().isEmpty() ||
                                 edtNhapgiaban.getText().toString().trim().isEmpty() ||
+                                edtgiaNhap.getText().toString().trim().isEmpty() ||
                                 edtNhapsoluong.getText().toString().trim().isEmpty()) {
 
                     Toast.makeText(Warehouse_ThemSanPhamActivity.this,
@@ -270,6 +272,7 @@ public class Warehouse_ThemSanPhamActivity extends AppCompatActivity {
                             // Hiển thị thông tin sản phẩm lên các EditText
                             edtNhapten.setText(sanPhamModel.getTen());
                             edtNhapgiaban.setText(sanPhamModel.getGia());
+                            edtgiaNhap.setText(sanPhamModel.getGiaNhap());
                             edtNhapsoluong.setText(sanPhamModel.getTonKho());
                             edtDaban.setText(sanPhamModel.getDaBan());
                             edtMoTa.setText(sanPhamModel.getMoTa());
@@ -303,13 +306,16 @@ public class Warehouse_ThemSanPhamActivity extends AppCompatActivity {
         if (sanPhamModel.getId() == null) sanPhamModel.setId(System.currentTimeMillis() + "");
         sanPhamModel.setTen(edtNhapten.getText().toString());
         sanPhamModel.setGia(edtNhapgiaban.getText().toString());
+        sanPhamModel.setGiaNhap(edtgiaNhap.getText().toString());
+
         sanPhamModel.setTonKho(edtNhapsoluong.getText().toString());
         sanPhamModel.setMoTa(edtMoTa.getText().toString());
         sanPhamModel.setAnh(uri != null ? imagesUrl.toString() : sanPhamModel.getAnh());
         sanPhamModel.setDonVi(donVi);
         sanPhamModel.setDanhMuc(danhMuc);
-        sanPhamModel.setIdChu("1");
+        sanPhamModel.setIdChu(Owner_HomeActivity.infoChu.getID());
 
+        reference.child("ProdImages").child(sanPhamModel.getId()).child("-1").child("anh").setValue(sanPhamModel.getAnh());
         reference.child("products").child(sanPhamModel.getId()).setValue(sanPhamModel)
                 .addOnCompleteListener(task -> {
                     if (task.isSuccessful()) {
@@ -318,7 +324,6 @@ public class Warehouse_ThemSanPhamActivity extends AppCompatActivity {
                 });
         uri = null;
     }
-
     public void uploadData() {
         if (uri != null) {
             StorageReference storageReference = FirebaseStorage.getInstance().getReference().child("SanPham Images")
@@ -353,6 +358,7 @@ public class Warehouse_ThemSanPhamActivity extends AppCompatActivity {
                 }
             }
         });
+        reference.child("ProdImages").child(id).removeValue(); // Xóa ảnh trong bảng "ProdImages")
     }
 
     // clear trạng thái
@@ -360,6 +366,7 @@ public class Warehouse_ThemSanPhamActivity extends AppCompatActivity {
         sanPhamModel = new SanPham_Model();
         edtNhapten.setText("");
         edtNhapgiaban.setText("");
+        edtgiaNhap.setText("");
         edtNhapsoluong.setText("");
         edtDaban.setText("");
         edtMoTa.setText("");
@@ -370,9 +377,11 @@ public class Warehouse_ThemSanPhamActivity extends AppCompatActivity {
         btnSua.setEnabled(false);
         btnThem.setEnabled(true);
     }
+
     private void setControl() {
         edtNhapten = findViewById(R.id.edtNhapTen);
         edtNhapgiaban = findViewById(R.id.edtNhapgiaban);
+        edtgiaNhap = findViewById(R.id.edtNhapgiaNhap);
         edtNhapsoluong = findViewById(R.id.edtNhapsoluong);
         edtDaban = findViewById(R.id.edtDaban);
         edtMoTa = findViewById(R.id.edtMoTa);
@@ -383,5 +392,6 @@ public class Warehouse_ThemSanPhamActivity extends AppCompatActivity {
         recyclerView = findViewById(R.id.recycleview);
         spdonVi = findViewById(R.id.spdonVi);
         spdanhMuc = findViewById(R.id.spdanhMuc);
+
     }
 }

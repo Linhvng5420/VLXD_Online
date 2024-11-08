@@ -184,7 +184,6 @@ public class Warehouse_DanhMucActivity extends AppCompatActivity {
             @Override
             public void onCancelled(@NonNull DatabaseError error) {
             }
-
         });
     }
 
@@ -235,7 +234,7 @@ public class Warehouse_DanhMucActivity extends AppCompatActivity {
     }
 
     private void deleteProduct(String id) {
-        DatabaseReference productRef = FirebaseDatabase.getInstance().getReference("category").child(id);
+        DatabaseReference productRef = FirebaseDatabase.getInstance().getReference("categorys").child(id);
         productRef.removeValue().addOnCompleteListener(task -> {
             if (task.isSuccessful()) {
                 Toast.makeText(Warehouse_DanhMucActivity.this, "Xóa sản phẩm thành công", Toast.LENGTH_SHORT).show();

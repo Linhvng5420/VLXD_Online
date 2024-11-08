@@ -78,14 +78,11 @@
                 android:paddingStart="12dp"
                 android:paddingTop="8dp">
 
-                <TextView
-                    android:id="@+id/edtChonASP"
+                <Spinner
+                    android:id="@+id/spAnhSP"
                     android:layout_width="match_parent"
-                    android:layout_height="wrap_content"
-                    android:padding="12dp"
-                    android:text="Chọn Ảnh Sản Phẩm"
-                    android:gravity="center"
-                    android:textSize="15dp"/>
+                    android:layout_height="30dp"
+                    android:gravity="center" />
 
                 <LinearLayout
                     android:layout_width="match_parent"

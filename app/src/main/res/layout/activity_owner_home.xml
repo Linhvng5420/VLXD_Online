@@ -7,13 +7,14 @@
     android:orientation="vertical"
     tools:context=".Activity.Owner_HomeActivity">
 
-    <LinearLayout
+    <FrameLayout
+        android:id="@+id/fragment_container"
         android:layout_width="match_parent"
         android:layout_height="0dp"
         android:layout_weight="9"
         android:orientation="vertical">
 
-    </LinearLayout>
+    </FrameLayout>
 
     <!--  NAVIGATOR BOTTON  -->
     <LinearLayout
