@@ -69,7 +69,7 @@ public class Owner_HomeActivity extends AppCompatActivity {
             } else if (itemId == R.id.nav_owner_donhang) {
                 ReplaceFragment(new Fragment());
             } else if (itemId == R.id.nav_owner_kho) {
-                ReplaceFragment(new AccountSettingFragment());
+                ReplaceFragment(new Owner_SettingFragment());
             }
 
             return true;
