@@ -9,10 +9,10 @@ import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
 import androidx.fragment.app.Fragment;
 
-import com.tdc.vlxdonline.databinding.FragmentOwnerHosoBinding;
+import com.tdc.vlxdonline.databinding.FragmentOwnerSettingDetailBinding;
 
 public class Owner_SettingDetailFragment extends Fragment {
-    FragmentOwnerHosoBinding binding;
+    FragmentOwnerSettingDetailBinding binding;
 
     @Override
     public void onCreate(Bundle savedInstanceState) {
@@ -23,7 +23,7 @@ public class Owner_SettingDetailFragment extends Fragment {
     public View onCreateView(LayoutInflater inflater, ViewGroup container,
                              Bundle savedInstanceState) {
         // Inflate the layout for this fragment
-        binding = FragmentOwnerHosoBinding.inflate(inflater, container, false);
+        binding = FragmentOwnerSettingDetailBinding.inflate(inflater, container, false);
         return binding.getRoot();
     }
 
