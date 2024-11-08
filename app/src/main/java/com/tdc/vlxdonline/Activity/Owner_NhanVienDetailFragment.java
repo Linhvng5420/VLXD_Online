@@ -3,8 +3,12 @@ package com.tdc.vlxdonline.Activity;
 import android.Manifest;
 import android.app.Activity;
 import android.app.ProgressDialog;
+import android.content.ClipData;
+import android.content.ClipboardManager;
+import android.content.Context;
 import android.content.Intent;
 import android.content.pm.PackageManager;
+import android.graphics.Color;
 import android.net.Uri;
 import android.os.Bundle;
 import android.util.Log;
@@ -37,9 +41,12 @@ import com.google.firebase.storage.FirebaseStorage;
 import com.google.firebase.storage.StorageReference;
 import com.tdc.vlxdonline.Model.ChucVu;
 import com.tdc.vlxdonline.Model.NhanVien;
+import com.tdc.vlxdonline.Model.Users;
 import com.tdc.vlxdonline.R;
 import com.tdc.vlxdonline.databinding.FragmentOwnerNhanvienDetailBinding;
 
+import java.security.MessageDigest;
+import java.security.NoSuchAlgorithmException;
 import java.util.ArrayList;
 import java.util.List;
 
@@ -49,7 +56,8 @@ public class Owner_NhanVienDetailFragment extends Fragment {
     private NhanVien nhanVien = new NhanVien();
 
     //ID nhân viên đc truyền từ Fragment trước qua
-    private String selectedIDNhanVien;
+    private String idNhanVien;
+
     //Danh sách chức vụ từ Firebase
     private List<ChucVu> listChucVuFireBase = new ArrayList<>();
 
@@ -62,7 +70,6 @@ public class Owner_NhanVienDetailFragment extends Fragment {
     // Mã yêu cầu cho việc chọn ảnh
     private static final int PICK_IMAGE_FRONT_ID = 2;
     private static final int PICK_IMAGE_BACK_ID = 3;
-
     // Uri để lưu trữ đường dẫn đến ảnh được chọn
     private Uri anhCCCDTruoc, anhCCCDSau;
 
@@ -84,6 +91,8 @@ public class Owner_NhanVienDetailFragment extends Fragment {
     @Override
     public void onViewCreated(@NonNull View view, @Nullable Bundle savedInstanceState) {
         super.onViewCreated(view, savedInstanceState);
+        // Kiểm tra quyền đọc bộ nhớ
+        checkPermissions();
         //Thiết lập Toolbar cho Fragment
         setupToolbar(view);
 
@@ -93,7 +102,7 @@ public class Owner_NhanVienDetailFragment extends Fragment {
         binding.spinnerChucVu.setAdapter(chucVuAdapter);
 
         // Lấy danh sách chức vụ từ Firebase và cập nhật vào Spinner
-        setEventSpinner();
+        setupSpinner();
 
         // Lấy ID nhân viên từ Bundle rồi truy xuất thông tin nhân viên từ firebase và Hiển thị lên giao diện
         getDataNhanVien();
@@ -101,8 +110,9 @@ public class Owner_NhanVienDetailFragment extends Fragment {
         // Bắt sự kiện các Button
         setupEditButton();
         setupSaveButton();
-        setupDeleteButton(selectedIDNhanVien);
+        setupHiddenButton();
         setupCancelButton();
+        setupResetPassWord();
     }
 
     // LẤY TẤT CẢ DANH SÁCH CHỨC VỤ TỪ FIREBASE THEO THỜI GIAN THỰC
@@ -149,16 +159,11 @@ public class Owner_NhanVienDetailFragment extends Fragment {
         if (getArguments() != null) // Kiểm tra xem Bundle có tồn tại hay không
         {
             // Lấy thông tin nhân viên từ Bundle
-            selectedIDNhanVien = getArguments().getSerializable("selectedIDNhanVien").toString();
-
-            // Hiển thị thông tin ID nhân viên lên giao diện
-            Snackbar.make(getView(), "ID Nhân Viên\n" + selectedIDNhanVien, Toast.LENGTH_SHORT).setAnimationMode(BaseTransientBottomBar.ANIMATION_MODE_SLIDE).show();
-            Log.d("l.d", "nhanIDNhanVienTuBundle: " + selectedIDNhanVien.toString());
+            idNhanVien = getArguments().getSerializable("idNhanVien").toString();
 
             // Lấy thông tin nhân viên từ firebase thông qua ID
             DatabaseReference dbNhanVien = FirebaseDatabase.getInstance().getReference("nhanvien");
-
-            dbNhanVien.child(selectedIDNhanVien).addValueEventListener(new ValueEventListener() {
+            dbNhanVien.child(idNhanVien).addValueEventListener(new ValueEventListener() {
                 @Override
                 public void onDataChange(@NonNull DataSnapshot dataSnapshot) {
                     if (dataSnapshot.exists()) {
@@ -179,7 +184,7 @@ public class Owner_NhanVienDetailFragment extends Fragment {
                             Log.d("l.d", "Nhân viên không tồn tại trong cơ sở dữ liệu.");
                         }
                     } else {
-                        Log.d("l.d", "Không tìm thấy nhân viên với ID: " + selectedIDNhanVien);
+                        Log.d("l.d", "Không tìm thấy nhân viên với ID: " + idNhanVien);
                     }
                 }
 
@@ -189,9 +194,9 @@ public class Owner_NhanVienDetailFragment extends Fragment {
                 }
             });
 
-            hienthiAnhCCCD();
+            hienThiAnhCCCD();
         } else {
-            Log.d("l.d", "nhanIDNhanVienTuBundle: Lỗi truyền bundle từ fragment qua Detail");
+            Snackbar.make(getView(), "Không Lấy Được ID Nhân Viên", Toast.LENGTH_SHORT).setAnimationMode(BaseTransientBottomBar.ANIMATION_MODE_SLIDE).show();
         }
     }
 
@@ -226,7 +231,7 @@ public class Owner_NhanVienDetailFragment extends Fragment {
     }
 
     // BẮT SỰ KIỆN SPINNER
-    private void setEventSpinner() {
+    private void setupSpinner() {
         binding.spinnerChucVu.setOnItemSelectedListener(new AdapterView.OnItemSelectedListener() {
             @Override
             public void onItemSelected(AdapterView<?> parent, View view, int position, long id) {
@@ -241,7 +246,6 @@ public class Owner_NhanVienDetailFragment extends Fragment {
                 // Xử lý khi không có gì được chọn
             }
         });
-
     }
 
     // THIẾT LẬP SỰ KIỆN CHO CÁC NÚT
@@ -250,18 +254,31 @@ public class Owner_NhanVienDetailFragment extends Fragment {
             // Kích hoạt chỉnh sửa cho các trường thông tin
             binding.etTenNhanVien.setEnabled(true);
             binding.etSDT.setEnabled(true);
+            binding.etCCCD.setEnabled(true);
 
-            // Hiển thị Spinner chọn chức vụ
-            binding.tilChucVu.setVisibility(View.INVISIBLE);
-            binding.etChucVu.setVisibility(View.INVISIBLE);
-            binding.spinnerChucVu.setVisibility(View.VISIBLE);
-            binding.tvChucVu.setVisibility(View.VISIBLE);
-            binding.tvChucVu.setText("Chức Vụ");
-
-            // Hiển thị nút Lưu Lại, Xóa, Hủy. Ẩn nút Chỉnh Sửa
-            binding.btnLuuLai.setVisibility(View.VISIBLE);
-            binding.btnXoa.setVisibility(View.VISIBLE);
+            // Hiển thị nút Lưu Lại, Hủy.
             binding.btnHuy.setVisibility(View.VISIBLE);
+            binding.btnLuuLai.setVisibility(View.VISIBLE);
+
+            // Neu Nhan Vien An Thi Bo Qua: Nut An, Nut ResetPassWord
+            if (idNhanVien.startsWith("@")) {
+                binding.btnResetPassWord.setVisibility(View.INVISIBLE);
+                binding.btnAn.setVisibility(View.INVISIBLE);
+                binding.btnLuuLai.setText("Mở Khóa");
+            } else {
+                binding.btnResetPassWord.setVisibility(View.VISIBLE);
+                binding.btnAn.setVisibility(View.VISIBLE);
+                binding.btnLuuLai.setText("Lưu Lại");
+
+                // Hiển thị Spinner chọn chức vụ
+                binding.tilChucVu.setVisibility(View.INVISIBLE);
+                binding.etChucVu.setVisibility(View.INVISIBLE);
+                binding.spinnerChucVu.setVisibility(View.VISIBLE);
+                binding.tvChucVu.setVisibility(View.VISIBLE);
+                binding.tvChucVu.setText("Chức Vụ");
+            }
+
+            // Ẩn nút Chỉnh Sửa
             binding.btnChinhSua.setVisibility(View.INVISIBLE);
 
             // Cho phép người dùng chọn ảnh khi nhấn vào các ImageView
@@ -277,6 +294,7 @@ public class Owner_NhanVienDetailFragment extends Fragment {
 
                         // Vô hiệu hóa các trường chỉnh sửa sau khi hủy
                         binding.etTenNhanVien.setEnabled(false);
+                        binding.etCCCD.setEnabled(false);
                         binding.etSDT.setEnabled(false);
 
                         // Ẩn Spinner và hiển thị TextView cho chức vụ
@@ -284,12 +302,15 @@ public class Owner_NhanVienDetailFragment extends Fragment {
                         binding.etChucVu.setVisibility(View.VISIBLE);
                         binding.spinnerChucVu.setVisibility(View.INVISIBLE);
                         binding.tvChucVu.setVisibility(View.INVISIBLE);
+                        binding.btnResetPassWord.setVisibility(View.INVISIBLE);
 
-                        // Ẩn nút Lưu Lại, Xóa, Hủy và Hiển thị nút Sửa sau khi Hủy
+                        // Ẩn nút Lưu Lại, Xóa, Hủy
                         binding.btnLuuLai.setVisibility(View.INVISIBLE);
                         binding.btnHuy.setVisibility(View.VISIBLE);
-                        binding.btnXoa.setVisibility(View.INVISIBLE);
+                        binding.btnAn.setVisibility(View.INVISIBLE);
                         binding.btnHuy.setVisibility(View.INVISIBLE);
+
+                        // Hiển thị nút Sửa sau khi Hủy
                         binding.btnChinhSua.setVisibility(View.VISIBLE);
 
                         // Khóa chọn ảnh
@@ -302,8 +323,8 @@ public class Owner_NhanVienDetailFragment extends Fragment {
         });
     }
 
-    private void setupDeleteButton(String idNhanVien) {
-        binding.btnXoa.setOnClickListener(view -> {
+    private void setupHiddenButton() {
+        binding.btnAn.setOnClickListener(view -> {
             // Tạo hộp thoại xác nhận
             new AlertDialog.Builder(getContext())
                     .setTitle("Xác Nhận")
@@ -327,12 +348,10 @@ public class Owner_NhanVienDetailFragment extends Fragment {
                                     // Ghi dữ liệu vào key mới
                                     databaseReference.child("nhanvien").child(newKey).setValue(dataSnapshot.getValue()).addOnCompleteListener(task1 -> {
                                         if (task1.isSuccessful()) {
-                                            // Xóa key cũ
+                                            // Xóa data cũ
                                             databaseReference.child("nhanvien").child(oldKey).removeValue();
-
-                                            Toast.makeText(getContext(), "Ẩn NV thành công", Toast.LENGTH_SHORT).show();
-
-                                            // Quay lại màn hình quản lý nhân viên sau khi xóa
+                                            Snackbar.make(getView(), "Ẩn NV thành công", Toast.LENGTH_SHORT).setAnimationMode(BaseTransientBottomBar.ANIMATION_MODE_SLIDE).show();
+                                            // Quay lại màn hình quản lý nhân viên sau khi ẩn
                                             getParentFragmentManager().popBackStack();
                                         } else
                                             Toast.makeText(getContext(), "Ẩn NV không thành công", Toast.LENGTH_SHORT).show();
@@ -357,7 +376,10 @@ public class Owner_NhanVienDetailFragment extends Fragment {
             nhanVien.setEmailnv(nhanVien.getEmailnv());
             String cccd = nhanVien.getCccd();
 
-            if (batDieuKienDuLieuDauVao(nhanVien) == true) {
+            // Neu Nhan Vien dang an thi chuyen sang Nut Mo Khoa
+            if (idNhanVien.startsWith("@")) {
+                setupUnHiddenButton();
+            } else if (batDieuKienDuLieuDauVao(nhanVien) == true) {
                 new AlertDialog.Builder(getContext()).setTitle("Xác Nhận")
                         .setMessage("Bạn có chắc chắn muốn lưu thay đổi không?")
                         .setPositiveButton("Có", (dialog, which) -> {
@@ -390,7 +412,7 @@ public class Owner_NhanVienDetailFragment extends Fragment {
                                             binding.tvChucVu.setVisibility(View.INVISIBLE);
                                             binding.btnLuuLai.setVisibility(View.INVISIBLE);
                                             binding.btnHuy.setVisibility(View.VISIBLE);
-                                            binding.btnXoa.setVisibility(View.INVISIBLE);
+                                            binding.btnAn.setVisibility(View.INVISIBLE);
                                             binding.btnHuy.setVisibility(View.INVISIBLE);
                                             binding.btnChinhSua.setVisibility(View.VISIBLE);
                                             binding.ivCCCD1.setOnClickListener(null);
@@ -404,32 +426,52 @@ public class Owner_NhanVienDetailFragment extends Fragment {
                         .setNegativeButton("Không", null)
                         .show();
             }
+
         });
     }
 
-    private void uploadAnh(Runnable onUploadComplete, ProgressDialog progressDialog) {
-        StorageReference storageRef = FirebaseStorage.getInstance().getReference("CCCD");
-        StorageReference frontImageRef = storageRef.child(nhanVien.getCccd() + "_Truoc.jpg");
-        StorageReference backImageRef = storageRef.child(nhanVien.getCccd() + "_Sau.jpg");
+    private void setupUnHiddenButton() {
+        binding.btnAn.setOnClickListener(view -> {
+            new AlertDialog.Builder(getContext())
+                    .setTitle("Xác Nhận")
+                    .setMessage("Bạn có chắc chắn muốn Mở Khóa nhân viên không?")
+                    .setPositiveButton("Có", (dialog, which) -> {
 
-        frontImageRef.putFile(anhCCCDTruoc)
-                .addOnSuccessListener(taskSnapshot -> frontImageRef.getDownloadUrl().addOnSuccessListener(uri -> {
-                    nhanVien.setAnhcc1(uri.toString());
+                        // Xóa @ để tạo key mới
+                        String newIDNhanVien = idNhanVien.substring(1, idNhanVien.length() - 1);
 
-                    backImageRef.putFile(anhCCCDSau)
-                            .addOnSuccessListener(taskSnapshot2 -> backImageRef.getDownloadUrl().addOnSuccessListener(uri2 -> {
-                                nhanVien.setAnhcc2(uri2.toString());
-                                onUploadComplete.run();  // Gọi callback sau khi cả hai ảnh đã upload xong
-                            }))
-                            .addOnFailureListener(e -> {
-                                progressDialog.dismiss();
-                                Toast.makeText(getContext(), "Upload ảnh sau thất bại: " + e.getMessage(), Toast.LENGTH_SHORT).show();
-                            });
-                }))
-                .addOnFailureListener(e -> {
-                    progressDialog.dismiss();
-                    Toast.makeText(getContext(), "Upload ảnh trước thất bại: " + e.getMessage(), Toast.LENGTH_SHORT).show();
-                });
+                        DatabaseReference databaseReference = FirebaseDatabase.getInstance().getReference();
+
+                        // Tao Account
+                        createAccountForNhanVien(newIDNhanVien);
+
+                        // Đổi mã nhân viên
+                        databaseReference.child("nhanvien").child(idNhanVien).get().addOnCompleteListener(task -> {
+                            if (task.isSuccessful()) {
+                                DataSnapshot dataSnapshot = task.getResult();
+                                if (dataSnapshot.exists()) {
+                                    // Ghi dữ liệu vào key mới
+                                    databaseReference.child("nhanvien").child(newIDNhanVien).setValue(dataSnapshot.getValue()).addOnCompleteListener(task1 -> {
+                                        if (task1.isSuccessful()) {
+                                            // Xóa key cũ
+                                            databaseReference.child("nhanvien").child(idNhanVien).removeValue();
+                                            Toast.makeText(getContext(), "Mở Khóa NV thành công", Toast.LENGTH_SHORT).show();
+                                            // Quay lại màn hình quản lý nhân viên sau khi ẩn
+                                            getParentFragmentManager().popBackStack();
+                                        } else
+                                            Toast.makeText(getContext(), "Mở Khóa NV không thành công", Toast.LENGTH_SHORT).show();
+                                    });
+                                }
+                            }
+                        });
+                    })
+                    .setNegativeButton("Không", null)
+                    .show();
+        });
+    }
+
+    private void setupResetPassWord() {
+
     }
 
     // TÌM VÀ ĐỌC ID CHỨC VỤ TRONG listChucVuFireBase BẰNG TÊN CHỨC VỤ TRUYỀN VÀO
@@ -461,11 +503,67 @@ public class Owner_NhanVienDetailFragment extends Fragment {
         return "Lỗi: docIDChucVuBangTen";
     }
 
+    // TẠO MẬT KHẨU VÀ HIỂN THỊ ACCOUNT MỚI TẠO
+    private void createAccountForNhanVien(String cccd) {
+        // Tạo tài khoản với mật khẩu ngẫu nhiên và mã hóa
+        String userNhanVien = nhanVien.getEmailnv();
+        String passwordNhanVien = String.valueOf((int) (Math.random() * 1000000)); // Tạo mật khẩu ngẫu nhiên 6 chữ số
+        String hashedPassword = hashPassword(passwordNhanVien); // Mã hóa mật khẩu
+        Users usersNhanVienMoi = new Users(userNhanVien, hashedPassword, "nv");
+        DatabaseReference dbrfAccount = FirebaseDatabase.getInstance().getReference("account");
+        dbrfAccount.child(cccd).setValue(usersNhanVienMoi)
+                .addOnSuccessListener(unused -> {
+                    Snackbar.make(getView(), "Tạo tài khoản cho nhân viên thành công", Toast.LENGTH_SHORT).show();
+                    // Hiển thị hộp thoại thông tin tài khoản
+                    showAccountInfoDialog(userNhanVien, passwordNhanVien);
+                })
+                .addOnFailureListener(e -> {
+                    Snackbar.make(getView(), "Tạo TK nhân viên thất bại: " + e.getMessage(), Toast.LENGTH_SHORT).show();
+                });
+    }
+
+    private String hashPassword(String password) {
+        try {
+            MessageDigest md = MessageDigest.getInstance("SHA-256");
+            byte[] hash = md.digest(password.getBytes());
+            StringBuilder hexString = new StringBuilder();
+
+            for (byte b : hash) {
+                String hex = Integer.toHexString(0xff & b);
+                if (hex.length() == 1) hexString.append('0');
+                hexString.append(hex);
+            }
+
+            return hexString.toString();
+        } catch (NoSuchAlgorithmException e) {
+            e.printStackTrace();
+            return null;
+        }
+    }
+
+    private void showAccountInfoDialog(String userNhanVien, String passwordNhanVien) {
+        AlertDialog.Builder builder = new AlertDialog.Builder(getContext());
+        builder.setTitle("Thông tin tài khoản nhân viên")
+                .setMessage("User: " + userNhanVien + "\nPassword: " + passwordNhanVien)
+                .setPositiveButton("OK", (dialogInterface, i) -> {
+                    getParentFragmentManager().popBackStack(); // Quay lại Fragment trước
+                })
+                .setNeutralButton("Copy", (dialogInterface, i) -> {
+                    // Sao chép User và Password vào Clipboard
+                    ClipboardManager clipboard = (ClipboardManager) getContext().getSystemService(Context.CLIPBOARD_SERVICE);
+                    ClipData clip = ClipData.newPlainText("User & Password", userNhanVien + "\n" + passwordNhanVien);
+                    clipboard.setPrimaryClip(clip);
+                    getParentFragmentManager().popBackStack(); // Quay lại Fragment trước
+                    Snackbar.make(getView(), "Đã sao chép User và Password vào clipboard", Toast.LENGTH_SHORT).show();
+                });
+        builder.show();
+    }
+
     // ẢNH: HÀM ĐỂ HIỂN THỊ ẢNH CC
-    private void hienthiAnhCCCD() {
+    private void hienThiAnhCCCD() {
         // Lấy dữ liệu của nhân viên từ Firebase
         DatabaseReference dbNhanVien = FirebaseDatabase.getInstance().getReference("nhanvien");
-        dbNhanVien.child(selectedIDNhanVien).addListenerForSingleValueEvent(new ValueEventListener() {
+        dbNhanVien.child(idNhanVien).addListenerForSingleValueEvent(new ValueEventListener() {
             @Override
             public void onDataChange(@NonNull DataSnapshot dataSnapshot) {
                 // Kiểm tra nếu có dữ liệu
@@ -501,8 +599,16 @@ public class Owner_NhanVienDetailFragment extends Fragment {
         });
     }
 
-    // ẢNH: MỞ TRÌNH CHỌN ẢNH
+    private void checkPermissions() {
+        // Kiểm tra xem ứng dụng có quyền truy cập vào bộ nhớ ngoài hay không
+        if (ContextCompat.checkSelfPermission(getContext(), Manifest.permission.READ_EXTERNAL_STORAGE) != PackageManager.PERMISSION_GRANTED) {
+            // Nếu chưa có quyền, yêu cầu quyền truy cập từ người dùng
+            ActivityCompat.requestPermissions(getActivity(), new String[]{Manifest.permission.READ_EXTERNAL_STORAGE}, PICK_IMAGE_FRONT_ID);
+        }
+    }
+
     private void openImagePicker(int requestCode) {
+        // ẢNH: MỞ TRÌNH CHỌN ẢNH
         //ACTION_GET_CONTENT: cho phép chọn một tệp từ bất kỳ nguồn nào, bao gồm cả trình quản lý tệp và các ứng dụng khác.
         Intent intent = new Intent(Intent.ACTION_GET_CONTENT);
         intent.setType("image/*"); // Chỉ định loại tệp là hình ảnh
@@ -510,9 +616,9 @@ public class Owner_NhanVienDetailFragment extends Fragment {
         startActivityForResult(Intent.createChooser(intent, "Chọn ảnh"), requestCode); // Mở trình hộp thoại chọn ảnh
     }
 
-    // ẢNH: XỬ LÝ ẢNH SAU KHI CHỌN
     @Override
     public void onActivityResult(int requestCode, int resultCode, @Nullable Intent data) {
+        // ẢNH: XỬ LÝ ẢNH SAU KHI CHỌN
         super.onActivityResult(requestCode, resultCode, data);
         // Kiểm tra kết quả trả về từ hoạt động chọn ảnh
         if (resultCode == Activity.RESULT_OK && data != null) {
@@ -532,13 +638,29 @@ public class Owner_NhanVienDetailFragment extends Fragment {
         }
     }
 
-    // ẢNH: KIỂM TRA VÀ YÊU CẦU QUYỀN TRUY CẬP
-    private void checkPermissions() {
-        // Kiểm tra xem ứng dụng có quyền truy cập vào bộ nhớ ngoài hay không
-        if (ContextCompat.checkSelfPermission(getContext(), Manifest.permission.READ_EXTERNAL_STORAGE) != PackageManager.PERMISSION_GRANTED) {
-            // Nếu chưa có quyền, yêu cầu quyền truy cập từ người dùng
-            ActivityCompat.requestPermissions(getActivity(), new String[]{Manifest.permission.READ_EXTERNAL_STORAGE}, PICK_IMAGE_FRONT_ID);
-        }
+    private void uploadAnh(Runnable onUploadComplete, ProgressDialog progressDialog) {
+        StorageReference storageRef = FirebaseStorage.getInstance().getReference("CCCD");
+        StorageReference frontImageRef = storageRef.child(nhanVien.getCccd() + "_Truoc.jpg");
+        StorageReference backImageRef = storageRef.child(nhanVien.getCccd() + "_Sau.jpg");
+
+        frontImageRef.putFile(anhCCCDTruoc)
+                .addOnSuccessListener(taskSnapshot -> frontImageRef.getDownloadUrl().addOnSuccessListener(uri -> {
+                    nhanVien.setAnhcc1(uri.toString());
+
+                    backImageRef.putFile(anhCCCDSau)
+                            .addOnSuccessListener(taskSnapshot2 -> backImageRef.getDownloadUrl().addOnSuccessListener(uri2 -> {
+                                nhanVien.setAnhcc2(uri2.toString());
+                                onUploadComplete.run();  // Gọi callback sau khi cả hai ảnh đã upload xong
+                            }))
+                            .addOnFailureListener(e -> {
+                                progressDialog.dismiss();
+                                Toast.makeText(getContext(), "Upload ảnh sau thất bại: " + e.getMessage(), Toast.LENGTH_SHORT).show();
+                            });
+                }))
+                .addOnFailureListener(e -> {
+                    progressDialog.dismiss();
+                    Toast.makeText(getContext(), "Upload ảnh trước thất bại: " + e.getMessage(), Toast.LENGTH_SHORT).show();
+                });
     }
 
     // CUỐI: BẮT ĐIỀU KIỆN DỮ LIỆU ĐẦU VÀO

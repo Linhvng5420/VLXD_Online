@@ -7,22 +7,6 @@
     tools:context=".Activity.Owner_NhanVienDetailFragment">
 
     <!-- Thanh Toolbar -->
-
-    <com.google.android.material.floatingactionbutton.FloatingActionButton
-        android:id="@+id/btnResetPassWord"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:layout_marginEnd="32dp"
-        android:layout_marginBottom="16dp"
-        android:contentDescription="Chỉnh sửa"
-        android:src="@android:drawable/ic_partial_secure"
-        android:visibility="invisible"
-        app:backgroundTint="#E53935"
-        app:layout_constraintBottom_toTopOf="@+id/btnChinhSua"
-        app:layout_constraintEnd_toEndOf="parent"
-        app:maxImageSize="40dp"
-        app:tint="@color/white" />
-
     <androidx.appcompat.widget.Toolbar
         android:id="@+id/toolbar"
         android:layout_width="0dp"
@@ -35,10 +19,8 @@
         app:layout_constraintTop_toTopOf="parent"
         app:title="Chi tiết Nhân Viên" />
 
-    <!-- Avatar của Nhân Viên -->
 
     <!-- EditText Tên Nhân Viên (Mặc định: Không Cho Sửa)-->
-
     <com.google.android.material.textfield.TextInputLayout
         android:id="@+id/tilTenNhanVien"
         android:layout_width="match_parent"
@@ -243,7 +225,7 @@
         app:layout_constraintStart_toStartOf="@+id/ivCCCD2"
         app:layout_constraintTop_toBottomOf="@+id/ivCCCD2" />
 
-    <!--  Button  -->
+    <!-- Nút Hủy Chỉnh Sửa -->
     <com.google.android.material.floatingactionbutton.FloatingActionButton
         android:id="@+id/btnChinhSua"
         android:layout_width="wrap_content"
@@ -260,18 +242,13 @@
         app:tint="#F44336" />
 
     <!-- Nút Xóa -->
-
-    <!-- Nút Lưu Lại (Ẩn) -->
-
-    <!-- Nút Hủy Chỉnh Sửa -->
-
     <com.google.android.material.floatingactionbutton.FloatingActionButton
-        android:id="@+id/btnXoa"
+        android:id="@+id/btnAn"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:layout_marginStart="32dp"
         android:layout_marginBottom="32dp"
-        android:contentDescription="Xóa"
+        android:contentDescription="Ẩn"
         android:src="@drawable/ic_trash"
         android:visibility="invisible"
         app:backgroundTint="#F44336"
@@ -280,6 +257,7 @@
         app:maxImageSize="40dp"
         app:tint="#FFFFFF" />
 
+    <!-- Nút Lưu Lại -->
     <com.google.android.material.floatingactionbutton.ExtendedFloatingActionButton
         android:id="@+id/btnLuuLai"
         android:layout_width="wrap_content"
@@ -315,5 +293,22 @@
         app:layout_constraintEnd_toEndOf="parent"
         app:maxImageSize="40dp"
         app:tint="#FF0000" />
+
+    <!--  Reset Password  -->
+    <com.google.android.material.floatingactionbutton.FloatingActionButton
+        android:id="@+id/btnResetPassWord"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_marginEnd="32dp"
+        android:layout_marginBottom="16dp"
+        android:contentDescription="Chỉnh sửa"
+        android:src="@drawable/baseline_lock_reset_24"
+        android:tintMode="multiply"
+        android:visibility="visible"
+        app:backgroundTint="#3F51B5"
+        app:layout_constraintBottom_toTopOf="@+id/btnChinhSua"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:maxImageSize="40dp"
+        app:tint="#FF9800" />
 
 </androidx.constraintlayout.widget.ConstraintLayout>

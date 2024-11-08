@@ -1,6 +1,7 @@
 package com.tdc.vlxdonline.Activity;
 
 import android.app.Activity;
+import android.graphics.Color;
 import android.os.Bundle;
 import android.view.LayoutInflater;
 import android.view.View;
@@ -29,17 +30,14 @@ import java.util.ArrayList;
 import java.util.List;
 
 public class Owner_NhanVienFragment extends Fragment {
-
-    // Khai báo đối tượng binding để liên kết với layout của Fragment
     private FragmentOwnerNhanvienBinding ownerNhanvienBinding;
-    // Adapter để hiển thị danh sách nhân viên
-    private NhanVienAdapter nhanVienAdapter;
 
     // Email mà tài khoản quản lý đang đăng nhập
     String emailLogin = LoginActivity.idUser;
 
     // Lưu lại danh sách nhân viên ban đầu trước khi tìm kiếm
     private List<NhanVien> dsNhanVien = new ArrayList<>();
+    private NhanVienAdapter nhanVienAdapter;
 
     @Override
     public void onCreate(@Nullable Bundle savedInstanceState) {
@@ -49,10 +47,7 @@ public class Owner_NhanVienFragment extends Fragment {
     @Nullable
     @Override
     public View onCreateView(@NonNull LayoutInflater inflater, @Nullable ViewGroup container, @Nullable Bundle savedInstanceState) {
-        // Khởi tạo View Binding cho Fragment và liên kết với layout fragment_owner_nhanvien.xml
         ownerNhanvienBinding = FragmentOwnerNhanvienBinding.inflate(inflater, container, false);
-
-        // Trả về đối tượng View được tạo từ binding, đây là root view của Fragment
         return ownerNhanvienBinding.getRoot();
     }
 
@@ -66,19 +61,20 @@ public class Owner_NhanVienFragment extends Fragment {
         // Khởi tạo danh sách nhân viên trống và adapter
         List<NhanVien> nhanVienList = new ArrayList<>();
         nhanVienAdapter = new NhanVienAdapter(nhanVienList);
+        nhanVienAdapter.sortNhanVienList();
         ownerNhanvienBinding.ownerRcvNhanVien.setAdapter(nhanVienAdapter);
 
         // Firebase: lấy dữ liệu từ Firebase
-        hienThiDSNhanVien();
+        getDataNhanVien();
 
         // Bắt sự kiện khi nhấn vào recycleview nhân viên
-        nhanVaoItemNhanVien();
+        setupNhanItemRecycleView();
 
         // Bắt sự kiện khi nhấn nút thêm nhân viên
-        nhanNutThemNhanVien();
+        setupThemNhanVien();
 
         // Thiết lập tìm kiếm
-        timKiemNhanVien();
+        setupTimKiemNhanVien();
 
         // Lắng nghe sự kiện nhấn ra ngoài thanh tìm kiếm để tắt con trỏ và ẩn bàn phím
         ownerNhanvienBinding.getRoot().setOnTouchListener((v, event) -> {
@@ -88,7 +84,7 @@ public class Owner_NhanVienFragment extends Fragment {
         });
     }
 
-    private void hienThiDSNhanVien() {
+    private void getDataNhanVien() {
         // TODO: Thoát ứng dụng khi chưa đăng nhập mà vào được trang quản lý
         if (emailLogin == null) {
             Snackbar.make(getView(), "Bạn không có quyền truy cập \nQuản lý Nhân Viên", Toast.LENGTH_SHORT).show();
@@ -130,24 +126,22 @@ public class Owner_NhanVienFragment extends Fragment {
 
                 // Sắp xếp danh sách theo mã NV
                 nhanVienAdapter.sortNhanVienList();
-
                 // Thông báo cho adapter cập nhật dữ liệu
                 nhanVienAdapter.notifyDataSetChanged();
             }
 
             @Override
             public void onCancelled(@NonNull DatabaseError databaseError) {
-                // Xử lý lỗi nếu có
             }
         });
     }
 
     // BẮT SỰ KIỆN THIẾT LẬP SỰ KIỆN KHI NHẤN VÀO MỘT ITEM TRONG DANH SÁCH NHÂN VIÊN
-    private void nhanVaoItemNhanVien() {
+    private void setupNhanItemRecycleView() {
         nhanVienAdapter.setOnItemClickListener(nhanVien -> {
             // Tạo Bundle để truyền thông tin nhân viên được chọn qua Fragment Detail
             Bundle bundleIDNhanVien = new Bundle();
-            bundleIDNhanVien.putSerializable("selectedIDNhanVien", nhanVien.getCccd()); // Đưa dữ liệu ID nhân viên vào Bundle
+            bundleIDNhanVien.putSerializable("idNhanVien", nhanVien.getCccd()); // Đưa dữ liệu ID nhân viên vào Bundle
 
             // Tạo một instance, nó giúp chúng ta chuyển đổi dữ liệu từ Fragment này sang Fragment khác
             Owner_NhanVienDetailFragment nhanVienDetailFragment = new Owner_NhanVienDetailFragment();
@@ -167,7 +161,7 @@ public class Owner_NhanVienFragment extends Fragment {
     }
 
     // BẮT SỰ KIỆN NHẤN VÀO NÚT THÊM NHÂN VIÊN
-    private void nhanNutThemNhanVien() {
+    private void setupThemNhanVien() {
         ownerNhanvienBinding.btnThemNhanVien.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
@@ -185,7 +179,7 @@ public class Owner_NhanVienFragment extends Fragment {
     }
 
     // CHỨC NĂNG TÌM KIẾM NHÂN VIÊN
-    private void timKiemNhanVien() {
+    private void setupTimKiemNhanVien() {
         ownerNhanvienBinding.searchView.setOnQueryTextListener(new SearchView.OnQueryTextListener() {
             @Override
             public boolean onQueryTextSubmit(String query) {

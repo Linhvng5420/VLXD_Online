@@ -1,5 +1,6 @@
 package com.tdc.vlxdonline.Adapter;
 
+import android.graphics.Color;
 import android.view.LayoutInflater;
 import android.view.ViewGroup;
 
@@ -89,16 +90,16 @@ public class NhanVienAdapter extends RecyclerView.Adapter<NhanVienAdapter.NhanVi
         // Phương thức bind để gán dữ liệu nhân viên vào các view trong item
         public void bind(NhanVien nhanVien) {
             // Hiển thị tt của nhân viên
-            binding.tvcccd.setText(nhanVien.getCccd());
-            binding.tvTenNV.setText(nhanVien.getTennv());
-            binding.tvsdt.setText(nhanVien.getSdt());
+            binding.tvID.setText(nhanVien.getCccd());
+            binding.tvTen.setText(nhanVien.getTennv());
+            binding.tvSDT.setText(nhanVien.getSdt());
 
             // Hiển thị chức vụ từ Firebase nếu chucVuId không null
             String chucVuId = nhanVien.getChucvu();
             if (chucVuId != null && !chucVuId.isEmpty()) {
                 chucVuTuFireBase(chucVuId);
             } else {
-                binding.tvChucVu.setText("N/A"); // Hiển thị "N/A" nếu chucVuId là null hoặc rỗng
+                binding.tvPhu.setText("N/A"); // Hiển thị "N/A" nếu chucVuId là null hoặc rỗng
             }
         }
 
@@ -113,21 +114,22 @@ public class NhanVienAdapter extends RecyclerView.Adapter<NhanVienAdapter.NhanVi
                     if (dataSnapshot.exists()) {
                         // Lấy tên chức vụ từ Firebase
                         String tenChucVu = dataSnapshot.child("ten").getValue(String.class);
-                        binding.tvChucVu.setText(tenChucVu != null ? tenChucVu : "N/A"); // Gán tên chức vụ vào TextView
+                        binding.tvPhu.setText(tenChucVu != null ? tenChucVu : "N/A"); // Gán tên chức vụ vào TextView
                     } else {
-                        binding.tvChucVu.setText("N/A"); // Nếu không tìm thấy chức vụ, hiển thị "N/A"
+                        binding.tvPhu.setText("N/A"); // Nếu không tìm thấy chức vụ, hiển thị "N/A"
                     }
                 }
 
                 @Override
                 public void onCancelled(@NonNull DatabaseError databaseError) {
-                    binding.tvChucVu.setText("N/A"); // Xử lý lỗi nếu có
+                    binding.tvPhu.setText("N/A"); // Xử lý lỗi nếu có
                 }
             });
         }
     }
 
     // Hàm cập nhật danh sách khi thực hiện tìm kiếm
+
     public void updateList(List<NhanVien> filteredList) {
         this.nhanVienList = filteredList;
         notifyDataSetChanged(); // Thông báo cho adapter biết dữ liệu đã thay đổi

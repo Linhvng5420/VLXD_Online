@@ -96,8 +96,8 @@ public class KhachHangAdapter extends RecyclerView.Adapter<KhachHangAdapter.Khac
             // Hiển thị tên khách hàng
             binding.tvTen.setText(khachHang.getTen());
 
-            // Hiển thị tên khách hàng
-            binding.tvsdt.setText(khachHang.getSdt());
+            // Hiển thị SDT khách hàng
+            binding.tvSDT.setText(khachHang.getSdt());
 
             //TODO: Hiển thị loại khách hàng
             loaiKH(khachHang.getID());
@@ -115,20 +115,20 @@ public class KhachHangAdapter extends RecyclerView.Adapter<KhachHangAdapter.Khac
                             String status = dataSnapshot.getValue(String.class);
                             if (status != null) {
                                 if (status.equals("1")) {
-                                    binding.tvLoaiKH.setText("Đã Xác Thực");
+                                    binding.tvPhu.setText("Đã Xác Thực");
                                 } else {
-                                    binding.tvLoaiKH.setText("Chưa Xác Thực");
-                                    binding.tvLoaiKH.setTextColor(binding.tvLoaiKH.getContext().getResources().getColor(R.color.black));
+                                    binding.tvPhu.setText("Chưa Xác Thực");
+                                    binding.tvPhu.setTextColor(binding.tvPhu.getContext().getResources().getColor(R.color.black));
                                 }
                             } else {
-                                binding.tvLoaiKH.setText("Không xác định");
+                                binding.tvPhu.setText("Không xác định");
                             }
                         }
 
                         @Override
                         public void onCancelled(@NonNull DatabaseError databaseError) {
                             // Handle potential errors
-                            binding.tvLoaiKH.setText("Lỗi truy xuất dữ liệu");
+                            binding.tvPhu.setText("Lỗi truy xuất dữ liệu");
                         }
                     });
         }
