@@ -4,6 +4,7 @@ import android.content.Intent;
 import android.graphics.Paint;
 import android.os.Bundle;
 import android.text.InputType;
+import android.util.Log;
 import android.view.View;
 import android.widget.AdapterView;
 import android.widget.ArrayAdapter;
@@ -157,11 +158,11 @@ public class LoginActivity extends AppCompatActivity {
                         typeEmployee = nv.getChucvu();
                         if (nv.getChucvu().equals("cv1")) {
                             Intent intent = new Intent(LoginActivity.this, Shipper_HomeActivity.class);
-                            intent.putExtra("emailUser", idUser); // Truyền emailUser qua Intent
+                            intent.putExtra("canCuoc", snapshot.getKey()); // Truyền emailUser qua Intent
                             startActivity(intent);
                         }else {
                             Intent intent = new Intent(LoginActivity.this, Warehouse_HomeActivity.class);
-                            intent.putExtra("emailUser", idUser); // Truyền emailUser qua Intent
+                            intent.putExtra("canCuoc", snapshot.getKey()); // Truyền emailUser qua Intent
                             startActivity(intent);
                         }
                         break;

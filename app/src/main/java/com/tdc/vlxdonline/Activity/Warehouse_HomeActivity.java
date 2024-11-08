@@ -2,6 +2,7 @@ package com.tdc.vlxdonline.Activity;
 
 import android.content.DialogInterface;
 import android.os.Bundle;
+import android.widget.Toast;
 
 import androidx.activity.OnBackPressedCallback;
 import androidx.annotation.NonNull;
@@ -23,8 +24,8 @@ import com.tdc.vlxdonline.databinding.ActivityWarehouseHomeBinding;
 public class Warehouse_HomeActivity extends AppCompatActivity {
     // Binding
     ActivityWarehouseHomeBinding warehouseHomeBinding;
-    String emailNV;
-    DatabaseReference reference = FirebaseDatabase.getInstance().getReference("nhanvien");
+    String canCuocNV;
+    DatabaseReference reference;
     public static NhanVien nhanVien = new NhanVien();
 
     @Override
@@ -32,7 +33,8 @@ public class Warehouse_HomeActivity extends AppCompatActivity {
         super.onCreate(savedInstanceState);
         warehouseHomeBinding = ActivityWarehouseHomeBinding.inflate(getLayoutInflater());
         setContentView(warehouseHomeBinding.getRoot());
-        emailNV = getIntent().getStringExtra("emailUser");
+        canCuocNV = getIntent().getStringExtra("canCuoc");
+        reference = FirebaseDatabase.getInstance().getReference("nhanvien").child(canCuocNV);
         DocThongTinNV();
 
         ReplaceFragment(new GiaoDienKho_Fragment());
@@ -82,13 +84,10 @@ public class Warehouse_HomeActivity extends AppCompatActivity {
             @Override
             public void onDataChange(@NonNull DataSnapshot dataSnapshot) {
                 try{
-                    for (DataSnapshot snapshot : dataSnapshot.getChildren()) {
-                        NhanVien nv = snapshot.getValue(NhanVien.class);
-                        nv.setCccd(snapshot.getKey());
-                        if (nv.getEmailnv().equals(emailNV)) {
-                            nhanVien = nv;
-                            break;
-                        }
+                    NhanVien nv = dataSnapshot.getValue(NhanVien.class);
+                    if (nv != null){
+                        nv.setCccd(dataSnapshot.getKey());
+                        Warehouse_HomeActivity.nhanVien = nv;
                     }
                 }catch (Exception e){}
             }
