@@ -187,6 +187,7 @@ public class Warehouse_DonViActivity extends AppCompatActivity {
         btnXoa.setEnabled(false);
         btnThem.setEnabled(true);
     }
+
     private void showConfirmDialogXoa(String id) {
         AlertDialog.Builder builder = new AlertDialog.Builder(Warehouse_DonViActivity.this);
         builder.setTitle("Xác nhận xóa");
@@ -208,12 +209,14 @@ public class Warehouse_DonViActivity extends AppCompatActivity {
         AlertDialog dialog = builder.create();
         dialog.show();
     }
+
     private void hideKeyboard() {
         InputMethodManager inputMethodManager = (InputMethodManager) getSystemService(Context.INPUT_METHOD_SERVICE);
         if (inputMethodManager != null && getCurrentFocus() != null) {
             inputMethodManager.hideSoftInputFromWindow(getCurrentFocus().getWindowToken(), 0);
         }
     }
+
     private void setCtronl() {
         edtNhapDV = findViewById(R.id.edtNhapDV);
         btnThem = findViewById(R.id.btnThemDV);

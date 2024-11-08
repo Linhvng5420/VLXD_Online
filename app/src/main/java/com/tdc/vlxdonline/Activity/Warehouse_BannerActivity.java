@@ -154,6 +154,7 @@ public class Warehouse_BannerActivity extends AppCompatActivity {
             }
         });
     }
+
     public void uploadData() {
         if (uri != null) {
             StorageReference storageReference = FirebaseStorage.getInstance().getReference().child("Banner Images")
@@ -172,6 +173,7 @@ public class Warehouse_BannerActivity extends AppCompatActivity {
             Toast.makeText(this, "Vui lòng chọn ảnh trước khi thêm", Toast.LENGTH_SHORT).show();
         }
     }
+
     private void saveData() {
         if (banner.getId() == null) banner.setId(System.currentTimeMillis() + "");
         banner.setAnhBanner(uri != null ? imagesUrl : banner.getAnhBanner());  // Update the banner image URL
@@ -188,6 +190,7 @@ public class Warehouse_BannerActivity extends AppCompatActivity {
             }
         });
     }
+
     private void deleteProduct(String id) {
         DatabaseReference productRef = FirebaseDatabase.getInstance().getReference("Banner").child(id);
         productRef.removeValue().addOnCompleteListener(new OnCompleteListener<Void>() {
@@ -204,6 +207,7 @@ public class Warehouse_BannerActivity extends AppCompatActivity {
             }
         });
     }
+
     private void setCtronl() {
         ivAnhBanner = findViewById(R.id.ivAnhBanner);
         btnThemBanner = findViewById(R.id.btnThemBanner);

@@ -24,6 +24,7 @@ public class Owner_HomeActivity extends AppCompatActivity {
     String idChu;
     static ThongTinChu infoChu = new ThongTinChu();
     DatabaseReference reference = FirebaseDatabase.getInstance().getReference();
+
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -69,12 +70,14 @@ public class Owner_HomeActivity extends AppCompatActivity {
                     infoChu = chu;
                 }
             }
+
             @Override
             public void onCancelled(@NonNull DatabaseError error) {
 
             }
         });
     }
+
     private void ReplaceFragment(Fragment fragment) {
         FragmentManager fragmentManager = getSupportFragmentManager();
         FragmentTransaction fragmentTransaction = fragmentManager.beginTransaction();

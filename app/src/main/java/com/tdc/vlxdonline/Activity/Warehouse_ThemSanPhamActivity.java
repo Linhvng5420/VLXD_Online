@@ -52,7 +52,7 @@ import java.util.List;
 import SanPham_Model.SanPham_Model;*/
 
 public class Warehouse_ThemSanPhamActivity extends AppCompatActivity {
-    EditText edtNhapten, edtNhapgiaban,edtgiaNhap, edtNhapsoluong, edtDaban, edtMoTa;
+    EditText edtNhapten, edtNhapgiaban, edtgiaNhap, edtNhapsoluong, edtDaban, edtMoTa;
     Button btnThem, btnXoa, btnSua;
     ImageView ivImages;
     Uri uri;
@@ -176,7 +176,8 @@ public class Warehouse_ThemSanPhamActivity extends AppCompatActivity {
                 for (DataSnapshot items : snapshot.getChildren()) {
                     SanPham_Model sanPhamModel = items.getValue(SanPham_Model.class);
                     sanPhamModel.setId(items.getKey());
-                    if (sanPhamModel.getIdChu().equals(Owner_HomeActivity.infoChu.getID())) list_SP.add(sanPhamModel);
+                    if (sanPhamModel.getIdChu().equals(Owner_HomeActivity.infoChu.getID()))
+                        list_SP.add(sanPhamModel);
                 }
                 // Notify adapter sau khi có dữ liệu
                 adapter.notifyDataSetChanged();
@@ -334,6 +335,7 @@ public class Warehouse_ThemSanPhamActivity extends AppCompatActivity {
         uri = null;
 
     }
+
     public void uploadData() {
         if (uri != null) {
             StorageReference storageReference = FirebaseStorage.getInstance().getReference().child("SanPham Images")
@@ -387,6 +389,7 @@ public class Warehouse_ThemSanPhamActivity extends AppCompatActivity {
         btnSua.setEnabled(false);
         btnThem.setEnabled(true);
     }
+
     private void showConfirmDialogXoa(String id) {
         AlertDialog.Builder builder = new AlertDialog.Builder(Warehouse_ThemSanPhamActivity.this);
         builder.setTitle("Xác nhận xóa");
@@ -409,6 +412,7 @@ public class Warehouse_ThemSanPhamActivity extends AppCompatActivity {
         AlertDialog dialog = builder.create();
         dialog.show();
     }
+
     private void showConfirmDialogSua() {
         AlertDialog.Builder builder = new AlertDialog.Builder(Warehouse_ThemSanPhamActivity.this);
         builder.setTitle("Xác nhận sửa");
@@ -430,12 +434,14 @@ public class Warehouse_ThemSanPhamActivity extends AppCompatActivity {
         AlertDialog dialog = builder.create();
         dialog.show();
     }
+
     private void hideKeyboard() {
         InputMethodManager inputMethodManager = (InputMethodManager) getSystemService(Context.INPUT_METHOD_SERVICE);
         if (inputMethodManager != null && getCurrentFocus() != null) {
             inputMethodManager.hideSoftInputFromWindow(getCurrentFocus().getWindowToken(), 0);
         }
     }
+
     private void setControl() {
         edtNhapten = findViewById(R.id.edtNhapTen);
         edtNhapgiaban = findViewById(R.id.edtNhapgiaban);
@@ -450,6 +456,5 @@ public class Warehouse_ThemSanPhamActivity extends AppCompatActivity {
         recyclerView = findViewById(R.id.recycleview);
         spdonVi = findViewById(R.id.spdonVi);
         spdanhMuc = findViewById(R.id.spdanhMuc);
-
     }
 }

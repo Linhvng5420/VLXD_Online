@@ -217,6 +217,7 @@ public class Warehouse_DanhMucActivity extends AppCompatActivity {
             }
         }
     }
+
     private void saveData() {
         if (category.getId() != null) {
             category.setTen(edtNhapDM.getText().toString());
@@ -263,6 +264,7 @@ public class Warehouse_DanhMucActivity extends AppCompatActivity {
         btnXoaDM.setEnabled(false);
         btnThemDM.setEnabled(true);
     }
+
     private void showConfirmDialogXoa(String id) {
         AlertDialog.Builder builder = new AlertDialog.Builder(Warehouse_DanhMucActivity.this);
         builder.setTitle("Xác nhận xóa");
@@ -285,6 +287,7 @@ public class Warehouse_DanhMucActivity extends AppCompatActivity {
         AlertDialog dialog = builder.create();
         dialog.show();
     }
+
     private void showConfirmDialogSua() {
         AlertDialog.Builder builder = new AlertDialog.Builder(Warehouse_DanhMucActivity.this);
         builder.setTitle("Xác nhận sửa");
@@ -307,12 +310,14 @@ public class Warehouse_DanhMucActivity extends AppCompatActivity {
         AlertDialog dialog = builder.create();
         dialog.show();
     }
+
     private void hideKeyboard() {
         InputMethodManager inputMethodManager = (InputMethodManager) getSystemService(Context.INPUT_METHOD_SERVICE);
         if (inputMethodManager != null && getCurrentFocus() != null) {
             inputMethodManager.hideSoftInputFromWindow(getCurrentFocus().getWindowToken(), 0);
         }
     }
+
     private void setCtronl() {
         edtNhapDM = findViewById(R.id.edtNhapDM);
         ivAnhDM = findViewById(R.id.ivAnhDM);

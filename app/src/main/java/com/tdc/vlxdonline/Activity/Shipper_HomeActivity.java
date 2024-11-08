@@ -18,7 +18,7 @@ public class Shipper_HomeActivity extends AppCompatActivity {
         super.onCreate(savedInstanceState);
         shipperHomeBinding = ActivityShipperHomeBinding.inflate(getLayoutInflater());
         setContentView(shipperHomeBinding.getRoot());
-        
+
         //3. Bắt sự kiện
         EventNavigationBottom();
     }
@@ -42,6 +42,7 @@ public class Shipper_HomeActivity extends AppCompatActivity {
             return true;
         });
     }
+
     private void ReplaceFragment(Fragment fragment) {
         FragmentManager fragmentManager = getSupportFragmentManager();
         FragmentTransaction fragmentTransaction = fragmentManager.beginTransaction();
