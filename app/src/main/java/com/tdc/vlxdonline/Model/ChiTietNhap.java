@@ -1,10 +1,24 @@
 package com.tdc.vlxdonline.Model;
 
 public class ChiTietNhap {
-    private String idDon, idSanPham, soLuong, gia;
+    @Override
+    public String toString() {
+        return "ChiTietNhap{" +
+                "idDon='" + idDon + '\'' +
+                ", idSanPham='" + idSanPham + '\'' +
+                ", soLuong='" + soLuong + '\'' +
+                ", gia='" + gia + '\'' +
+                ", ten='" + ten + '\'' +
+                ", anh='" + anh + '\'' +
+                '}';
+    }
+
+    private String idSanPham;
+    private long idDon;
+    private int soLuong, gia;
     private String ten, anh;
 
-    public ChiTietNhap(String idDon, String idSanPham, String soLuong, String gia, String ten, String anh) {
+    public ChiTietNhap(long idDon, String idSanPham, int soLuong, int gia, String ten, String anh) {
         this.idDon = idDon;
         this.idSanPham = idSanPham;
         this.soLuong = soLuong;
@@ -13,14 +27,15 @@ public class ChiTietNhap {
         this.anh = anh;
     }
 
-    public ChiTietNhap() {
+    public ChiTietNhap(long idDon) {
+        this.idDon = idDon;
     }
 
-    public String getIdDon() {
+    public long getIdDon() {
         return idDon;
     }
 
-    public void setIdDon(String idDon) {
+    public void setIdDon(long idDon) {
         this.idDon = idDon;
     }
 
@@ -32,19 +47,19 @@ public class ChiTietNhap {
         this.idSanPham = idSanPham;
     }
 
-    public String getSoLuong() {
+    public int getSoLuong() {
         return soLuong;
     }
 
-    public void setSoLuong(String soLuong) {
+    public void setSoLuong(int soLuong) {
         this.soLuong = soLuong;
     }
 
-    public String getGia() {
+    public int getGia() {
         return gia;
     }
 
-    public void setGia(String gia) {
+    public void setGia(int gia) {
         this.gia = gia;
     }
 

@@ -2,21 +2,21 @@ package com.tdc.vlxdonline.Model;
 
 public class DonVi {
     private String ten;
-    private String id;
+    private long id;
 
     public DonVi() {
     }
 
-    public DonVi(String ten, String id) {
+    public DonVi(String ten, long  id) {
         this.ten = ten;
         this.id = id;
     }
 
-    public String getId() {
+    public long getId() {
         return id;
     }
 
-    public void setId(String id) {
+    public void setId(long id) {
         this.id = id;
     }
 

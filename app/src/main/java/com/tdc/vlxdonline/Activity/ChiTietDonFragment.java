@@ -175,7 +175,9 @@ public class ChiTietDonFragment extends Fragment {
         adapter.setOnChiTietDonClick(new ChiTietDonHangAdapter.OnChiTietDonClick() {
             @Override
             public void onItemClick(int position) {
-                ((Customer_HomeActivity) getActivity()).ReplaceFragment(new ProdDetailCustomerFragment(dataChiTietDon.get(position).getIdSanPham()));
+                if (LoginActivity.typeUser == 0) {}
+                if (LoginActivity.typeUser == 1) ((Customer_HomeActivity) getActivity()).ReplaceFragment(new ProdDetailCustomerFragment(dataChiTietDon.get(position).getIdSanPham()));
+                if (LoginActivity.typeUser == 2) ((Warehouse_HomeActivity) getActivity()).ReplaceFragment(new ChiTietSPKho_Fragment(dataChiTietDon.get(position).getIdSanPham()));
             }
         });
         LinearLayoutManager linearLayoutManager = new LinearLayoutManager(getActivity());

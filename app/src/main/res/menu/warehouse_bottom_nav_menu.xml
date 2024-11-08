@@ -7,10 +7,16 @@
         android:title="Kho" />
 
     <item
-            android:id="@+id/nav_warehouse_donhang"
+        android:id="@+id/nav_warehouse_donhang"
         android:icon="@drawable/nav_donhang"
         android:orderInCategory="2"
         android:title="Đơn Hàng" />
+
+    <item
+        android:id="@+id/nav_warehouse_nhapkho"
+        android:icon="@drawable/add_donhang"
+        android:orderInCategory="3"
+        android:title="Nhập Kho" />
 
     <item
         android:id="@+id/nav_warehouse_daxuat"

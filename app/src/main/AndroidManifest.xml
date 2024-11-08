@@ -26,6 +26,21 @@
             android:name=".Activity.Warehouse_HomeActivity"
             android:exported="false" />
         <activity
+            android:name=".Activity.Warehouse_ThemSanPhamActivity"
+            android:exported="false" />
+        <activity
+            android:name=".Activity.Warehouse_DonViActivity"
+            android:exported="false" />
+        <activity
+            android:name=".Activity.Warehouse_DanhMucActivity"
+            android:exported="false" />
+        <activity
+            android:name=".Activity.Warehouse_BannerActivity"
+            android:exported="false" />
+        <activity
+            android:name=".Activity.Warehouse_AnhSPActivity"
+            android:exported="false" />
+        <activity
             android:name=".Activity.RegisterActivity"
             android:exported="false" />
         <activity

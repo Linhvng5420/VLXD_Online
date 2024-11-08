@@ -9,6 +9,7 @@ import android.widget.AdapterView;
 import android.widget.ArrayAdapter;
 import android.widget.Toast;
 
+import androidx.annotation.NonNull;
 import androidx.appcompat.app.AppCompatActivity;
 
 import com.google.firebase.database.DataSnapshot;
@@ -18,6 +19,7 @@ import com.google.firebase.database.FirebaseDatabase;
 import com.google.firebase.database.ValueEventListener;
 import com.tdc.vlxdonline.Model.Categorys;
 import com.tdc.vlxdonline.Model.DonVi;
+import com.tdc.vlxdonline.Model.NhanVien;
 import com.tdc.vlxdonline.Model.SendMail;
 import com.tdc.vlxdonline.Model.TypeUser;
 import com.tdc.vlxdonline.Model.Users;
@@ -29,8 +31,10 @@ import java.util.ArrayList;
 public class LoginActivity extends AppCompatActivity {
 
     ActivityLoginBinding binding;
-    public static int typeUser, typeEmployee = -1;
+    public static int typeUser;
+    public static String typeEmployee = "null";
     String idUser = "";
+    DatabaseReference dbRef = FirebaseDatabase.getInstance().getReference();
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -56,8 +60,7 @@ public class LoginActivity extends AppCompatActivity {
                 }
 
                 // Truy vấn Firebase
-                DatabaseReference dbRef = FirebaseDatabase.getInstance().getReference("account");
-                dbRef.addListenerForSingleValueEvent(new ValueEventListener() {
+                dbRef.child("account").addListenerForSingleValueEvent(new ValueEventListener() {
                     @Override
                     public void onDataChange(DataSnapshot dataSnapshot) {
                         boolean isValid = false;
@@ -100,15 +103,15 @@ public class LoginActivity extends AppCompatActivity {
                                 c = Owner_HomeActivity.class;
                             } else if (typeUser == 1) {
                                 c = Customer_HomeActivity.class;
-                            } else if (typeEmployee == 0) {
-                                c = Warehouse_HomeActivity.class;
-                            } else if (typeEmployee == 1) {
-                                c = Shipper_HomeActivity.class;
+                            } else if (typeUser == 2) {
+                                getTypeEmployee(email);
                             }
 
-                            Intent intent = new Intent(LoginActivity.this, c);
-                            intent.putExtra("emailUser", idUser); // Truyền emailUser qua Intent
-                            startActivity(intent);
+                            if (typeUser != 2) {
+                                Intent intent = new Intent(LoginActivity.this, c);
+                                intent.putExtra("emailUser", idUser); // Truyền emailUser qua Intent
+                                startActivity(intent);
+                            }
                         } else {
                             // Thông báo lỗi đăng nhập
                             Toast.makeText(LoginActivity.this, "Sai thông tin đăng nhập!", Toast.LENGTH_SHORT).show();
@@ -140,6 +143,35 @@ public class LoginActivity extends AppCompatActivity {
             public void onClick(View v) {
                 Intent intent = new Intent(LoginActivity.this, RegisterActivity.class);
                 startActivity(intent);
+            }
+        });
+    }
+
+    private void getTypeEmployee(String email){
+        dbRef.child("nhanvien").addListenerForSingleValueEvent(new ValueEventListener() {
+            @Override
+            public void onDataChange(@NonNull DataSnapshot dataSnapshot) {
+                for (DataSnapshot snapshot : dataSnapshot.getChildren()){
+                    NhanVien nv = snapshot.getValue(NhanVien.class);
+                    if (nv.getEmailnv().equals(email)) {
+                        typeEmployee = nv.getChucvu();
+                        if (nv.getChucvu().equals("cv1")) {
+                            Intent intent = new Intent(LoginActivity.this, Shipper_HomeActivity.class);
+                            intent.putExtra("emailUser", idUser); // Truyền emailUser qua Intent
+                            startActivity(intent);
+                        }else {
+                            Intent intent = new Intent(LoginActivity.this, Warehouse_HomeActivity.class);
+                            intent.putExtra("emailUser", idUser); // Truyền emailUser qua Intent
+                            startActivity(intent);
+                        }
+                        break;
+                    }
+                }
+            }
+
+            @Override
+            public void onCancelled(@NonNull DatabaseError error) {
+
             }
         });
     }

@@ -63,7 +63,7 @@ public class Shipper_HomeActivity extends AppCompatActivity {
         });
     }
 
-    private void ReplaceFragment(Fragment fragment) {
+    public void ReplaceFragment(Fragment fragment) {
         FragmentManager fragmentManager = getSupportFragmentManager();
         FragmentTransaction fragmentTransaction = fragmentManager.beginTransaction();
 //        fragmentTransaction.replace(R.id."Thay Thế Tên Fragment_.xml vào đây", fragment);

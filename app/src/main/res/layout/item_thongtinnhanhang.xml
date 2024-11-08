@@ -1,0 +1,85 @@
+<?xml version="1.0" encoding="utf-8"?>
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    android:layout_width="match_parent"
+    android:layout_height="wrap_content"
+    android:layout_marginHorizontal="5dp"
+    android:layout_marginTop="10dp"
+    android:layout_marginBottom="5dp"
+    android:background="@drawable/common_google_signin_btn_icon_dark_normal_background"
+    android:gravity="center"
+    android:orientation="vertical">
+
+    <LinearLayout
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_marginBottom="5dp"
+        android:orientation="horizontal">
+
+        <TextView
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text="Mã đơn: "
+            android:textColor="#AD2020"
+            android:textSize="16dp" />
+
+        <TextView
+            android:id="@+id/tv_maNhap"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:text=" 1900-1000"
+            android:textColor="#AD2020"
+            android:textSize="16dp"
+
+            />
+    </LinearLayout>
+
+
+    <LinearLayout
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_marginBottom="5dp"
+        android:orientation="horizontal">
+
+        <TextView
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text="Ngày nhập: "
+            android:textSize="16dp" />
+
+        <TextView
+            android:id="@+id/tv_ngayNhap"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:text="20/11/2002"
+            android:textSize="16dp"
+
+            />
+    </LinearLayout>
+
+    <LinearLayout
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:orientation="horizontal">
+
+        <TextView
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text="Tổng tiền: "
+            android:textSize="16dp" />
+
+        <TextView
+            android:id="@+id/tv_tongTien_nhap"
+            android:layout_width="match_parent"
+            android:layout_height="match_parent"
+            android:text="500.000"
+            android:textSize="16dp"
+
+            />
+
+
+
+    </LinearLayout>
+
+
+</LinearLayout>

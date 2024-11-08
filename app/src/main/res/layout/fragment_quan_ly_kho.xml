@@ -1,0 +1,103 @@
+<?xml version="1.0" encoding="utf-8"?>
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:orientation="vertical"
+    android:padding="15dp"
+    android:background="@drawable/back3">
+
+    <LinearLayout
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_marginBottom="8dp"
+        android:background="#F0E4CE"
+        android:elevation="10dp"
+        android:orientation="horizontal"
+        android:padding="8dp"
+        android:layout_gravity="center"
+        android:gravity="center">
+
+        <TextView
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:gravity="center"
+            android:text="KHO"
+            android:textColor="#03A9F4"
+            android:textSize="40dp"
+            app:cardCornerRadius="10dp"
+            android:textStyle="bold"/>
+    </LinearLayout>
+
+
+    <TextView
+        android:id="@+id/tvQLSP"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:text="Quản Lý Sản Phẩm"
+        android:textColor="#000"
+        android:textSize="24sp"
+        android:padding="16dp"
+        android:layout_marginBottom="8dp"
+        app:cardCornerRadius="12dp"
+        app:cardElevation="6dp"
+        android:elevation="4dp"
+        android:background="@android:color/white"/>
+
+    <TextView
+        android:id="@+id/tvQLDM"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:text="Quản Lý Danh Mục"
+        android:textColor="#000"
+        android:textSize="24sp"
+        android:padding="16dp"
+        android:layout_marginBottom="8dp"
+        app:cardCornerRadius="12dp"
+        app:cardElevation="6dp"
+        android:elevation="4dp"
+        android:background="@android:color/white"/>
+
+    <TextView
+        android:id="@+id/tvQLDV"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:text="Quản Lý Đơn Vị"
+        android:textColor="#000"
+        android:textSize="24sp"
+        android:padding="16dp"
+        android:layout_marginBottom="8dp"
+        app:cardCornerRadius="12dp"
+        app:cardElevation="6dp"
+        android:elevation="4dp"
+        android:background="@android:color/white"/>
+
+    <TextView
+        android:id="@+id/tvQLAnhSP"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:text="Quản Lý Ảnh Sản Phẩm"
+        android:textColor="#000"
+        android:textSize="24sp"
+        android:padding="16dp"
+        android:layout_marginBottom="8dp"
+        app:cardCornerRadius="12dp"
+        app:cardElevation="6dp"
+        android:elevation="4dp"
+        android:background="@android:color/white"/>
+
+    <TextView
+        android:id="@+id/tvQLBanner"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:text="Quản Lý Banner"
+        android:textColor="#000"
+        android:textSize="24sp"
+        android:padding="16dp"
+        app:cardCornerRadius="12dp"
+        app:cardElevation="6dp"
+        android:elevation="4dp"
+        android:background="@android:color/white"/>
+
+</LinearLayout>

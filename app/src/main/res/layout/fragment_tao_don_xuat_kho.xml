@@ -1,0 +1,118 @@
+<?xml version="1.0" encoding="utf-8"?>
+<FrameLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:id="@+id/fragment_container"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:background="#f5f5f5"
+    tools:context=".Activity.TaoDonXuatKhoFragment">
+
+
+    <LinearLayout
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        android:background="@drawable/back4"
+        android:orientation="vertical">
+
+
+
+            <TextView
+                android:id="@+id/tv_chiTiet"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:background="#EFDBDB"
+                android:padding="10dp"
+                android:gravity="center"
+                android:text="Tạo Đơn Hàng"
+                android:textSize="25sp"
+                android:textStyle="bold" />
+
+        <!-- Search View -->
+        <SearchView
+            android:id="@+id/sv_donhang"
+            android:layout_width="match_parent"
+            android:layout_height="50dp"
+            android:layout_margin="12dp"
+            android:background="@drawable/bg_detail"
+            android:iconifiedByDefault="false"
+            android:queryHint="Tìm kiếm sản phẩm"
+            android:searchIcon="@drawable/search" />
+        <!-- RecyclerView for Products -->
+        <androidx.recyclerview.widget.RecyclerView
+            android:id="@+id/rcv_sanpham"
+            android:layout_width="match_parent"
+            android:layout_height="210dp"
+            android:layout_marginBottom="16dp"
+            android:clipToPadding="false" />
+
+        <!-- Quantity and Add Button -->
+        <LinearLayout
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_marginBottom="10dp"
+            android:gravity="center"
+            android:orientation="horizontal"
+            android:padding="2dp">
+
+            <EditText
+                android:id="@+id/edtSoLuong"
+                android:layout_width="0dp"
+                android:layout_height="50dp"
+                android:layout_weight="1"
+                android:background="@drawable/edit_text_tt"
+                android:hint="Nhập số lượng"
+                android:inputType="number"
+                android:padding="12dp"
+                android:text="1"
+                android:textSize="16sp" />
+
+            <Button
+                android:id="@+id/btnThem"
+                android:layout_width="0dp"
+                android:layout_height="50dp"
+                android:layout_marginStart="8dp"
+                android:layout_weight="1"
+                android:backgroundTint="#FF5722"
+                android:text="Thêm"
+                android:textColor="#FFFFFF"
+                android:textSize="16sp"
+                android:textStyle="bold" />
+        </LinearLayout>
+
+        <!-- Price Input -->
+
+
+        <TextView
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_marginTop="5dp"
+            android:layout_marginBottom="10dp"
+            android:background="#2196F3"
+            android:gravity="center"
+            android:paddingVertical="10dp"
+            android:text="Hóa Đơn"
+            android:textColor="#FFFFFF"
+            android:textSize="20sp"
+            android:textStyle="bold" />
+
+        <!-- RecyclerView for Invoice Details -->
+        <androidx.recyclerview.widget.RecyclerView
+            android:id="@+id/rcv_chitiet"
+            android:layout_width="match_parent"
+            android:layout_height="200dp"
+            android:clipToPadding="false" />
+
+        <!-- Confirm Button -->
+        <Button
+            android:id="@+id/btnXacNhan"
+            android:layout_width="match_parent"
+            android:layout_height="50dp"
+            android:layout_marginTop="10dp"
+            android:backgroundTint="#4CAF50"
+            android:text="Xác nhận"
+            android:textColor="#FFFFFF"
+            android:textSize="18sp"
+            android:textStyle="bold" />
+    </LinearLayout>
+</FrameLayout>

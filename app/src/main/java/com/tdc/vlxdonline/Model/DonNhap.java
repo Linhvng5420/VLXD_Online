@@ -1,10 +1,17 @@
 package com.tdc.vlxdonline.Model;
 
+import com.tdc.vlxdonline.Activity.Warehouse_HomeActivity;
+
+import java.time.LocalDate;
+import java.time.format.DateTimeFormatter;
+
 public class DonNhap {
-    private String id, idChu, idTao, tongTien;
+    private String  idChu, idTao;
+    private int  tongTien = 0;
+    private long id;
     private String ngayTao;
 
-    public DonNhap(String id, String idChu, String idTao, String tongTien, String ngayTao) {
+    public DonNhap(long id, String idChu, String idTao, int tongTien, String ngayTao) {
         this.id = id;
         this.idChu = idChu;
         this.idTao = idTao;
@@ -13,13 +20,22 @@ public class DonNhap {
     }
 
     public DonNhap() {
+        id = System.currentTimeMillis();
+
+        // id chu, id tạo lấy từ nhân viên đang đăng nhập (Warehouse_HomeActivity)
+        idChu = Warehouse_HomeActivity.nhanVien.getEmailchu();
+        idTao = Warehouse_HomeActivity.nhanVien.getCccd();
+        LocalDate today = LocalDate.now();
+        DateTimeFormatter formatter = DateTimeFormatter.ofPattern("dd-MM-yyyy");
+        String formattedDate = today.format(formatter);
+        this.ngayTao = formattedDate;
     }
 
-    public String getId() {
+    public long getId() {
         return id;
     }
 
-    public void setId(String id) {
+    public void setId(long id) {
         this.id = id;
     }
 
@@ -39,11 +55,11 @@ public class DonNhap {
         this.idTao = idTao;
     }
 
-    public String getTongTien() {
+    public int getTongTien() {
         return tongTien;
     }
 
-    public void setTongTien(String tongTien) {
+    public void setTongTien(int tongTien) {
         this.tongTien = tongTien;
     }
 

@@ -4,26 +4,39 @@ import android.content.DialogInterface;
 import android.os.Bundle;
 
 import androidx.activity.OnBackPressedCallback;
+import androidx.annotation.NonNull;
 import androidx.appcompat.app.AlertDialog;
 import androidx.appcompat.app.AppCompatActivity;
 import androidx.fragment.app.Fragment;
 import androidx.fragment.app.FragmentManager;
 import androidx.fragment.app.FragmentTransaction;
 
+import com.google.firebase.database.DataSnapshot;
+import com.google.firebase.database.DatabaseError;
+import com.google.firebase.database.DatabaseReference;
+import com.google.firebase.database.FirebaseDatabase;
+import com.google.firebase.database.ValueEventListener;
+import com.tdc.vlxdonline.Model.NhanVien;
 import com.tdc.vlxdonline.R;
 import com.tdc.vlxdonline.databinding.ActivityWarehouseHomeBinding;
 
 public class Warehouse_HomeActivity extends AppCompatActivity {
     // Binding
     ActivityWarehouseHomeBinding warehouseHomeBinding;
+    String emailNV;
+    DatabaseReference reference = FirebaseDatabase.getInstance().getReference("nhanvien");
+    public static NhanVien nhanVien = new NhanVien();
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         warehouseHomeBinding = ActivityWarehouseHomeBinding.inflate(getLayoutInflater());
         setContentView(warehouseHomeBinding.getRoot());
+        emailNV = getIntent().getStringExtra("emailUser");
+        DocThongTinNV();
 
-        // Bắt sự kiện
+        ReplaceFragment(new GiaoDienKho_Fragment());
+
         EventNavigationBottom();
 
         // Sử dụng OnBackPressedDispatcher để tùy chỉnh hành vi khi nhấn nút back
@@ -31,7 +44,7 @@ public class Warehouse_HomeActivity extends AppCompatActivity {
             @Override
             public void handleOnBackPressed() {
                 // Kiểm tra xem có Fragment nào trong back stack không
-                if (getSupportFragmentManager().getBackStackEntryCount() > 0) {
+                if (getSupportFragmentManager().getBackStackEntryCount() > 1) {
                     // Nếu có Fragment, quay về Fragment trước đó
                     getSupportFragmentManager().popBackStack();
                 } else {
@@ -47,26 +60,50 @@ public class Warehouse_HomeActivity extends AppCompatActivity {
         warehouseHomeBinding.navWarehouse.setOnItemSelectedListener(item -> {
             int itemId = item.getItemId();
 
-            if (itemId == R.id.nav_owner_dashboard) {
-                ReplaceFragment(new Fragment());
-            } else if (itemId == R.id.nav_owner_nhanvien) {
-                ReplaceFragment(new Fragment());
-            } else if (itemId == R.id.nav_owner_khachhang) {
-                ReplaceFragment(new Fragment());
-            } else if (itemId == R.id.nav_owner_donhang) {
-                ReplaceFragment(new Fragment());
-            } else if (itemId == R.id.nav_owner_kho) {
-                ReplaceFragment(new Fragment());
+            if (itemId == R.id.nav_warehouse_kho) {
+                ReplaceFragment(new GiaoDienKho_Fragment());
+            } else if (itemId == R.id.nav_warehouse_daxuat) {
+                ReplaceFragment(new DanhSachDonHangFragment(0));
+            } else if (itemId == R.id.nav_warehouse_taikhoan) {
+                ReplaceFragment(new TaiKhoanNVFragment());
+            } else if (itemId == R.id.nav_warehouse_nhapkho) {
+                ReplaceFragment(new GiaoDienDonHang_Fragment());
+            } else if (itemId == R.id.nav_warehouse_donhang) {
+                //   ReplaceFragment(new ThongTinNhanHang_Fragment());
+                ReplaceFragment(new TaoDonXuatKhoFragment());
             }
 
             return true;
         });
     }
 
-    private void ReplaceFragment(Fragment fragment) {
+    private void DocThongTinNV(){
+        reference.addValueEventListener(new ValueEventListener() {
+            @Override
+            public void onDataChange(@NonNull DataSnapshot dataSnapshot) {
+                try{
+                    for (DataSnapshot snapshot : dataSnapshot.getChildren()) {
+                        NhanVien nv = snapshot.getValue(NhanVien.class);
+                        nv.setCccd(snapshot.getKey());
+                        if (nv.getEmailnv().equals(emailNV)) {
+                            nhanVien = nv;
+                            break;
+                        }
+                    }
+                }catch (Exception e){}
+            }
+
+            @Override
+            public void onCancelled(@NonNull DatabaseError error) {
+
+            }
+        });
+    }
+
+    public void ReplaceFragment(Fragment fragment) {
         FragmentManager fragmentManager = getSupportFragmentManager();
         FragmentTransaction fragmentTransaction = fragmentManager.beginTransaction();
-//        fragmentTransaction.replace(R.id."Thay Thế Tên Fragment_.xml vào đây", fragment);
+        fragmentTransaction.replace(warehouseHomeBinding.frmWarehouse.getId(), fragment).addToBackStack(null);
         fragmentTransaction.commit();
     }
 

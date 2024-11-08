@@ -148,7 +148,12 @@ public class DanhSachDonHangFragment extends Fragment {
                         if (LoginActivity.typeUser == 0) continue;
                         else if (LoginActivity.typeUser == 1 && !don.getIdKhach().equals(Customer_HomeActivity.info.getID()))
                             continue;
-                        else if (LoginActivity.typeUser == 2) continue;
+                        else if (LoginActivity.typeUser == 2 && !LoginActivity.typeEmployee.equals("cv1")) {
+                            String emailChu = Warehouse_HomeActivity.nhanVien.getEmailchu();
+                            if (!don.getIdChu().equals(emailChu.substring(0, emailChu.indexOf("@")))) {
+                                continue;
+                            }
+                        }
                         data.add(don); // Thêm User vào danh sách
                     }
 
@@ -175,7 +180,9 @@ public class DanhSachDonHangFragment extends Fragment {
                 if (donHang.getPhiTraGop() > 0) {
 
                 } else {
-                    ((Customer_HomeActivity) getActivity()).ReplaceFragment(new ChiTietDonFragment(donHang.getId()));
+                    if (LoginActivity.typeUser == 0) ((Owner_HomeActivity) getActivity()).ReplaceFragment(new ChiTietDonFragment(donHang.getId()));
+                    if (LoginActivity.typeUser == 1) ((Customer_HomeActivity) getActivity()).ReplaceFragment(new ChiTietDonFragment(donHang.getId()));
+                    if (LoginActivity.typeUser == 2) ((Warehouse_HomeActivity) getActivity()).ReplaceFragment(new ChiTietDonFragment(donHang.getId()));
                 }
             }
         });
