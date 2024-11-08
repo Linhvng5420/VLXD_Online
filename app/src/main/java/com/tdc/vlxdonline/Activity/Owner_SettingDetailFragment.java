@@ -7,8 +7,11 @@ import android.view.ViewGroup;
 
 import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
+import androidx.appcompat.app.AppCompatActivity;
+import androidx.appcompat.widget.Toolbar;
 import androidx.fragment.app.Fragment;
 
+import com.tdc.vlxdonline.R;
 import com.tdc.vlxdonline.databinding.FragmentOwnerSettingDetailBinding;
 
 public class Owner_SettingDetailFragment extends Fragment {
@@ -30,7 +33,22 @@ public class Owner_SettingDetailFragment extends Fragment {
     @Override
     public void onViewCreated(@NonNull View view, @Nullable Bundle savedInstanceState) {
         super.onViewCreated(view, savedInstanceState);
+        //Thiết lập Toolbar cho Fragment
+        setupToolbar(view);
 
+    }
 
+    // CUỐI: THIẾT LẬP TOOLBAR VÀ ĐIỀU HƯỚNG
+    private void setupToolbar(View view) {
+        Toolbar toolbar = view.findViewById(R.id.toolbar);
+        ((AppCompatActivity) getActivity()).setSupportActionBar(toolbar);
+
+        if (((AppCompatActivity) getActivity()).getSupportActionBar() != null) {
+            ((AppCompatActivity) getActivity()).getSupportActionBar().setDisplayHomeAsUpEnabled(true);
+            ((AppCompatActivity) getActivity()).getSupportActionBar().setDisplayShowHomeEnabled(true);
+        }
+
+        // Xử lý khi nhấn nút quay về trên Toolbar
+        toolbar.setNavigationOnClickListener(v -> getActivity().onBackPressed());
     }
 }
