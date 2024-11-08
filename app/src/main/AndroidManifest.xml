@@ -48,4 +48,5 @@
             android:name=".Activity.Warehouse_BannerActivity"
             android:exported="false" />
     </application>
+
 </manifest>

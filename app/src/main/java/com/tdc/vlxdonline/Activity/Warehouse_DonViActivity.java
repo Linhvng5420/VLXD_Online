@@ -1,7 +1,11 @@
 package com.tdc.vlxdonline.Activity;
 
+import android.app.AlertDialog;
+import android.content.Context;
+import android.content.DialogInterface;
 import android.os.Bundle;
 import android.view.View;
+import android.view.inputmethod.InputMethodManager;
 import android.widget.Button;
 import android.widget.EditText;
 import android.widget.Toast;
@@ -111,6 +115,7 @@ public class Warehouse_DonViActivity extends AppCompatActivity {
             @Override
             public void onClick(View v) {
                 saveDate();
+                hideKeyboard();
                 edtNhapDV.setText("");
             }
         });
@@ -121,7 +126,7 @@ public class Warehouse_DonViActivity extends AppCompatActivity {
                 String id = String.valueOf(donVi.getId());
                 if (!id.isEmpty()) {
                     // Gọi phương thức xóa sản phẩm
-                    deleteProduct(id);
+                    showConfirmDialogXoa(id);
                 } else {
                     Toast.makeText(Warehouse_DonViActivity.this, "Vui lòng chọn sản phẩm để xóa", Toast.LENGTH_SHORT).show();
                 }
@@ -182,7 +187,33 @@ public class Warehouse_DonViActivity extends AppCompatActivity {
         btnXoa.setEnabled(false);
         btnThem.setEnabled(true);
     }
+    private void showConfirmDialogXoa(String id) {
+        AlertDialog.Builder builder = new AlertDialog.Builder(Warehouse_DonViActivity.this);
+        builder.setTitle("Xác nhận xóa");
+        builder.setMessage("Bạn có chắc chắn muốn xóa đơn vị này không?");
 
+        builder.setPositiveButton("Xóa", new DialogInterface.OnClickListener() {
+            @Override
+            public void onClick(DialogInterface dialog, int which) {
+                deleteProduct(id);
+            }
+        });
+
+        builder.setNegativeButton("Hủy", new DialogInterface.OnClickListener() {
+            @Override
+            public void onClick(DialogInterface dialog, int which) {
+                dialog.dismiss(); // Đóng dialog
+            }
+        });
+        AlertDialog dialog = builder.create();
+        dialog.show();
+    }
+    private void hideKeyboard() {
+        InputMethodManager inputMethodManager = (InputMethodManager) getSystemService(Context.INPUT_METHOD_SERVICE);
+        if (inputMethodManager != null && getCurrentFocus() != null) {
+            inputMethodManager.hideSoftInputFromWindow(getCurrentFocus().getWindowToken(), 0);
+        }
+    }
     private void setCtronl() {
         edtNhapDV = findViewById(R.id.edtNhapDV);
         btnThem = findViewById(R.id.btnThemDV);

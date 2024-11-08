@@ -1,10 +1,14 @@
 package com.tdc.vlxdonline.Activity;
 
 import android.app.Activity;
+import android.app.AlertDialog;
+import android.content.Context;
+import android.content.DialogInterface;
 import android.content.Intent;
 import android.net.Uri;
 import android.os.Bundle;
 import android.view.View;
+import android.view.inputmethod.InputMethodManager;
 import android.widget.AdapterView;
 import android.widget.ArrayAdapter;
 import android.widget.Button;
@@ -101,7 +105,7 @@ public class Warehouse_AnhSPActivity extends AppCompatActivity {
         btnThemASP.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                if (uri == null) {
+                if (uri == null || imagesUrl != null ) {
                     Toast.makeText(Warehouse_AnhSPActivity.this,
                             "Vui lòng chon anh!", Toast.LENGTH_SHORT).show();
                 } else {
@@ -117,7 +121,8 @@ public class Warehouse_AnhSPActivity extends AppCompatActivity {
                 long id = anhSP.getId();
                 if (id != 0) {
                     // Gọi phương thức xóa sản phẩm
-                    deleteProduct(id);
+                    showConfirmDialogXoa(id);
+                    //deleteProduct(id);
                     clearSelection();
                 } else {
                     Toast.makeText(Warehouse_AnhSPActivity.this, "Vui lòng chọn sản phẩm để xóa", Toast.LENGTH_SHORT).show();
@@ -133,7 +138,7 @@ public class Warehouse_AnhSPActivity extends AppCompatActivity {
                 public void onItemClick(int position) {
                     // Xử lý sự kiện click vào sản phẩm
                     if (position != RecyclerView.NO_POSITION) {
-                        if (list_ASP.get(position).getId() != (anhSP.getId())) {
+                        if (list_ASP.get(position).getId()!=(anhSP.getId())) {
                             btnThemASP.setEnabled(false);
                             btnXoaASP.setEnabled(true);
                             anhSP = list_ASP.get(position);
@@ -141,7 +146,7 @@ public class Warehouse_AnhSPActivity extends AppCompatActivity {
                             Glide.with(Warehouse_AnhSPActivity.this)
                                     .load(anhSP.getAnh())
                                     .into(ivAnhSP);
-                        } else {
+                        }else {
                             clearSelection();
                         }
                     }
@@ -163,7 +168,6 @@ public class Warehouse_AnhSPActivity extends AppCompatActivity {
                 getDate(idProduct);
                 adapter.notifyDataSetChanged();
             }
-
             @Override
             public void onNothingSelected(AdapterView<?> adapterView) {
 
@@ -193,7 +197,6 @@ public class Warehouse_AnhSPActivity extends AppCompatActivity {
                 // Cập nhật adapter sau khi có dữ liệu
                 adapter.notifyDataSetChanged();
             }
-
             @Override
             public void onCancelled(@NonNull DatabaseError error) {
             }
@@ -208,8 +211,7 @@ public class Warehouse_AnhSPActivity extends AppCompatActivity {
                 for (DataSnapshot items : snapshot.getChildren()) {
                     SanPham_Model sanPhamModel = items.getValue(SanPham_Model.class);
                     sanPhamModel.setId(items.getKey());
-                    if (sanPhamModel.getIdChu().equals(Owner_HomeActivity.infoChu.getID()))
-                        data.add(sanPhamModel);
+                    if (sanPhamModel.getIdChu().equals(Owner_HomeActivity.infoChu.getID())) data.add(sanPhamModel);
                 }
                 // Cập nhật adapter sau khi có dữ liệu
                 adapterSP.notifyDataSetChanged();
@@ -220,7 +222,6 @@ public class Warehouse_AnhSPActivity extends AppCompatActivity {
             }
         });
     }
-
     public void uploadData() {
         if (uri != null) {
             StorageReference storageReference = FirebaseStorage.getInstance().getReference().child("ProdImages Images")
@@ -241,18 +242,12 @@ public class Warehouse_AnhSPActivity extends AppCompatActivity {
             clearSelection();
         }
     }
-
     private void saveDate() {
-        if (anhSP.getId() == 0) {
-            anhSP.setId(System.currentTimeMillis());
-            anhSP.setAnh(uri != null ? imagesUrl.toString() : anhSP.getAnh());  // Nếu bạn không cần thay đổi ảnh
-        }
-        reference.child("ProdImages").child(idProduct).child(System.currentTimeMillis() + "").child("anh").setValue(anhSP.getAnh());
-        uri = null;
+        anhSP.setAnh(uri != null ? imagesUrl.toString() : anhSP.getAnh());  // Nếu bạn không cần thay đổi ảnh
+        reference.child("ProdImages").child(idProduct).child(System.currentTimeMillis()+"").child("anh").setValue(anhSP.getAnh());
     }
-
     private void deleteProduct(long id) {
-        if (id > -1) {
+        if (id > -1){
             DatabaseReference productRef = FirebaseDatabase.getInstance().getReference("ProdImages").child(idProduct).child(id + "");
             productRef.removeValue().addOnCompleteListener(new OnCompleteListener<Void>() {
                 @Override
@@ -267,18 +262,38 @@ public class Warehouse_AnhSPActivity extends AppCompatActivity {
                     }
                 }
             });
-        } else {
+        }else {
             Toast.makeText(this, "Khong duoc xoa anh mac dinh cua san pham", Toast.LENGTH_SHORT).show();
         }
     }
-
     private void clearSelection() {
         anhSP = new AnhSanPham();
         ivAnhSP.setImageResource(R.drawable.add_a_photo_24);
         btnXoaASP.setEnabled(false);
         btnThemASP.setEnabled(true);
     }
+    private void showConfirmDialogXoa(long id) {
+        AlertDialog.Builder builder = new AlertDialog.Builder(Warehouse_AnhSPActivity.this);
+        builder.setTitle("Xác nhận xóa");
+        builder.setMessage("Bạn có chắc chắn muốn xóa ảnh phẩm này không?");
 
+        builder.setPositiveButton("Xóa", new DialogInterface.OnClickListener() {
+            @Override
+            public void onClick(DialogInterface dialog, int which) {
+                deleteProduct(id);
+            }
+        });
+
+        builder.setNegativeButton("Hủy", new DialogInterface.OnClickListener() {
+            @Override
+            public void onClick(DialogInterface dialog, int which) {
+                dialog.dismiss(); // Đóng dialog
+            }
+        });
+
+        AlertDialog dialog = builder.create();
+        dialog.show();
+    }
     private void setCtronl() {
         ivAnhSP = findViewById(R.id.ivAnhSP);
         btnThemASP = findViewById(R.id.btnThemASP);
