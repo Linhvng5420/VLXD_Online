@@ -2,7 +2,6 @@ package com.tdc.vlxdonline.Activity;
 
 import android.app.Activity;
 import android.os.Bundle;
-import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -93,7 +92,7 @@ public class Owner_NhanVienFragment extends Fragment {
         // TODO: Thoát ứng dụng khi chưa đăng nhập mà vào được trang quản lý
         if (emailLogin == null) {
             Snackbar.make(getView(), "Bạn không có quyền truy cập \nQuản lý Nhân Viên", Toast.LENGTH_SHORT).show();
-             requireActivity().finishAffinity();
+            requireActivity().finishAffinity();
         }
 
         // Firebase: Khởi tạo databaseReference và lấy dữ liệu từ Firebase
@@ -172,17 +171,9 @@ public class Owner_NhanVienFragment extends Fragment {
         ownerNhanvienBinding.btnThemNhanVien.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
-                // Bundle email
-                Bundle bundle = new Bundle();
-                bundle.putSerializable("loginEmailUser", emailLogin);
-
-                // Instance
-                Owner_NhanVienAddFragment nhanVienFragment = new Owner_NhanVienAddFragment();
-                nhanVienFragment.setArguments(bundle);
-
                 // chuyển sang fragment thêm nhân viên
                 getParentFragmentManager().beginTransaction()
-                        .replace(R.id.fragment_owner, nhanVienFragment)
+                        .replace(R.id.fragment_owner, new Owner_NhanVienAddFragment())
                         .addToBackStack(null)
                         .commit();
 

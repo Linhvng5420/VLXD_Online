@@ -55,7 +55,7 @@ import java.util.List;
 public class Owner_NhanVienAddFragment extends Fragment {
     FragmentOwnerNhanVienAddBinding binding;
 
-    private String loginEmailUser;
+    private String loginEmailUser = LoginActivity.idUser;
     private NhanVien nhanVien;
 
     //Danh sách chức vụ từ Firebase
@@ -76,12 +76,6 @@ public class Owner_NhanVienAddFragment extends Fragment {
     @Override
     public void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-
-        // Lấy instance loginUser
-        if (getArguments() != null) {
-            loginEmailUser = getArguments().getString("loginEmailUser");
-        } else Log.d("l.d", "onCreate: Lấy Instance thất bại");
-
         // Khởi tạo đối tượng nhân viên dùng chung và duy nhất trong toàn bộ Fragment
         nhanVien = new NhanVien();
 
