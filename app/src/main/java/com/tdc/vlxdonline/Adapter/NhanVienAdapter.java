@@ -126,7 +126,6 @@ public class NhanVienAdapter extends RecyclerView.Adapter<NhanVienAdapter.NhanVi
                 }
             });
         }
-
     }
 
     // Hàm cập nhật danh sách khi thực hiện tìm kiếm

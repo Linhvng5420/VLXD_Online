@@ -33,8 +33,7 @@ import androidx.core.app.ActivityCompat;
 import androidx.core.content.ContextCompat;
 import androidx.fragment.app.Fragment;
 
-import com.google.android.gms.tasks.OnFailureListener;
-import com.google.android.gms.tasks.OnSuccessListener;
+import com.google.android.material.snackbar.Snackbar;
 import com.google.firebase.database.DataSnapshot;
 import com.google.firebase.database.DatabaseError;
 import com.google.firebase.database.DatabaseReference;
@@ -227,7 +226,7 @@ public class Owner_NhanVienAddFragment extends Fragment {
                                     @Override
                                     public void onCancelled(DatabaseError error) {
                                         // Xử lý lỗi nếu có
-                                        Toast.makeText(getContext(), "Lỗi kiểm tra email", Toast.LENGTH_SHORT).show();
+                                        Snackbar.make(getView(), "Lỗi kiểm tra email", Toast.LENGTH_SHORT).show();
                                     }
                                 });
                             }
@@ -236,7 +235,7 @@ public class Owner_NhanVienAddFragment extends Fragment {
                         @Override
                         public void onCancelled(DatabaseError error) {
                             // Xử lý lỗi nếu có
-                            Toast.makeText(getContext(), "Lỗi kiểm tra email", Toast.LENGTH_SHORT).show();
+                            Snackbar.make(getView(), "Lỗi kiểm tra email", Toast.LENGTH_SHORT).show();
                         }
                     });
                 } else {
@@ -431,12 +430,12 @@ public class Owner_NhanVienAddFragment extends Fragment {
                             }))
                             .addOnFailureListener(e -> {
                                 progressDialog.dismiss(); // Ẩn ProgressDialog nếu thất bại
-                                Toast.makeText(getContext(), "Upload ảnh sau thất bại: " + e.getMessage(), Toast.LENGTH_SHORT).show();
+                                Snackbar.make(getView(), "Upload ảnh sau thất bại: " + e.getMessage(), Toast.LENGTH_SHORT).show();
                             });
                 }))
                 .addOnFailureListener(e -> {
                     progressDialog.dismiss(); // Ẩn ProgressDialog nếu thất bại
-                    Toast.makeText(getContext(), "Upload ảnh trước thất bại: " + e.getMessage(), Toast.LENGTH_SHORT).show();
+                    Snackbar.make(getView(), "Upload ảnh trước thất bại: " + e.getMessage(), Toast.LENGTH_SHORT).show();
                 });
     }
 
@@ -446,12 +445,12 @@ public class Owner_NhanVienAddFragment extends Fragment {
         DatabaseReference dbrfNhanvien = FirebaseDatabase.getInstance().getReference("nhanvien");
         dbrfNhanvien.child(cccd).setValue(nhanVien) // Thêm nv mới vào firebase với Key = nhanVien.getCccd()
                 .addOnSuccessListener(aVoid -> {
-                    Toast.makeText(getContext(), "Thêm nhân viên thành công", Toast.LENGTH_SHORT).show();
+                    Snackbar.make(getView(), "Thêm nhân viên thành công", Toast.LENGTH_SHORT).show();
                     // Tiếp tục tạo tài khoản cho nhân viên
                     createAccountForNhanVien(cccd);
                 })
                 .addOnFailureListener(e -> {
-                    Toast.makeText(getContext(), "Thêm nhân viên thất bại: " + e.getMessage(), Toast.LENGTH_SHORT).show();
+                    Snackbar.make(getView(), "Thêm nhân viên thất bại: " + e.getMessage(), Toast.LENGTH_SHORT).show();
                 });
     }
 
@@ -466,12 +465,12 @@ public class Owner_NhanVienAddFragment extends Fragment {
         DatabaseReference dbrfAccount = FirebaseDatabase.getInstance().getReference("account");
         dbrfAccount.child(cccd).setValue(usersNhanVienMoi)
                 .addOnSuccessListener(unused -> {
-                    Toast.makeText(getContext(), "Tạo tài khoản cho nhân viên thành công", Toast.LENGTH_SHORT).show();
+                    Snackbar.make(getView(), "Tạo tài khoản cho nhân viên thành công", Toast.LENGTH_SHORT).show();
                     // Hiển thị hộp thoại thông tin tài khoản
                     showAccountInfoDialog(userNhanVien, passwordNhanVien);
                 })
                 .addOnFailureListener(e -> {
-                    Toast.makeText(getContext(), "Tạo TK nhân viên thất bại: " + e.getMessage(), Toast.LENGTH_SHORT).show();
+                    Snackbar.make(getView(), "Tạo TK nhân viên thất bại: " + e.getMessage(), Toast.LENGTH_SHORT).show();
                 });
     }
 
@@ -488,7 +487,7 @@ public class Owner_NhanVienAddFragment extends Fragment {
                     ClipData clip = ClipData.newPlainText("User & Password", userNhanVien + "\n" + passwordNhanVien);
                     clipboard.setPrimaryClip(clip);
                     getParentFragmentManager().popBackStack(); // Quay lại Fragment trước
-                    Toast.makeText(getContext(), "Đã sao chép User và Password vào clipboard", Toast.LENGTH_SHORT).show();
+                    Snackbar.make(getView(), "Đã sao chép User và Password vào clipboard", Toast.LENGTH_SHORT).show();
                 });
         builder.show();
     }
@@ -585,7 +584,7 @@ public class Owner_NhanVienAddFragment extends Fragment {
     private boolean batDieuKienDuLieuDauVao() {
         if (loginEmailUser == null) {
             // Hiển thị thông báo nếu cần
-            Toast.makeText(getContext(), "Email đăng nhập không hợp lệ \nThoát ứng dụng.", Toast.LENGTH_LONG).show();
+            Snackbar.make(getView(), "Email đăng nhập không hợp lệ \nThoát ứng dụng.", Toast.LENGTH_LONG).show();
 
             // Loại bỏ Fragment khỏi stack nếu đang sử dụng `FragmentManager`
             // requireActivity().getSupportFragmentManager().popBackStack();

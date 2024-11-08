@@ -26,6 +26,8 @@ import androidx.core.content.ContextCompat;
 import androidx.fragment.app.Fragment;
 
 import com.bumptech.glide.Glide;
+import com.google.android.material.snackbar.BaseTransientBottomBar;
+import com.google.android.material.snackbar.Snackbar;
 import com.google.firebase.database.DataSnapshot;
 import com.google.firebase.database.DatabaseError;
 import com.google.firebase.database.DatabaseReference;
@@ -44,7 +46,7 @@ import java.util.List;
 public class Owner_NhanVienDetailFragment extends Fragment {
     private FragmentOwnerNhanvienDetailBinding binding;
 
-    private NhanVien nhanVien;
+    private NhanVien nhanVien = new NhanVien();
 
     //ID nhân viên đc truyền từ Fragment trước qua
     private String selectedIDNhanVien;
@@ -150,7 +152,7 @@ public class Owner_NhanVienDetailFragment extends Fragment {
             selectedIDNhanVien = getArguments().getSerializable("selectedIDNhanVien").toString();
 
             // Hiển thị thông tin ID nhân viên lên giao diện
-            Toast.makeText(getContext(), "ID Nhân Viên\n" + selectedIDNhanVien, Toast.LENGTH_SHORT).show();
+            Snackbar.make(getView(), "ID Nhân Viên\n" + selectedIDNhanVien, Toast.LENGTH_SHORT).setAnimationMode(BaseTransientBottomBar.ANIMATION_MODE_SLIDE).show();
             Log.d("l.d", "nhanIDNhanVienTuBundle: " + selectedIDNhanVien.toString());
 
             // Lấy thông tin nhân viên từ firebase thông qua ID
@@ -470,17 +472,19 @@ public class Owner_NhanVienDetailFragment extends Fragment {
                 if (dataSnapshot.exists()) {
                     // Lấy dữ liệu của nhân viên
                     String anhCC1 = dataSnapshot.child("anhcc1").getValue(String.class);
+                    anhCC1 = anhCC1 == null ? "" : anhCC1;
                     String anhCC2 = dataSnapshot.child("anhcc2").getValue(String.class);
+                    anhCC2 = anhCC2 == null ? "" : anhCC2;
 
                     // Hiển thị hình ảnh
-                    if (!anhCC1.equals("N/A")) {
+                    if (!anhCC1.equals("N/A") && !anhCC1.equals("")) {
                         Glide.with(getContext())
                                 .load(anhCC1) // Tải ảnh từ URL
                                 .into(binding.ivCCCD1); // imageViewCC là ID của ImageView trong layout
                     } else
                         binding.ivCCCD1.setImageDrawable(getResources().getDrawable(android.R.drawable.ic_menu_report_image));
 
-                    if (!anhCC2.equals("N/A")) {
+                    if (!anhCC2.equals("N/A") && !anhCC2.equals("")) {
                         Glide.with(getContext())
                                 .load(anhCC2) // Tải ảnh từ URL
                                 .into(binding.ivCCCD2); // imageViewCC2 là ID của ImageView trong layout

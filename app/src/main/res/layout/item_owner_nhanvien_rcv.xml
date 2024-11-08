@@ -36,7 +36,7 @@
                     android:gravity="start|center"
                     android:paddingLeft="10dp"
                     android:paddingRight="5dp"
-                    android:text="56476658564"
+                    android:text="N/A"
                     android:textColor="#B71C1C"
                     android:textStyle="bold" />
 
@@ -52,7 +52,7 @@
                     android:gravity="center|end"
                     android:paddingLeft="10dp"
                     android:paddingRight="5dp"
-                    android:text="0378565768"
+                    android:text="N/A"
                     android:textColor="#1B5E20"
                     android:textStyle="bold" />
             </LinearLayout>
@@ -73,7 +73,7 @@
                     android:gravity="center|start"
                     android:paddingLeft="10dp"
                     android:paddingRight="5dp"
-                    android:text="Tên Nhân Viên"
+                    android:text="N/A"
                     android:textColor="@color/black"
                     android:textStyle="bold" />
 
@@ -88,7 +88,6 @@
                     android:gravity="center|top"
                     android:paddingLeft="5dp"
                     android:paddingRight="5dp"
-                    android:text="Chức Vụ"
                     android:textColor="#F57F17"
                     android:textStyle="bold" />
             </LinearLayout>

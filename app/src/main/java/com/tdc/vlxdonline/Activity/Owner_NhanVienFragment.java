@@ -15,6 +15,7 @@ import androidx.annotation.Nullable;
 import androidx.fragment.app.Fragment;
 import androidx.recyclerview.widget.LinearLayoutManager;
 
+import com.google.android.material.snackbar.Snackbar;
 import com.google.firebase.database.DataSnapshot;
 import com.google.firebase.database.DatabaseError;
 import com.google.firebase.database.DatabaseReference;
@@ -36,7 +37,7 @@ public class Owner_NhanVienFragment extends Fragment {
     private NhanVienAdapter nhanVienAdapter;
 
     // Email mà tài khoản quản lý đang đăng nhập
-    String emailLogin = null;
+    String emailLogin = LoginActivity.idUser;
 
     // Lưu lại danh sách nhân viên ban đầu trước khi tìm kiếm
     private List<NhanVien> dsNhanVien = new ArrayList<>();
@@ -60,12 +61,6 @@ public class Owner_NhanVienFragment extends Fragment {
     @Override
     public void onViewCreated(@NonNull View view, @Nullable Bundle savedInstanceState) {
         super.onViewCreated(view, savedInstanceState);
-
-        // Nhận emailUser từ Bundle
-        if (getArguments() != null) {
-            emailLogin = getArguments().getString("emailUser");
-            Log.d("l.e", "onViewCreated: emailUser = " + emailLogin);
-        } else Log.d("l.e", "Nhận emailUser từ Bundle: getArguments() = null");
 
         //RecycleView: Thiết lập layout cho RecyclerView, sử dụng LinearLayoutManager để hiển thị danh sách theo chiều dọc
         ownerNhanvienBinding.ownerRcvNhanVien.setLayoutManager(new LinearLayoutManager(getContext()));
@@ -95,11 +90,10 @@ public class Owner_NhanVienFragment extends Fragment {
     }
 
     private void hienThiDSNhanVien() {
-
         // TODO: Thoát ứng dụng khi chưa đăng nhập mà vào được trang quản lý
         if (emailLogin == null) {
-            Toast.makeText(getContext(), "Bạn không có quyền truy cập \nQuản lý Nhân Viên", Toast.LENGTH_SHORT).show();
-            // requireActivity().finishAffinity();
+            Snackbar.make(getView(), "Bạn không có quyền truy cập \nQuản lý Nhân Viên", Toast.LENGTH_SHORT).show();
+             requireActivity().finishAffinity();
         }
 
         // Firebase: Khởi tạo databaseReference và lấy dữ liệu từ Firebase
@@ -114,7 +108,8 @@ public class Owner_NhanVienFragment extends Fragment {
                 // Lặp qua tất cả các DataSnapshot con để lấy thông tin nhân viên
                 for (DataSnapshot snapshot : dataSnapshot.getChildren()) {
                     // Lấy đối tượng NhanVien từ snapshot
-                    NhanVien nhanVien = snapshot.getValue(NhanVien.class);
+                    NhanVien nhanVien = new NhanVien();
+                    nhanVien = snapshot.getValue(NhanVien.class);
                     if (nhanVien != null) {
                         // Set ID NV là snapshot key
                         nhanVien.setCccd(snapshot.getKey());
@@ -131,7 +126,7 @@ public class Owner_NhanVienFragment extends Fragment {
                                 dsNhanVien.add(nhanVien); // Lưu vào danh sách gốc
                             }
                     } else
-                        Toast.makeText(getContext(), "Danh Sách Nhân Viên Rỗng", Toast.LENGTH_SHORT).show();
+                        Snackbar.make(getView(), "Danh Sách Nhân Viên Rỗng", Toast.LENGTH_SHORT).show();
                 }
 
                 // Sắp xếp danh sách theo mã NV
