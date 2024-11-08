@@ -77,7 +77,7 @@ public class Owner_KhachHangFragment extends Fragment {
         timKiemKhachHang();
 
         // Bắt sự kiện khi nhấn vào recycleview khách hàng
-        nhanVaoItemKhachHang();
+        setupNhanItemKhachHang();
 
         // Lắng nghe sự kiện nhấn ra ngoài thanh tìm kiếm để tắt con trỏ và ẩn bàn phím
         binding.getRoot().setOnTouchListener((v, event) -> {
@@ -254,7 +254,7 @@ public class Owner_KhachHangFragment extends Fragment {
         });
     }
 
-    private void nhanVaoItemKhachHang() {
+    private void setupNhanItemKhachHang() {
         adapter.setOnItemClickListener(khachHang -> {
             ChuyenSangFragmentDetail(khachHang.getID());
         });
