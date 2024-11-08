@@ -4,18 +4,27 @@
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
-    tools:context=".Activity.Owner_NhanVienFragment">
+    tools:context=".Activity.Owner_KhachHangFragment">
 
     <androidx.constraintlayout.widget.ConstraintLayout
         android:layout_width="match_parent"
         android:layout_height="match_parent"
         android:background="@color/white">
 
+        <TextView
+            android:id="@+id/textView2"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:paddingTop="10dp"
+            android:text="Quản Lý Khách Hàng"
+            android:textAlignment="center"
+            android:textColor="#1A6D1D"
+            android:textSize="32sp"
+            android:textStyle="bold"
+            app:layout_constraintTop_toTopOf="parent"
+            tools:layout_editor_absoluteX="-5dp" />
+
         <!-- SearchView với bo góc và mở rộng phạm vi nhấn -->
-
-        <!-- Thêm Nhân Viên -->
-
-        <!--Danh Sách Nhân Viên-->
         <SearchView
             android:id="@+id/searchView"
             android:layout_width="0dp"
@@ -24,49 +33,52 @@
             android:layout_marginTop="8dp"
             android:layout_marginEnd="16dp"
             android:background="@drawable/common_google_signin_btn_icon_dark_normal_background"
-
             android:iconifiedByDefault="false"
             android:inputType="text"
-            android:queryHint="Tìm Kiếm: Nhập Tên, ID"
+            android:queryHint="Tìm Kiếm: Nhập Tên, ID, SĐT_"
             app:layout_constraintEnd_toEndOf="parent"
             app:layout_constraintHorizontal_bias="0.0"
             app:layout_constraintStart_toStartOf="parent"
             app:layout_constraintTop_toBottomOf="@+id/textView2" />
 
-        <Button
-            android:id="@+id/btnThemNhanVien"
+        <!-- Thông báo -->
+        <LinearLayout
+            android:id="@+id/lnThongBao"
             android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:layout_marginTop="16dp"
+            android:layout_height="50dp"
+            android:layout_marginTop="8dp"
             android:layout_marginEnd="16dp"
-            android:backgroundTint="#327735"
-            android:drawableRight="@drawable/people_add"
-            android:drawableTint="@color/white"
-            android:text="Nhân Viên Mới"
-            android:textSize="18sp"
+            android:gravity="center|end"
+            android:background="@drawable/bg_img_detail"
+            android:orientation="horizontal"
             app:layout_constraintEnd_toEndOf="parent"
-            app:layout_constraintTop_toBottomOf="@+id/searchView" />
+            app:layout_constraintTop_toBottomOf="@+id/searchView">
 
-        <TextView
-            android:id="@+id/textView2"
-            android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            android:paddingTop="10dp"
-            android:text="Quản Lý Nhân Viên"
-            android:textAlignment="center"
-            android:textColor="#1A6D1D"
-            android:textSize="32sp"
-            android:textStyle="bold"
-            app:layout_constraintTop_toTopOf="parent"
-            tools:layout_editor_absoluteX="-5dp" />
+            <TextView
+                android:id="@+id/tvThongBao"
+                android:layout_width="wrap_content"
+                android:layout_height="match_parent"
+                android:padding="5dp"
+                android:gravity="center"
+                android:textColor="#4CAF50"
+                android:textSize="20sp"
+                android:textStyle="bold" />
 
-        <!-- Hàng tiêu đề cố định, không cuộn -->
+            <ImageView
+                android:id="@+id/ivThongBao"
+                android:layout_width="wrap_content"
+                android:layout_height="match_parent"
+                android:layout_marginEnd="10dp"
+                android:backgroundTint="#00FFFFFF"
+                android:src="@android:drawable/ic_popup_reminder" />
+        </LinearLayout>
 
+        <!--Danh Sách Nhân Viên-->
         <LinearLayout
             android:id="@+id/linearLayout"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:layout_marginTop="16dp"
+            android:layout_marginTop="8dp"
             android:background="@drawable/common_google_signin_btn_text_light_normal_background"
             android:backgroundTint="#6851A5"
             android:gravity="center"
@@ -74,13 +86,12 @@
             android:padding="8dp"
             app:layout_constraintEnd_toEndOf="parent"
             app:layout_constraintStart_toStartOf="parent"
-            app:layout_constraintTop_toBottomOf="@+id/btnThemNhanVien">
-
+            app:layout_constraintTop_toBottomOf="@+id/lnThongBao">
 
             <TextView
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
-                android:text="Danh Sách Nhân Viên"
+                android:text="Danh Sách Khách Hàng"
                 android:textAlignment="center"
                 android:textColor="@color/white"
                 android:textSize="24sp"
@@ -98,7 +109,7 @@
             app:layout_constraintTop_toBottomOf="@+id/linearLayout" />
 
         <androidx.recyclerview.widget.RecyclerView
-            android:id="@+id/ownerRcvNhanVien"
+            android:id="@+id/ownerRcvKhachHang"
             android:layout_width="0dp"
             android:layout_height="0dp"
             android:layout_marginTop="2dp"
