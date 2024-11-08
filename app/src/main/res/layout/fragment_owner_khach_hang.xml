@@ -48,8 +48,8 @@
             android:layout_height="50dp"
             android:layout_marginTop="8dp"
             android:layout_marginEnd="16dp"
-            android:gravity="center|end"
             android:background="@drawable/bg_img_detail"
+            android:gravity="center|end"
             android:orientation="horizontal"
             app:layout_constraintEnd_toEndOf="parent"
             app:layout_constraintTop_toBottomOf="@+id/searchView">
@@ -58,8 +58,8 @@
                 android:id="@+id/tvThongBao"
                 android:layout_width="wrap_content"
                 android:layout_height="match_parent"
-                android:padding="5dp"
                 android:gravity="center"
+                android:padding="5dp"
                 android:textColor="#4CAF50"
                 android:textSize="20sp"
                 android:textStyle="bold" />
@@ -120,7 +120,7 @@
             app:layout_constraintHorizontal_bias="0.5"
             app:layout_constraintStart_toStartOf="parent"
             app:layout_constraintTop_toBottomOf="@+id/linearLayout"
-            tools:listitem="@layout/item_owner_recycleview" />
+            tools:listitem="@layout/item_owner_khachhang_rcv" />
 
     </androidx.constraintlayout.widget.ConstraintLayout>
 

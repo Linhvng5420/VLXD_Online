@@ -72,11 +72,7 @@
                     android:gravity="center|start"
                     android:paddingLeft="10dp"
                     android:paddingRight="5dp"
-<<<<<<< HEAD:app/src/main/res/layout/item_owner_nhanvien_rcv.xml
                     android:text="N/A"
-=======
-                    android:text="Tên Khách Hàng"
->>>>>>> @linh/quan_ly_khach_hang:app/src/main/res/layout/item_owner_khachhang_rcv.xml
                     android:textColor="@color/black"
                     android:textStyle="bold" />
 
@@ -91,11 +87,7 @@
                     android:gravity="center"
                     android:paddingLeft="5dp"
                     android:paddingRight="5dp"
-<<<<<<< HEAD:app/src/main/res/layout/item_owner_nhanvien_rcv.xml
                     android:textColor="#F57F17"
-=======
-                    android:textColor="#1E88E5"
->>>>>>> @linh/quan_ly_khach_hang:app/src/main/res/layout/item_owner_khachhang_rcv.xml
                     android:textStyle="bold" />
             </LinearLayout>
         </LinearLayout>

@@ -88,11 +88,10 @@ public class NhanVienAdapter extends RecyclerView.Adapter<NhanVienAdapter.NhanVi
 
         // Phương thức bind để gán dữ liệu nhân viên vào các view trong item
         public void bind(NhanVien nhanVien) {
-            // Hiển thị ID của nhân viên
+            // Hiển thị tt của nhân viên
             binding.tvcccd.setText(nhanVien.getCccd());
-
-            // Hiển thị tên nhân viên
             binding.tvTenNV.setText(nhanVien.getTennv());
+            binding.tvsdt.setText(nhanVien.getSdt());
 
             // Hiển thị chức vụ từ Firebase nếu chucVuId không null
             String chucVuId = nhanVien.getChucvu();

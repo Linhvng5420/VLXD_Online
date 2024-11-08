@@ -158,7 +158,7 @@ public class Owner_KhachHangFragment extends Fragment {
                 boolean hasNotification = false;
 
                 for (DataSnapshot customerSnapshot : dataSnapshot.getChildren()) {
-                    String xacthuc = String.valueOf(customerSnapshot.child("xacthuc").getValue(String.class));
+                    String xacthuc = String.valueOf(customerSnapshot.child("xacthuc").getValue(Long.class));
                     if (xacthuc != null && "1".equals(xacthuc)) {
                         hasNotification = true;
                         break;
@@ -191,7 +191,7 @@ public class Owner_KhachHangFragment extends Fragment {
             @Override
             public void onDataChange(@NonNull DataSnapshot dataSnapshot) {
                 for (DataSnapshot customerSnapshot : dataSnapshot.getChildren()) {
-                    String xacthuc = String.valueOf(customerSnapshot.child("xacthuc").getValue(String.class));
+                    String xacthuc = String.valueOf(customerSnapshot.child("xacthuc").getValue(Long.class));
                     if (xacthuc != null && "1".equals(xacthuc)) {
                         String khachHangId = customerSnapshot.getKey();
                         layThongTinKhachHang(khachHangId, khachHangThongBaoList);
