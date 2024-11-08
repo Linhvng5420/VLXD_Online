@@ -32,7 +32,7 @@
         style="@style/item_lg"
         android:hint="Nhập Email ....."
         android:inputType="text|textEmailAddress"
-        android:text="admin@tdc.com" />
+        android:text="chu1@m.c" />
 
     <TextView
         android:layout_width="match_parent"
@@ -49,7 +49,7 @@
         android:hint="Nhập Mật khẩu ....."
         android:imeOptions="actionDone"
         android:inputType="textPassword"
-        android:text="a" />
+        android:text="1" />
 
     <CheckBox
         android:id="@+id/cb_dis_pass"

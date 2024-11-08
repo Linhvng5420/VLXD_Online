@@ -25,6 +25,7 @@ public class Owner_HomeActivity extends AppCompatActivity {
         ownerHomeBinding = ActivityOwnerHomeBinding.inflate(getLayoutInflater());
         // Thiết lập nội dung hiển thị của Activity từ layout đã được binding
         setContentView(ownerHomeBinding.getRoot());
+
         // Thiết lập Fragment mặc định (Hiển thị màn hình mặc định ban đầu của ứng dụng)
         //ReplaceFragment(new Owner_NhanVienFragment());
 
@@ -62,9 +63,9 @@ public class Owner_HomeActivity extends AppCompatActivity {
             if (itemId == R.id.nav_owner_dashboard) {
                 ReplaceFragment(new Fragment());
             } else if (itemId == R.id.nav_owner_nhanvien) {
-                ReplaceFragment(new Owner_NhanVienFragment());
-            } else if (itemId == R.id.nav_owner_khachhang) {
                 ReplaceFragment(new Fragment());
+            } else if (itemId == R.id.nav_owner_khachhang) {
+                ReplaceFragment(new Owner_KhachHangFragment());
             } else if (itemId == R.id.nav_owner_donhang) {
                 ReplaceFragment(new Fragment());
             } else if (itemId == R.id.nav_owner_kho) {
