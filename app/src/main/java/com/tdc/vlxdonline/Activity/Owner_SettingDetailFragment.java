@@ -11,7 +11,7 @@ import androidx.fragment.app.Fragment;
 
 import com.tdc.vlxdonline.databinding.FragmentOwnerHosoBinding;
 
-public class Owner_HoSoFragment extends Fragment {
+public class Owner_SettingDetailFragment extends Fragment {
     FragmentOwnerHosoBinding binding;
 
     @Override
