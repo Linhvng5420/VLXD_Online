@@ -27,6 +27,7 @@ public class Warehouse_HomeActivity extends AppCompatActivity {
     String canCuocNV;
     DatabaseReference reference;
     public static NhanVien nhanVien = new NhanVien();
+    boolean checkFirst = true;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -36,8 +37,6 @@ public class Warehouse_HomeActivity extends AppCompatActivity {
         canCuocNV = getIntent().getStringExtra("canCuoc");
         reference = FirebaseDatabase.getInstance().getReference("nhanvien").child(canCuocNV);
         DocThongTinNV();
-
-        ReplaceFragment(new GiaoDienKho_Fragment());
 
         EventNavigationBottom();
 
@@ -63,7 +62,7 @@ public class Warehouse_HomeActivity extends AppCompatActivity {
             int itemId = item.getItemId();
 
             if (itemId == R.id.nav_warehouse_kho) {
-                ReplaceFragment(new GiaoDienKho_Fragment());
+                ReplaceFragment(new GiaoDienKho_Fragment(nhanVien.getEmailchu()));
             } else if (itemId == R.id.nav_warehouse_daxuat) {
                 ReplaceFragment(new DanhSachDonHangFragment(0));
             } else if (itemId == R.id.nav_warehouse_taikhoan) {
@@ -88,6 +87,10 @@ public class Warehouse_HomeActivity extends AppCompatActivity {
                     if (nv != null){
                         nv.setCccd(dataSnapshot.getKey());
                         Warehouse_HomeActivity.nhanVien = nv;
+                        if (checkFirst) {
+                            ReplaceFragment(new GiaoDienKho_Fragment(nv.getEmailchu()));
+                            checkFirst = false;
+                        }
                     }
                 }catch (Exception e){}
             }
