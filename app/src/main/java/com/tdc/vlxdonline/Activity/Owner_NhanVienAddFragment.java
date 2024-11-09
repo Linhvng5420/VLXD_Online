@@ -131,9 +131,9 @@ public class Owner_NhanVienAddFragment extends Fragment {
                     return;
                 }
 
-                // Kiểm tra ký tự
-                if (!tenNhanVien.matches("[a-zA-Z ]+")) {
-                    binding.etTenNhanVien.setError("Không Nhập Ký Tự Khác A-Z");
+                // Kiểm tra ký tự chỉ cho phép chữ cái và khoảng trắng (bao gồm cả ký tự có dấu tiếng Việt)
+                if (!tenNhanVien.matches("^[\\p{L} ]+$")) {
+                    binding.etTenNhanVien.setError("Không nhập số hoặc ký tự đặc biệt");
                     setVisibilitySaveButton(false);
                     return;
                 }

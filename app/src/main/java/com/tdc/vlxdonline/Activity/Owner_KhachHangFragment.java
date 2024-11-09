@@ -34,7 +34,7 @@ public class Owner_KhachHangFragment extends Fragment {
     FragmentOwnerKhachHangBinding binding;
     KhachHangAdapter adapter;
 
-    // Email mà tài khoản quản lý đang đăng nhập
+    // Email mà tài khoản quản lý đang đăng nhập (Đã bỏ @mail.com)
     String idLogin = LoginActivity.idUser;
 
     // Lưu lại danh sách khách hàng ban đầu trước khi tìm kiếm
@@ -89,28 +89,51 @@ public class Owner_KhachHangFragment extends Fragment {
 
     // HIEN THI DANH SACH KHACH HANG
     private void hienThiDSKhachHang() {
-        DatabaseReference db = FirebaseDatabase.getInstance().getReference("duyetkhachhang");
         List<String> dsIDKhachHang = new ArrayList<>();
 
-        db.child(idLogin).addListenerForSingleValueEvent(new ValueEventListener() {
-            @Override
-            public void onDataChange(@NonNull DataSnapshot dataSnapshot) {
-                for (DataSnapshot snapshot : dataSnapshot.getChildren()) {
-                    String id = snapshot.getKey();
-                    dsIDKhachHang.add(id);
+        if (idLogin.equals("admin")) {
+            DatabaseReference db = FirebaseDatabase.getInstance().getReference("customers");
+            db.addListenerForSingleValueEvent(new ValueEventListener() {
+                @Override
+                public void onDataChange(@NonNull DataSnapshot dataSnapshot) {
+                    for (DataSnapshot snapshot : dataSnapshot.getChildren()) {
+                        KhachHang khachHang = snapshot.getValue(KhachHang.class);
+                        if (khachHang != null) {
+                            khachHang.setID(snapshot.getKey());
+                            dsKhachHang.add(khachHang);
+                        }
+                    }
+
+                    // Cập nhật dữ liệu khi hoàn thành việc lấy tất cả khách hàng
+                    adapter.sortKhachHangList();  // Sắp xếp nếu cần thiết
+                    adapter.notifyDataSetChanged();  // Cập nhật RecyclerView
                 }
 
-                Log.d("l.d", "Owner_KhachHangFragment > hienThiDSKhachHang: dsIDKhachHang: " + dsIDKhachHang);
+                @Override
+                public void onCancelled(@NonNull DatabaseError databaseError) {
+                }
+            });
+        } else {
+            DatabaseReference db = FirebaseDatabase.getInstance().getReference("duyetkhachhang");
+            db.child(idLogin).addListenerForSingleValueEvent(new ValueEventListener() {
+                @Override
+                public void onDataChange(@NonNull DataSnapshot dataSnapshot) {
+                    for (DataSnapshot snapshot : dataSnapshot.getChildren()) {
+                        String id = snapshot.getKey();
+                        dsIDKhachHang.add(id);
+                    }
 
-                // Sau khi lấy ID, tải dữ liệu khách hàng
-                layThongTinKH(dsIDKhachHang);
-            }
+                    Log.d("l.d", "Owner_KhachHangFragment > hienThiDSKhachHang: dsIDKhachHang: " + dsIDKhachHang);
 
-            @Override
-            public void onCancelled(@NonNull DatabaseError databaseError) {
-                Log.d("l.d", "Database error: " + databaseError.getMessage());
-            }
-        });
+                    // Sau khi lấy ID, tải dữ liệu khách hàng
+                    layThongTinKH(dsIDKhachHang);
+                }
+
+                @Override
+                public void onCancelled(@NonNull DatabaseError databaseError) {
+                }
+            });
+        }
     }
 
     private void layThongTinKH(List<String> customerIds) {

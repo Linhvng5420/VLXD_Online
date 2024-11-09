@@ -74,8 +74,8 @@ public class Owner_NhanVienDetailFragment extends Fragment {
     // Mã yêu cầu cho việc chọn ảnh
     private static final int PICK_IMAGE_FRONT_ID = 2;
     private static final int PICK_IMAGE_BACK_ID = 3;
-    // Uri để lưu trữ đường dẫn đến ảnh được chọn
-    private Uri anhCCCDTruoc, anhCCCDSau;
+    // Uri để lưu trữ đường dẫn đến ảnh được chọn (biến này không lưu lại link ảnh từ firebase tải về)
+    private Uri uriAnhCCTruoc, uriAnhCCSau;
 
     @Override
     public void onCreate(Bundle savedInstanceState) {
@@ -118,7 +118,7 @@ public class Owner_NhanVienDetailFragment extends Fragment {
         setupCancelButton();
         setupResetPassWord();
 
-        // Bắt nhập sdt
+        // Bắt nhập dữ liệu đầu vào
         binding.etSDT.addTextChangedListener(new TextWatcher() {
             @Override
             public void beforeTextChanged(CharSequence s, int start, int count, int after) {
@@ -145,6 +145,39 @@ public class Owner_NhanVienDetailFragment extends Fragment {
 
             @Override
             public void afterTextChanged(Editable s) {
+            }
+        });
+        binding.etTenNhanVien.addTextChangedListener(new TextWatcher() {
+            @Override
+            public void beforeTextChanged(CharSequence charSequence, int i, int i1, int i2) {
+
+            }
+
+            @Override
+            public void onTextChanged(CharSequence charSequence, int start, int before, int count) {
+                String tenNhanVien = binding.etTenNhanVien.getText().toString();
+
+                // Kiểm tra điều kiện độ dài tên
+                if (tenNhanVien.isEmpty() || tenNhanVien.length() < 2) {
+                    binding.etTenNhanVien.setError("Vui lòng nhập đủ họ tên nhân viên");
+                    setVisibilitySaveButton(false);
+                    return;
+                }
+
+                // Kiểm tra ký tự chỉ cho phép chữ cái và khoảng trắng (bao gồm cả ký tự có dấu tiếng Việt)
+                if (!tenNhanVien.matches("^[\\p{L} ]+$")) {
+                    binding.etTenNhanVien.setError("Không nhập số hoặc ký tự đặc biệt");
+                    setVisibilitySaveButton(false);
+                    return;
+                }
+
+                // Tên hợp lệ
+                setVisibilitySaveButton(true);
+            }
+
+            @Override
+            public void afterTextChanged(Editable editable) {
+
             }
         });
     }
@@ -665,12 +698,12 @@ public class Owner_NhanVienDetailFragment extends Fragment {
             // Dựa vào mã yêu cầu để xác định ảnh nào đã được chọn
             if (requestCode == PICK_IMAGE_FRONT_ID) {
                 // Lưu Uri ảnh CMND trước và hiển thị ảnh trong ImageView
-                anhCCCDTruoc = selectedImageUri;
-                binding.ivCCCD1.setImageURI(anhCCCDTruoc); // Hiển thị ảnh CMND trước
+                uriAnhCCTruoc = selectedImageUri;
+                binding.ivCCCD1.setImageURI(uriAnhCCTruoc); // Hiển thị ảnh CMND trước
             } else if (requestCode == PICK_IMAGE_BACK_ID) {
                 // Lưu Uri ảnh CMND sau và hiển thị ảnh trong ImageView
-                anhCCCDSau = selectedImageUri;
-                binding.ivCCCD2.setImageURI(anhCCCDSau); // Hiển thị ảnh CMND sau
+                uriAnhCCSau = selectedImageUri;
+                binding.ivCCCD2.setImageURI(uriAnhCCSau); // Hiển thị ảnh CMND sau
             }
         }
     }
@@ -680,10 +713,10 @@ public class Owner_NhanVienDetailFragment extends Fragment {
         final int[] uploadCount = {0};
         StorageReference storageRef = FirebaseStorage.getInstance().getReference("CCCD");
 
-        if (anhCCCDTruoc != null) {
+        if (uriAnhCCTruoc != null) {
             StorageReference frontImageRef = storageRef.child(nhanVien.getCccd() + "_Truoc.jpg");
 
-            frontImageRef.putFile(anhCCCDTruoc).addOnSuccessListener(taskSnapshot -> frontImageRef.getDownloadUrl().addOnSuccessListener(uri -> {
+            frontImageRef.putFile(uriAnhCCTruoc).addOnSuccessListener(taskSnapshot -> frontImageRef.getDownloadUrl().addOnSuccessListener(uri -> {
                 nhanVien.setAnhcc1(uri.toString());
                 uploadCount[0]++;  // Tăng biến đếm khi tải lên ảnh trước thành công
 
@@ -700,10 +733,10 @@ public class Owner_NhanVienDetailFragment extends Fragment {
             uploadCount[0]++;
         }
 
-        if (anhCCCDSau != null) {
+        if (uriAnhCCSau != null) {
             StorageReference backImageRef = storageRef.child(nhanVien.getCccd() + "_Sau.jpg");
 
-            backImageRef.putFile(anhCCCDSau).addOnSuccessListener(taskSnapshot2 -> backImageRef.getDownloadUrl().addOnSuccessListener(uri2 -> {
+            backImageRef.putFile(uriAnhCCSau).addOnSuccessListener(taskSnapshot2 -> backImageRef.getDownloadUrl().addOnSuccessListener(uri2 -> {
                 nhanVien.setAnhcc2(uri2.toString());
                 uploadCount[0]++;  // Tăng biến đếm khi tải lên ảnh sau thành công
 
@@ -719,6 +752,8 @@ public class Owner_NhanVienDetailFragment extends Fragment {
             // Tăng biến đếm nếu ảnh sau không có
             uploadCount[0]++;
         }
+
+        onUploadComplete.run();
     }
 
     // CUỐI: BẮT ĐIỀU KIỆN DỮ LIỆU ĐẦU VÀO
@@ -747,23 +782,24 @@ public class Owner_NhanVienDetailFragment extends Fragment {
             return false;
         }
 
-        // Yêu cầu user phải chọn ảnh cccd
-        if (binding.ivCCCD1.getDrawable() == null || binding.ivCCCD2.getDrawable() == null) {
+        // Kiểm tra ảnh CCCD trước
+        if (binding.ivCCCD1.getDrawable() == null ||
+                binding.ivCCCD1.getDrawable().getConstantState().equals(getResources().getDrawable(android.R.drawable.ic_menu_report_image).getConstantState())) {
+
             binding.tvCCCD1.setError("Chưa chọn ảnh CCCD Trước");
-            binding.tvCCCD2.setError("Chưa chọn ảnh CCCD Sau");
             return false;
         } else {
-            binding.tvCCCD1.setError(null);
-            binding.tvCCCD2.setError(null);
+            binding.tvCCCD1.setError(null);  // Xóa lỗi nếu ảnh CCCD Trước đã chọn
         }
 
-        if (binding.ivCCCD1.getDrawable() == null || binding.ivCCCD2.getDrawable() == null) {
-            binding.tvCCCD1.setError("Chưa chọn ảnh CCCD Trước");
+        // Kiểm tra ảnh CCCD sau
+        if (binding.ivCCCD2.getDrawable() == null ||
+                binding.ivCCCD2.getDrawable().getConstantState().equals(getResources().getDrawable(android.R.drawable.ic_menu_report_image).getConstantState())) {
+
             binding.tvCCCD2.setError("Chưa chọn ảnh CCCD Sau");
             return false;
         } else {
-            binding.tvCCCD1.setError(null);
-            binding.tvCCCD2.setError(null);
+            binding.tvCCCD2.setError(null);  // Xóa lỗi nếu ảnh CCCD Sau đã chọn
         }
 
         return true;
