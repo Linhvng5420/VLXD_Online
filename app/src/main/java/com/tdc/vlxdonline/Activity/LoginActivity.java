@@ -17,6 +17,9 @@ import com.google.firebase.database.FirebaseDatabase;
 import com.google.firebase.database.ValueEventListener;
 import com.tdc.vlxdonline.databinding.ActivityLoginBinding;
 
+import java.security.MessageDigest;
+import java.security.NoSuchAlgorithmException;
+
 public class LoginActivity extends AppCompatActivity {
 
     ActivityLoginBinding binding;
@@ -67,6 +70,8 @@ public class LoginActivity extends AppCompatActivity {
             return;
         }
 
+        String hashedPass = hashPassword(pass);
+
         DatabaseReference dbRef = FirebaseDatabase.getInstance().getReference("account");
         dbRef.addListenerForSingleValueEvent(new ValueEventListener() {
             @Override
@@ -81,7 +86,7 @@ public class LoginActivity extends AppCompatActivity {
                     String dbPass = passObj != null ? passObj.toString() : null;
                     String dbType = typeObj != null ? typeObj.toString() : null;
 
-                    if (dbEmail != null && dbEmail.equals(email) && dbPass != null && dbPass.equals(pass)) {
+                    if (dbEmail != null && dbEmail.equals(email) && dbPass != null && dbPass.equals(hashedPass)) {
                         isValid = true;
                         switch (dbType) {
                             case "chu":
@@ -116,6 +121,25 @@ public class LoginActivity extends AppCompatActivity {
                 Toast.makeText(LoginActivity.this, "Có lỗi xảy ra!", Toast.LENGTH_SHORT).show();
             }
         });
+    }
+
+    private String hashPassword(String password) {
+        try {
+            MessageDigest md = MessageDigest.getInstance("SHA-256");
+            byte[] hash = md.digest(password.getBytes());
+            StringBuilder hexString = new StringBuilder();
+
+            for (byte b : hash) {
+                String hex = Integer.toHexString(0xff & b);
+                if (hex.length() == 1) hexString.append('0');
+                hexString.append(hex);
+            }
+
+            return hexString.toString();
+        } catch (NoSuchAlgorithmException e) {
+            e.printStackTrace();
+            return null;
+        }
     }
 
     @Override

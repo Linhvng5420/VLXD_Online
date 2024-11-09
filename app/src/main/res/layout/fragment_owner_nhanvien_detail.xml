@@ -182,7 +182,6 @@
         android:contentDescription="Căn cước mặt trước"
         android:padding="10dp"
         android:scaleType="fitCenter"
-        android:src="@android:drawable/ic_menu_report_image"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toBottomOf="@+id/tilCCCD" />
 
@@ -209,7 +208,6 @@
         android:contentDescription="Căn cước mặt sau"
         android:padding="10dp"
         android:scaleType="fitCenter"
-        android:src="@android:drawable/ic_menu_report_image"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintTop_toBottomOf="@+id/tilCCCD" />
 
@@ -310,5 +308,4 @@
         app:layout_constraintEnd_toEndOf="parent"
         app:maxImageSize="40dp"
         app:tint="#FF9800" />
-
 </androidx.constraintlayout.widget.ConstraintLayout>
