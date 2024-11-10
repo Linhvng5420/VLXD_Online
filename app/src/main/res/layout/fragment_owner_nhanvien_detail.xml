@@ -102,11 +102,10 @@
     <!-- EditText Số điện thoại -->
     <com.google.android.material.textfield.TextInputLayout
         android:id="@+id/tilSDT"
-        android:layout_width="match_parent"
+        android:layout_width="300dp"
         android:layout_height="wrap_content"
         android:layout_margin="10dp"
         android:background="@color/white"
-        app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toBottomOf="@+id/spinnerChucVu">
 
@@ -122,6 +121,18 @@
     </com.google.android.material.textfield.TextInputLayout>
 
     <!-- EditText Email -->
+    <ImageButton
+        android:id="@+id/imgbCall"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_marginStart="19dp"
+        android:layout_marginTop="16dp"
+        android:background="@drawable/common_google_signin_btn_icon_light_normal_background"
+        android:src="@android:drawable/ic_menu_call"
+        android:tint="#04EE0F"
+        app:layout_constraintStart_toEndOf="@+id/tilSDT"
+        app:layout_constraintTop_toBottomOf="@+id/tilChucVu" />
+
     <com.google.android.material.textfield.TextInputLayout
         android:id="@+id/tilEmail"
         android:layout_width="match_parent"
@@ -308,4 +319,5 @@
         app:layout_constraintEnd_toEndOf="parent"
         app:maxImageSize="40dp"
         app:tint="#FF9800" />
+
 </androidx.constraintlayout.widget.ConstraintLayout>
