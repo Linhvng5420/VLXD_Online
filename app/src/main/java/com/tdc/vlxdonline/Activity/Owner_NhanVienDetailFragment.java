@@ -531,19 +531,24 @@ public class Owner_NhanVienDetailFragment extends Fragment {
         binding.btnResetPassWord.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
-                // Tạo tài khoản với mật khẩu ngẫu nhiên và mã hóa
-                String emailNVLogin = nhanVien.getEmailnv();
-                String passNVLogin = String.valueOf((int) (Math.random() * 1000000)); // Tạo mật khẩu ngẫu nhiên 6 chữ số
-                String hashedPassword = hashPassword(passNVLogin); // Mã hóa mật khẩu
+                new AlertDialog.Builder(getContext())
+                        .setTitle("Xác Nhận")
+                        .setMessage("Bạn có chắc chắn muốn Reset mật khẩu nhân viên không?")
+                        .setPositiveButton("Có", (dialog, which) -> {
+                            // Tạo tài khoản với mật khẩu ngẫu nhiên và mã hóa
+                            String emailNVLogin = nhanVien.getEmailnv();
+                            String passNVLogin = String.valueOf((int) (Math.random() * 1000000)); // Tạo mật khẩu ngẫu nhiên 6 chữ số
+                            String hashedPassword = hashPassword(passNVLogin); // Mã hóa mật khẩu
 
-                DatabaseReference dbrfAccount = FirebaseDatabase.getInstance().getReference("account");
-                dbrfAccount.child(nhanVien.getCccd()).child("pass").setValue(hashedPassword).addOnSuccessListener(unused -> {
-                    Snackbar.make(getView(), "Reset mật khẩu cho nhân viên thành công", Toast.LENGTH_SHORT).show();
-                    // Hiển thị hộp thoại thông tin tài khoản
-                    showAccountInfoDialog(emailNVLogin, passNVLogin);
-                }).addOnFailureListener(e -> {
-                    Snackbar.make(getView(), "Reset mật khẩu cho nhân viên thất bại: " + e.getMessage(), Toast.LENGTH_SHORT).show();
-                });
+                            DatabaseReference dbrfAccount = FirebaseDatabase.getInstance().getReference("account");
+                            dbrfAccount.child(nhanVien.getCccd()).child("pass").setValue(hashedPassword).addOnSuccessListener(unused -> {
+                                Snackbar.make(getView(), "Reset mật khẩu cho nhân viên thành công", Toast.LENGTH_SHORT).show();
+                                // Hiển thị hộp thoại thông tin tài khoản
+                                showAccountInfoDialog(emailNVLogin, passNVLogin);
+                            }).addOnFailureListener(e -> {
+                                Snackbar.make(getView(), "Reset mật khẩu cho nhân viên thất bại: " + e.getMessage(), Toast.LENGTH_SHORT).show();
+                            });
+                        }).setNegativeButton("Không", null).show();
             }
         });
     }
