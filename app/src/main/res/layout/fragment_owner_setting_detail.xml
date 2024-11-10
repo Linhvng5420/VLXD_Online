@@ -185,7 +185,6 @@
                 android:layout_height="match_parent"
                 android:enabled="false"
                 android:hint="Địa Chỉ"
-                android:inputType="number|numberSigned"
                 android:textColor="@color/black" />
 
         </com.google.android.material.textfield.TextInputLayout>
@@ -253,20 +252,20 @@
             android:id="@+id/btnChinhSua"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
+            android:layout_marginTop="32dp"
             android:layout_marginEnd="32dp"
-            android:layout_marginBottom="200dp"
             android:contentDescription="Chỉnh sửa"
             android:src="@android:drawable/ic_menu_edit"
             android:visibility="visible"
-            app:layout_constraintBottom_toBottomOf="parent"
             app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintTop_toBottomOf="@+id/tilDiaChi"
             app:maxImageSize="40dp" />
 
         <com.google.android.material.floatingactionbutton.ExtendedFloatingActionButton
             android:id="@+id/btnLuuLai"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:layout_marginBottom="200dp"
+            android:layout_marginTop="32dp"
             android:contentDescription="Lưu Lại"
             android:drawableRight="@android:drawable/ic_menu_save"
             android:drawableTint="#007906"
@@ -276,22 +275,22 @@
             android:textStyle="bold"
             android:visibility="invisible"
             app:backgroundTint="#FFFFFF"
-            app:layout_constraintBottom_toBottomOf="parent"
             app:layout_constraintEnd_toEndOf="parent"
             app:layout_constraintHorizontal_bias="0.5"
             app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintTop_toBottomOf="@+id/tilDiaChi"
             app:maxImageSize="40dp" />
 
         <com.google.android.material.floatingactionbutton.FloatingActionButton
             android:id="@+id/btnHuy"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
+            android:layout_marginTop="32dp"
             android:layout_marginEnd="32dp"
-            android:layout_marginBottom="200dp"
             android:src="@android:drawable/ic_menu_close_clear_cancel"
             android:visibility="invisible"
-            app:layout_constraintBottom_toBottomOf="parent"
             app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintTop_toBottomOf="@+id/tilDiaChi"
             app:maxImageSize="40dp" />
     </androidx.constraintlayout.widget.ConstraintLayout>
 </LinearLayout>

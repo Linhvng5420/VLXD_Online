@@ -10,6 +10,8 @@ import android.widget.Toast;
 
 import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
+import androidx.appcompat.app.AppCompatActivity;
+import androidx.appcompat.widget.Toolbar;
 import androidx.fragment.app.Fragment;
 
 import com.google.android.material.snackbar.BaseTransientBottomBar;
@@ -45,6 +47,9 @@ public class Owner_SettingFragment extends Fragment {
     @Override
     public void onViewCreated(@NonNull View view, @Nullable Bundle savedInstanceState) {
         super.onViewCreated(view, savedInstanceState);
+        // Thiết lập Toolbar
+        setupToolbar(view);
+
         // Đọc trạng thái shop (0-đóng 1-mở)
         dbThongBaoChu = FirebaseDatabase.getInstance().getReference("thongbaochu").child(idUser).child("trangthaishop");
         dbThongBaoChu.addValueEventListener(new ValueEventListener() {
@@ -216,5 +221,18 @@ public class Owner_SettingFragment extends Fragment {
                         .commit(); // Thực hiện chuyển đổi
             }
         });
+    }
+    // CUỐI: THIẾT LẬP TOOLBAR VÀ ĐIỀU HƯỚNG
+    private void setupToolbar(View view) {
+        Toolbar toolbar = view.findViewById(R.id.toolbar);
+        ((AppCompatActivity) getActivity()).setSupportActionBar(toolbar);
+
+        if (((AppCompatActivity) getActivity()).getSupportActionBar() != null) {
+            ((AppCompatActivity) getActivity()).getSupportActionBar().setDisplayHomeAsUpEnabled(true);
+            ((AppCompatActivity) getActivity()).getSupportActionBar().setDisplayShowHomeEnabled(true);
+        }
+
+        // Xử lý khi nhấn nút quay về trên Toolbar
+        toolbar.setNavigationOnClickListener(v -> getActivity().onBackPressed());
     }
 }

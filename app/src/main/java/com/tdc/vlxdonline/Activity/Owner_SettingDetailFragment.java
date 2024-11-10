@@ -34,6 +34,13 @@ public class Owner_SettingDetailFragment extends Fragment {
     }
 
     @Override
+    public void onViewCreated(@NonNull View view, @Nullable Bundle savedInstanceState) {
+        super.onViewCreated(view, savedInstanceState);
+        //Thiết lập Toolbar cho Fragment
+        setupToolbar(view);
+    }
+
+    @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState) {
         // Inflate layout cho Fragment và liên kết với binding
         binding = FragmentOwnerSettingDetailBinding.inflate(inflater, container, false);
@@ -43,6 +50,7 @@ public class Owner_SettingDetailFragment extends Fragment {
 
         setupEditButton();
         setupCancelButton();
+        setupSaveButton();
 
         return binding.getRoot();
     }
@@ -104,7 +112,6 @@ public class Owner_SettingDetailFragment extends Fragment {
         binding.btnHuy.setOnClickListener(v -> {
             // Tạo hộp thoại xác nhận
             new AlertDialog.Builder(getContext()).setTitle("Xác Nhận").setMessage("Bạn có chắc chắn muốn hủy thay đổi không?").setPositiveButton("Hủy", (dialog, which) -> {
-
                         // Vô hiệu hóa các trường chỉnh sửa sau khi hủy
                         binding.etTen.setEnabled(false);
                         binding.etSDT.setEnabled(false);
@@ -126,15 +133,28 @@ public class Owner_SettingDetailFragment extends Fragment {
     private void setupSaveButton() {
         // Lưu lại thông tin nv
         binding.btnLuuLai.setOnClickListener(v -> {
-            
-        });
-    }
+            new AlertDialog.Builder(getContext()).setTitle("Xác Nhận").setMessage("Bạn có chắc chắn muốn lưu thay đổi không?").setPositiveButton("Lưu", (dialog, which) -> {
+                String ten = binding.etTen.getText().toString();
+                String sdt = binding.etSDT.getText().toString();
+                String diaChi = binding.etDiaChi.getText().toString();
 
-    @Override
-    public void onViewCreated(@NonNull View view, @Nullable Bundle savedInstanceState) {
-        super.onViewCreated(view, savedInstanceState);
-        //Thiết lập Toolbar cho Fragment
-        setupToolbar(view);
+                // Cập nhật thông tin chủ cụ thể bằng ID
+                databaseReference.child(ownerId).child("ten").setValue(ten);
+                databaseReference.child(ownerId).child("sdt").setValue(sdt);
+                databaseReference.child(ownerId).child("diaChi").setValue(diaChi);
+
+                // Hiển thị thông báo thành công
+                Toast.makeText(getContext(), "Cập nhật thông tin thành công", Toast.LENGTH_SHORT).show();
+
+                // Vô hiệu hóa các trường chỉnh sửa sau khi lưu
+                binding.etTen.setEnabled(false);
+                binding.etSDT.setEnabled(false);
+                binding.etDiaChi.setEnabled(false);
+                binding.btnLuuLai.setVisibility(View.INVISIBLE);
+                binding.btnHuy.setVisibility(View.INVISIBLE);
+                binding.btnChinhSua.setVisibility(View.VISIBLE);
+            }).setNegativeButton("Không Lưu", null).show();
+        });
     }
 
     // CUỐI: THIẾT LẬP TOOLBAR VÀ ĐIỀU HƯỚNG
