@@ -186,13 +186,20 @@
                     android:textStyle="bold" />
 
                 <TextView
-                    android:id="@+id/tvSLSP"
+                    android:id="@+id/tvSLSP1"
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
                     android:text="13"
                     android:textColor="@android:color/black"
                     android:textSize="20sp"
                     android:textStyle="bold" />
+
+                <TextView
+                    android:id="@+id/tvSLSP2"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:text="Giá trị sản phẩm: 100,325,756 vnđ \nGiá nhập kho: 100,325,756 vnđ"
+                    android:textColor="@android:color/black" />
             </LinearLayout>
         </LinearLayout>
 
