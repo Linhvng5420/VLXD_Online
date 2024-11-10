@@ -63,7 +63,7 @@
                 <com.google.android.material.textfield.TextInputLayout
                     android:id="@+id/tilID"
                     android:layout_width="match_parent"
-                    android:layout_height="50dp"
+                    android:layout_height="wrap_content"
                     android:background="@color/white"
                     android:visibility="visible">
 
@@ -85,7 +85,7 @@
         <com.google.android.material.textfield.TextInputLayout
             android:id="@+id/tilTen"
             android:layout_width="match_parent"
-            android:layout_height="50dp"
+            android:layout_height="wrap_content"
             android:layout_margin="10dp"
             android:background="@color/white"
             android:visibility="visible"
@@ -107,7 +107,7 @@
         <com.google.android.material.textfield.TextInputLayout
             android:id="@+id/tilSDT"
             android:layout_width="match_parent"
-            android:layout_height="50dp"
+            android:layout_height="wrap_content"
             android:layout_margin="10dp"
             android:background="@color/white"
             app:layout_constraintEnd_toEndOf="parent"
@@ -129,7 +129,7 @@
         <com.google.android.material.textfield.TextInputLayout
             android:id="@+id/tilEmail"
             android:layout_width="match_parent"
-            android:layout_height="50dp"
+            android:layout_height="wrap_content"
             android:layout_margin="10dp"
             android:background="@color/white"
             android:textColorHint="#EE0000"
@@ -150,7 +150,7 @@
         <com.google.android.material.textfield.TextInputLayout
             android:id="@+id/tilCCCD"
             android:layout_width="match_parent"
-            android:layout_height="50dp"
+            android:layout_height="wrap_content"
             android:layout_margin="10dp"
             android:background="@color/white"
             app:layout_constraintEnd_toEndOf="parent"
@@ -172,7 +172,7 @@
         <com.google.android.material.textfield.TextInputLayout
             android:id="@+id/tilDiaChi"
             android:layout_width="match_parent"
-            android:layout_height="50dp"
+            android:layout_height="wrap_content"
             android:layout_margin="10dp"
             android:background="@color/white"
             app:layout_constraintEnd_toEndOf="parent"
@@ -254,11 +254,10 @@
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:layout_marginEnd="32dp"
-            android:layout_marginBottom="280dp"
+            android:layout_marginBottom="200dp"
             android:contentDescription="Chỉnh sửa"
             android:src="@android:drawable/ic_menu_edit"
             android:visibility="visible"
-            app:backgroundTint="#FFFFFF"
             app:layout_constraintBottom_toBottomOf="parent"
             app:layout_constraintEnd_toEndOf="parent"
             app:maxImageSize="40dp" />
@@ -267,7 +266,7 @@
             android:id="@+id/btnLuuLai"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:layout_marginBottom="280dp"
+            android:layout_marginBottom="200dp"
             android:contentDescription="Lưu Lại"
             android:drawableRight="@android:drawable/ic_menu_save"
             android:drawableTint="#007906"
@@ -288,7 +287,7 @@
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:layout_marginEnd="32dp"
-            android:layout_marginBottom="280dp"
+            android:layout_marginBottom="200dp"
             android:src="@android:drawable/ic_menu_close_clear_cancel"
             android:visibility="invisible"
             app:layout_constraintBottom_toBottomOf="parent"
