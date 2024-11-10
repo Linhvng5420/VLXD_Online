@@ -118,7 +118,7 @@
 
                 <!-- Payment Methods Row -->
                 <LinearLayout
-                    android:id="@+id/lnPhuongThucThanhToan"
+                    android:id="@+id/ln_stk"
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
                     android:layout_margin="4dp"
