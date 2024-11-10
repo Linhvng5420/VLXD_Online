@@ -1,8 +1,13 @@
 package com.tdc.vlxdonline.Activity;
 
 import android.app.AlertDialog;
+import android.content.ClipData;
+import android.content.ClipboardManager;
+import android.content.Context;
+import android.content.Intent;
 import android.content.res.ColorStateList;
 import android.graphics.Color;
+import android.net.Uri;
 import android.os.Bundle;
 import android.util.Log;
 import android.view.LayoutInflater;
@@ -57,21 +62,8 @@ public class Owner_KhachHangDetailFragment extends Fragment {
         getDataKhachHang();
 
         // Buttons
-        setupButtons();
-    }
-
-    // TODO: XỬ LÝ BUTTON
-    private void setupButtons() {
-        // Lắng nghe sự kiện khi nhấn vào ivAuthenticated
-        binding.ivAuthenticated.setOnClickListener(v -> {
-            // Hiển thị hộp thoại xác nhận
-            new AlertDialog.Builder(getContext())
-                    .setTitle("Xác Thực Khách Hàng")
-                    .setMessage("Bạn có muốn thay đổi trạng thái xác thực của khách hàng này không?")
-                    .setPositiveButton("Xác Thực", (dialog, which) -> updateAuthenticationStatus("1")) // "1" cho Xác Thực
-                    .setNegativeButton("Hủy Xác Thực", (dialog, which) -> updateAuthenticationStatus("0")) // "0" cho Hủy Xác Thực
-                    .show();
-        });
+        setupAuthentButtons();
+        setupCallButton();
     }
 
     // NHẬN ID TỪ BUNDLE, TRUY XUẤT FIREBASE VÀ HIỂN THỊ THÔNG TIN LÊN GIAO DIỆN
@@ -221,6 +213,47 @@ public class Owner_KhachHangDetailFragment extends Fragment {
                 // Xử lý lỗi nếu có
                 Log.e("Owner_NhanVienDetail", "Database error: " + databaseError.getMessage());
             }
+        });
+    }
+
+    // SỰ KIỆN BUTTONs
+    private void setupAuthentButtons() {
+        // Lắng nghe sự kiện khi nhấn vào ivAuthenticated
+        binding.ivAuthenticated.setOnClickListener(v -> {
+            // Hiển thị hộp thoại xác nhận
+            new AlertDialog.Builder(getContext())
+                    .setTitle("Xác Thực Khách Hàng")
+                    .setMessage("Bạn có muốn thay đổi trạng thái xác thực của khách hàng này không?")
+                    .setPositiveButton("Xác Thực", (dialog, which) -> updateAuthenticationStatus("1")) // "1" cho Xác Thực
+                    .setNegativeButton("Hủy Xác Thực", (dialog, which) -> updateAuthenticationStatus("0")) // "0" cho Hủy Xác Thực
+                    .show();
+        });
+    }
+
+    private void setupCallButton() {
+        binding.btnCall.setOnClickListener(view -> {
+            // Tạo AlertDialog để xác nhận
+            AlertDialog.Builder builder = new AlertDialog.Builder(getContext());
+            builder.setTitle("Xác nhận hành động")
+                    .setMessage("Bạn muốn gọi hay sao chép số điện thoại?");
+
+            // Nút "Gọi"
+            builder.setPositiveButton("Gọi", (dialog, which) -> {
+                Intent intent = new Intent(Intent.ACTION_DIAL);
+                intent.setData(Uri.parse("tel:" + khachHang.getSdt()));
+                startActivity(intent);
+            });
+
+            // Nút "Sao chép"
+            builder.setNegativeButton("Sao chép", (dialog, which) -> {
+                ClipboardManager clipboard = (ClipboardManager) getContext().getSystemService(Context.CLIPBOARD_SERVICE);
+                ClipData clip = ClipData.newPlainText("Số điện thoại", khachHang.getSdt());
+                clipboard.setPrimaryClip(clip);
+                Toast.makeText(getContext(), "Đã sao chép số điện thoại", Toast.LENGTH_SHORT).show();
+            });
+
+            // Hiển thị dialog
+            builder.show();
         });
     }
 

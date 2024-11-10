@@ -120,12 +120,11 @@
             <!-- EditText Số điện thoại -->
             <com.google.android.material.textfield.TextInputLayout
                 android:id="@+id/tilSDT"
-                android:layout_width="match_parent"
+                android:layout_width="300dp"
                 android:layout_height="wrap_content"
                 android:layout_margin="10dp"
                 android:layout_marginTop="5dp"
                 android:background="@color/white"
-                app:layout_constraintEnd_toEndOf="parent"
                 app:layout_constraintStart_toStartOf="parent"
                 app:layout_constraintTop_toBottomOf="@+id/tilTen">
 
@@ -141,6 +140,20 @@
             </com.google.android.material.textfield.TextInputLayout>
 
             <!-- EditText Email -->
+
+            <ImageButton
+                android:id="@+id/btn_call"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_marginStart="16dp"
+                android:layout_marginTop="16dp"
+                android:layout_weight="1"
+                android:background="@drawable/common_google_signin_btn_icon_light_normal_background"
+                android:src="@android:drawable/ic_menu_call"
+                app:layout_constraintStart_toEndOf="@+id/tilSDT"
+                app:layout_constraintTop_toBottomOf="@+id/tilTen"
+                app:tint="#04EE0F" />
+
             <com.google.android.material.textfield.TextInputLayout
                 android:id="@+id/tilEmail"
                 android:layout_width="match_parent"

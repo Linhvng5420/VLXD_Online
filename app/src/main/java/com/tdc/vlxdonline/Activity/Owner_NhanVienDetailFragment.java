@@ -1,5 +1,7 @@
 package com.tdc.vlxdonline.Activity;
 
+import static androidx.core.content.ContextCompat.getSystemService;
+
 import android.Manifest;
 import android.app.Activity;
 import android.app.ProgressDialog;
@@ -117,6 +119,7 @@ public class Owner_NhanVienDetailFragment extends Fragment {
         setupHiddenButton();
         setupCancelButton();
         setupResetPassWord();
+        setupCallButton();
 
         // Bắt nhập dữ liệu đầu vào
         binding.etSDT.addTextChangedListener(new TextWatcher() {
@@ -553,6 +556,33 @@ public class Owner_NhanVienDetailFragment extends Fragment {
         });
     }
 
+    private void setupCallButton() {
+        binding.btnCall.setOnClickListener(view -> {
+            // Tạo AlertDialog để xác nhận
+            AlertDialog.Builder builder = new AlertDialog.Builder(getContext());
+            builder.setTitle("Xác nhận hành động")
+                    .setMessage("Bạn muốn gọi hay sao chép số điện thoại?");
+
+            // Nút "Gọi"
+            builder.setPositiveButton("Gọi", (dialog, which) -> {
+                Intent intent = new Intent(Intent.ACTION_DIAL);
+                intent.setData(Uri.parse("tel:" + nhanVien.getSdt()));
+                startActivity(intent);
+            });
+
+            // Nút "Sao chép"
+            builder.setNegativeButton("Sao chép", (dialog, which) -> {
+                ClipboardManager clipboard = (ClipboardManager) getContext().getSystemService(Context.CLIPBOARD_SERVICE);
+                ClipData clip = ClipData.newPlainText("Số điện thoại", nhanVien.getSdt());
+                clipboard.setPrimaryClip(clip);
+                Toast.makeText(getContext(), "Đã sao chép số điện thoại", Toast.LENGTH_SHORT).show();
+            });
+
+            // Hiển thị dialog
+            builder.show();
+        });
+    }
+
     // TÌM VÀ ĐỌC ID CHỨC VỤ TRONG listChucVuFireBase BẰNG TÊN CHỨC VỤ TRUYỀN VÀO
     private String setIDChucVuNhanVien(String tenChucVu) {
         if (tenChucVu == null || tenChucVu.isEmpty()) {
@@ -622,7 +652,9 @@ public class Owner_NhanVienDetailFragment extends Fragment {
 
     private void showAccountInfoDialog(String userNhanVien, String passwordNhanVien) {
         AlertDialog.Builder builder = new AlertDialog.Builder(getContext());
-        builder.setTitle("Thông tin tài khoản nhân viên").setMessage("User: " + userNhanVien + "\nPassword: " + passwordNhanVien).setPositiveButton("OK", (dialogInterface, i) -> {
+        builder.setTitle("Thông tin tài khoản nhân viên")
+                .setMessage("User: " + userNhanVien + "\nPassword: " + passwordNhanVien)
+                .setPositiveButton("OK", (dialogInterface, i) -> {
             getParentFragmentManager().popBackStack(); // Quay lại Fragment trước
         }).setNeutralButton("Copy", (dialogInterface, i) -> {
             // Sao chép User và Password vào Clipboard
