@@ -194,5 +194,16 @@ public class Owner_SettingFragment extends Fragment {
                         .commit(); // Thực hiện chuyển đổi
             }
         });
+
+        // Trang Sổ Địa Chỉ
+        binding.lnSoDiaChi.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+                getParentFragmentManager().beginTransaction()
+                        .replace(R.id.fragment_owner, new Owner_SettingSoDiaChiFragment()) // Thay thế fragment_owner hiện tại bằng fragment chi tiết
+                        .addToBackStack(null) // Cho phép quay lại màn hình trước khi nhấn nút Back
+                        .commit(); // Thực hiện chuyển đổi
+            }
+        });
     }
 }
