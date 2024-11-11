@@ -21,7 +21,46 @@
             app:layout_constraintEnd_toEndOf="parent"
             app:layout_constraintStart_toStartOf="parent"
             app:layout_constraintTop_toTopOf="parent"
-            app:title="Chi tiết Khách Hàng" />
+            app:title="Chi tiết Khách Hàng">
+
+            <LinearLayout
+                android:layout_width="wrap_content"
+                android:layout_height="match_parent"
+                android:layout_gravity="center|end"
+                android:orientation="horizontal">
+
+                <!-- Nút Lưu -->
+                <ImageButton
+                    android:id="@+id/btnSave"
+                    android:layout_width="wrap_content"
+                    android:layout_height="match_parent"
+                    android:layout_marginEnd="8dp"
+                    android:backgroundTint="#1E88E5"
+                    android:contentDescription="Lưu"
+                    android:src="@drawable/ic_save" />
+
+                <!-- Nút Chỉnh Sửa -->
+                <ImageButton
+                    android:id="@+id/btnEdit"
+                    android:layout_width="wrap_content"
+                    android:layout_height="match_parent"
+                    android:layout_marginEnd="8dp"
+                    android:backgroundTint="#1E88E5"
+                    android:contentDescription="Chỉnh sửa"
+                    android:src="@drawable/ic_edit"
+                    android:visibility="visible" />
+
+                <!-- Nút Hủy (ẩn mặc định) -->
+                <ImageButton
+                    android:id="@+id/btnCancel"
+                    android:layout_width="wrap_content"
+                    android:layout_height="match_parent"
+                    android:backgroundTint="#1E88E5"
+                    android:contentDescription="Hủy"
+                    android:src="@android:drawable/btn_dialog"
+                    android:visibility="gone" />
+            </LinearLayout>
+        </androidx.appcompat.widget.Toolbar>
     </LinearLayout>
 
     <ScrollView
