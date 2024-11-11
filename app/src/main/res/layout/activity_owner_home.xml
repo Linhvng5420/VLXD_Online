@@ -7,8 +7,9 @@
     android:orientation="vertical"
     tools:context=".Activity.Owner_HomeActivity">
 
+    <!-- Fragment Layout -->
     <FrameLayout
-        android:id="@+id/fragment_container"
+        android:id="@+id/fragment_owner"
         android:layout_width="match_parent"
         android:layout_height="0dp"
         android:layout_weight="9"
@@ -26,7 +27,7 @@
         <com.google.android.material.bottomnavigation.BottomNavigationView
             android:id="@+id/nav_owner"
             android:layout_width="match_parent"
-            android:layout_height="wrap_content"
+            android:layout_height="match_parent"
             android:layout_gravity="bottom"
             app:menu="@menu/owner_bottom_nav_menu" />
     </LinearLayout>

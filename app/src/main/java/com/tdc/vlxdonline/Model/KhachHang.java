@@ -91,4 +91,19 @@ public class KhachHang{
     public void setDiaChi(String diaChi) {
         this.diaChi = diaChi;
     }
+
+    @Override
+    public String toString() {
+        return "KhachHang{" +
+                "id='" + id + '\'' +
+                ", ten='" + ten + '\'' +
+                ", sdt='" + sdt + '\'' +
+                ", email='" + email + '\'' +
+                ", avata='" + avata + '\'' +
+                ", cccdMatTruoc='" + cccdMatTruoc + '\'' +
+                ", cccdMatSau='" + cccdMatSau + '\'' +
+                ", soCCCD='" + soCCCD + '\'' +
+                ", diaChi='" + diaChi + '\'' +
+                '}';
+    }
 }

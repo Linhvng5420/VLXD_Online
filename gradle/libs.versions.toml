@@ -14,6 +14,7 @@ activity = "1.9.2"
 constraintlayout = "2.1.4"
 materialVersion = "1.6.1"
 firebaseDatabase = "21.0.0"
+googleGmsGoogleServices = "4.4.2"
 
 [libraries]
 android-activation = { module = "com.sun.mail:android-activation", version.ref = "androidMail" }
@@ -24,6 +25,9 @@ firebase-bom = { module = "com.google.firebase:firebase-bom", version.ref = "fir
 firebase-database-ktx = { module = "com.google.firebase:firebase-database-ktx", version.ref = "firebaseDatabaseKtx" }
 firebase-storage-ktx = { module = "com.google.firebase:firebase-storage-ktx", version.ref = "firebaseStorageKtx" }
 glide = { module = "com.github.bumptech.glide:glide", version.ref = "compiler" }
+
+
+[libraries]
 junit = { group = "junit", name = "junit", version.ref = "junit" }
 ext-junit = { group = "androidx.test.ext", name = "junit", version.ref = "junitVersion" }
 espresso-core = { group = "androidx.test.espresso", name = "espresso-core", version.ref = "espressoCore" }
@@ -36,4 +40,5 @@ firebase-database = { group = "com.google.firebase", name = "firebase-database",
 
 [plugins]
 android-application = { id = "com.android.application", version.ref = "agp" }
+google-gms-google-services = { id = "com.google.gms.google-services", version.ref = "googleGmsGoogleServices" }
 

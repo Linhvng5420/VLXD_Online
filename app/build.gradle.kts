@@ -1,5 +1,6 @@
 plugins {
     alias(libs.plugins.android.application)
+    alias(libs.plugins.google.gms.google.services)
 }
 
 android {
@@ -42,8 +43,6 @@ dependencies {
     implementation(libs.firebase.analytics)
     implementation(libs.firebase.storage.ktx)
 
-//    implementation(libs.android.mail)
-//    implementation(libs.android.activation)
     implementation(libs.glide)
     implementation(libs.firebase.database)
     annotationProcessor(libs.compiler)
@@ -55,5 +54,12 @@ dependencies {
     testImplementation(libs.junit)
     androidTestImplementation(libs.ext.junit)
     androidTestImplementation(libs.espresso.core)
+
+    // Load Picture
+    implementation("com.github.bumptech.glide:glide:4.15.1")
+    annotationProcessor("com.github.bumptech.glide:compiler:4.15.1")
+
+    // Import the Firebase
+    implementation("com.google.firebase:firebase-database:21.0.0")
+    implementation("com.google.firebase:firebase-storage:21.0.1")
 }
-apply(plugin = "com.google.gms.google-services")

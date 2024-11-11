@@ -27,9 +27,11 @@
         android:textSize="21dp"
         android:textStyle="bold"/>
     <EditText
-        style="@style/item_lg"
         android:id="@+id/edt_email_lg"
-        android:hint="Nhập Email ....."/>
+        style="@style/item_lg"
+        android:hint="Nhập Email ....."
+        android:inputType="text|textEmailAddress"
+        android:text="chu1@m.c" />
 
     <TextView
         android:layout_width="match_parent"
@@ -40,10 +42,12 @@
         android:textSize="21dp"
         android:textStyle="bold"/>
     <EditText
-        style="@style/item_lg"
         android:id="@+id/edt_pass_lg"
+        style="@style/item_lg"
         android:hint="Nhập Mật khẩu ....."
-        android:inputType="textPassword"/>
+        android:imeOptions="actionDone"
+        android:inputType="textPassword"
+        android:text="1" />
 
     <CheckBox
         android:id="@+id/cb_dis_pass"

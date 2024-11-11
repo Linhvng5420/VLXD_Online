@@ -7,7 +7,6 @@ import android.text.InputType;
 import android.util.Log;
 import android.view.View;
 import android.widget.AdapterView;
-import android.widget.ArrayAdapter;
 import android.widget.Toast;
 
 import androidx.annotation.NonNull;
@@ -18,16 +17,19 @@ import com.google.firebase.database.DatabaseError;
 import com.google.firebase.database.DatabaseReference;
 import com.google.firebase.database.FirebaseDatabase;
 import com.google.firebase.database.ValueEventListener;
+<<<<<<< HEAD
 import com.tdc.vlxdonline.Model.Categorys;
 import com.tdc.vlxdonline.Model.DonVi;
 import com.tdc.vlxdonline.Model.NhanVien;
 import com.tdc.vlxdonline.Model.SendMail;
 import com.tdc.vlxdonline.Model.TypeUser;
 import com.tdc.vlxdonline.Model.Users;
+=======
+>>>>>>> @linh/sprint2
 import com.tdc.vlxdonline.databinding.ActivityLoginBinding;
 
-import java.lang.reflect.Type;
-import java.util.ArrayList;
+import java.security.MessageDigest;
+import java.security.NoSuchAlgorithmException;
 
 public class LoginActivity extends AppCompatActivity {
 
@@ -36,6 +38,7 @@ public class LoginActivity extends AppCompatActivity {
     public static String typeEmployee = "null";
     String idUser = "";
     DatabaseReference dbRef = FirebaseDatabase.getInstance().getReference();
+    public static String idUser = "";
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -43,9 +46,11 @@ public class LoginActivity extends AppCompatActivity {
         binding = ActivityLoginBinding.inflate(getLayoutInflater());
         setContentView(binding.getRoot());
         binding.tvSignup.setPaintFlags(binding.tvSignup.getPaintFlags() | Paint.UNDERLINE_TEXT_FLAG);
+
         setEvents();
     }
 
+    // Trong hàm setEvents
     private void setEvents() {
         // Login
         binding.btnLg.setOnClickListener(new View.OnClickListener() {
@@ -144,6 +149,25 @@ public class LoginActivity extends AppCompatActivity {
             public void onClick(View v) {
                 Intent intent = new Intent(LoginActivity.this, RegisterActivity.class);
                 startActivity(intent);
+
+        // Sự kiện nhấn "Enter" trên ô mật khẩu
+        binding.edtPassLg.setOnEditorActionListener((v, actionId, event) -> {
+            if (actionId == android.view.inputmethod.EditorInfo.IME_ACTION_DONE) {
+                performLogin(); // Hàm thực hiện đăng nhập
+                return true;
+            }
+            return false;
+        });
+
+        // Sự kiện nhấn nút đăng nhập
+        binding.btnLg.setOnClickListener(v -> performLogin());
+
+        // Hiển thị/Ẩn mật khẩu
+        binding.cbDisPass.setOnClickListener(v -> {
+            if (binding.cbDisPass.isChecked()) {
+                binding.edtPassLg.setInputType(InputType.TYPE_CLASS_TEXT);
+            } else {
+                binding.edtPassLg.setInputType(InputType.TYPE_CLASS_TEXT | InputType.TYPE_TEXT_VARIATION_PASSWORD);
             }
         });
     }
@@ -175,5 +199,31 @@ public class LoginActivity extends AppCompatActivity {
 
             }
         });
+    }
+    
+    private String hashPassword(String password) {
+        try {
+            MessageDigest md = MessageDigest.getInstance("SHA-256");
+            byte[] hash = md.digest(password.getBytes());
+            StringBuilder hexString = new StringBuilder();
+
+            for (byte b : hash) {
+                String hex = Integer.toHexString(0xff & b);
+                if (hex.length() == 1) hexString.append('0');
+                hexString.append(hex);
+            }
+
+            return hexString.toString();
+        } catch (NoSuchAlgorithmException e) {
+            e.printStackTrace();
+            return null;
+        }
+    }
+
+    @Override
+    public void onBackPressed() {
+        super.onBackPressed();
+        onDestroy();
+//        finishAffinity();
     }
 }

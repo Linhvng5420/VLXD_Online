@@ -1,7 +1,13 @@
 <?xml version="1.0" encoding="utf-8"?>
 <manifest xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:tools="http://schemas.android.com/tools">
-<uses-permission android:name="android.permission.INTERNET"/>
+
+    <uses-permission android:name="android.permission.READ_EXTERNAL_STORAGE" />
+    <uses-permission android:name="android.permission.WRITE_EXTERNAL_STORAGE" />
+
+    <uses-permission android:name="android.permission.ACCESS_NETWORK_STATE" />
+    <uses-permission android:name="android.permission.INTERNET" />
+
     <application
         android:allowBackup="true"
         android:dataExtractionRules="@xml/data_extraction_rules"
@@ -14,8 +20,8 @@
         tools:targetApi="31">
         <activity
             android:name=".Activity.LoginActivity"
-            android:screenOrientation="portrait"
-            android:exported="true">
+            android:exported="true"
+            android:screenOrientation="portrait">
             <intent-filter>
                 <action android:name="android.intent.action.MAIN" />
 
@@ -48,18 +54,14 @@
             android:exported="false" />
         <activity
             android:name=".Activity.Owner_HomeActivity"
-            android:exported="false" />
-        <activity
-            android:name=".MainActivity"
             android:exported="false"
-            android:windowSoftInputMode="adjustPan">
-        </activity>
-        <activity
-            android:name=".Activity.Customer_HomeActivity"
             android:screenOrientation="portrait"
-            android:exported="false"
             android:windowSoftInputMode="adjustPan">
         </activity>
+
+        <meta-data
+            android:name="preloaded_fonts"
+            android:resource="@array/preloaded_fonts" />
     </application>
 
 </manifest>

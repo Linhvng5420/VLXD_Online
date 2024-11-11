@@ -1,30 +1,38 @@
 package com.tdc.vlxdonline.Model;
 
 public class ChucVu {
-    private String id;
-    private String ten;
-
-    public ChucVu(String id, String ten) {
-        this.id = id;
-        this.ten = ten;
-    }
+    String idChucVu;
+    String tenChucVu;
 
     public ChucVu() {
     }
 
-    public String getId() {
-        return id;
+    public ChucVu(String idChucVu, String tenChucVu) {
+        this.idChucVu = idChucVu;
+        this.tenChucVu = tenChucVu;
     }
 
-    public void setId(String id) {
-        this.id = id;
+    public String getIdChucVu() {
+        return idChucVu;
     }
 
-    public String getTen() {
-        return ten;
+    public void setIdChucVu(String idChucVu) {
+        this.idChucVu = idChucVu;
     }
 
-    public void setTen(String ten) {
-        this.ten = ten;
+    public String getTenChucVu() {
+        return tenChucVu;
+    }
+
+    public void setTenChucVu(String tenChucVu) {
+        this.tenChucVu = tenChucVu;
+    }
+
+    @Override
+    public String toString() {
+        return "ChucVu{" +
+                "idChucVu='" + idChucVu + '\'' +
+                ", tenChucVu='" + tenChucVu + '\'' +
+                '}';
     }
 }
