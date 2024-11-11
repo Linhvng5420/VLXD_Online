@@ -56,7 +56,11 @@ public class TaoDonXuatKhoFragment extends Fragment {
     int viTri = -1;
     int SoLuong = 0; // Số lượng sản phẩm
     DonHang donHang = new DonHang(); // Đơn xuất hiện tại
+    private String emailChu;
 
+    public TaoDonXuatKhoFragment() {
+        emailChu = Warehouse_HomeActivity.nhanVien.getEmailchu();
+    }
 
     @Override
     public void onCreate(Bundle savedInstanceState) {
@@ -184,6 +188,7 @@ public class TaoDonXuatKhoFragment extends Fragment {
                     dsSanPham.clear(); // Xóa danh sách cũ
                     for (DataSnapshot snapshot : dataSnapshot.getChildren()) {
                         Products product = snapshot.getValue(Products.class); // Lấy sản phẩm từ snapshot
+                        if (!product.getIdChu().equals(emailChu.substring(0, emailChu.indexOf("@")))) continue;
                         if (!category.isEmpty() && !category.equals(product.getDanhMuc()))
                             continue; // Kiểm tra danh mục
                         if (!tuKhoa.isEmpty() && !product.getTen().contains(tuKhoa) && !product.getMoTa().contains(tuKhoa))
