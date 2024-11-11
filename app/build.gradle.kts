@@ -37,16 +37,6 @@ android {
 }
 
 dependencies {
-
-    implementation(libs.firebase.database.ktx)
-    implementation(platform(libs.firebase.bom))
-    implementation(libs.firebase.analytics)
-    implementation(libs.firebase.storage.ktx)
-
-    implementation(libs.glide)
-    implementation(libs.firebase.database)
-    annotationProcessor(libs.compiler)
-
     implementation(libs.appcompat)
     implementation(libs.material)
     implementation(libs.activity)
@@ -56,8 +46,8 @@ dependencies {
     androidTestImplementation(libs.espresso.core)
 
     // Load Picture
-    implementation("com.github.bumptech.glide:glide:4.15.1")
-    annotationProcessor("com.github.bumptech.glide:compiler:4.15.1")
+    implementation("com.github.bumptech.glide:glide:4.16.0")
+    annotationProcessor("com.github.bumptech.glide:compiler:4.16.0")
 
     // Import the Firebase
     implementation("com.google.firebase:firebase-database:21.0.0")

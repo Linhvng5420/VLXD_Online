@@ -108,8 +108,6 @@ public class Owner_HomeActivity extends AppCompatActivity {
     }
 
     public void ReplaceFragment(Fragment fragment) {
-    // Phương thức thay thế (replace) Fragment hiển thị trên màn hình
-    private void ReplaceFragment(Fragment fragment) {
         // Lấy FragmentManager để quản lý các fragment trong Activity
         FragmentManager fragmentManager = getSupportFragmentManager();
         // Bắt đầu một giao dịch Fragment (FragmentTransaction)
