@@ -1,10 +1,14 @@
 package com.tdc.vlxdonline.Activity;
 
+import android.Manifest;
+import android.app.Activity;
 import android.app.AlertDialog;
+import android.app.ProgressDialog;
 import android.content.ClipData;
 import android.content.ClipboardManager;
 import android.content.Context;
 import android.content.Intent;
+import android.content.pm.PackageManager;
 import android.content.res.ColorStateList;
 import android.graphics.Color;
 import android.net.Uri;
@@ -21,14 +25,19 @@ import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
 import androidx.appcompat.app.AppCompatActivity;
 import androidx.appcompat.widget.Toolbar;
+import androidx.core.app.ActivityCompat;
+import androidx.core.content.ContextCompat;
 import androidx.fragment.app.Fragment;
 
 import com.bumptech.glide.Glide;
+import com.google.android.material.snackbar.Snackbar;
 import com.google.firebase.database.DataSnapshot;
 import com.google.firebase.database.DatabaseError;
 import com.google.firebase.database.DatabaseReference;
 import com.google.firebase.database.FirebaseDatabase;
 import com.google.firebase.database.ValueEventListener;
+import com.google.firebase.storage.FirebaseStorage;
+import com.google.firebase.storage.StorageReference;
 import com.tdc.vlxdonline.Model.KhachHang;
 import com.tdc.vlxdonline.R;
 import com.tdc.vlxdonline.databinding.FragmentOwnerKhachhangDetailBinding;
@@ -40,8 +49,15 @@ public class Owner_KhachHangDetailFragment extends Fragment {
     FragmentOwnerKhachhangDetailBinding binding;
 
     KhachHang khachHang;
-    String idChuLogin = LoginActivity.idUser.substring(0, LoginActivity.idUser.indexOf("@"));
-    String idKH;
+    String idLogin = LoginActivity.idUser.substring(0, LoginActivity.idUser.indexOf("@")); //mail bỏ @ -> id, sử dụng biến này khi người đăng nhập là KH
+    String idKH; // ID khách hàng được truyền từ Fragment trước (Không phải email hay cccd)
+
+    // Mã yêu cầu cho việc chọn ảnh
+    private static final int PICK_IMAGE_AVATA_ID = 1;
+    private static final int PICK_IMAGE_FRONT_ID = 2;
+    private static final int PICK_IMAGE_BACK_ID = 3;
+    // Uri để lưu trữ đường dẫn đến ảnh được chọn (biến này không lưu lại link ảnh từ firebase tải về)
+    private Uri uriAvata, uriAnhCCTruoc, uriAnhCCSau;
 
     @Override
     public void onCreate(Bundle savedInstanceState) {
@@ -70,6 +86,8 @@ public class Owner_KhachHangDetailFragment extends Fragment {
         setupAuthentButtons();
         setupCallButton();
         setupEditButtons();
+
+        checkPermissions();
     }
 
     // NHẬN ID TỪ BUNDLE, TRUY XUẤT FIREBASE VÀ HIỂN THỊ THÔNG TIN LÊN GIAO DIỆN
@@ -124,7 +142,7 @@ public class Owner_KhachHangDetailFragment extends Fragment {
     // XÁC THỰC KHÁCH HÀNG: HIỂN THỊ THÔNG TIN VÀ TRẠNG THÁI XÁC THỰC
     private void setupAuthenticated(String idKH) {
         DatabaseReference db = FirebaseDatabase.getInstance().getReference("duyetkhachhang");
-        db.child(idChuLogin).child(idKH).addListenerForSingleValueEvent(new ValueEventListener() {
+        db.child(idLogin).child(idKH).addListenerForSingleValueEvent(new ValueEventListener() {
             @Override
             public void onDataChange(@NonNull DataSnapshot snapshot) {
                 if (snapshot.exists()) {
@@ -157,7 +175,7 @@ public class Owner_KhachHangDetailFragment extends Fragment {
 
         // Cập nhật trạng thái xác thực cho khách hàng trong cơ sở dữ liệu
         DatabaseReference dbDuyetKhachHanng = FirebaseDatabase.getInstance().getReference("duyetkhachhang");
-        dbDuyetKhachHanng.child(idChuLogin).child(idKH).child("trangthai").setValue(status)
+        dbDuyetKhachHanng.child(idLogin).child(idKH).child("trangthai").setValue(status)
                 .addOnSuccessListener(aVoid -> {
                     // Cập nhật màu của ivAuthenticated theo trạng thái mới
                     if ("1".equals(status)) {
@@ -174,7 +192,7 @@ public class Owner_KhachHangDetailFragment extends Fragment {
         // Cập nhật trạng thái thông báo cho chu cua hang ve yeu cau xac thuc cua khach hang
         if ("1".equals(status)) {
             DatabaseReference dbThongBaoChu = FirebaseDatabase.getInstance().getReference("thongbaochu");
-            dbThongBaoChu.child(idChuLogin).child(idKH).child("xacthuc").setValue("0");
+            dbThongBaoChu.child(idLogin).child(idKH).child("xacthuc").setValue("0");
         }
 
     }
@@ -226,7 +244,7 @@ public class Owner_KhachHangDetailFragment extends Fragment {
     private void setupAuthentButtons() {
         binding.ivAuthenticated.setOnClickListener(v -> {
             // Kiểm tra nếu idChuLogin trùng với idKH
-            if (idChuLogin.equals(idKH)) {
+            if (idLogin.equals(idKH)) {
                 // Đọc danh sách chủ cửa hàng có idKH và trạng thái xác thực = 1 từ Firebase
                 DatabaseReference dbDuyetKhachHang = FirebaseDatabase.getInstance().getReference("duyetkhachhang");
                 dbDuyetKhachHang.addListenerForSingleValueEvent(new ValueEventListener() {
@@ -325,6 +343,11 @@ public class Owner_KhachHangDetailFragment extends Fragment {
             binding.btnEdit.setVisibility(View.GONE);
             binding.btnSave.setVisibility(View.VISIBLE);
             binding.btnCancel.setVisibility(View.VISIBLE);
+
+            // Cho phép người dùng chọn ảnh khi nhấn vào các ImageView
+            binding.ivAvata.setOnClickListener(v1 -> openImagePicker(PICK_IMAGE_AVATA_ID));
+            binding.ivCCCD1.setOnClickListener(v1 -> openImagePicker(PICK_IMAGE_FRONT_ID));
+            binding.ivCCCD2.setOnClickListener(v1 -> openImagePicker(PICK_IMAGE_BACK_ID));
         });
 
         // Khi nhấn nút "Hủy"
@@ -339,6 +362,13 @@ public class Owner_KhachHangDetailFragment extends Fragment {
                         binding.btnEdit.setVisibility(View.VISIBLE);
                         binding.btnSave.setVisibility(View.GONE);
                         binding.btnCancel.setVisibility(View.GONE);
+
+                        // Khóa chọn ảnh
+                        binding.ivAvata.setOnClickListener(null);
+                        binding.ivCCCD1.setOnClickListener(null);
+                        binding.ivCCCD2.setOnClickListener(null);
+
+                        getDataKhachHang();
                     })
                     .setNegativeButton("Quay lại", null)  // Nếu nhấn Quay lại sẽ đóng hộp thoại
                     .show();
@@ -352,7 +382,7 @@ public class Owner_KhachHangDetailFragment extends Fragment {
                     .setMessage("Bạn có chắc chắn muốn lưu thay đổi không?")
                     .setPositiveButton("Lưu", (dialog, which) -> {
                         // Lưu thông tin vào Firebase
-                        saveCustomerInfo();
+                        luuVaoFireBase();
                         // Ẩn nút lưu và hủy, hiển thị nút chỉnh sửa
                         binding.btnEdit.setVisibility(View.VISIBLE);
                         binding.btnSave.setVisibility(View.GONE);
@@ -366,6 +396,7 @@ public class Owner_KhachHangDetailFragment extends Fragment {
     private void enableEditingFields() {
         binding.etTen.setEnabled(true);
         binding.etSDT.setEnabled(true);
+        binding.etCCCD.setEnabled(true);
         binding.etDiaChi.setEnabled(true);
         Toast.makeText(getContext(), "Chỉnh sửa thông tin", Toast.LENGTH_SHORT).show();
     }
@@ -373,34 +404,197 @@ public class Owner_KhachHangDetailFragment extends Fragment {
     private void disableEditingFields() {
         binding.etTen.setEnabled(false);
         binding.etSDT.setEnabled(false);
+        binding.etCCCD.setEnabled(false);
         binding.etDiaChi.setEnabled(false);
     }
 
-    private void saveCustomerInfo() {
-        String ten = binding.etTen.getText().toString();
-        String sdt = binding.etSDT.getText().toString();
-        String diaChi = binding.etDiaChi.getText().toString();
+    private void luuVaoFireBase() {
+        // Tạo và hiển thị ProgressDialog
+        ProgressDialog progressDialog = new ProgressDialog(getContext());
+        progressDialog.setMessage("Đang tải ảnh lên...");
+        progressDialog.setCancelable(false);  // Ngăn người dùng đóng dialog khi đang tải
+        progressDialog.show();
 
-        // Cập nhật thông tin vào Firebase
-        DatabaseReference db = FirebaseDatabase.getInstance().getReference("customers");
-        db.child(idKH).child("ten").setValue(ten);
-        db.child(idKH).child("sdt").setValue(sdt);
-        db.child(idKH).child("diaChi").setValue(diaChi).addOnCompleteListener(task -> {
-            if (task.isSuccessful()) {
-                Toast.makeText(getContext(), "Cập nhật thông tin thành công", Toast.LENGTH_SHORT).show();
-            } else {
-                Toast.makeText(getContext(), "Cập nhật thông tin thất bại", Toast.LENGTH_SHORT).show();
-            }
-        });
+        // Gọi hàm upload ảnh và cập nhật nhanVien sau khi ảnh đã upload
+        uploadAnh(() -> {
+            // Đóng ProgressDialog sau khi upload hoàn tất
+            progressDialog.dismiss();
+
+            String ten = binding.etTen.getText().toString();
+            String sdt = binding.etSDT.getText().toString();
+            String diaChi = binding.etDiaChi.getText().toString();
+
+            // Cập nhật thông tin vào Firebase
+            DatabaseReference db = FirebaseDatabase.getInstance().getReference("customers");
+            db.child(idKH).child("ten").setValue(ten);
+            db.child(idKH).child("sdt").setValue(sdt);
+            db.child(idKH).child("avata").setValue(khachHang.getAvata());
+            db.child(idKH).child("cccdMatTruoc").setValue(khachHang.getCccdMatTruoc());
+            db.child(idKH).child("cccdMatSau").setValue(khachHang.getCccdMatSau());
+            db.child(idKH).child("diaChi").setValue(diaChi).addOnCompleteListener(task -> {
+                if (task.isSuccessful()) {
+                    Snackbar.make(getView(), "Cập nhật thông tin thành công", Toast.LENGTH_SHORT).show();
+                } else {
+                    Toast.makeText(getContext(), "Cập nhật thông tin thất bại", Toast.LENGTH_SHORT).show();
+                }
+            });
+        }, progressDialog);  // Truyền ProgressDialog vào hàm uploadAnh
     }
 
     private void setupEditButtonsVisibility() {
         // Hiển thị nút chỉnh sửa nếu idChuLogin trùng với idKH
-        if (idChuLogin.equals(idKH)) {
+        if (idLogin.equals(idKH)) {
             binding.btnEdit.setVisibility(View.VISIBLE);
         } else {
             binding.btnEdit.setVisibility(View.GONE);
         }
+    }
+
+/*
+    // ẢNH: HÀM ĐỂ HIỂN THỊ ẢNH CC
+    private void hienThiAnhCCCD() {
+        // Lấy dữ liệu của nhân viên từ Firebase
+        DatabaseReference dbNhanVien = FirebaseDatabase.getInstance().getReference("nhanvien");
+        dbNhanVien.child(idKH).addListenerForSingleValueEvent(new ValueEventListener() {
+            @Override
+            public void onDataChange(@NonNull DataSnapshot dataSnapshot) {
+                // Kiểm tra nếu có dữ liệu
+                if (dataSnapshot.exists()) {
+                    // Lấy dữ liệu của nhân viên
+                    // Nếu trong csdl mất trường fiel thì sẽ gây crash app, phải fix lỗi này
+                    String anhCC1 = dataSnapshot.child("anhcc1").getValue(String.class);
+                    anhCC1 = anhCC1 == null ? "" : anhCC1;
+                    String anhCC2 = dataSnapshot.child("anhcc2").getValue(String.class);
+                    anhCC2 = anhCC2 == null ? "" : anhCC2;
+
+                    // Hiển thị hình ảnh
+                    if (!anhCC1.equals("N/A") && !anhCC1.equals("")) {
+                        Glide.with(getContext()).load(anhCC1) // Tải ảnh từ URL
+                                .into(binding.ivCCCD1); // imageViewCC là ID của ImageView trong layout
+                    } else
+                        binding.ivCCCD1.setImageDrawable(getResources().getDrawable(android.R.drawable.ic_menu_report_image));
+
+                    if (!anhCC2.equals("N/A") && !anhCC2.equals("")) {
+                        Glide.with(getContext()).load(anhCC2) // Tải ảnh từ URL
+                                .into(binding.ivCCCD2); // imageViewCC2 là ID của ImageView trong layout
+                    } else
+                        binding.ivCCCD2.setImageDrawable(getResources().getDrawable(android.R.drawable.ic_menu_report_image));
+                }
+            }
+
+            @Override
+            public void onCancelled(@NonNull DatabaseError databaseError) {
+                // Xử lý lỗi nếu có
+                Log.e("Owner_NhanVienDetail", "Database error: " + databaseError.getMessage());
+            }
+        });
+    }
+*/
+
+    private void checkPermissions() {
+        // Kiểm tra xem ứng dụng có quyền truy cập vào bộ nhớ ngoài hay không
+        if (ContextCompat.checkSelfPermission(getContext(), Manifest.permission.READ_EXTERNAL_STORAGE) != PackageManager.PERMISSION_GRANTED) {
+            // Nếu chưa có quyền, yêu cầu quyền truy cập từ người dùng
+            ActivityCompat.requestPermissions(getActivity(), new String[]{Manifest.permission.READ_EXTERNAL_STORAGE}, PICK_IMAGE_FRONT_ID);
+        }
+    }
+
+    private void openImagePicker(int requestCode) {
+        // ẢNH: MỞ TRÌNH CHỌN ẢNH
+        //ACTION_GET_CONTENT: cho phép chọn một tệp từ bất kỳ nguồn nào, bao gồm cả trình quản lý tệp và các ứng dụng khác.
+        Intent intent = new Intent(Intent.ACTION_GET_CONTENT);
+        intent.setType("image/*"); // Chỉ định loại tệp là hình ảnh
+        intent.addCategory(Intent.CATEGORY_OPENABLE); // Thêm thể loại này để đảm bảo rằng trình quản lý tệp hiển thị các tệp có thể mở được.
+        startActivityForResult(Intent.createChooser(intent, "Chọn ảnh"), requestCode); // Mở trình hộp thoại chọn ảnh
+    }
+
+    @Override
+    public void onActivityResult(int requestCode, int resultCode, @Nullable Intent data) {
+        // ẢNH: XỬ LÝ ẢNH SAU KHI CHỌN
+        super.onActivityResult(requestCode, resultCode, data);
+        // Kiểm tra kết quả trả về từ hoạt động chọn ảnh
+        if (resultCode == Activity.RESULT_OK && data != null) {
+            // Lấy Uri của ảnh đã chọn từ Intent data
+            Uri selectedImageUri = data.getData();
+
+            // Dựa vào mã yêu cầu để xác định ảnh nào đã được chọn
+            if (requestCode == PICK_IMAGE_FRONT_ID) {
+                // Lưu Uri ảnh CMND trước và hiển thị ảnh trong ImageView
+                uriAnhCCTruoc = selectedImageUri;
+                binding.ivCCCD1.setImageURI(uriAnhCCTruoc); // Hiển thị ảnh CMND trước
+            } else if (requestCode == PICK_IMAGE_BACK_ID) {
+                // Lưu Uri ảnh CMND sau và hiển thị ảnh trong ImageView
+                uriAnhCCSau = selectedImageUri;
+                binding.ivCCCD2.setImageURI(uriAnhCCSau); // Hiển thị ảnh CMND sau
+            }
+        }
+    }
+
+    private void uploadAnh(Runnable onUploadComplete, ProgressDialog progressDialog) {
+        // Biến đếm số lượng ảnh đã tải thành công
+        final int[] uploadCount = {0};
+        StorageReference storageRef = FirebaseStorage.getInstance().getReference("khachang");
+
+        if (uriAvata != null) {
+            StorageReference avataImageRef = storageRef.child(idLogin + "_Avata.jpg");
+
+            avataImageRef.putFile(uriAvata).addOnSuccessListener(taskSnapshot -> avataImageRef.getDownloadUrl().addOnSuccessListener(uri -> {
+                khachHang.setAvata(uri.toString());
+                uploadCount[0]++;  // Tăng biến đếm khi tải lên ảnh trước thành công
+
+                // Kiểm tra nếu cả ba ảnh đều đã tải xong
+                if (uploadCount[0] == 3) {
+                    onUploadComplete.run();
+                }
+            })).addOnFailureListener(e -> {
+                progressDialog.dismiss();
+                Toast.makeText(getContext(), "Upload ảnh avata thất bại: " + e.getMessage(), Toast.LENGTH_SHORT).show();
+            });
+        } else {
+            // Tăng biến đếm nếu ảnh trước không có
+            uploadCount[0]++;
+        }
+        if (uriAnhCCTruoc != null) {
+            StorageReference frontImageRef = storageRef.child(idLogin + "_Truoc.jpg");
+
+            frontImageRef.putFile(uriAnhCCTruoc).addOnSuccessListener(taskSnapshot -> frontImageRef.getDownloadUrl().addOnSuccessListener(uri -> {
+                khachHang.setCccdMatTruoc(uri.toString());
+                uploadCount[0]++;  // Tăng biến đếm khi tải lên ảnh trước thành công
+
+                // Kiểm tra nếu cả ba ảnh đều đã tải xong
+                if (uploadCount[0] == 3) {
+                    onUploadComplete.run();
+                }
+            })).addOnFailureListener(e -> {
+                progressDialog.dismiss();
+                Toast.makeText(getContext(), "Upload ảnh trước thất bại: " + e.getMessage(), Toast.LENGTH_SHORT).show();
+            });
+        } else {
+            // Tăng biến đếm nếu ảnh trước không có
+            uploadCount[0]++;
+        }
+
+        if (uriAnhCCSau != null) {
+            StorageReference backImageRef = storageRef.child(idLogin + "_Sau.jpg");
+
+            backImageRef.putFile(uriAnhCCSau).addOnSuccessListener(taskSnapshot2 -> backImageRef.getDownloadUrl().addOnSuccessListener(uri2 -> {
+                khachHang.setCccdMatSau(uri2.toString());
+                uploadCount[0]++;  // Tăng biến đếm khi tải lên ảnh sau thành công
+
+                // Kiểm tra nếu cả ba ảnh đều đã tải xong
+                if (uploadCount[0] == 3) {
+                    onUploadComplete.run();
+                }
+            })).addOnFailureListener(e -> {
+                progressDialog.dismiss();
+                Toast.makeText(getContext(), "Upload ảnh sau thất bại: " + e.getMessage(), Toast.LENGTH_SHORT).show();
+            });
+        } else {
+            // Tăng biến đếm nếu ảnh sau không có
+            uploadCount[0]++;
+        }
+
+        onUploadComplete.run();
     }
 
     // CUỐI: THIẾT LẬP TOOLBAR VÀ ĐIỀU HƯỚNG
