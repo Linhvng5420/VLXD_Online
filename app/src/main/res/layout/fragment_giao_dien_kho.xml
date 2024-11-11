@@ -36,7 +36,7 @@
                 android:id="@+id/rcv_category"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
-                android:background="@drawable/bg_img_item" />
+                android:background="@drawable/backnav"/>
         </androidx.cardview.widget.CardView>
 
         <androidx.recyclerview.widget.RecyclerView
