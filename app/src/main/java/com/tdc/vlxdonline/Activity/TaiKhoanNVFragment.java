@@ -8,18 +8,22 @@ import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
 import androidx.fragment.app.Fragment;
 
+import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 
+import com.google.firebase.database.DataSnapshot;
+import com.google.firebase.database.DatabaseError;
+import com.google.firebase.database.DatabaseReference;
+import com.google.firebase.database.FirebaseDatabase;
+import com.google.firebase.database.ValueEventListener;
+import com.tdc.vlxdonline.Model.NhanVien;
 import com.tdc.vlxdonline.R;
 import com.tdc.vlxdonline.databinding.FragmentTaiKhoanNVBinding;
 
 public class TaiKhoanNVFragment extends Fragment {
     FragmentTaiKhoanNVBinding binding;
-
-
-
 
     @Override
     public void onCreate(Bundle savedInstanceState) {
@@ -43,10 +47,45 @@ public class TaiKhoanNVFragment extends Fragment {
         binding.lnHoSo.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
-                getParentFragmentManager().beginTransaction()
-                        .replace(R.id.fragment_container, new TaiKhoan_HoSoNVFragment())
-                        .addToBackStack(null)
-                        .commit();
+                String emailNV = LoginActivity.idUser; // Email đăng nhập hiện tại
+                DatabaseReference nhanvienRef = FirebaseDatabase.getInstance().getReference("account");
+
+                // Lấy thông tin nhân viên dựa trên email
+                nhanvienRef.orderByChild("email").equalTo(emailNV).addListenerForSingleValueEvent(new ValueEventListener() {
+                    @Override
+                    public void onDataChange(DataSnapshot dataSnapshot) {
+                        if (dataSnapshot.exists()) {
+                            // Lấy ID nhân viên từ key của node
+                            String idNhanVien = dataSnapshot.getChildren().iterator().next().getKey();
+
+                            // Đảm bảo ID không null trước khi chuyển sang Fragment khác
+                            if (idNhanVien != null) {
+                                Log.d("l.d", "ID của nhân viên: " + idNhanVien);
+
+                                // Tạo Bundle và truyền ID nhân viên vào
+                                Bundle bundleIDNhanVien = new Bundle();
+                                bundleIDNhanVien.putString("idNhanVien", idNhanVien); // Chỉ cần dùng putString nếu chỉ truyền một giá trị đơn giản
+
+                                // Chuyển đến Fragment chi tiết
+                                Owner_NhanVienDetailFragment nhanVienDetailFragment = new Owner_NhanVienDetailFragment();
+                                nhanVienDetailFragment.setArguments(bundleIDNhanVien);
+
+                                // Thực hiện chuyển Fragment
+                                getParentFragmentManager().beginTransaction()
+                                        .replace(R.id.fragment_container, nhanVienDetailFragment)
+                                        .addToBackStack(null)
+                                        .commit();
+                            }
+                        } else {
+                            Log.e("FirebaseError", "Không tìm thấy nhân viên với email: " + emailNV);
+                        }
+                    }
+
+                    @Override
+                    public void onCancelled(DatabaseError databaseError) {
+                        Log.e("FirebaseError", "Lỗi: " + databaseError.getMessage());
+                    }
+                });
             }
         });
 
