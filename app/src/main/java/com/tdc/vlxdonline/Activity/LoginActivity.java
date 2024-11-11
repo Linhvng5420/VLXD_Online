@@ -155,10 +155,10 @@ public class LoginActivity extends AppCompatActivity {
                                 typeUser = 0;
                                 break;
                             case "nv":
-                                typeUser = 1;
+                                typeUser = 2;
                                 break;
                             case "kh":
-                                typeUser = 2;
+                                typeUser = 1;
                                 break;
                         }
                         idUser = dbEmail;
@@ -172,11 +172,11 @@ public class LoginActivity extends AppCompatActivity {
                         Intent intent = new Intent(LoginActivity.this, Owner_HomeActivity.class);
                         intent.putExtra("emailUser", idUser);
                         startActivity(intent);
-                    } else if (typeUser == 2) {
+                    } else if (typeUser == 1) {
                         Intent intent = new Intent(LoginActivity.this, Customer_HomeActivity.class);
                         intent.putExtra("emailUser", idUser);
                         startActivity(intent);
-                    } else if (typeUser == 1) {
+                    } else if (typeUser == 2) {
                         getTypeEmployee(email);
                     }
                 } else {
