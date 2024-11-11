@@ -35,9 +35,12 @@
                     android:layout_width="wrap_content"
                     android:layout_height="match_parent"
                     android:layout_marginEnd="8dp"
-                    android:backgroundTint="#1E88E5"
+                    android:backgroundTint="@android:color/transparent"
                     android:contentDescription="Lưu"
-                    android:src="@drawable/ic_save" />
+                    android:src="@drawable/ic_save"
+                    android:visibility="gone"
+                    android:tint="@color/white"
+                    tools:ignore="UseAppTint" />
 
                 <!-- Nút Chỉnh Sửa -->
                 <ImageButton
@@ -45,20 +48,24 @@
                     android:layout_width="wrap_content"
                     android:layout_height="match_parent"
                     android:layout_marginEnd="8dp"
-                    android:backgroundTint="#1E88E5"
+                    android:backgroundTint="@android:color/transparent"
                     android:contentDescription="Chỉnh sửa"
                     android:src="@drawable/ic_edit"
-                    android:visibility="visible" />
+                    android:visibility="visible"
+                    android:tint="@color/white"
+                    tools:ignore="UseAppTint" />
 
                 <!-- Nút Hủy (ẩn mặc định) -->
                 <ImageButton
                     android:id="@+id/btnCancel"
                     android:layout_width="wrap_content"
                     android:layout_height="match_parent"
-                    android:backgroundTint="#1E88E5"
+                    android:backgroundTint="@android:color/transparent"
                     android:contentDescription="Hủy"
-                    android:src="@android:drawable/btn_dialog"
-                    android:visibility="gone" />
+                    android:src="@android:drawable/ic_menu_close_clear_cancel"
+                    android:tint="@color/white"
+                    android:visibility="gone"
+                    tools:tint="@color/white" />
             </LinearLayout>
         </androidx.appcompat.widget.Toolbar>
     </LinearLayout>
@@ -252,7 +259,6 @@
                     android:layout_height="match_parent"
                     android:enabled="false"
                     android:hint="Địa Chỉ"
-                    android:inputType="number|numberSigned"
                     android:textColor="@color/black" />
 
             </com.google.android.material.textfield.TextInputLayout>

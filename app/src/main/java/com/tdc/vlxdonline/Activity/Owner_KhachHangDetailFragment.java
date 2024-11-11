@@ -22,6 +22,7 @@ import androidx.appcompat.widget.Toolbar;
 import androidx.fragment.app.Fragment;
 
 import com.bumptech.glide.Glide;
+import com.google.android.material.snackbar.Snackbar;
 import com.google.firebase.database.DataSnapshot;
 import com.google.firebase.database.DatabaseError;
 import com.google.firebase.database.DatabaseReference;
@@ -64,6 +65,7 @@ public class Owner_KhachHangDetailFragment extends Fragment {
         // Buttons
         setupAuthentButtons();
         setupCallButton();
+        setupEditButtons();
     }
 
     // NHẬN ID TỪ BUNDLE, TRUY XUẤT FIREBASE VÀ HIỂN THỊ THÔNG TIN LÊN GIAO DIỆN
@@ -94,7 +96,7 @@ public class Owner_KhachHangDetailFragment extends Fragment {
                             binding.etDiaChi.setText(khachHang.getDiaChi());
 
                             setupAuthenticated(idKH);
-
+                            setupEditButtonsVisibility();
                         } else {
                             Log.d("l.d", "khách hàng không tồn tại trong cơ sở dữ liệu.");
                         }
@@ -255,6 +257,93 @@ public class Owner_KhachHangDetailFragment extends Fragment {
             // Hiển thị dialog
             builder.show();
         });
+    }
+
+    private void setupEditButtons() {
+        // Khi nhấn nút "Chỉnh sửa"
+        binding.btnEdit.setOnClickListener(v -> {
+            // Hiển thị các trường để chỉnh sửa
+            enableEditingFields();
+            // Ẩn nút chỉnh sửa, hiển thị nút hủy và lưu
+            binding.btnEdit.setVisibility(View.GONE);
+            binding.btnSave.setVisibility(View.VISIBLE);
+            binding.btnCancel.setVisibility(View.VISIBLE);
+        });
+
+        // Khi nhấn nút "Hủy"
+        binding.btnCancel.setOnClickListener(v -> {
+            // Hiển thị AlertDialog xác nhận
+            new AlertDialog.Builder(getContext())
+                    .setTitle("Hủy chỉnh sửa")
+                    .setMessage("Bạn có chắc chắn muốn hủy thay đổi không?")
+                    .setPositiveButton("Hủy", (dialog, which) -> {
+                        // Hủy việc chỉnh sửa, hiển thị lại các giá trị cũ và ẩn nút hủy và lưu
+                        disableEditingFields();
+                        binding.btnEdit.setVisibility(View.VISIBLE);
+                        binding.btnSave.setVisibility(View.GONE);
+                        binding.btnCancel.setVisibility(View.GONE);
+                    })
+                    .setNegativeButton("Quay lại", null)  // Nếu nhấn Quay lại sẽ đóng hộp thoại
+                    .show();
+        });
+
+        // Khi nhấn nút "Lưu"
+        binding.btnSave.setOnClickListener(v -> {
+            // Hiển thị AlertDialog xác nhận
+            new AlertDialog.Builder(getContext())
+                    .setTitle("Lưu thay đổi")
+                    .setMessage("Bạn có chắc chắn muốn lưu thay đổi không?")
+                    .setPositiveButton("Lưu", (dialog, which) -> {
+                        // Lưu thông tin vào Firebase
+                        saveCustomerInfo();
+                        // Ẩn nút lưu và hủy, hiển thị nút chỉnh sửa
+                        binding.btnEdit.setVisibility(View.VISIBLE);
+                        binding.btnSave.setVisibility(View.GONE);
+                        binding.btnCancel.setVisibility(View.GONE);
+                    })
+                    .setNegativeButton("Quay lại", null)  // Nếu nhấn Quay lại sẽ đóng hộp thoại
+                    .show();
+        });
+    }
+
+    private void enableEditingFields() {
+        binding.etTen.setEnabled(true);
+        binding.etSDT.setEnabled(true);
+        binding.etDiaChi.setEnabled(true);
+        Toast.makeText(getContext(), "Chỉnh sửa thông tin", Toast.LENGTH_SHORT).show();
+    }
+
+    private void disableEditingFields() {
+        binding.etTen.setEnabled(false);
+        binding.etSDT.setEnabled(false);
+        binding.etDiaChi.setEnabled(false);
+    }
+
+    private void saveCustomerInfo() {
+        String ten = binding.etTen.getText().toString();
+        String sdt = binding.etSDT.getText().toString();
+        String diaChi = binding.etDiaChi.getText().toString();
+
+        // Cập nhật thông tin vào Firebase
+        DatabaseReference db = FirebaseDatabase.getInstance().getReference("customers");
+        db.child(idKH).child("ten").setValue(ten);
+        db.child(idKH).child("sdt").setValue(sdt);
+        db.child(idKH).child("diaChi").setValue(diaChi).addOnCompleteListener(task -> {
+            if (task.isSuccessful()) {
+                Toast.makeText(getContext(), "Cập nhật thông tin thành công", Toast.LENGTH_SHORT).show();
+            } else {
+                Toast.makeText(getContext(), "Cập nhật thông tin thất bại", Toast.LENGTH_SHORT).show();
+            }
+        });
+    }
+
+    private void setupEditButtonsVisibility() {
+        // Hiển thị nút chỉnh sửa nếu idChuLogin trùng với idKH
+        if (idChuLogin.equals(idKH)) {
+            binding.btnEdit.setVisibility(View.VISIBLE);
+        } else {
+            binding.btnEdit.setVisibility(View.GONE);
+        }
     }
 
     // CUỐI: THIẾT LẬP TOOLBAR VÀ ĐIỀU HƯỚNG
