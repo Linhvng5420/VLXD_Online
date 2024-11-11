@@ -387,6 +387,7 @@ public class Owner_KhachHangDetailFragment extends Fragment {
                         binding.btnEdit.setVisibility(View.VISIBLE);
                         binding.btnSave.setVisibility(View.GONE);
                         binding.btnCancel.setVisibility(View.GONE);
+                        disableEditingFields();
                     })
                     .setNegativeButton("Quay lại", null)  // Nếu nhấn Quay lại sẽ đóng hộp thoại
                     .show();
@@ -422,12 +423,14 @@ public class Owner_KhachHangDetailFragment extends Fragment {
 
             String ten = binding.etTen.getText().toString();
             String sdt = binding.etSDT.getText().toString();
+            String soCCCD = binding.etCCCD.getText().toString();
             String diaChi = binding.etDiaChi.getText().toString();
 
             // Cập nhật thông tin vào Firebase
             DatabaseReference db = FirebaseDatabase.getInstance().getReference("customers");
             db.child(idKH).child("ten").setValue(ten);
             db.child(idKH).child("sdt").setValue(sdt);
+            db.child(idKH).child("soCCCD").setValue(soCCCD);
             db.child(idKH).child("avata").setValue(khachHang.getAvata());
             db.child(idKH).child("cccdMatTruoc").setValue(khachHang.getCccdMatTruoc());
             db.child(idKH).child("cccdMatSau").setValue(khachHang.getCccdMatSau());
@@ -533,7 +536,7 @@ public class Owner_KhachHangDetailFragment extends Fragment {
     private void uploadAnh(Runnable onUploadComplete, ProgressDialog progressDialog) {
         // Biến đếm số lượng ảnh đã tải thành công
         final int[] uploadCount = {0};
-        StorageReference storageRef = FirebaseStorage.getInstance().getReference("khachang");
+        StorageReference storageRef = FirebaseStorage.getInstance().getReference("khachhang");
 
         if (uriAvata != null) {
             StorageReference avataImageRef = storageRef.child(idLogin + "_Avata.jpg");
