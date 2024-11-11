@@ -20,14 +20,13 @@ import com.google.firebase.database.FirebaseDatabase;
 import com.google.firebase.database.ValueEventListener;
 import com.tdc.vlxdonline.R;
 import com.tdc.vlxdonline.databinding.FragmentTaiKhoanHoSoNVBinding;
-import com.tdc.vlxdonline.databinding.FragmentTaiKhoanNVBinding;
 
 
 public class TaiKhoan_HoSoNVFragment extends Fragment {
 
     FragmentTaiKhoanHoSoNVBinding binding;
     private DatabaseReference databaseReference; // Đối tượng để truy cập Firebase
-    String ownerId = LoginActivity.idUser.substring(0, LoginActivity.idUser.indexOf("@"));
+    String emailNV = LoginActivity.idUser;
 
 
     @Override
@@ -43,15 +42,19 @@ public class TaiKhoan_HoSoNVFragment extends Fragment {
                              Bundle savedInstanceState) {
         // Inflate the layout for this fragment
         binding = FragmentTaiKhoanHoSoNVBinding.inflate(inflater, container, false);
+        // Thiết lập Toolbar
+        View root = binding.getRoot();
+
+        setupToolbar(root);
 
         // Gọi hàm để đọc dữ liệu từ Firebase
-        loadOwnerData(ownerId);
+        loadOwnerData(emailNV);
 
         setupEditButton();
         setupCancelButton();
         setupSaveButton();
 
-        return binding.getRoot();
+        return root;
     }
 
     private void setupEditButton() {
@@ -73,31 +76,36 @@ public class TaiKhoan_HoSoNVFragment extends Fragment {
         });
     }
 
-    private void loadOwnerData(String ownerId) {
-        // Truy cập vào thông tin chủ cụ thể bằng ID
-        databaseReference.child(ownerId).addListenerForSingleValueEvent(new ValueEventListener() {
+    private void loadOwnerData(String email) {
+        // Truy cập vào thông tin chủ cụ thể bằng email
+        databaseReference.addListenerForSingleValueEvent(new ValueEventListener() {
             @Override
             public void onDataChange(DataSnapshot dataSnapshot) {
-                // Kiểm tra nếu dữ liệu tồn tại
-                if (dataSnapshot.exists()) {
-                    // Lấy thông tin chủ từ Firebase và ánh xạ vào đối tượng Owner
-                    String id = dataSnapshot.getKey();
-                    String ten = dataSnapshot.child("tennv").getValue(String.class);
-                    String diaChi = dataSnapshot.child("diaChi").getValue(String.class);
-                    String sdt = dataSnapshot.child("sdt").getValue(String.class);
-                    String email = dataSnapshot.child("email").getValue(String.class);
-                    String cccd = dataSnapshot.child("cccd").getValue(String.class);
+                // Lặp qua tất cả các node và tìm node có emailnv khớp với email cần tìm
+                for (DataSnapshot snapshot : dataSnapshot.getChildren()) {
+                    String emailnv = snapshot.child("emailnv").getValue(String.class);
 
-                    // Hiển thị dữ liệu lên các TextView trong giao diện
-                    binding.edtTen.setText(id);
-                    binding.edtDiaChi.setText(ten);
-                    binding.edtSDT.setText(diaChi);
-                    binding.edtEmail.setText(sdt);
-                    binding.edtCCCD.setText(cccd);
-                } else {
-                    // Xử lý khi ID chủ không tồn tại
-                    Toast.makeText(getContext(), "Không tìm thấy thông tin chủ", Toast.LENGTH_SHORT).show();
+                    if (emailnv != null && emailnv.equals(email)) {
+                        // Lấy thông tin chủ từ Firebase và ánh xạ vào đối tượng Owner
+                        String id = snapshot.getKey();
+                        String ten = snapshot.child("tennv").getValue(String.class);
+//                        String diaChi = snapshot.child("diaChi").getValue(String.class);
+                        String sdt = snapshot.child("sdt").getValue(String.class);
+                        String email = snapshot.child("emailnv").getValue(String.class);
+
+                        // Hiển thị dữ liệu lên các TextView trong giao diện
+                        binding.edtTen.setText(ten);  // Lưu ý bạn cần chỉnh lại đúng với các trường thông tin
+//                        binding.edtDiaChi.setText(diaChi);
+                        binding.edtSDT.setText(sdt);
+                        binding.edtEmail.setText(email);
+                        binding.edtCCCD.setText(id);
+
+                        return;  // Kết thúc vòng lặp khi đã tìm thấy chủ sở hữu
+                    }
                 }
+
+                // Nếu không tìm thấy email
+                Toast.makeText(getContext(), "Không tìm thấy thông tin chủ", Toast.LENGTH_SHORT).show();
             }
 
             @Override
@@ -124,7 +132,7 @@ public class TaiKhoan_HoSoNVFragment extends Fragment {
                         // Hiển thị nút Sửa sau khi Hủy
                         binding.btnSua.setVisibility(View.VISIBLE);
 
-                        loadOwnerData(ownerId);
+                        loadOwnerData(emailNV);
                     }).setNegativeButton("Không Hủy", null) // Hiển thị hộp thoại
                     .show();
         });
@@ -140,10 +148,10 @@ public class TaiKhoan_HoSoNVFragment extends Fragment {
                 String email = binding.edtEmail.getText().toString();
 
                 // Cập nhật thông tin chủ cụ thể bằng ID
-                databaseReference.child(ownerId).child("ten").setValue(ten);
-                databaseReference.child(ownerId).child("sdt").setValue(sdt);
-                databaseReference.child(ownerId).child("diaChi").setValue(diaChi);
-                databaseReference.child(ownerId).child("email").setValue(email);
+                databaseReference.child(emailNV).child("ten").setValue(ten);
+                databaseReference.child(emailNV).child("sdt").setValue(sdt);
+                databaseReference.child(emailNV).child("diaChi").setValue(diaChi);
+                databaseReference.child(emailNV).child("email").setValue(email);
 
 
                 // Hiển thị thông báo thành công

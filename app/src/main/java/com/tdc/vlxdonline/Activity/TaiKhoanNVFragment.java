@@ -44,18 +44,17 @@ public class TaiKhoanNVFragment extends Fragment {
             @Override
             public void onClick(View view) {
                 getParentFragmentManager().beginTransaction()
-                        .replace(R.id.fragment_owner, new TaiKhoan_HoSoNVFragment())
+                        .replace(R.id.frmWarehouse, new TaiKhoan_HoSoNVFragment())
                         .addToBackStack(null)
                         .commit();
             }
         });
 
-
         binding.lnAbout.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
                 getParentFragmentManager().beginTransaction()
-                        .replace(R.id.fragment_owner, new Owner_SettingAboutFragment())
+                        .replace(R.id.frmWarehouse, new Owner_SettingAboutFragment())
                         .addToBackStack(null)
                         .commit();
             }
