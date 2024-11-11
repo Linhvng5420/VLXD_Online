@@ -32,6 +32,9 @@
             android:name=".Activity.Warehouse_HomeActivity"
             android:exported="false" />
         <activity
+            android:name=".Activity.Customer_HomeActivity"
+            android:exported="false" />
+        <activity
             android:name=".Activity.Warehouse_ThemSanPhamActivity"
             android:exported="false" />
         <activity

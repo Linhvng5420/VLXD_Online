@@ -172,11 +172,11 @@ public class LoginActivity extends AppCompatActivity {
                         Intent intent = new Intent(LoginActivity.this, Owner_HomeActivity.class);
                         intent.putExtra("emailUser", idUser);
                         startActivity(intent);
-                    } else if (typeUser == 1) {
+                    } else if (typeUser == 2) {
                         Intent intent = new Intent(LoginActivity.this, Customer_HomeActivity.class);
                         intent.putExtra("emailUser", idUser);
                         startActivity(intent);
-                    } else if (typeUser == 2) {
+                    } else if (typeUser == 1) {
                         getTypeEmployee(email);
                     }
                 } else {
