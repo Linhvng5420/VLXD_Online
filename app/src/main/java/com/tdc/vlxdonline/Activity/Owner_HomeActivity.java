@@ -22,7 +22,7 @@ import com.tdc.vlxdonline.R;
 import com.tdc.vlxdonline.databinding.ActivityOwnerHomeBinding;
 
 public class Owner_HomeActivity extends AppCompatActivity {
-    ActivityOwnerHomeBinding ownerHomeBinding;
+    ActivityOwnerHomeBinding binding;
     String idChu;
     static ThongTinChu infoChu = new ThongTinChu();
     DatabaseReference reference = FirebaseDatabase.getInstance().getReference();
@@ -32,9 +32,9 @@ public class Owner_HomeActivity extends AppCompatActivity {
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         // Sử dụng View Binding để lấy layout (ActivityOwnerHomeBinding) và gán vào ownerHomeBinding
-        ownerHomeBinding = ActivityOwnerHomeBinding.inflate(getLayoutInflater());
+        binding = ActivityOwnerHomeBinding.inflate(getLayoutInflater());
         // Thiết lập nội dung hiển thị của Activity từ layout đã được binding
-        setContentView(ownerHomeBinding.getRoot());
+        setContentView(binding.getRoot());
         idChu = getIntent().getStringExtra("emailUser");
         DocThongTinChu();
         //Bắt sự kiện
@@ -68,7 +68,7 @@ public class Owner_HomeActivity extends AppCompatActivity {
     // Phương thức bắt sự kiện cho Bottom Navigation Bar khi người dùng nhấn vào các mục
     private void EventNavigationBottom() {
         // Thiết lập listener cho sự kiện chọn item trong Bottom Navigation
-        ownerHomeBinding.navOwner.setOnItemSelectedListener(item -> {
+        binding.navOwner.setOnItemSelectedListener(item -> {
             // Lấy ID của mục được chọn
             int itemId = item.getItemId();
 

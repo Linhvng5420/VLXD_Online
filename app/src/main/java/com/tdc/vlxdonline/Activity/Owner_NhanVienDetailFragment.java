@@ -1,7 +1,5 @@
 package com.tdc.vlxdonline.Activity;
 
-import static androidx.core.content.ContextCompat.getSystemService;
-
 import android.Manifest;
 import android.app.Activity;
 import android.app.ProgressDialog;
@@ -58,11 +56,11 @@ import java.util.List;
 
 public class Owner_NhanVienDetailFragment extends Fragment {
     private FragmentOwnerNhanvienDetailBinding binding;
-
-    private NhanVien nhanVien = new NhanVien();
+    String idLogin = LoginActivity.idUser; //email đăng nhập
 
     //ID nhân viên đc truyền từ Fragment trước qua
-    private String idNhanVien;
+    private NhanVien nhanVien = new NhanVien();
+    private String idNhanVien; //cccd
 
     //Danh sách chức vụ từ Firebase
     private List<ChucVu> listChucVuFireBase = new ArrayList<>();
@@ -346,11 +344,13 @@ public class Owner_NhanVienDetailFragment extends Fragment {
                 binding.btnLuuLai.setText("Lưu Lại");
 
                 // Hiển thị Spinner chọn chức vụ
-                binding.tilChucVu.setVisibility(View.INVISIBLE);
-                binding.etChucVu.setVisibility(View.INVISIBLE);
-                binding.spinnerChucVu.setVisibility(View.VISIBLE);
-                binding.tvChucVu.setVisibility(View.VISIBLE);
-                binding.tvChucVu.setText("Chức Vụ");
+                if (!nhanVien.getEmailnv().equals(idLogin)) {
+                    binding.tilChucVu.setVisibility(View.INVISIBLE);
+                    binding.etChucVu.setVisibility(View.INVISIBLE);
+                    binding.spinnerChucVu.setVisibility(View.VISIBLE);
+                    binding.tvChucVu.setVisibility(View.VISIBLE);
+                    binding.tvChucVu.setText("Chức Vụ");
+                }
             }
 
             // Ẩn nút Chỉnh Sửa
@@ -446,7 +446,9 @@ public class Owner_NhanVienDetailFragment extends Fragment {
             // Lưu lại thông tin nv
             binding.btnLuuLai.setOnClickListener(v -> {
                 nhanVien.setTennv(binding.etTenNhanVien.getText().toString());
-                nhanVien.setChucvu(setIDChucVuNhanVien(binding.spinnerChucVu.getSelectedItem().toString()));
+                if (!nhanVien.getEmailnv().equals(idLogin)) {
+                    nhanVien.setChucvu(setIDChucVuNhanVien(binding.spinnerChucVu.getSelectedItem().toString()));
+                }
                 nhanVien.setSdt(binding.etSDT.getText().toString());
                 nhanVien.setEmailchu(nhanVien.getEmailchu());
                 nhanVien.setEmailnv(nhanVien.getEmailnv());
@@ -534,24 +536,21 @@ public class Owner_NhanVienDetailFragment extends Fragment {
         binding.btnResetPassWord.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
-                new AlertDialog.Builder(getContext())
-                        .setTitle("Xác Nhận")
-                        .setMessage("Bạn có chắc chắn muốn Reset mật khẩu nhân viên không?")
-                        .setPositiveButton("Có", (dialog, which) -> {
-                            // Tạo tài khoản với mật khẩu ngẫu nhiên và mã hóa
-                            String emailNVLogin = nhanVien.getEmailnv();
-                            String passNVLogin = String.valueOf((int) (Math.random() * 1000000)); // Tạo mật khẩu ngẫu nhiên 6 chữ số
-                            String hashedPassword = hashPassword(passNVLogin); // Mã hóa mật khẩu
+                new AlertDialog.Builder(getContext()).setTitle("Xác Nhận").setMessage("Bạn có chắc chắn muốn Reset mật khẩu nhân viên không?").setPositiveButton("Có", (dialog, which) -> {
+                    // Tạo tài khoản với mật khẩu ngẫu nhiên và mã hóa
+                    String emailNVLogin = nhanVien.getEmailnv();
+                    String passNVLogin = String.valueOf((int) (Math.random() * 1000000)); // Tạo mật khẩu ngẫu nhiên 6 chữ số
+                    String hashedPassword = hashPassword(passNVLogin); // Mã hóa mật khẩu
 
-                            DatabaseReference dbrfAccount = FirebaseDatabase.getInstance().getReference("account");
-                            dbrfAccount.child(nhanVien.getCccd()).child("pass").setValue(hashedPassword).addOnSuccessListener(unused -> {
-                                Snackbar.make(getView(), "Reset mật khẩu cho nhân viên thành công", Toast.LENGTH_SHORT).show();
-                                // Hiển thị hộp thoại thông tin tài khoản
-                                showAccountInfoDialog(emailNVLogin, passNVLogin);
-                            }).addOnFailureListener(e -> {
-                                Snackbar.make(getView(), "Reset mật khẩu cho nhân viên thất bại: " + e.getMessage(), Toast.LENGTH_SHORT).show();
-                            });
-                        }).setNegativeButton("Không", null).show();
+                    DatabaseReference dbrfAccount = FirebaseDatabase.getInstance().getReference("account");
+                    dbrfAccount.child(nhanVien.getCccd()).child("pass").setValue(hashedPassword).addOnSuccessListener(unused -> {
+                        Snackbar.make(getView(), "Reset mật khẩu cho nhân viên thành công", Toast.LENGTH_SHORT).show();
+                        // Hiển thị hộp thoại thông tin tài khoản
+                        showAccountInfoDialog(emailNVLogin, passNVLogin);
+                    }).addOnFailureListener(e -> {
+                        Snackbar.make(getView(), "Reset mật khẩu cho nhân viên thất bại: " + e.getMessage(), Toast.LENGTH_SHORT).show();
+                    });
+                }).setNegativeButton("Không", null).show();
             }
         });
     }
@@ -560,8 +559,7 @@ public class Owner_NhanVienDetailFragment extends Fragment {
         binding.btnCall.setOnClickListener(view -> {
             // Tạo AlertDialog để xác nhận
             AlertDialog.Builder builder = new AlertDialog.Builder(getContext());
-            builder.setTitle("Xác nhận hành động")
-                    .setMessage("Bạn muốn gọi hay sao chép số điện thoại?");
+            builder.setTitle("Xác nhận hành động").setMessage("Bạn muốn gọi hay sao chép số điện thoại?");
 
             // Nút "Gọi"
             builder.setPositiveButton("Gọi", (dialog, which) -> {
@@ -652,9 +650,7 @@ public class Owner_NhanVienDetailFragment extends Fragment {
 
     private void showAccountInfoDialog(String userNhanVien, String passwordNhanVien) {
         AlertDialog.Builder builder = new AlertDialog.Builder(getContext());
-        builder.setTitle("Thông tin tài khoản nhân viên")
-                .setMessage("User: " + userNhanVien + "\nPassword: " + passwordNhanVien)
-                .setPositiveButton("OK", (dialogInterface, i) -> {
+        builder.setTitle("Thông tin tài khoản nhân viên").setMessage("User: " + userNhanVien + "\nPassword: " + passwordNhanVien).setPositiveButton("OK", (dialogInterface, i) -> {
             getParentFragmentManager().popBackStack(); // Quay lại Fragment trước
         }).setNeutralButton("Copy", (dialogInterface, i) -> {
             // Sao chép User và Password vào Clipboard
@@ -820,8 +816,7 @@ public class Owner_NhanVienDetailFragment extends Fragment {
         }
 
         // Kiểm tra ảnh CCCD trước
-        if (binding.ivCCCD1.getDrawable() == null ||
-                binding.ivCCCD1.getDrawable().getConstantState().equals(getResources().getDrawable(android.R.drawable.ic_menu_report_image).getConstantState())) {
+        if (binding.ivCCCD1.getDrawable() == null || binding.ivCCCD1.getDrawable().getConstantState().equals(getResources().getDrawable(android.R.drawable.ic_menu_report_image).getConstantState())) {
 
             binding.tvCCCD1.setError("Chưa chọn ảnh CCCD Trước");
             return false;
@@ -830,8 +825,7 @@ public class Owner_NhanVienDetailFragment extends Fragment {
         }
 
         // Kiểm tra ảnh CCCD sau
-        if (binding.ivCCCD2.getDrawable() == null ||
-                binding.ivCCCD2.getDrawable().getConstantState().equals(getResources().getDrawable(android.R.drawable.ic_menu_report_image).getConstantState())) {
+        if (binding.ivCCCD2.getDrawable() == null || binding.ivCCCD2.getDrawable().getConstantState().equals(getResources().getDrawable(android.R.drawable.ic_menu_report_image).getConstantState())) {
 
             binding.tvCCCD2.setError("Chưa chọn ảnh CCCD Sau");
             return false;
@@ -905,6 +899,14 @@ public class Owner_NhanVienDetailFragment extends Fragment {
 
         // Xử lý khi nhấn nút quay về trên Toolbar
         toolbar.setNavigationOnClickListener(v -> getParentFragmentManager().popBackStack());
+    }
+
+    @Override
+    public void onDestroyView() {
+        super.onDestroyView();
+
+        // Giải phóng tài nguyên của binding để tránh việc rò rỉ bộ nhớ khi Fragment bị hủy
+        binding = null;
     }
 }
 

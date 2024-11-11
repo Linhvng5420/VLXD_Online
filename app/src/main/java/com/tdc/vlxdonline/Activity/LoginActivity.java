@@ -28,7 +28,6 @@ public class LoginActivity extends AppCompatActivity {
     public static String typeEmployee = "null";
     DatabaseReference dbRef = FirebaseDatabase.getInstance().getReference();
     public static String idUser = "";
-//    String idUser = "";
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -38,6 +37,15 @@ public class LoginActivity extends AppCompatActivity {
         binding.tvSignup.setPaintFlags(binding.tvSignup.getPaintFlags() | Paint.UNDERLINE_TEXT_FLAG);
 
         setEvents();
+
+        // Sự kiện nhấn "Enter" trên ô mật khẩu
+        binding.edtPassLg.setOnEditorActionListener((v, actionId, event) -> {
+            if (actionId == android.view.inputmethod.EditorInfo.IME_ACTION_DONE) {
+                performLogin(); // Hàm thực hiện đăng nhập
+                return true;
+            }
+            return false;
+        });
     }
 
     // Trong hàm setEvents
@@ -214,6 +222,5 @@ public class LoginActivity extends AppCompatActivity {
     public void onBackPressed() {
         super.onBackPressed();
         onDestroy();
-//        finishAffinity();
     }
 }

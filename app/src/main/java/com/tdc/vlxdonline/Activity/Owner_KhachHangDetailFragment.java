@@ -13,6 +13,8 @@ import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
+import android.widget.ArrayAdapter;
+import android.widget.ListView;
 import android.widget.Toast;
 
 import androidx.annotation.NonNull;
@@ -22,7 +24,6 @@ import androidx.appcompat.widget.Toolbar;
 import androidx.fragment.app.Fragment;
 
 import com.bumptech.glide.Glide;
-import com.google.android.material.snackbar.Snackbar;
 import com.google.firebase.database.DataSnapshot;
 import com.google.firebase.database.DatabaseError;
 import com.google.firebase.database.DatabaseReference;
@@ -31,6 +32,9 @@ import com.google.firebase.database.ValueEventListener;
 import com.tdc.vlxdonline.Model.KhachHang;
 import com.tdc.vlxdonline.R;
 import com.tdc.vlxdonline.databinding.FragmentOwnerKhachhangDetailBinding;
+
+import java.util.ArrayList;
+import java.util.List;
 
 public class Owner_KhachHangDetailFragment extends Fragment {
     FragmentOwnerKhachhangDetailBinding binding;
@@ -220,16 +224,69 @@ public class Owner_KhachHangDetailFragment extends Fragment {
 
     // SỰ KIỆN BUTTONs
     private void setupAuthentButtons() {
-        // Lắng nghe sự kiện khi nhấn vào ivAuthenticated
         binding.ivAuthenticated.setOnClickListener(v -> {
-            // Hiển thị hộp thoại xác nhận
-            new AlertDialog.Builder(getContext())
-                    .setTitle("Xác Thực Khách Hàng")
-                    .setMessage("Bạn có muốn thay đổi trạng thái xác thực của khách hàng này không?")
-                    .setPositiveButton("Xác Thực", (dialog, which) -> updateAuthenticationStatus("1")) // "1" cho Xác Thực
-                    .setNegativeButton("Hủy Xác Thực", (dialog, which) -> updateAuthenticationStatus("0")) // "0" cho Hủy Xác Thực
-                    .show();
+            // Kiểm tra nếu idChuLogin trùng với idKH
+            if (idChuLogin.equals(idKH)) {
+                // Đọc danh sách chủ cửa hàng có idKH và trạng thái xác thực = 1 từ Firebase
+                DatabaseReference dbDuyetKhachHang = FirebaseDatabase.getInstance().getReference("duyetkhachhang");
+                dbDuyetKhachHang.addListenerForSingleValueEvent(new ValueEventListener() {
+                    @Override
+                    public void onDataChange(@NonNull DataSnapshot snapshot) {
+                        List<String> listOwners = new ArrayList<>(); // Danh sách chủ cửa hàng
+
+                        // Duyệt qua các node chủ cửa hàng trong database
+                        for (DataSnapshot ownerSnapshot : snapshot.getChildren()) {
+                            String ownerId = ownerSnapshot.getKey();
+                            DataSnapshot customerSnapshot = ownerSnapshot.child(idKH);
+
+                            // Kiểm tra nếu khách hàng có trạng thái xác thực = 1
+                            if (customerSnapshot.exists() && "1".equals(customerSnapshot.child("trangthai").getValue(String.class))) {
+                                listOwners.add("ID chủ cửa hàng: " + ownerId);
+                            }
+                        }
+
+                        // Hiển thị danh sách chủ cửa hàng bằng Dialog với ListView
+                        showOwnersDialog(listOwners);
+                    }
+
+                    @Override
+                    public void onCancelled(@NonNull DatabaseError error) {
+                        Log.d("l.d", "Đã xảy ra lỗi khi truy cập database: " + error.getMessage());
+                    }
+                });
+            } else {
+                // Trường hợp không trùng idChuLogin, giữ lại chức năng xác thực cũ
+                showAuthenticationDialog();
+            }
         });
+    }
+
+    // Hiển thị Dialog với ListView để liệt kê danh sách chủ cửa hàng
+    private void showOwnersDialog(List<String> listOwners) {
+        // Chuyển danh sách chủ cửa hàng thành một mảng để đưa vào Dialog
+        String[] ownersArray = listOwners.toArray(new String[0]);
+
+        AlertDialog.Builder builder = new AlertDialog.Builder(getContext());
+        builder.setTitle("Các Chủ Cửa Hàng Cho Phép Trả Góp");
+
+        // Tạo ListView trực tiếp trong mã mà không cần XML
+        ListView listView = new ListView(getContext());
+        ArrayAdapter<String> adapter = new ArrayAdapter<>(getContext(), android.R.layout.simple_list_item_1, ownersArray);
+        listView.setAdapter(adapter);
+
+        builder.setView(listView);
+        builder.setPositiveButton("Đóng", (dialog, which) -> dialog.dismiss());
+        builder.show();
+    }
+
+    // Hiển thị Dialog xác thực/hủy xác thực (giữ lại chức năng xác thực cũ nếu cần)
+    private void showAuthenticationDialog() {
+        new AlertDialog.Builder(getContext())
+                .setTitle("Xác Thực Khách Hàng")
+                .setMessage("Bạn có muốn thay đổi trạng thái xác thực của khách hàng này không?")
+                .setPositiveButton("Xác Thực", (dialog, which) -> updateAuthenticationStatus("1"))
+                .setNegativeButton("Hủy Xác Thực", (dialog, which) -> updateAuthenticationStatus("0"))
+                .show();
     }
 
     private void setupCallButton() {

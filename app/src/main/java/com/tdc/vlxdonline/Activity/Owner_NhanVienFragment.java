@@ -1,7 +1,6 @@
 package com.tdc.vlxdonline.Activity;
 
 import android.app.Activity;
-import android.graphics.Color;
 import android.os.Bundle;
 import android.view.LayoutInflater;
 import android.view.View;
@@ -30,7 +29,7 @@ import java.util.ArrayList;
 import java.util.List;
 
 public class Owner_NhanVienFragment extends Fragment {
-    private FragmentOwnerNhanvienBinding ownerNhanvienBinding;
+    private FragmentOwnerNhanvienBinding binding;
 
     // Email mà tài khoản quản lý đang đăng nhập
     String emailLogin = LoginActivity.idUser;
@@ -47,8 +46,8 @@ public class Owner_NhanVienFragment extends Fragment {
     @Nullable
     @Override
     public View onCreateView(@NonNull LayoutInflater inflater, @Nullable ViewGroup container, @Nullable Bundle savedInstanceState) {
-        ownerNhanvienBinding = FragmentOwnerNhanvienBinding.inflate(inflater, container, false);
-        return ownerNhanvienBinding.getRoot();
+        binding = FragmentOwnerNhanvienBinding.inflate(inflater, container, false);
+        return binding.getRoot();
     }
 
     // TODO: HÀM XỬ LÝ CHỨC NĂNG CỦA VIEW APP
@@ -57,12 +56,12 @@ public class Owner_NhanVienFragment extends Fragment {
         super.onViewCreated(view, savedInstanceState);
 
         //RecycleView: Thiết lập layout cho RecyclerView, sử dụng LinearLayoutManager để hiển thị danh sách theo chiều dọc
-        ownerNhanvienBinding.ownerRcvNhanVien.setLayoutManager(new LinearLayoutManager(getContext()));
+        binding.ownerRcvNhanVien.setLayoutManager(new LinearLayoutManager(getContext()));
         // Khởi tạo danh sách nhân viên trống và adapter
         List<NhanVien> nhanVienList = new ArrayList<>();
         nhanVienAdapter = new NhanVienAdapter(nhanVienList);
         nhanVienAdapter.sortNhanVienList();
-        ownerNhanvienBinding.ownerRcvNhanVien.setAdapter(nhanVienAdapter);
+        binding.ownerRcvNhanVien.setAdapter(nhanVienAdapter);
 
         // Firebase: lấy dữ liệu từ Firebase
         getDataNhanVien();
@@ -77,9 +76,9 @@ public class Owner_NhanVienFragment extends Fragment {
         setupTimKiemNhanVien();
 
         // Lắng nghe sự kiện nhấn ra ngoài thanh tìm kiếm để tắt con trỏ và ẩn bàn phím
-        ownerNhanvienBinding.getRoot().setOnTouchListener((v, event) -> {
+        binding.getRoot().setOnTouchListener((v, event) -> {
             hideKeyboard(v); // Ẩn bàn phím
-            ownerNhanvienBinding.searchView.clearFocus(); // Xóa focus để tắt con trỏ trong SearchView
+            binding.searchView.clearFocus(); // Xóa focus để tắt con trỏ trong SearchView
             return false;
         });
     }
@@ -155,14 +154,14 @@ public class Owner_NhanVienFragment extends Fragment {
                     .commit(); // Thực hiện chuyển đổi
 
             // Xóa văn bản tìm kiếm khi một nhân viên được chọn
-            ownerNhanvienBinding.searchView.setQuery("", false); // Xóa văn bản tìm kiếm
-            ownerNhanvienBinding.searchView.clearFocus(); // Ẩn con trỏ
+            binding.searchView.setQuery("", false); // Xóa văn bản tìm kiếm
+            binding.searchView.clearFocus(); // Ẩn con trỏ
         });
     }
 
     // BẮT SỰ KIỆN NHẤN VÀO NÚT THÊM NHÂN VIÊN
     private void setupThemNhanVien() {
-        ownerNhanvienBinding.btnThemNhanVien.setOnClickListener(new View.OnClickListener() {
+        binding.btnThemNhanVien.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
                 // chuyển sang fragment thêm nhân viên
@@ -172,15 +171,15 @@ public class Owner_NhanVienFragment extends Fragment {
                         .commit();
 
                 // Xóa văn bản tìm kiếm khi một sự kiện khác xảy ra
-                ownerNhanvienBinding.searchView.setQuery("", false); // Xóa văn bản tìm kiếm
-                ownerNhanvienBinding.searchView.clearFocus(); // Ẩn con trỏ
+                binding.searchView.setQuery("", false); // Xóa văn bản tìm kiếm
+                binding.searchView.clearFocus(); // Ẩn con trỏ
             }
         });
     }
 
     // CHỨC NĂNG TÌM KIẾM NHÂN VIÊN
     private void setupTimKiemNhanVien() {
-        ownerNhanvienBinding.searchView.setOnQueryTextListener(new SearchView.OnQueryTextListener() {
+        binding.searchView.setOnQueryTextListener(new SearchView.OnQueryTextListener() {
             @Override
             public boolean onQueryTextSubmit(String query) {
                 // Không cần xử lý khi submit, chỉ thực hiện tìm kiếm ngay khi người dùng nhập
@@ -201,9 +200,9 @@ public class Owner_NhanVienFragment extends Fragment {
         });
 
         // Tắt con trỏ khi SearchView bị mất focus
-        ownerNhanvienBinding.searchView.setOnQueryTextFocusChangeListener((v, hasFocus) -> {
+        binding.searchView.setOnQueryTextFocusChangeListener((v, hasFocus) -> {
             if (!hasFocus) {
-                ownerNhanvienBinding.searchView.clearFocus(); // Xóa focus khi mất focus
+                binding.searchView.clearFocus(); // Xóa focus khi mất focus
             }
         });
     }
@@ -234,7 +233,7 @@ public class Owner_NhanVienFragment extends Fragment {
         super.onDestroyView();
 
         // Giải phóng tài nguyên của binding để tránh việc rò rỉ bộ nhớ khi Fragment bị hủy
-        ownerNhanvienBinding = null;
+        binding = null;
     }
 }
 
