@@ -81,7 +81,7 @@ public class Shipper_HomeActivity extends AppCompatActivity {
     public void ReplaceFragment(Fragment fragment) {
         FragmentManager fragmentManager = getSupportFragmentManager();
         FragmentTransaction fragmentTransaction = fragmentManager.beginTransaction();
-        fragmentTransaction.replace(shipperHomeBinding.frShipper.getId(), fragment);
+        fragmentTransaction.replace(shipperHomeBinding.fragmentContainer.getId(), fragment);
         fragmentTransaction.commit();
     }
 

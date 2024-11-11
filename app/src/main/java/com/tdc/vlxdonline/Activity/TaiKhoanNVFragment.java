@@ -44,7 +44,7 @@ public class TaiKhoanNVFragment extends Fragment {
             @Override
             public void onClick(View view) {
                 getParentFragmentManager().beginTransaction()
-                        .replace(R.id.frmWarehouse, new TaiKhoan_HoSoNVFragment())
+                        .replace(R.id.fragment_container, new TaiKhoan_HoSoNVFragment())
                         .addToBackStack(null)
                         .commit();
             }
@@ -54,7 +54,7 @@ public class TaiKhoanNVFragment extends Fragment {
             @Override
             public void onClick(View view) {
                 getParentFragmentManager().beginTransaction()
-                        .replace(R.id.frmWarehouse, new Owner_SettingAboutFragment())
+                        .replace(R.id.fragment_container, new Owner_SettingAboutFragment())
                         .addToBackStack(null)
                         .commit();
             }

@@ -40,7 +40,7 @@ public class Owner_HomeActivity extends AppCompatActivity {
         //Bắt sự kiện
 
         // Thiết lập Fragment mặc định (Hiển thị màn hình mặc định ban đầu của ứng dụng)
-        //ReplaceFragment(new Owner_DashboardFragment());
+        ReplaceFragment(new Owner_DashboardFragment());
 
         // Bắt instance
         emailUser = getIntent().getStringExtra("emailUser");
@@ -80,7 +80,7 @@ public class Owner_HomeActivity extends AppCompatActivity {
             } else if (itemId == R.id.nav_owner_khachhang) {
                 ReplaceFragment(new Owner_KhachHangFragment());
             } else if (itemId == R.id.nav_owner_donhang) {
-                ReplaceFragment(new Fragment());
+                ReplaceFragment(new DanhSachDonHangFragment(0));
             } else if (itemId == R.id.nav_owner_kho) {
                 ReplaceFragment(new QuanLyKhoFragment());
             }
