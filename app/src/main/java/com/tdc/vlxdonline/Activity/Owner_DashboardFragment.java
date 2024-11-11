@@ -76,7 +76,7 @@ public class Owner_DashboardFragment extends Fragment {
             @Override
             public void onClick(View view) {
                 getParentFragmentManager().beginTransaction()
-                        .replace(R.id.fragment_owner, new Owner_SettingFragment())
+                        .replace(R.id.fragment_container, new Owner_SettingFragment())
                         .addToBackStack(null)
                         .commit();
             }

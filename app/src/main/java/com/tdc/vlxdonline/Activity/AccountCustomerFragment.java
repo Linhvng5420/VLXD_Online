@@ -76,7 +76,7 @@ public class AccountCustomerFragment extends Fragment {
 
                 // Thực hiện chuyển đổi sang Fragment chi tiết, thay thế Fragment hiện tại
                 getParentFragmentManager().beginTransaction()
-                        .replace(R.id.frm_customer, khachHangDetailFragment) // Thay thế fragment_owner hiện tại bằng fragment chi tiết
+                        .replace(R.id.frm_customer, khachHangDetailFragment) // Thay thế fragment_container hiện tại bằng fragment chi tiết
                         .addToBackStack(null) // Cho phép quay lại màn hình trước khi nhấn nút Back
                         .commit(); // Thực hiện chuyển đổi
             }

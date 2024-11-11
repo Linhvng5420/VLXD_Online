@@ -113,7 +113,7 @@ public class Owner_HomeActivity extends AppCompatActivity {
         // Bắt đầu một giao dịch Fragment (FragmentTransaction)
         FragmentTransaction fragmentTransaction = fragmentManager.beginTransaction();
         // Thay thế Fragment hiện tại bằng Fragment mới được truyền vào
-        fragmentTransaction.replace(R.id.fragment_owner, fragment);
+        fragmentTransaction.replace(R.id.fragment_container, fragment);
         // Xác nhận thay đổi Fragment bằng cách commit giao dịch
         fragmentTransaction.commit();
     }
