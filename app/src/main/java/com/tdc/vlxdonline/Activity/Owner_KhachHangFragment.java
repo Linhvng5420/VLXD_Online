@@ -181,21 +181,26 @@ public class Owner_KhachHangFragment extends Fragment {
                 boolean hasNotification = false;
 
                 for (DataSnapshot customerSnapshot : dataSnapshot.getChildren()) {
-                    String xacthuc = String.valueOf(customerSnapshot.child("xacthuc").getValue(Long.class));
+                    String xacthuc = String.valueOf(customerSnapshot.child("xacthuc").getValue(String.class));
                     if (xacthuc != null && "1".equals(xacthuc)) {
                         hasNotification = true;
                         break;
                     }
                 }
 
-                if (hasNotification) {
-                    binding.lnThongBao.setBackground(getResources().getDrawable(R.drawable.bg_img_detail));
-                    binding.ivThongBao.setColorFilter(Color.parseColor("#F44336"));
-                    binding.tvThongBao.setText("Bạn có thông báo mới!");
+                if (binding != null && binding.lnThongBao != null) {
+                    if (hasNotification) {
+                        binding.lnThongBao.setBackground(getResources().getDrawable(R.drawable.bg_img_detail));
+                        binding.ivThongBao.setColorFilter(Color.parseColor("#F44336"));
+                        binding.tvThongBao.setText("Bạn có thông báo mới!");
 
-                    // Xem thông báo
-                    binding.lnThongBao.setOnClickListener(v -> showThongBaoPopup());
+                        // Xem thông báo
+                        binding.lnThongBao.setOnClickListener(v -> showThongBaoPopup());
+                    }
+                } else {
+                    Log.d("l.d", "Binding hoặc lnThongBao bị null");
                 }
+
             }
 
             @Override
@@ -214,7 +219,7 @@ public class Owner_KhachHangFragment extends Fragment {
             @Override
             public void onDataChange(@NonNull DataSnapshot dataSnapshot) {
                 for (DataSnapshot customerSnapshot : dataSnapshot.getChildren()) {
-                    String xacthuc = String.valueOf(customerSnapshot.child("xacthuc").getValue(Long.class));
+                    String xacthuc = String.valueOf(customerSnapshot.child("xacthuc").getValue(String.class));
                     if (xacthuc != null && "1".equals(xacthuc)) {
                         String khachHangId = customerSnapshot.getKey();
                         layThongTinKhachHang(khachHangId, khachHangThongBaoList);
