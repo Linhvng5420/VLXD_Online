@@ -118,7 +118,7 @@
             android:layout_height="wrap_content"
             android:hint="Email"
             android:inputType="text|textEmailAddress"
-            android:text="nguyenvan"
+            android:text="nv@m.c"
             android:maxLength="40"
             android:textColor="#1EA323"
             android:textStyle="bold" />

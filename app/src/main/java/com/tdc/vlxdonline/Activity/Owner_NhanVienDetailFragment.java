@@ -82,6 +82,9 @@ public class Owner_NhanVienDetailFragment extends Fragment {
         super.onCreate(savedInstanceState);
         // Nó sẽ nằm ở đây, vì giao diện spinner hiển thị chức vụ INVISIBLE
         layTatCaDSChucVuTuFirebase();
+
+        // Lấy thông tin nhân viên từ Bundle
+        idNhanVien = getArguments().getSerializable("idNhanVien").toString();
     }
 
     @Override
@@ -226,9 +229,6 @@ public class Owner_NhanVienDetailFragment extends Fragment {
         // getArguments() trả về Bundle chứa thông tin được truyền từ Fragment trước
         if (getArguments() != null) // Kiểm tra xem Bundle có tồn tại hay không
         {
-            // Lấy thông tin nhân viên từ Bundle
-            idNhanVien = getArguments().getSerializable("idNhanVien").toString();
-
             // Lấy thông tin nhân viên từ firebase thông qua ID
             DatabaseReference dbNhanVien = FirebaseDatabase.getInstance().getReference("nhanvien");
             dbNhanVien.child(idNhanVien).addValueEventListener(new ValueEventListener() {
@@ -450,9 +450,11 @@ public class Owner_NhanVienDetailFragment extends Fragment {
                     nhanVien.setChucvu(setIDChucVuNhanVien(binding.spinnerChucVu.getSelectedItem().toString()));
                 }
                 nhanVien.setSdt(binding.etSDT.getText().toString());
+                nhanVien.setCccd(binding.etCCCD.getText().toString());
+                String cccd = nhanVien.getCccd();
+
                 nhanVien.setEmailchu(nhanVien.getEmailchu());
                 nhanVien.setEmailnv(nhanVien.getEmailnv());
-                String cccd = nhanVien.getCccd();
 
                 if (batDieuKienDuLieuDauVao(nhanVien) == true) {
                     new AlertDialog.Builder(getContext()).setTitle("Xác Nhận").setMessage("Bạn có chắc chắn muốn lưu thay đổi không?").setPositiveButton("Có", (dialog, which) -> {
@@ -475,7 +477,9 @@ public class Owner_NhanVienDetailFragment extends Fragment {
                             nhanVien.setCccd(null);
 
                             dbNhanVien.child(cccd).setValue(nhanVien).addOnSuccessListener(aVoid -> {
-                                Toast.makeText(getContext(), "Cập nhật thành công", Toast.LENGTH_SHORT).show();
+                                if (getContext() != null) {
+                                    Toast.makeText(getContext(), "Cập nhật thành công", Toast.LENGTH_SHORT).show();
+                                }
                                 binding.etTenNhanVien.setEnabled(false);
                                 binding.etSDT.setEnabled(false);
                                 binding.tilChucVu.setVisibility(View.VISIBLE);
@@ -901,12 +905,12 @@ public class Owner_NhanVienDetailFragment extends Fragment {
         toolbar.setNavigationOnClickListener(v -> getParentFragmentManager().popBackStack());
     }
 
-    @Override
+/*    @Override
     public void onDestroyView() {
         super.onDestroyView();
 
         // Giải phóng tài nguyên của binding để tránh việc rò rỉ bộ nhớ khi Fragment bị hủy
         binding = null;
-    }
+    }*/
 }
 
