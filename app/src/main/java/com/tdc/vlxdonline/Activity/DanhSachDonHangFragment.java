@@ -3,18 +3,16 @@ package com.tdc.vlxdonline.Activity;
 import android.graphics.Color;
 import android.graphics.drawable.Drawable;
 import android.os.Bundle;
-
-import androidx.annotation.NonNull;
-import androidx.annotation.Nullable;
-import androidx.fragment.app.Fragment;
-import androidx.recyclerview.widget.GridLayoutManager;
-import androidx.recyclerview.widget.LinearLayoutManager;
-
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.SearchView;
 import android.widget.Toast;
+
+import androidx.annotation.NonNull;
+import androidx.annotation.Nullable;
+import androidx.fragment.app.Fragment;
+import androidx.recyclerview.widget.LinearLayoutManager;
 
 import com.google.firebase.database.DataSnapshot;
 import com.google.firebase.database.DatabaseError;
@@ -22,9 +20,7 @@ import com.google.firebase.database.DatabaseReference;
 import com.google.firebase.database.FirebaseDatabase;
 import com.google.firebase.database.ValueEventListener;
 import com.tdc.vlxdonline.Adapter.DonHangAdapter;
-import com.tdc.vlxdonline.Adapter.ProductAdapter;
 import com.tdc.vlxdonline.Model.DonHang;
-import com.tdc.vlxdonline.Model.Products;
 import com.tdc.vlxdonline.R;
 import com.tdc.vlxdonline.databinding.FragmentDanhSachDonHangBinding;
 
@@ -140,12 +136,13 @@ public class DanhSachDonHangFragment extends Fragment {
                         int tt = don.getTrangThaiTT();
                         // 0 la chua hoan thanh, continue neu don da xac nhan hoan thanh
                         if (trangThaiLoc == 0 && vc == 4 && tt == 2) continue;
-                        // 1 la chua da hoan thanh, continue neu don chua xac nhan hoan thanh
+                            // 1 la chua da hoan thanh, continue neu don chua xac nhan hoan thanh
                         else if (trangThaiLoc == 1) {
                             if (vc < 4 || tt < 2) continue;
                         }
 
-                        if (LoginActivity.typeUser == 0) continue;
+                        if (LoginActivity.typeUser == 0 && !Owner_HomeActivity.infoChu.getID().equals(don.getIdChu()))
+                            continue;
                         else if (LoginActivity.typeUser == 1 && !don.getIdKhach().equals(Customer_HomeActivity.info.getID()))
                             continue;
                         else if (LoginActivity.typeUser == 2 && !LoginActivity.typeEmployee.equals("cv1")) {
@@ -180,9 +177,12 @@ public class DanhSachDonHangFragment extends Fragment {
                 if (donHang.getPhiTraGop() > 0) {
 
                 } else {
-                    if (LoginActivity.typeUser == 0) ((Owner_HomeActivity) getActivity()).ReplaceFragment(new ChiTietDonFragment(donHang.getId()));
-                    if (LoginActivity.typeUser == 1) ((Customer_HomeActivity) getActivity()).ReplaceFragment(new ChiTietDonFragment(donHang.getId()));
-                    if (LoginActivity.typeUser == 2) ((Warehouse_HomeActivity) getActivity()).ReplaceFragment(new ChiTietDonFragment(donHang.getId()));
+                    if (LoginActivity.typeUser == 0)
+                        ((Owner_HomeActivity) getActivity()).ReplaceFragment(new ChiTietDonFragment(donHang.getId()));
+                    if (LoginActivity.typeUser == 1)
+                        ((Customer_HomeActivity) getActivity()).ReplaceFragment(new ChiTietDonFragment(donHang.getId()));
+                    if (LoginActivity.typeUser == 2)
+                        ((Warehouse_HomeActivity) getActivity()).ReplaceFragment(new ChiTietDonFragment(donHang.getId()));
                 }
             }
         });
