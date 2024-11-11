@@ -28,6 +28,8 @@ public class ChiTietSPKho_Fragment extends Fragment {
     Products product; // Biến để lưu thông tin sản phẩm
     String idProduct; // Biến để lưu ID sản phẩm
     FragmentChiTietSpKhoBinding binding; // Binding cho layout của fragment
+    DatabaseReference reference;
+    ValueEventListener event;
 
     // Constructor nhận vào ID sản phẩm
     public ChiTietSPKho_Fragment(String id) {
@@ -37,6 +39,7 @@ public class ChiTietSPKho_Fragment extends Fragment {
     @Override
     public void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
+        reference = FirebaseDatabase.getInstance().getReference();
     }
 
     @Override
@@ -87,7 +90,7 @@ public class ChiTietSPKho_Fragment extends Fragment {
         return binding.getRoot();
     }
 
-    // Phương thức để hiển thị hộp thoại xác nhận cho việc thêm số lượng
+    // Phương thức để hiển thị hộp thoại xác nhận cho việc thay doi gia
     private void showConfirm() {
         AlertDialog.Builder builder = new AlertDialog.Builder(getActivity());
         builder.setMessage("Bạn có chắc chắn thay đổi giá ?") // Thông điệp bằng tiếng Việt
@@ -106,10 +109,7 @@ public class ChiTietSPKho_Fragment extends Fragment {
         alert.show(); // Hiển thị hộp thoại
     }
 
-    // Phương thức để hiển thị hộp thoại xác nhận cho việc giảm số lượng
-
-
-    // Phương thức để thêm số lượng vào kho sản phẩm
+    // Phương thức để thay doi gia ban sản phẩm
     private void thayDoiGia() {
         String giaBanMoi = binding.edtThayDoiGia.getText().toString(); // Lấy số lượng nhập vào
 
@@ -156,8 +156,7 @@ public class ChiTietSPKho_Fragment extends Fragment {
 
     // Phương thức để tải dữ liệu sản phẩm từ Firebase
     private void docDulieu() {
-        DatabaseReference reference = FirebaseDatabase.getInstance().getReference();
-        reference.child("products").child(idProduct).addValueEventListener(new ValueEventListener() {
+        event = new ValueEventListener() {
             @Override
             public void onDataChange(DataSnapshot dataSnapshot) {
                 try {
@@ -184,6 +183,16 @@ public class ChiTietSPKho_Fragment extends Fragment {
             public void onCancelled(DatabaseError databaseError) {
                 Log.e("Lỗi", "Đọc dữ liệu không thành công: " + databaseError.getCode()); // Xử lý lỗi
             }
-        });
+        };
+        reference.child("products").child(idProduct).addValueEventListener(event);
+    }
+
+    @Override
+    public void onDestroyView() {
+        super.onDestroyView();
+        binding = null;
+        reference.child("products").child(idProduct).removeEventListener(event);
+        event = null;
+        reference = null;
     }
 }

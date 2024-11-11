@@ -50,6 +50,11 @@ public class GiaoDienKho_Fragment extends Fragment {
     View preView = null; // View trước đó được chọn
     ValueEventListener eventDocDanhSach; // Listener cho danh sách sản phẩm
     private String tuKhoa = ""; // Từ khóa tìm kiếm
+    private String emailChu; // Biến dùng để kiểm tra có đúng id chủ của nhân viên hay không
+
+    public GiaoDienKho_Fragment(String emailChu) {
+        this.emailChu = emailChu;
+    }
 
     @Override
     public void onCreate(Bundle savedInstanceState) {
@@ -100,6 +105,8 @@ public class GiaoDienKho_Fragment extends Fragment {
                     for (DataSnapshot snapshot : dataSnapshot.getChildren()) {
                         Products product = snapshot.getValue(Products.class);
                         product.setId(snapshot.getKey());
+                        // Kiem tra id chu
+                        if (!product.getIdChu().equals(emailChu.substring(0, emailChu.indexOf("@")))) continue;
                         // Kiểm tra danh mục và từ khóa tìm kiếm
                         if (!category.isEmpty() && !category.equals(product.getDanhMuc())) continue;
                         if (!tuKhoa.isEmpty() && !product.getTen().contains(tuKhoa) && !product.getMoTa().contains(tuKhoa))

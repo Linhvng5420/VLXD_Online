@@ -1,12 +1,16 @@
 package com.tdc.vlxdonline.Activity;
 
 import android.app.Activity;
+import android.app.AlertDialog;
+import android.content.Context;
+import android.content.DialogInterface;
 import android.content.Intent;
 import android.graphics.Color;
 import android.net.Uri;
 import android.os.Bundle;
 import android.util.Log;
 import android.view.View;
+import android.view.inputmethod.InputMethodManager;
 import android.widget.Button;
 import android.widget.EditText;
 import android.widget.ImageView;
@@ -103,6 +107,7 @@ public class Warehouse_DanhMucActivity extends AppCompatActivity {
                             "Vui lòng điền đầy đủ thông tin sản phẩm!", Toast.LENGTH_SHORT).show();
                 } else {
                     uploadData();
+                    hideKeyboard();
                 }
             }
         });
@@ -113,7 +118,8 @@ public class Warehouse_DanhMucActivity extends AppCompatActivity {
                 String id = category.getId();
                 if (!id.isEmpty()) {
                     // Gọi phương thức xóa sản phẩm
-                    deleteProduct(id);
+                   // deleteProduct(id);
+                    showConfirmDialogXoa(id);
                 } else {
                     Toast.makeText(Warehouse_DanhMucActivity.this, "Vui lòng chọn sản phẩm để xóa", Toast.LENGTH_SHORT).show();
                 }
@@ -125,7 +131,9 @@ public class Warehouse_DanhMucActivity extends AppCompatActivity {
                 if (edtNhapDM.getText().toString().isEmpty()) {
                     Toast.makeText(Warehouse_DanhMucActivity.this, "Vui lòng chọn sản phẩm để sửa!", Toast.LENGTH_SHORT).show();
                 } else {
-                    uploadData();  // Gọi phương thức để cập nhật dữ liệu
+                    //uploadData();  // Gọi phương thức để cập nhật dữ liệu
+                    showConfirmDialogSua();
+                    hideKeyboard();
                 }
             }
         });
@@ -255,7 +263,56 @@ public class Warehouse_DanhMucActivity extends AppCompatActivity {
         btnXoaDM.setEnabled(false);
         btnThemDM.setEnabled(true);
     }
+    private void showConfirmDialogXoa(String id) {
+        AlertDialog.Builder builder = new AlertDialog.Builder(Warehouse_DanhMucActivity.this);
+        builder.setTitle("Xác nhận xóa");
+        builder.setMessage("Bạn có chắc chắn muốn xóa danh mục này không?");
 
+        builder.setPositiveButton("Xóa", new DialogInterface.OnClickListener() {
+            @Override
+            public void onClick(DialogInterface dialog, int which) {
+                deleteProduct(id);
+            }
+        });
+
+        builder.setNegativeButton("Hủy", new DialogInterface.OnClickListener() {
+            @Override
+            public void onClick(DialogInterface dialog, int which) {
+                dialog.dismiss();
+            }
+        });
+
+        AlertDialog dialog = builder.create();
+        dialog.show();
+    }
+
+    private void showConfirmDialogSua() {
+        AlertDialog.Builder builder = new AlertDialog.Builder(Warehouse_DanhMucActivity.this);
+        builder.setTitle("Xác nhận sửa");
+        builder.setMessage("Bạn có chắc chắn muốn sửa danh mục này không?");
+
+        builder.setPositiveButton("Sửa", new DialogInterface.OnClickListener() {
+            @Override
+            public void onClick(DialogInterface dialog, int which) {
+                uploadData();
+            }
+        });
+
+        builder.setNegativeButton("Hủy", new DialogInterface.OnClickListener() {
+            @Override
+            public void onClick(DialogInterface dialog, int which) {
+                dialog.dismiss();
+            }
+        });
+        AlertDialog dialog = builder.create();
+        dialog.show();
+    }
+    private void hideKeyboard() {
+        InputMethodManager inputMethodManager = (InputMethodManager) getSystemService(Context.INPUT_METHOD_SERVICE);
+        if (inputMethodManager != null && getCurrentFocus() != null) {
+            inputMethodManager.hideSoftInputFromWindow(getCurrentFocus().getWindowToken(), 0);
+        }
+    }
     private void setCtronl() {
         edtNhapDM = findViewById(R.id.edtNhapDM);
         ivAnhDM = findViewById(R.id.ivAnhDM);
