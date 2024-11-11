@@ -33,7 +33,12 @@ public class AccountCustomerFragment extends Fragment {
     @Override
     public void onViewCreated(@NonNull View view, @Nullable Bundle savedInstanceState) {
         super.onViewCreated(view, savedInstanceState);
-
+        binding.btnHoSo.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                ((Customer_HomeActivity) getActivity()).ReplaceFragment(new HoSoKhachHangCusFragment());
+            }
+        });
     }
 
     @Override

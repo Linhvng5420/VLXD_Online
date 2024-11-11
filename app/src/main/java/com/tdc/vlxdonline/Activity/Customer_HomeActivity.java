@@ -31,6 +31,7 @@ public class Customer_HomeActivity extends AppCompatActivity {
     // Thong tin khach hang dang dang nhap
     public static KhachHang info;
     DatabaseReference referCustomerActi;
+    private boolean checkFirst = true;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -49,7 +50,10 @@ public class Customer_HomeActivity extends AppCompatActivity {
                         Customer_HomeActivity.info = khach;
                         Customer_HomeActivity.info.setEmail(email);
                         Customer_HomeActivity.info.setID(email.substring(0, email.indexOf('@')));
-                        Toast.makeText(Customer_HomeActivity.this, "Hello " + info.getTen(), Toast.LENGTH_LONG).show();
+                        if (checkFirst){
+                            Toast.makeText(Customer_HomeActivity.this, "Hello " + info.getTen(), Toast.LENGTH_LONG).show();
+                            checkFirst = false;
+                        }
                     }else{
                         Toast.makeText(Customer_HomeActivity.this, "Tài Khoản Đã Bị Xóa!", Toast.LENGTH_LONG).show();
                     }
