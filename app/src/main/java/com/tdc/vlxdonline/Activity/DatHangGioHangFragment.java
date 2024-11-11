@@ -92,10 +92,10 @@ public class DatHangGioHangFragment extends Fragment {
             referDatHangGio.child("products").child(temp.getIdSanPham()).addListenerForSingleValueEvent(new ValueEventListener() {
                 @Override
                 public void onDataChange(@NonNull DataSnapshot snapshot) {
-                    try{
+                    try {
                         Products product = snapshot.getValue(Products.class);
-                        if (product != null){
-                            if (Integer.parseInt(product.getTonKho()) > 0){
+                        if (product != null) {
+                            if (Integer.parseInt(product.getTonKho()) > 0) {
                                 // Bien check đã có đơn hàng chủ sở hữu của sản phẩm đang duyệt chưa
                                 boolean check = false;
                                 for (int j = 0; j < dataDon.size(); j++) {
@@ -119,12 +119,12 @@ public class DatHangGioHangFragment extends Fragment {
                                     dataDon.add(don);
                                     dataChiTiet.get(position).setIdDon(don.getId());
                                 }
-                            }else {
+                            } else {
                                 ThongBaoHetHang(temp.getTen());
                                 dataChiTiet.remove(position);
                                 checkRemove[0] = true;
                             }
-                        }else{
+                        } else {
                             ThongBaoXoa(temp.getTen());
                             dataChiTiet.remove(position);
                             checkRemove[0] = true;
@@ -137,7 +137,8 @@ public class DatHangGioHangFragment extends Fragment {
                             binding.tvTongDatCart.setText(chuyenChuoi(tong));
                             adapter.notifyDataSetChanged();
                         }
-                    }catch (Exception e){}
+                    } catch (Exception e) {
+                    }
                 }
 
                 @Override
@@ -216,11 +217,9 @@ public class DatHangGioHangFragment extends Fragment {
             referDatHangGio.child("products").child(tempChiTiet.getIdSanPham()).addListenerForSingleValueEvent(new ValueEventListener() {
                 @Override
                 public void onDataChange(@NonNull DataSnapshot snapshot) {
-                    try{
-                        Products product = snapshot.getValue(Products.class);
-
-                        referDatHangGio.child("products").child(tempChiTiet.getIdSanPham()).child("tonKho").setValue((Integer.parseInt(product.getTonKho()) - tempChiTiet.getSoLuong()) + "");
-                    }catch (Exception e){}
+                    Products product = snapshot.getValue(Products.class);
+                    DatabaseReference tempRefer = FirebaseDatabase.getInstance().getReference("products");
+                    tempRefer.child(tempChiTiet.getIdSanPham()).child("tonKho").setValue((Integer.parseInt(product.getTonKho()) - tempChiTiet.getSoLuong()) + "");
                 }
 
                 @Override
@@ -234,15 +233,16 @@ public class DatHangGioHangFragment extends Fragment {
     }
 
     // Event realtime cho Products
-    private void setProdEvent(){
+    private void setProdEvent() {
         if (prodEvent == null) {
             prodEvent = new ValueEventListener() {
                 @Override
                 public void onDataChange(@NonNull DataSnapshot snapshot) {
-                    try{
+                    try {
                         dataDon.clear();
                         TaoDonHangTuChiTiet();
-                    }catch (Exception e){}
+                    } catch (Exception e) {
+                    }
                 }
 
                 @Override
@@ -260,7 +260,7 @@ public class DatHangGioHangFragment extends Fragment {
         binding.rcChiTietDatGio.setAdapter(adapter);
     }
 
-    private void ThongBaoXoa(String maSP){
+    private void ThongBaoXoa(String maSP) {
         AlertDialog.Builder builder = new AlertDialog.Builder(getActivity());
         builder.setTitle("Thông Báo!").setMessage("Đã Xóa Sản Phẩm " + maSP + " Khỏi Danh Sách Vì Sản Phẩm Đã Bị Xóa!");
 
@@ -281,7 +281,7 @@ public class DatHangGioHangFragment extends Fragment {
         alertDialog.show();
     }
 
-    private void ThongBaoHetHang(String maSP){
+    private void ThongBaoHetHang(String maSP) {
         AlertDialog.Builder builder = new AlertDialog.Builder(getActivity());
         builder.setTitle("Thông Báo!").setMessage("Đã Xóa Sản Phẩm " + maSP + " Khỏi Danh Sách Vì Sản Phẩm Đã Hết Hàng!");
 
