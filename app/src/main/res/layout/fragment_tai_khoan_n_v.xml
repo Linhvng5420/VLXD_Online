@@ -106,6 +106,13 @@
                         android:textStyle="bold" />
                 </LinearLayout>
             </LinearLayout>
+
+            <ImageView
+                android:id="@+id/imageView3"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_marginTop="30dp"
+                android:src="@drawable/vlxd_online" />
         </LinearLayout>
 
     </LinearLayout>

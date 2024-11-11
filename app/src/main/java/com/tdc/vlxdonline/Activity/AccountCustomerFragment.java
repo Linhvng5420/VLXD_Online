@@ -14,7 +14,6 @@ import com.tdc.vlxdonline.R;
 import com.tdc.vlxdonline.databinding.FragmentAccountCustomerBinding;
 
 public class AccountCustomerFragment extends Fragment {
-
     FragmentAccountCustomerBinding binding;
 
     @Override
