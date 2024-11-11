@@ -82,6 +82,7 @@ public class DatHangGioHangFragment extends Fragment {
 
     // Hàm tạo danh sách các đơn hàng theo chủ cửa hàng dựa theo các sản phẩm đã chọn
     private void TaoDonHangTuChiTiet() {
+        ArrayList<ChiTietDon> tempArray = new ArrayList<>();
         // Đếm số lượng mục cần xử lý (xử lý đồng bộ firebase)
         int itemCount = dataChiTiet.size();
         AtomicInteger processedCount = new AtomicInteger(0);
@@ -92,52 +93,54 @@ public class DatHangGioHangFragment extends Fragment {
             referDatHangGio.child("products").child(temp.getIdSanPham()).addListenerForSingleValueEvent(new ValueEventListener() {
                 @Override
                 public void onDataChange(@NonNull DataSnapshot snapshot) {
-                    try {
-                        Products product = snapshot.getValue(Products.class);
-                        if (product != null) {
-                            if (Integer.parseInt(product.getTonKho()) > 0) {
-                                // Bien check đã có đơn hàng chủ sở hữu của sản phẩm đang duyệt chưa
-                                boolean check = false;
-                                for (int j = 0; j < dataDon.size(); j++) {
-                                    if (product.getIdChu().equals(dataDon.get(j).getIdChu())) {
-                                        dataChiTiet.get(position).setIdDon(dataDon.get(j).getId());
-                                        dataDon.get(j).setTongTien(dataDon.get(j).getTongTien() + (temp.getGia() * temp.getSoLuong()));
-                                        check = true;
-                                        break;
-                                    }
+                    Products product = snapshot.getValue(Products.class);
+                    if (product != null) {
+                        int tonKho = Integer.parseInt(product.getTonKho());
+                        if (tonKho > 0) {
+                            // Bien check đã có đơn hàng chủ sở hữu của sản phẩm đang duyệt chưa
+                            if (tonKho < temp.getSoLuong()) dataChiTiet.get(position).setSoLuong(tonKho);
+                            boolean check = false;
+                            for (int j = 0; j < dataDon.size(); j++) {
+                                if (product.getIdChu().equals(dataDon.get(j).getIdChu())) {
+                                    dataChiTiet.get(position).setIdDon(dataDon.get(j).getId());
+                                    dataDon.get(j).setTongTien(dataDon.get(j).getTongTien() + (temp.getGia() * temp.getSoLuong()));
+                                    check = true;
+                                    break;
                                 }
-                                if (!check) {
-                                    DonHang don = new DonHang();
-                                    don.setId(don.getId() + position);
-                                    don.setIdChu(product.getIdChu());
-                                    don.setIdKhach(khach.getID());
-                                    don.setTenKhach(khach.getTen());
-                                    don.setSdt(khach.getSdt());
-                                    don.setDiaChi(khach.getDiaChi());
-                                    don.setAnh(product.getAnh());
-                                    don.setTongTien(temp.getGia() * temp.getSoLuong());
-                                    dataDon.add(don);
-                                    dataChiTiet.get(position).setIdDon(don.getId());
-                                }
-                            } else {
-                                ThongBaoHetHang(temp.getTen());
-                                dataChiTiet.remove(position);
-                                checkRemove[0] = true;
                             }
+                            if (!check) {
+                                DonHang don = new DonHang();
+                                don.setId(don.getId() + position);
+                                don.setIdChu(product.getIdChu());
+                                don.setIdKhach(khach.getID());
+                                don.setTenKhach(khach.getTen());
+                                don.setSdt(khach.getSdt());
+                                don.setDiaChi(khach.getDiaChi());
+                                don.setAnh(product.getAnh());
+                                don.setTongTien(temp.getGia() * temp.getSoLuong());
+                                dataDon.add(don);
+                                dataChiTiet.get(position).setIdDon(don.getId());
+                            }
+                            ChiTietDon tempAdd = dataChiTiet.get(position);
+                            tempArray.add(tempAdd);
                         } else {
-                            ThongBaoXoa(temp.getTen());
-                            dataChiTiet.remove(position);
+                            ThongBaoHetHang(temp.getTen());
                             checkRemove[0] = true;
                         }
-                        if (processedCount.incrementAndGet() == itemCount) {
-                            int tong = 0;
-                            for (int i = 0; i < dataDon.size(); i++) {
-                                tong = tong + dataDon.get(i).getTongTien();
-                            }
-                            binding.tvTongDatCart.setText(chuyenChuoi(tong));
-                            adapter.notifyDataSetChanged();
+                    } else {
+                        ThongBaoXoa(temp.getTen());
+                        checkRemove[0] = true;
+                    }
+                    if (processedCount.incrementAndGet() == itemCount) {
+                        dataChiTiet.clear();
+                        dataChiTiet.addAll(tempArray);
+                        int tong = 0;
+                        for (int i = 0; i < dataDon.size(); i++) {
+                            tong = tong + dataDon.get(i).getTongTien();
                         }
-                    } catch (Exception e) {
+                        binding.tvTongDatCart.setText(chuyenChuoi(tong));
+                        adapter.notifyDataSetChanged();
+                        if (dataChiTiet.size() == 0) getActivity().getSupportFragmentManager().popBackStack();
                     }
                 }
 
