@@ -1,7 +1,5 @@
 package com.tdc.vlxdonline.Activity;
 
-import static androidx.core.content.ContextCompat.getSystemService;
-
 import android.Manifest;
 import android.app.Activity;
 import android.app.ProgressDialog;
@@ -230,6 +228,10 @@ public class Owner_NhanVienDetailFragment extends Fragment {
         {
             // Lấy thông tin nhân viên từ Bundle
             idNhanVien = getArguments().getSerializable("idNhanVien").toString();
+
+            if (idNhanVien == null) {
+                Toast.makeText(getContext(), "Không lấy được ID Nhân Viên", Toast.LENGTH_SHORT).show();
+            }
 
             // Lấy thông tin nhân viên từ firebase thông qua ID
             DatabaseReference dbNhanVien = FirebaseDatabase.getInstance().getReference("nhanvien");
@@ -655,15 +657,15 @@ public class Owner_NhanVienDetailFragment extends Fragment {
         builder.setTitle("Thông tin tài khoản nhân viên")
                 .setMessage("User: " + userNhanVien + "\nPassword: " + passwordNhanVien)
                 .setPositiveButton("OK", (dialogInterface, i) -> {
-            getParentFragmentManager().popBackStack(); // Quay lại Fragment trước
-        }).setNeutralButton("Copy", (dialogInterface, i) -> {
-            // Sao chép User và Password vào Clipboard
-            ClipboardManager clipboard = (ClipboardManager) getContext().getSystemService(Context.CLIPBOARD_SERVICE);
-            ClipData clip = ClipData.newPlainText("User & Password", userNhanVien + "\n" + passwordNhanVien);
-            clipboard.setPrimaryClip(clip);
-            getParentFragmentManager().popBackStack(); // Quay lại Fragment trước
-            Snackbar.make(getView(), "Đã sao chép User và Password vào clipboard", Toast.LENGTH_SHORT).show();
-        });
+                    getParentFragmentManager().popBackStack(); // Quay lại Fragment trước
+                }).setNeutralButton("Copy", (dialogInterface, i) -> {
+                    // Sao chép User và Password vào Clipboard
+                    ClipboardManager clipboard = (ClipboardManager) getContext().getSystemService(Context.CLIPBOARD_SERVICE);
+                    ClipData clip = ClipData.newPlainText("User & Password", userNhanVien + "\n" + passwordNhanVien);
+                    clipboard.setPrimaryClip(clip);
+                    getParentFragmentManager().popBackStack(); // Quay lại Fragment trước
+                    Snackbar.make(getView(), "Đã sao chép User và Password vào clipboard", Toast.LENGTH_SHORT).show();
+                });
         builder.show();
     }
 
