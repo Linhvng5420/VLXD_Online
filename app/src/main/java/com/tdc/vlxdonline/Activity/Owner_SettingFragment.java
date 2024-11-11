@@ -194,7 +194,7 @@ public class Owner_SettingFragment extends Fragment {
             @Override
             public void onClick(View view) {
                 getParentFragmentManager().beginTransaction()
-                        .replace(R.id.fragment_owner, new Owner_SettingDetailFragment()) // Thay thế fragment_owner hiện tại bằng fragment chi tiết
+                        .replace(R.id.fragment_container, new Owner_SettingDetailFragment()) // Thay thế fragment_container hiện tại bằng fragment chi tiết
                         .addToBackStack(null) // Cho phép quay lại màn hình trước khi nhấn nút Back
                         .commit(); // Thực hiện chuyển đổi
             }
@@ -205,7 +205,7 @@ public class Owner_SettingFragment extends Fragment {
             @Override
             public void onClick(View view) {
                 getParentFragmentManager().beginTransaction()
-                        .replace(R.id.fragment_owner, new Owner_SettingSoDiaChiFragment()) // Thay thế fragment_owner hiện tại bằng fragment chi tiết
+                        .replace(R.id.fragment_container, new Owner_SettingSoDiaChiFragment()) // Thay thế fragment_container hiện tại bằng fragment chi tiết
                         .addToBackStack(null) // Cho phép quay lại màn hình trước khi nhấn nút Back
                         .commit(); // Thực hiện chuyển đổi
             }
@@ -216,7 +216,7 @@ public class Owner_SettingFragment extends Fragment {
             @Override
             public void onClick(View view) {
                 getParentFragmentManager().beginTransaction()
-                        .replace(R.id.fragment_owner, new Owner_SettingSTKFragment()) // Thay thế fragment_owner hiện tại bằng fragment chi tiết
+                        .replace(R.id.fragment_container, new Owner_SettingSTKFragment()) // Thay thế fragment_container hiện tại bằng fragment chi tiết
                         .addToBackStack(null) // Cho phép quay lại màn hình trước khi nhấn nút Back
                         .commit(); // Thực hiện chuyển đổi
             }
@@ -226,7 +226,7 @@ public class Owner_SettingFragment extends Fragment {
             @Override
             public void onClick(View view) {
                 getParentFragmentManager().beginTransaction()
-                        .replace(R.id.fragment_owner, new Owner_SettingAboutFragment()) // Thay thế fragment_owner hiện tại bằng fragment chi tiết
+                        .replace(R.id.fragment_container, new Owner_SettingAboutFragment()) // Thay thế fragment_container hiện tại bằng fragment chi tiết
                         .addToBackStack(null) // Cho phép quay lại màn hình trước khi nhấn nút Back
                         .commit(); // Thực hiện chuyển đổi
             }
