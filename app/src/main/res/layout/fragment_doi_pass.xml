@@ -4,6 +4,7 @@
     android:layout_width="match_parent"
     android:layout_height="match_parent"
     android:orientation="horizontal"
+    android:background="@drawable/back3"
     tools:context=".Activity.Fragment_DoiPass">
 
     <LinearLayout
@@ -25,28 +26,38 @@
         <LinearLayout
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:orientation="vertical">
+            android:orientation="vertical"
+            android:padding="10dp">
 
             <EditText
                 android:id="@+id/edtCurrentPassword"
-                android:padding="15dp"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
-                android:hint="Mật khẩu hiện tại"/>
+                android:hint="Mật khẩu hiện tại"
+                android:padding="12dp"
+                android:background="@drawable/edit_text_border"
+                android:inputType="textPassword"
+                android:layout_marginBottom="16dp" />
 
             <EditText
                 android:id="@+id/edtNewPassword"
-                android:padding="15dp"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
-                android:hint="Mật khẩu mới"/>
+                android:hint="Mật khẩu mới"
+                android:padding="12dp"
+                android:background="@drawable/edit_text_border"
+                android:inputType="textPassword"
+                android:layout_marginBottom="16dp" />
 
             <EditText
                 android:id="@+id/edtConfirmPassword"
-                android:padding="15dp"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
-                android:hint="Nhập lại mật khẩu mới"/>
+                android:hint="Nhập lại mật khẩu mới"
+                android:padding="12dp"
+                android:background="@drawable/edit_text_border"
+                android:inputType="textPassword"
+                android:layout_marginBottom="32dp" />
 
         </LinearLayout>
 
@@ -54,8 +65,12 @@
             android:id="@+id/btnluupass"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:layout_gravity="right"
-            android:text="Lưu" />
+            android:text="Lưu"
+            android:background="@drawable/edit_text_border"
+            android:textColor="@android:color/white"
+            android:padding="10dp"
+            android:textSize="16sp"
+            android:layout_gravity="center" />
 
     </LinearLayout>
 </FrameLayout>

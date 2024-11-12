@@ -4,7 +4,8 @@
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
-    tools:context=".Activity.Owner_NhanVienDetailFragment">
+    tools:context=".Activity.Owner_NhanVienDetailFragment"
+    android:background="@drawable/back3">
 
     <!-- Thanh Toolbar -->
     <androidx.appcompat.widget.Toolbar
@@ -28,7 +29,7 @@
         android:layout_marginLeft="10dp"
         android:layout_marginTop="24dp"
         android:layout_marginRight="10dp"
-        android:background="@color/white"
+        android:background="@drawable/edit_text_border"
         android:visibility="visible"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintHorizontal_bias="0.5"
@@ -53,7 +54,7 @@
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:layout_margin="10dp"
-        android:background="@color/white"
+        android:background="@drawable/edit_text_border"
         android:visibility="visible"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent"
@@ -105,7 +106,7 @@
         android:layout_width="300dp"
         android:layout_height="wrap_content"
         android:layout_margin="10dp"
-        android:background="@color/white"
+        android:background="@drawable/edit_text_border"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toBottomOf="@+id/spinnerChucVu">
 
@@ -138,11 +139,11 @@
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:layout_margin="10dp"
-        android:background="@color/white"
         android:textColorHint="#EE0000"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toBottomOf="@id/tilSDT">
+        app:layout_constraintTop_toBottomOf="@id/tilSDT"
+        android:background="@drawable/edit_text_border">
 
         <com.google.android.material.textfield.TextInputEditText
             android:id="@+id/etEmail"
@@ -165,7 +166,7 @@
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:layout_margin="10dp"
-        android:background="@color/white"
+        android:background="@drawable/edit_text_border"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toBottomOf="@+id/tilEmail">
@@ -205,7 +206,7 @@
                 android:id="@+id/ivCCCD1"
                 android:layout_width="match_parent"
                 android:layout_height="130dp"
-                android:background="@drawable/common_google_signin_btn_icon_dark_normal_background"
+                android:background="@drawable/edit_text_border"
                 android:contentDescription="Căn cước mặt trước"
                 android:scaleType="fitCenter"
                 android:src="@android:drawable/ic_menu_report_image" />
@@ -214,7 +215,6 @@
                 android:id="@+id/tvCCCD1"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
-                android:layout_marginTop="4dp"
                 android:text="CCCD Mặt Trước"
                 android:textAlignment="center"
                 android:textStyle="bold" />
@@ -231,7 +231,7 @@
                 android:id="@+id/ivCCCD2"
                 android:layout_width="match_parent"
                 android:layout_height="130dp"
-                android:background="@drawable/common_google_signin_btn_icon_dark_normal_background"
+                android:background="@drawable/edit_text_border"
                 android:contentDescription="Căn cước mặt sau"
                 android:scaleType="fitCenter"
                 android:src="@android:drawable/ic_menu_report_image" />

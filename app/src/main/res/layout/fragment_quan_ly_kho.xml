@@ -43,7 +43,7 @@
         app:cardCornerRadius="12dp"
         app:cardElevation="6dp"
         android:elevation="4dp"
-        android:background="@android:color/white"/>
+        android:background="@drawable/edit_text_border"/>
 
     <TextView
         android:id="@+id/tvQLDM"
@@ -57,7 +57,7 @@
         app:cardCornerRadius="12dp"
         app:cardElevation="6dp"
         android:elevation="4dp"
-        android:background="@android:color/white"/>
+        android:background="@drawable/edit_text_border"/>
 
     <TextView
         android:id="@+id/tvQLDV"
@@ -71,7 +71,7 @@
         app:cardCornerRadius="12dp"
         app:cardElevation="6dp"
         android:elevation="4dp"
-        android:background="@android:color/white"/>
+        android:background="@drawable/edit_text_border"/>
 
     <TextView
         android:id="@+id/tvQLAnhSP"
@@ -85,7 +85,7 @@
         app:cardCornerRadius="12dp"
         app:cardElevation="6dp"
         android:elevation="4dp"
-        android:background="@android:color/white"/>
+        android:background="@drawable/edit_text_border"/>
 
     <TextView
         android:id="@+id/tvQLBanner"
@@ -98,6 +98,6 @@
         app:cardCornerRadius="12dp"
         app:cardElevation="6dp"
         android:elevation="4dp"
-        android:background="@android:color/white"/>
+        android:background="@drawable/edit_text_border"/>
 
 </LinearLayout>

@@ -55,8 +55,8 @@
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:layout_marginBottom="8dp"
-                android:background="#fff"
                 android:backgroundTint="@color/white"
+                android:background="@drawable/common_google_signin_btn_icon_dark_normal_background"
                 android:elevation="10dp"
                 android:orientation="horizontal"
                 android:padding="8dp"
@@ -88,6 +88,7 @@
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
                     android:hint="Nhập Danh Mục"
+                    android:background="@drawable/edit_text_border"
                     android:padding="12dp" />
 
                 <LinearLayout
@@ -106,7 +107,8 @@
                         android:textColor="@color/white"
                         android:paddingHorizontal="16dp"
                         android:layout_gravity="center"
-                        app:cornerRadius="12dp"/>
+                        app:cornerRadius="12dp"
+                        android:background="@drawable/edit_text_border"/>
 
                 </LinearLayout>
 
@@ -128,7 +130,8 @@
                         android:text="Sửa"
                         android:textColor="@color/white"
                         android:paddingHorizontal="16dp"
-                        app:cornerRadius="12dp"/>
+                        app:cornerRadius="12dp"
+                        android:background="@drawable/edit_text_border"/>
 
                     <Button
                         android:id="@+id/btnXoaDM"
@@ -138,7 +141,8 @@
                         android:text="Xoá"
                         android:textColor="@color/white"
                         android:paddingHorizontal="16dp"
-                        app:cornerRadius="12dp"/>
+                        app:cornerRadius="12dp"
+                        android:background="@drawable/edit_text_border"/>
 
                 </LinearLayout>
 
