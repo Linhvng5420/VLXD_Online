@@ -109,7 +109,7 @@ public class KhachHangAdapter extends RecyclerView.Adapter<KhachHangAdapter.Khac
 
             String key = LoginActivity.idUser.substring(0, LoginActivity.idUser.indexOf("@"));
             databaseRef.child(key).child(khachHangId).child("trangthai")
-                    .addListenerForSingleValueEvent(new ValueEventListener() {
+                    .addValueEventListener(new ValueEventListener() {
                         @Override
                         public void onDataChange(@NonNull DataSnapshot dataSnapshot) {
                             String status = dataSnapshot.getValue(String.class);
