@@ -472,9 +472,6 @@ public class Owner_NhanVienAddFragment extends Fragment {
         AlertDialog.Builder builder = new AlertDialog.Builder(getContext());
         builder.setTitle("Thông tin tài khoản nhân viên")
                 .setMessage("User: " + userNhanVien + "\nPassword: " + passwordNhanVien)
-                .setPositiveButton("OK", (dialogInterface, i) -> {
-                    getParentFragmentManager().popBackStack(); // Quay lại Fragment trước
-                })
                 .setNeutralButton("Copy", (dialogInterface, i) -> {
                     // Sao chép User và Password vào Clipboard
                     ClipboardManager clipboard = (ClipboardManager) getContext().getSystemService(Context.CLIPBOARD_SERVICE);

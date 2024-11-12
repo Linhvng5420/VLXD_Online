@@ -13,6 +13,7 @@ import com.google.firebase.database.DatabaseReference;
 import com.google.firebase.database.FirebaseDatabase;
 import com.google.firebase.database.ValueEventListener;
 import com.tdc.vlxdonline.Model.NhanVien;
+import com.tdc.vlxdonline.R;
 import com.tdc.vlxdonline.databinding.ItemOwnerRecycleviewBinding;
 
 import java.util.Collections;
@@ -93,6 +94,13 @@ public class NhanVienAdapter extends RecyclerView.Adapter<NhanVienAdapter.NhanVi
             binding.tvID.setText(nhanVien.getCccd());
             binding.tvTen.setText(nhanVien.getTennv());
             binding.tvSDT.setText(nhanVien.getSdt());
+
+            // Kiểm tra nếu mã CCCD bắt đầu bằng ký tự '@'
+            if (nhanVien.getCccd() != null && nhanVien.getCccd().startsWith("@")) {
+                binding.lnItem.setBackgroundResource(android.R.drawable.title_bar); // Đặt background đặc biệt
+            } else {
+                binding.lnItem.setBackgroundResource(com.google.android.gms.base.R.drawable.common_google_signin_btn_icon_dark_normal_background); // Đặt background mặc định
+            }
 
             // Hiển thị chức vụ từ Firebase nếu chucVuId không null
             String chucVuId = nhanVien.getChucvu();

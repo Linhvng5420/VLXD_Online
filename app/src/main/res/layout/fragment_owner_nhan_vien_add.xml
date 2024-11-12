@@ -41,7 +41,6 @@
             android:hint="Tên Nhân Viên"
             android:inputType="text|textPersonName"
             android:maxLength="40"
-            android:text="Nguyễn Văn "
             android:textColor="#1EA323"
             android:textStyle="bold"
             android:visibility="visible" />
@@ -94,7 +93,6 @@
             android:layout_height="wrap_content"
             android:hint="Số điện thoại"
             android:inputType="number|numberSigned"
-            android:text="0373595"
             android:maxLength="10"
             android:textColor="#1EA323"
             android:textStyle="bold" />
@@ -118,7 +116,6 @@
             android:layout_height="wrap_content"
             android:hint="Email"
             android:inputType="text|textEmailAddress"
-            android:text="nv@m.c"
             android:maxLength="40"
             android:textColor="#1EA323"
             android:textStyle="bold" />
@@ -141,7 +138,6 @@
             android:layout_height="match_parent"
             android:hint="CCCD"
             android:inputType="number|numberSigned"
-            android:text="11111111"
             android:maxLength="10"
             android:textColor="#1EA323"
             android:textStyle="bold" />
