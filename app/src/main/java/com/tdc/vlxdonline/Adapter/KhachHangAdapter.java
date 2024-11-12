@@ -116,9 +116,11 @@ public class KhachHangAdapter extends RecyclerView.Adapter<KhachHangAdapter.Khac
                             if (status != null) {
                                 if (status.equals("1")) {
                                     binding.tvPhu.setText("Đã Xác Thực");
+                                    binding.tvPhu.setTextColor(binding.tvPhu.getContext().getResources().getColor(R.color.light_gray));
                                 } else {
                                     binding.tvPhu.setText("Chưa Xác Thực");
                                     binding.tvPhu.setTextColor(binding.tvPhu.getContext().getResources().getColor(R.color.black));
+                                    binding.tvPhu.invalidate();
                                 }
                             } else {
                                 binding.tvPhu.setText("Không xác định");
