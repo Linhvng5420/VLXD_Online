@@ -71,9 +71,9 @@
                                     android:gravity="center_vertical"
                                     android:paddingHorizontal="5dp"
                                     android:text="Thép Hòa Phát"
+                                    android:textColor="@color/black"
                                     android:textSize="15dp"
-                                    android:textStyle="bold"
-                                    android:textColor="@color/black"/>
+                                    android:textStyle="bold" />
 
                                 <TextView
                                     android:id="@+id/tv_giaSp_detail"
@@ -82,9 +82,9 @@
                                     android:gravity="center_vertical"
                                     android:paddingHorizontal="5dp"
                                     android:text="13.640 VND"
+                                    android:textColor="@color/black"
                                     android:textSize="15dp"
-                                    android:textStyle="bold"
-                                    android:textColor="@color/black"/>
+                                    android:textStyle="bold" />
 
                                 <LinearLayout
                                     android:layout_width="match_parent"
@@ -97,8 +97,8 @@
                                         android:layout_height="30dp"
                                         android:gravity="center_vertical"
                                         android:text="Kho: 500"
-                                        android:textSize="15dp"
-                                        android:textColor="@color/black"/>
+                                        android:textColor="@color/black"
+                                        android:textSize="15dp" />
 
                                     <TextView
                                         android:id="@+id/tv_daBan_detail"
@@ -106,8 +106,8 @@
                                         android:layout_height="30dp"
                                         android:gravity="center_vertical"
                                         android:text="Đã Bán: 150"
-                                        android:textSize="15dp"
-                                        android:textColor="@color/black"/>
+                                        android:textColor="@color/black"
+                                        android:textSize="15dp" />
                                 </LinearLayout>
 
                                 <LinearLayout
@@ -120,9 +120,9 @@
                                         android:gravity="center_vertical"
                                         android:paddingLeft="5dp"
                                         android:text="Đơn vị tính: "
+                                        android:textColor="@color/black"
                                         android:textSize="15dp"
-                                        android:textStyle="bold"
-                                        android:textColor="@color/black"/>
+                                        android:textStyle="bold" />
 
                                     <TextView
                                         android:id="@+id/tv_donVi_detail"
@@ -130,9 +130,9 @@
                                         android:layout_height="30dp"
                                         android:gravity="center_vertical"
                                         android:text="Tấm"
+                                        android:textColor="@color/black"
                                         android:textSize="15dp"
-                                        android:textStyle="bold"
-                                        android:textColor="@color/black"/>
+                                        android:textStyle="bold" />
                                 </LinearLayout>
                             </LinearLayout>
                         </LinearLayout>
@@ -143,13 +143,26 @@
                             android:orientation="vertical">
 
                             <TextView
+                                android:id="@+id/tvCuaHang"
+                                android:layout_width="match_parent"
+                                android:layout_height="wrap_content"
+                                android:layout_margin="5dp"
+                                android:background="@drawable/bg_img_detail"
+                                android:padding="5dp"
+                                android:text="Thông Tin Cửa Hàng"
+                                android:textAlignment="center"
+                                android:textColor="#1E88E5"
+                                android:textSize="20dp"
+                                android:textStyle="bold" />
+
+                            <TextView
                                 android:layout_width="match_parent"
                                 android:layout_height="wrap_content"
                                 android:layout_marginBottom="-2dp"
                                 android:paddingHorizontal="5dp"
                                 android:text="Mô tả:"
-                                android:textSize="16dp"
-                                android:textColor="@color/black"/>
+                                android:textColor="@color/black"
+                                android:textSize="16dp" />
 
                             <TextView
                                 android:id="@+id/tv_moTa_detail"
@@ -158,8 +171,8 @@
                                 android:paddingHorizontal="5dp"
                                 android:paddingBottom="5dp"
                                 android:text="Thép cuộn CB240 chất lượng cao, độ dày 1mm, đàn hồi tốt, cứng cáp, chắc chắn."
-                                android:textSize="15dp"
-                                android:textColor="@color/black"/>
+                                android:textColor="@color/black"
+                                android:textSize="15dp" />
                         </LinearLayout>
 
                     </LinearLayout>
