@@ -88,6 +88,15 @@ public class TaiKhoanNVFragment extends Fragment {
                 });
             }
         });
+        binding.lnDoipass.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+                getParentFragmentManager().beginTransaction()
+                        .replace(R.id.fragment_container, new Fragment_DoiPass())
+                        .addToBackStack(null)
+                        .commit();
+            }
+        });
 
         binding.lnAbout.setOnClickListener(new View.OnClickListener() {
             @Override
