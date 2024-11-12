@@ -231,6 +231,16 @@ public class Owner_SettingFragment extends Fragment {
                         .commit(); // Thực hiện chuyển đổi
             }
         });
+
+        binding.lnResetPass.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+                getParentFragmentManager().beginTransaction()
+                        .replace(R.id.fragment_container, new Owner_ResetPassWordFragment()) // Thay thế fragment_container hiện tại bằng fragment chi tiết
+                        .addToBackStack(null) // Cho phép quay lại màn hình trước khi nhấn nút Back
+                        .commit(); // Thực hiện chuyển đổi
+            }
+        });
     }
 
     // CUỐI: THIẾT LẬP TOOLBAR VÀ ĐIỀU HƯỚNG

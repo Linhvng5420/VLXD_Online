@@ -27,7 +27,7 @@ public class LoginActivity extends AppCompatActivity {
     public static int typeUser;
     public static String typeEmployee = "null";
     DatabaseReference dbRef = FirebaseDatabase.getInstance().getReference();
-    public static String idUser = "";
+    public static String idUser = ""; // Email
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
