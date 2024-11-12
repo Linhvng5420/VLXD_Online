@@ -36,10 +36,6 @@ public class AccountCustomerFragment extends Fragment {
     @Override
     public void onViewCreated(@NonNull View view, @Nullable Bundle savedInstanceState) {
         super.onViewCreated(view, savedInstanceState);
-        // Thiết lập Toolbar
-        setupToolbar(view);
-
-
         // Sự kiện khi nhấn nút logout
         binding.btnLogout.setOnClickListener(new View.OnClickListener() {
             @Override
@@ -88,21 +84,6 @@ public class AccountCustomerFragment extends Fragment {
 
             }
         });
-    }
-
-
-    // CUỐI: THIẾT LẬP TOOLBAR VÀ ĐIỀU HƯỚNG
-    private void setupToolbar(View view) {
-        Toolbar toolbar = view.findViewById(R.id.toolbar);
-        ((AppCompatActivity) getActivity()).setSupportActionBar(toolbar);
-
-        if (((AppCompatActivity) getActivity()).getSupportActionBar() != null) {
-            ((AppCompatActivity) getActivity()).getSupportActionBar().setDisplayHomeAsUpEnabled(true);
-            ((AppCompatActivity) getActivity()).getSupportActionBar().setDisplayShowHomeEnabled(true);
-        }
-
-        // Xử lý khi nhấn nút quay về trên Toolbar
-        toolbar.setNavigationOnClickListener(v -> getActivity().onBackPressed());
     }
 
     @Override

@@ -1,0 +1,41 @@
+<?xml version="1.0" encoding="utf-8"?>
+<FrameLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    tools:context=".Activity.YeuCauXacThucFragment">
+
+    <LinearLayout
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        android:orientation="vertical">
+
+        <TextView
+            android:layout_width="match_parent"
+            android:layout_height="50dp"
+            android:background="@drawable/back6"
+            android:gravity="center"
+            android:text="YÊU CẦU XÁC THỰC"
+            android:textColor="#D7D7D7"
+            android:textSize="30dp"
+            android:textStyle="bold" />
+
+        <SearchView
+            android:id="@+id/sv_yeu_cau"
+            android:layout_width="match_parent"
+            android:layout_height="50dp"
+            android:layout_margin="5dp"
+            android:background="@drawable/bg_detail"
+            android:iconifiedByDefault="false"
+            android:searchIcon="@drawable/search" />
+
+        <ListView
+            android:id="@+id/lvDSChu"
+            android:layout_width="match_parent"
+            android:layout_height="0dp"
+            android:layout_weight="1"
+            android:layout_marginHorizontal="5dp"
+            android:dividerHeight="2dp"/>
+    </LinearLayout>
+
+</FrameLayout>

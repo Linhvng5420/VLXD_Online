@@ -19,6 +19,7 @@ import android.view.View;
 import android.view.ViewGroup;
 import android.widget.ArrayAdapter;
 import android.widget.ListView;
+import android.widget.TextView;
 import android.widget.Toast;
 
 import androidx.annotation.NonNull;
@@ -281,20 +282,36 @@ public class Owner_KhachHangDetailFragment extends Fragment {
 
     // Hiển thị Dialog với ListView để liệt kê danh sách chủ cửa hàng
     private void showOwnersDialog(List<String> listOwners) {
+        LayoutInflater inflater = getLayoutInflater();
+        View dialogView = inflater.inflate(R.layout.layout_dialog_xac_thuc, null);
+
+        TextView tv = dialogView.findViewById(R.id.tvTitle);
+        TextView btnDong = dialogView.findViewById(R.id.tvDong);
+        ListView listView = dialogView.findViewById(R.id.lv_xac_thuc);
+
         // Chuyển danh sách chủ cửa hàng thành một mảng để đưa vào Dialog
         String[] ownersArray = listOwners.toArray(new String[0]);
 
         AlertDialog.Builder builder = new AlertDialog.Builder(getContext());
-        builder.setTitle("Các Chủ Cửa Hàng Cho Phép Trả Góp");
+        builder.setView(dialogView);
+        AlertDialog dialog = builder.create();
 
-        // Tạo ListView trực tiếp trong mã mà không cần XML
-        ListView listView = new ListView(getContext());
-        ArrayAdapter<String> adapter = new ArrayAdapter<>(getContext(), android.R.layout.simple_list_item_1, ownersArray);
-        listView.setAdapter(adapter);
+        if (ownersArray.length > 0) {
+            ArrayAdapter<String> adapter = new ArrayAdapter<>(getContext(), android.R.layout.simple_list_item_1, ownersArray);
+            listView.setAdapter(adapter);
+        }else{
+            tv.setText("Không Có Cửa Hàng Đã Xác Thực");
+            listView.setVisibility(View.GONE);
+        }
 
-        builder.setView(listView);
-        builder.setPositiveButton("Đóng", (dialog, which) -> dialog.dismiss());
-        builder.show();
+        btnDong.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                dialog.dismiss();
+            }
+        });
+
+        dialog.show();
     }
 
     // Hiển thị Dialog xác thực/hủy xác thực (giữ lại chức năng xác thực cũ nếu cần)
