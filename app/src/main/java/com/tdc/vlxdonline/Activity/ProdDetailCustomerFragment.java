@@ -134,7 +134,7 @@ public class ProdDetailCustomerFragment extends Fragment {
                             tvSdt.setTypeface(null, Typeface.BOLD);  // Đặt kiểu chữ đậm
                             layout.addView(tvSdt);
 
-                            referDetailProd.child("thongtinchusdc").child(idChu).addListenerForSingleValueEvent(new ValueEventListener() {
+                            referDetailProd.child("thongtinchusdc").child(idChu).addValueEventListener(new ValueEventListener() {
                                 @Override
                                 public void onDataChange(DataSnapshot dataSnapshot) {
                                     if (dataSnapshot.exists()) {
@@ -181,7 +181,7 @@ public class ProdDetailCustomerFragment extends Fragment {
                                 }
                             });
 
-                            referDetailProd.child("thongtinchustk").child(idChu).addListenerForSingleValueEvent(new ValueEventListener() {
+                            referDetailProd.child("thongtinchustk").child(idChu).addValueEventListener(new ValueEventListener() {
                                 @Override
                                 public void onDataChange(DataSnapshot dataSnapshot) {
                                     if (dataSnapshot.exists()) {
@@ -214,7 +214,6 @@ public class ProdDetailCustomerFragment extends Fragment {
 
                             scrollView.addView(layout);
                             dialog.setContentView(scrollView);
-
                             dialog.show();
                         }
                     }
