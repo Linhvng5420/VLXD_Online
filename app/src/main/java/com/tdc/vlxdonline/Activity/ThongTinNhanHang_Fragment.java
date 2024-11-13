@@ -1,21 +1,20 @@
+
 package com.tdc.vlxdonline.Activity;
 
-import android.app.AlertDialog;
 import android.content.DialogInterface;
 import android.os.Bundle;
-
-import androidx.annotation.NonNull;
-import androidx.annotation.Nullable;
-import androidx.fragment.app.Fragment;
-import androidx.recyclerview.widget.LinearLayoutManager;
-
 import android.text.Editable;
 import android.text.TextWatcher;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
-import android.widget.Button;
 import android.widget.Toast;
+
+import androidx.annotation.NonNull;
+import androidx.annotation.Nullable;
+import androidx.appcompat.app.AlertDialog;
+import androidx.fragment.app.Fragment;
+import androidx.recyclerview.widget.LinearLayoutManager;
 
 import com.google.firebase.database.DataSnapshot;
 import com.google.firebase.database.DatabaseError;
@@ -25,14 +24,12 @@ import com.google.firebase.database.ValueEventListener;
 import com.tdc.vlxdonline.Adapter.ChiTietXuatAdapter;
 import com.tdc.vlxdonline.Model.ChiTietDon;
 import com.tdc.vlxdonline.Model.DonHang;
-import com.tdc.vlxdonline.Model.DonNhap;
 import com.tdc.vlxdonline.Model.KhachHang;
 import com.tdc.vlxdonline.Model.Products;
-import com.tdc.vlxdonline.R;
-import com.tdc.vlxdonline.databinding.FragmentTaoDonNhapHangBinding;
 import com.tdc.vlxdonline.databinding.FragmentThongTinNhanHangBinding;
 
 import java.util.ArrayList;
+import java.util.concurrent.atomic.AtomicInteger;
 
 
 public class ThongTinNhanHang_Fragment extends Fragment {
@@ -103,7 +100,7 @@ public class ThongTinNhanHang_Fragment extends Fragment {
                 referDatHang.child("customers").addListenerForSingleValueEvent(new ValueEventListener() {
                     @Override
                     public void onDataChange(@NonNull DataSnapshot dataSnapshot) {
-                        if (!binding.edtNhapSDT.getText().toString().equals("")){
+                        if (!binding.edtNhapSDT.getText().toString().equals("")) {
                             for (DataSnapshot snapshot : dataSnapshot.getChildren()) {
                                 KhachHang temp = snapshot.getValue(KhachHang.class);
                                 temp.setID(snapshot.getKey());
@@ -144,16 +141,19 @@ public class ThongTinNhanHang_Fragment extends Fragment {
         donHang.setSdt(binding.edtNhapSoDTNguoiNhan.getText().toString());
         donHang.setDiaChi(binding.edtNhapDiaChi.getText().toString());
         referDatHang.child("bills").child(donHang.getId() + "").setValue(donHang);
+        int itemCount = dataChiTietDon.size();
+        AtomicInteger p = new AtomicInteger(0);
         for (int i = 0; i < dataChiTietDon.size(); i++) {
             ChiTietDon tempChiTiet = dataChiTietDon.get(i);
-            referDatHang.child("BillDetails").child(tempChiTiet.getIdDon() + "").child(tempChiTiet.getIdSanPham()).setValue(tempChiTiet);
+            DatabaseReference tempRefer = FirebaseDatabase.getInstance().getReference();
+            tempRefer.child("BillDetails").child(tempChiTiet.getIdDon() + "").child(tempChiTiet.getIdSanPham()).setValue(tempChiTiet);
 
-            referDatHang.child("products").child(tempChiTiet.getIdSanPham()).addListenerForSingleValueEvent(new ValueEventListener() {
+            tempRefer.child("products").child(tempChiTiet.getIdSanPham()).addListenerForSingleValueEvent(new ValueEventListener() {
                 @Override
                 public void onDataChange(@NonNull DataSnapshot snapshot) {
                     Products product = snapshot.getValue(Products.class);
                     int tonKho = Integer.parseInt(product.getTonKho());
-                    referDatHang.child("products").child(tempChiTiet.getIdSanPham()).child("tonKho").setValue((tonKho - tempChiTiet.getSoLuong()) + "");
+                    tempRefer.child("products").child(tempChiTiet.getIdSanPham()).child("tonKho").setValue((tonKho - tempChiTiet.getSoLuong()) + "");
                 }
 
                 @Override
@@ -161,12 +161,13 @@ public class ThongTinNhanHang_Fragment extends Fragment {
 
                 }
             });
+            if (p.incrementAndGet() == itemCount)
+                getActivity().getSupportFragmentManager().popBackStack();
         }
-        getActivity().getSupportFragmentManager().popBackStack();
     }
 
     private void showConfirm() {
-        AlertDialog.Builder builder = new AlertDialog.Builder(getActivity());
+        androidx.appcompat.app.AlertDialog.Builder builder = new androidx.appcompat.app.AlertDialog.Builder(getActivity());
         builder.setMessage("Xác nhận tạo đơn hàng ?") // Thông điệp bằng tiếng Việt
                 .setCancelable(false)
                 .setPositiveButton("Có", new DialogInterface.OnClickListener() {
@@ -188,5 +189,4 @@ public class ThongTinNhanHang_Fragment extends Fragment {
         super.onDestroyView();
         binding = null;
     }
-
 }

@@ -1,17 +1,20 @@
 package com.tdc.vlxdonline.Activity;
 
+import android.content.DialogInterface;
+import android.graphics.Color;
+import android.graphics.drawable.Drawable;
 import android.os.Bundle;
-
-import androidx.annotation.NonNull;
-import androidx.annotation.Nullable;
-import androidx.fragment.app.Fragment;
-
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.AdapterView;
 import android.widget.ArrayAdapter;
 import android.widget.SearchView;
+
+import androidx.annotation.NonNull;
+import androidx.annotation.Nullable;
+import androidx.appcompat.app.AlertDialog;
+import androidx.fragment.app.Fragment;
 
 import com.google.firebase.database.DataSnapshot;
 import com.google.firebase.database.DatabaseError;
@@ -56,31 +59,60 @@ public class YeuCauXacThucFragment extends Fragment {
             @Override
             public boolean onQueryTextSubmit(String query) {
                 tuKhoa = query;
-                LocThongTin();
+                reference.child("thongtinchu").addListenerForSingleValueEvent(eventListener);
                 return false;
             }
 
             @Override
             public boolean onQueryTextChange(String newText) {
                 tuKhoa = newText;
-                LocThongTin();
+                reference.child("thongtinchu").addListenerForSingleValueEvent(eventListener);
                 return false;
             }
         });
     }
 
-    private void setAdapterHT(){
+    private void setAdapterHT() {
         adapter = new ArrayAdapter<>(getActivity(), android.R.layout.simple_list_item_1, dataHienThi);
         binding.lvDSChu.setOnItemClickListener(new AdapterView.OnItemClickListener() {
             @Override
             public void onItemClick(AdapterView<?> parent, View view, int position, long id) {
-
+                XacNhanYeuCau(position);
             }
         });
     }
 
-    private void DocThongTin(){
-        if (eventListener == null){
+    private void XacNhanYeuCau(int position) {
+        ThongTinChu tt = dataChu.get(position);
+        AlertDialog.Builder builder = new AlertDialog.Builder(getActivity());
+        builder.setTitle("Xác Nhận Yêu Cầu!").setMessage("Xác Nhận Gửi Yêu Cầu Xác Thực Cho Cửa Hàng " + tt.getTen() + "?");
+
+        builder.setPositiveButton(android.R.string.yes, new DialogInterface.OnClickListener() {
+            @Override
+            public void onClick(DialogInterface dialog, int which) {
+                reference.child("thongbaochu").child(tt.getID()).child(Customer_HomeActivity.info.getID()).child("xacthuc").setValue("1");
+                reference.child("duyetkhachhang").child(tt.getID()).child(Customer_HomeActivity.info.getID()).child("trangthai").setValue("0");
+            }
+        });
+        builder.setNegativeButton(R.string.quay_lai, new DialogInterface.OnClickListener() {
+            @Override
+            public void onClick(DialogInterface dialog, int which) {
+                dialog.cancel();
+            }
+        });
+
+        Drawable drawableIcon = getResources().getDrawable(android.R.drawable.ic_dialog_alert);
+        drawableIcon.setTint(Color.RED);
+        builder.setIcon(drawableIcon);
+        Drawable drawableBg = getResources().getDrawable(R.drawable.bg_item_lg);
+        drawableBg.setTint(Color.rgb(100, 220, 255));
+        AlertDialog alertDialog = builder.create();
+        alertDialog.getWindow().setBackgroundDrawable(drawableBg);
+        alertDialog.show();
+    }
+
+    private void DocThongTin() {
+        if (eventListener == null) {
             eventListener = new ValueEventListener() {
                 @Override
                 public void onDataChange(@NonNull DataSnapshot dataSnapshot) {
@@ -105,17 +137,6 @@ public class YeuCauXacThucFragment extends Fragment {
             };
             reference.child("thongtinchu").addValueEventListener(eventListener);
         }
-    }
-
-    private void LocThongTin(){
-        dataHienThi.clear();
-        for (int i = 0; i < dataChu.size(); i++) {
-            ThongTinChu tt = dataChu.get(i);
-            if (tuKhoa.equals("") || tt.getTen().contains(tuKhoa) || tt.getEmail().contains(tuKhoa)){
-                dataHienThi.add("Tên Chủ: " + tt.getTen() + "\n" + "Email: " + tt.getEmail() + "\n" + "Số Điện Thoại: " + tt.getSdt());
-            }
-        }
-        adapter.notifyDataSetChanged();
     }
 
     @Override
