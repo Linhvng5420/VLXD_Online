@@ -19,7 +19,6 @@
         android:text="QUẢN LÝ SẢN PHẨM"
         android:textSize="40sp"
         android:textStyle="bold"
-        android:elevation="4dp"
         android:orientation="horizontal"
         android:padding="8dp">
 
@@ -32,8 +31,6 @@
             android:textColor="#03A9F4"
             android:textSize="40sp"
             android:textStyle="bold" />
->>>>>>> @sprint2-v2
-
     </LinearLayout>
 
     <LinearLayout
