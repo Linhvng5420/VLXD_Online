@@ -59,7 +59,7 @@ public class Warehouse_DonViActivity extends AppCompatActivity {
         setEvent();
     }
 
-//    private void saveDate() {
+    //    private void saveDate() {
 //        try {
 //            if (!edtNhapDV.getText().toString().isEmpty()) {
 //                donVi.setId(Long.parseLong(System.currentTimeMillis() + ""));
@@ -84,11 +84,9 @@ public class Warehouse_DonViActivity extends AppCompatActivity {
 //            e.printStackTrace(); // Log the exception for debugging
 //        }
 //    }
-
     private void saveDate() {
         try {
-            String tenDonVi = edtNhapDV.getText().toString().trim();
-            //String tenDonVi = edtNhapDV.getText().toString();
+            String tenDonVi = edtNhapDV.getText().toString();
             if (!tenDonVi.isEmpty()) {
                 // Kiểm tra đơn vị đã tồn tại hay chưa
                 reference.child("DonVi")
@@ -97,7 +95,20 @@ public class Warehouse_DonViActivity extends AppCompatActivity {
                         .addListenerForSingleValueEvent(new ValueEventListener() {
                             @Override
                             public void onDataChange(@NonNull DataSnapshot snapshot) {
-                                if (snapshot.exists()) {
+
+                                boolean isExist = false;
+
+                                for (DataSnapshot item : snapshot.getChildren()) {
+                                    DonVi donVi = item.getValue(DonVi.class);
+
+                                    // Kiểm tra tên đơn vị trong cơ sở dữ liệu (cũng chuyển sang chữ thường để so sánh)
+                                    if (donVi != null && donVi.getTen().equalsIgnoreCase(tenDonVi)) {
+                                        isExist = true; // Nếu có đơn vị trùng tên, đánh dấu là đã tồn tại
+                                        break;
+                                    }
+                                }
+
+                                if (isExist) {
                                     // Đơn vị đã tồn tại
                                     Toast.makeText(Warehouse_DonViActivity.this, "Đơn vị đã tồn tại", Toast.LENGTH_SHORT).show();
                                 } else {
@@ -268,7 +279,6 @@ public class Warehouse_DonViActivity extends AppCompatActivity {
             inputMethodManager.hideSoftInputFromWindow(getCurrentFocus().getWindowToken(), 0);
         }
     }
-
     private void setCtronl() {
         edtNhapDV = findViewById(R.id.edtNhapDV);
         btnThem = findViewById(R.id.btnThemDV);
