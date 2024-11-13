@@ -74,7 +74,8 @@
                         android:layout_height="wrap_content"
                         android:gravity="center"
                         android:hint="Nhập Đơn Vị"
-                        android:padding="12dp" />
+                        android:padding="12dp"
+                        android:background="@drawable/edit_text_border"/>
                 </LinearLayout>
 
                 <LinearLayout
@@ -94,17 +95,19 @@
                         android:text="Thêm"
                         android:textColor="@color/white"
                         android:paddingHorizontal="16dp"
-                        app:cornerRadius="12dp" />
+                        app:cornerRadius="12dp"
+                        android:background="@drawable/edit_text_border"/>
 
                     <Button
                         android:id="@+id/btnXoaDV"
                         android:layout_width="0dp"
                         android:layout_height="wrap_content"
                         android:layout_weight="1"
+                        android:paddingHorizontal="16dp"
                         android:text="Xoá"
                         android:textColor="@color/white"
-                        android:paddingHorizontal="16dp"
-                        app:cornerRadius="12dp"/>
+                        app:cornerRadius="12dp"
+                        android:background="@drawable/edit_text_border"/>
 
                 </LinearLayout>
 
