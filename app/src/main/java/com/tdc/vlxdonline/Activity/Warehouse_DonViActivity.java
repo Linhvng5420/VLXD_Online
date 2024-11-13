@@ -58,45 +58,23 @@ public class Warehouse_DonViActivity extends AppCompatActivity {
         getDate();
         setEvent();
     }
-//    private void saveDate() {
+
+    //    private void saveDate() {
 //        try {
-//            String tenDonVi = edtNhapDV.getText().toString().trim();
-//            //String tenDonVi = edtNhapDV.getText().toString();
-//            if (!tenDonVi.isEmpty()) {
-//                // Kiểm tra đơn vị đã tồn tại hay chưa
-//                reference.child("DonVi")
-//                        .orderByChild("ten")
-//                        .equalTo(tenDonVi)
-//                        .addListenerForSingleValueEvent(new ValueEventListener() {
+//            if (!edtNhapDV.getText().toString().isEmpty()) {
+//                donVi.setId(Long.parseLong(System.currentTimeMillis() + ""));
+//                donVi.setTen(edtNhapDV.getText().toString());
+//
+//                reference.child("DonVi").child(String.valueOf(donVi.getId())).setValue(donVi)
+//                        .addOnCompleteListener(new OnCompleteListener<Void>() {
 //                            @Override
-//                            public void onDataChange(@NonNull DataSnapshot snapshot) {
-//                                if (snapshot.exists()) {
-//                                    // Đơn vị đã tồn tại
-//                                    Toast.makeText(Warehouse_DonViActivity.this, "Đơn vị đã tồn tại", Toast.LENGTH_SHORT).show();
+//                            public void onComplete(@NonNull Task<Void> task) {
+//                                if (task.isSuccessful()) {
+//                                    Toast.makeText(Warehouse_DonViActivity.this, "Thêm đơn vị thành công", Toast.LENGTH_SHORT).show();
+//                                    resetSelection();  // Reset selection after successful addition
 //                                } else {
-//                                    // Đơn vị chưa tồn tại, tiến hành thêm
-//                                    donVi.setId(Long.parseLong(System.currentTimeMillis() + ""));
-//                                    donVi.setTen(tenDonVi);
-//
-//                                    reference.child("DonVi").child(String.valueOf(donVi.getId())).setValue(donVi)
-//                                            .addOnCompleteListener(new OnCompleteListener<Void>() {
-//                                                @Override
-//                                                public void onComplete(@NonNull Task<Void> task) {
-//                                                    if (task.isSuccessful()) {
-//                                                        Toast.makeText(Warehouse_DonViActivity.this, "Thêm đơn vị thành công", Toast.LENGTH_SHORT).show();
-//                                                        resetSelection();  // Reset selection after successful addition
-//                                                    } else {
-//                                                        Toast.makeText(Warehouse_DonViActivity.this, "Thêm đơn vị thất bại", Toast.LENGTH_SHORT).show();
-//                                                    }
-//                                                }
-//                                            });
+//                                    Toast.makeText(Warehouse_DonViActivity.this, "Thêm đơn vị thất bại", Toast.LENGTH_SHORT).show();
 //                                }
-//                            }
-//
-//                            @Override
-//                            public void onCancelled(@NonNull DatabaseError error) {
-//                                // Xử lý lỗi nếu có
-//                                Toast.makeText(Warehouse_DonViActivity.this, "Lỗi kết nối", Toast.LENGTH_SHORT).show();
 //                            }
 //                        });
 //            } else {
@@ -106,8 +84,6 @@ public class Warehouse_DonViActivity extends AppCompatActivity {
 //            e.printStackTrace(); // Log the exception for debugging
 //        }
 //    }
-
-
     private void saveDate() {
         try {
             String tenDonVi = edtNhapDV.getText().toString();
@@ -168,6 +144,7 @@ public class Warehouse_DonViActivity extends AppCompatActivity {
             e.printStackTrace(); // Log the exception for debugging
         }
     }
+
     private void getDate() {
         GridLayoutManager gridLayoutManager = new GridLayoutManager(this, 1);
         recyclerView.setLayoutManager(gridLayoutManager);
@@ -302,7 +279,6 @@ public class Warehouse_DonViActivity extends AppCompatActivity {
             inputMethodManager.hideSoftInputFromWindow(getCurrentFocus().getWindowToken(), 0);
         }
     }
-
     private void setCtronl() {
         edtNhapDV = findViewById(R.id.edtNhapDV);
         btnThem = findViewById(R.id.btnThemDV);
