@@ -179,12 +179,13 @@ public class Owner_KhachHangFragment extends Fragment {
             @Override
             public void onDataChange(@NonNull DataSnapshot dataSnapshot) {
                 boolean hasNotification = false;
+                int count = 0;
 
                 for (DataSnapshot customerSnapshot : dataSnapshot.getChildren()) {
                     String xacthuc = String.valueOf(customerSnapshot.child("xacthuc").getValue(String.class));
                     if (xacthuc != null && "1".equals(xacthuc)) {
                         hasNotification = true;
-                        break;
+                        count++;
                     }
                 }
 
@@ -192,7 +193,7 @@ public class Owner_KhachHangFragment extends Fragment {
                     if (hasNotification) {
                         binding.lnThongBao.setBackground(getResources().getDrawable(R.drawable.bg_img_detail));
                         binding.ivThongBao.setColorFilter(Color.parseColor("#F44336"));
-                        binding.tvThongBao.setText("Bạn có thông báo mới!");
+                        binding.tvThongBao.setText("Bạn có thông báo mới! +" + count);
 
                         // Xem thông báo
                         binding.lnThongBao.setOnClickListener(v -> showThongBaoPopup());
