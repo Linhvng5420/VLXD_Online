@@ -25,7 +25,7 @@
         android:layout_height="wrap_content"
         android:gravity="center"
         android:text="QUẢN LÝ ẢNH MÔ TẢ"
-        android:textSize="40sp"
+        android:textSize="38dp"
         android:textStyle="bold" />
     </LinearLayout>
 

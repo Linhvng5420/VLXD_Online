@@ -27,9 +27,9 @@
             android:layout_height="wrap_content"
             android:elevation="4dp"
             android:gravity="center"
-            android:text="QUẢN LÝ"
+            android:text="QUẢN LÝ SẢN PHẨM"
             android:textColor="#03A9F4"
-            android:textSize="40sp"
+            android:textSize="38sp"
             android:textStyle="bold" />
     </LinearLayout>
 
