@@ -278,6 +278,13 @@ public class Owner_KhachHangDetailFragment extends Fragment {
                 showAuthenticationDialog();
             }
         });
+        binding.ivAuthenticated.setOnLongClickListener(new View.OnLongClickListener() {
+            @Override
+            public boolean onLongClick(View v) {
+                if (Customer_HomeActivity.info != null) ((Customer_HomeActivity) getActivity()).ReplaceFragment(new YeuCauXacThucFragment());
+                return false;
+            }
+        });
     }
 
     // Hiển thị Dialog với ListView để liệt kê danh sách chủ cửa hàng
