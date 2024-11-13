@@ -1,5 +1,6 @@
 package com.tdc.vlxdonline.Activity;
 
+import android.app.ProgressDialog;
 import android.content.Intent;
 import android.graphics.Paint;
 import android.os.Bundle;
@@ -29,9 +30,20 @@ public class LoginActivity extends AppCompatActivity {
     DatabaseReference dbRef = FirebaseDatabase.getInstance().getReference();
     public static String idUser = ""; // Email
 
+    private ProgressDialog progressDialog;
+
+    // Hàm khởi tạo ProgressDialog
+    private void initProgressDialog() {
+        progressDialog = new ProgressDialog(this);
+        progressDialog.setMessage("Đang đăng nhập...");
+        progressDialog.setCancelable(false);
+    }
+
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
+        initProgressDialog();
+        
         binding = ActivityLoginBinding.inflate(getLayoutInflater());
         setContentView(binding.getRoot());
         binding.tvSignup.setPaintFlags(binding.tvSignup.getPaintFlags() | Paint.UNDERLINE_TEXT_FLAG);
@@ -140,9 +152,12 @@ public class LoginActivity extends AppCompatActivity {
             return;
         }
 
-        String hashedPass = hashPassword(pass);
+        // Hiển thị ProgressDialog khi bắt đầu đăng nhập
+        progressDialog.show();
 
+        String hashedPass = hashPassword(pass);
         DatabaseReference dbRef = FirebaseDatabase.getInstance().getReference("account");
+
         dbRef.addListenerForSingleValueEvent(new ValueEventListener() {
             @Override
             public void onDataChange(DataSnapshot dataSnapshot) {
@@ -174,6 +189,9 @@ public class LoginActivity extends AppCompatActivity {
                     }
                 }
 
+                // Ẩn ProgressDialog sau khi hoàn thành quá trình đăng nhập
+                progressDialog.dismiss();
+
                 if (isValid) {
                     if (typeUser == 0) {
                         Toast.makeText(LoginActivity.this, "Hello [ User: " + idUser + " ]", Toast.LENGTH_LONG).show();
@@ -194,6 +212,8 @@ public class LoginActivity extends AppCompatActivity {
 
             @Override
             public void onCancelled(DatabaseError databaseError) {
+                // Ẩn ProgressDialog nếu có lỗi xảy ra
+                progressDialog.dismiss();
                 Toast.makeText(LoginActivity.this, "Có lỗi xảy ra!", Toast.LENGTH_SHORT).show();
             }
         });
