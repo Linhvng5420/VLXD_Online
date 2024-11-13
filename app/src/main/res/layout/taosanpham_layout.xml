@@ -47,7 +47,8 @@
         <LinearLayout
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:orientation="vertical">
+            android:orientation="vertical"
+            android:layout_marginBottom="3dp">
 
             <LinearLayout
                 android:layout_width="match_parent"
@@ -91,35 +92,40 @@
                         android:layout_width="match_parent"
                         android:layout_height="wrap_content"
                         android:background="@drawable/edit_text_border"
-                        android:hint="Nhập Tên Sản Phẩm" />
+                        android:hint="Nhập Tên Sản Phẩm"
+                        android:layout_marginBottom="3dp"/>
 
                     <EditText
                         android:id="@+id/edtNhapgiaban"
                         android:layout_width="match_parent"
                         android:layout_height="wrap_content"
                         android:background="@drawable/edit_text_border"
-                        android:hint="Nhập Giá Bán" />
+                        android:hint="Nhập Giá Bán"
+                        android:layout_marginBottom="3dp"/>
 
                     <EditText
                         android:id="@+id/edtNhapgiaNhap"
                         android:layout_width="match_parent"
                         android:layout_height="wrap_content"
                         android:background="@drawable/edit_text_border"
-                        android:hint="Nhập Giá Nhap" />
+                        android:hint="Nhập Giá Nhap"
+                        android:layout_marginBottom="3dp"/>
 
                     <EditText
                         android:id="@+id/edtNhapsoluong"
                         android:layout_width="match_parent"
                         android:layout_height="wrap_content"
                         android:background="@drawable/edit_text_border"
-                        android:hint="Nhập Số Lượng" />
+                        android:hint="Nhập Số Lượng"
+                        android:layout_marginBottom="3dp"/>
 
                     <EditText
                         android:id="@+id/edtDaban"
                         android:layout_width="match_parent"
                         android:layout_height="wrap_content"
                         android:background="@drawable/edit_text_border"
-                        android:hint="Sản Phẩm Đã Bán" />
+                        android:hint="Sản Phẩm Đã Bán"
+                        android:layout_marginBottom="3dp"/>
 
                 </LinearLayout>
 
@@ -129,7 +135,8 @@
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
                 android:background="#fff"
-                android:orientation="horizontal">
+                android:orientation="horizontal"
+                android:layout_marginBottom="3dp">
 
                 <Spinner
                     android:id="@+id/spdonVi"
