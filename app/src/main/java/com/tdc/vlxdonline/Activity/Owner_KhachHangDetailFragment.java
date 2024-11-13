@@ -281,8 +281,16 @@ public class Owner_KhachHangDetailFragment extends Fragment {
         binding.ivAuthenticated.setOnLongClickListener(new View.OnLongClickListener() {
             @Override
             public boolean onLongClick(View v) {
-                if (Customer_HomeActivity.info != null) ((Customer_HomeActivity) getActivity()).ReplaceFragment(new YeuCauXacThucFragment());
-                return false;
+                if (LoginActivity.idUser.equals(idKH)) {
+                    try {
+                        if (Customer_HomeActivity.info != null)
+                            ((Customer_HomeActivity) getActivity()).ReplaceFragment(new YeuCauXacThucFragment());
+                        return false;
+                    } catch (Exception e) {
+                        throw new RuntimeException(e);
+                    }
+                }
+                return true;
             }
         });
     }
@@ -306,7 +314,7 @@ public class Owner_KhachHangDetailFragment extends Fragment {
         if (ownersArray.length > 0) {
             ArrayAdapter<String> adapter = new ArrayAdapter<>(getContext(), android.R.layout.simple_list_item_1, ownersArray);
             listView.setAdapter(adapter);
-        }else{
+        } else {
             tv.setText("Không Có Cửa Hàng Đã Xác Thực");
             listView.setVisibility(View.GONE);
         }
