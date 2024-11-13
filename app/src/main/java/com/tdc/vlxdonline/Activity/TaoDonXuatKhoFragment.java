@@ -81,7 +81,7 @@ public class TaoDonXuatKhoFragment extends Fragment {
         binding.rcvChitiet.setAdapter(chiTietXuatAdapter); // Gán adapter vào RecyclerView
         donHang = new DonHang();
         String emailChu = Warehouse_HomeActivity.nhanVien.getEmailchu();
-        donHang.setIdChu(emailChu.substring(emailChu.indexOf("@")));
+        donHang.setIdChu(emailChu.substring(0, emailChu.indexOf("@")));
         donHang.setIdTao(Warehouse_HomeActivity.nhanVien.getCccd());
         dsChiTiet.clear();
         chiTietXuatAdapter.notifyDataSetChanged();
@@ -149,7 +149,6 @@ public class TaoDonXuatKhoFragment extends Fragment {
                     donHang.setTongTien(donHang.getTongTien() + (temp.getSoLuong() * temp.getGia())); // Cập nhật tổng tiền
                     temp = new ChiTietDon();
                     products = new Products();
-                    temp.setIdDon(donHang.getId());// Tạo đối tượng chi tiết nhập mới
                     chiTietXuatAdapter.notifyDataSetChanged(); // Cập nhật adapter
                 } else {
                     Toast.makeText(getActivity(), "Hãy chọn sản phẩm và nhâp đủ thông tin !!!", Toast.LENGTH_SHORT).show(); // Thông báo lỗi

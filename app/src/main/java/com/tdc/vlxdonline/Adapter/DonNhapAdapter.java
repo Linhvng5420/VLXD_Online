@@ -38,7 +38,9 @@ public class DonNhapAdapter extends RecyclerView.Adapter<DonNhapAdapter.DonNhapH
     public void onBindViewHolder(@NonNull DonNhapHolder holder, int position) {
         DonNhap chiTiet = data.get(position);
 
-        // Bind data to views
+        holder.tvmaNhap.setText(chiTiet.getId()+"");
+        holder.tv_tongTien_nhap.setText(chiTiet.getTongTien()+"");
+        holder.tvngayNhap.setText(chiTiet.getNgayTao());
 
     }
 
@@ -52,7 +54,9 @@ public class DonNhapAdapter extends RecyclerView.Adapter<DonNhapAdapter.DonNhapH
 
         public DonNhapHolder(@NonNull View itemView) {
             super(itemView);
-
+            tvmaNhap = itemView.findViewById(R.id.tv_maNhap);
+            tvngayNhap = itemView.findViewById(R.id.tv_ngayNhap);
+            tv_tongTien_nhap = itemView.findViewById(R.id.tv_tongTien_nhap);
         }
     }
 }

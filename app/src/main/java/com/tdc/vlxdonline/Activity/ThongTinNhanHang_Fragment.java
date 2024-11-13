@@ -144,6 +144,7 @@ public class ThongTinNhanHang_Fragment extends Fragment {
         int itemCount = dataChiTietDon.size();
         AtomicInteger p = new AtomicInteger(0);
         for (int i = 0; i < dataChiTietDon.size(); i++) {
+            dataChiTietDon.get(i).setIdDon(donHang.getId());
             ChiTietDon tempChiTiet = dataChiTietDon.get(i);
             DatabaseReference tempRefer = FirebaseDatabase.getInstance().getReference();
             tempRefer.child("BillDetails").child(tempChiTiet.getIdDon() + "").child(tempChiTiet.getIdSanPham()).setValue(tempChiTiet);
