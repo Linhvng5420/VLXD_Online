@@ -83,6 +83,9 @@ public class DonHangAdapter extends RecyclerView.Adapter<DonHangAdapter.DonHangH
                 holder.binding.tvTrangThaiVc.setBackgroundColor(Color.rgb(0, 255, 0));
                 holder.binding.tvTrangThaiVc.setText(R.string.da_hoan_thanh);
             }
+        }else if (trangThai==5){
+            holder.binding.tvTrangThaiVc.setBackgroundColor(Color.rgb(0, 100, 255));
+            holder.binding.tvTrangThaiVc.setText("Chờ Lấy Hàng");
         }
 
         final int pos = position;

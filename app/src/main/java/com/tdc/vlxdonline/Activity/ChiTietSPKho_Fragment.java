@@ -2,6 +2,8 @@ package com.tdc.vlxdonline.Activity;
 
 import android.app.AlertDialog;
 import android.content.DialogInterface;
+import android.graphics.Color;
+import android.graphics.drawable.Drawable;
 import android.os.Bundle;
 
 import androidx.fragment.app.Fragment;
@@ -21,6 +23,7 @@ import com.google.firebase.database.DatabaseReference;
 import com.google.firebase.database.FirebaseDatabase;
 import com.google.firebase.database.ValueEventListener;
 import com.tdc.vlxdonline.Model.Products;
+import com.tdc.vlxdonline.R;
 import com.tdc.vlxdonline.databinding.FragmentChiTietSpKhoBinding;
 
 public class ChiTietSPKho_Fragment extends Fragment {
@@ -93,7 +96,7 @@ public class ChiTietSPKho_Fragment extends Fragment {
     // Phương thức để hiển thị hộp thoại xác nhận cho việc thay doi gia
     private void showConfirm() {
         AlertDialog.Builder builder = new AlertDialog.Builder(getActivity());
-        builder.setMessage("Bạn có chắc chắn thay đổi giá ?") // Thông điệp bằng tiếng Việt
+        builder.setTitle("Thông Báo !").setMessage("Bạn có chắc chắn thay đổi giá ?") // Thông điệp bằng tiếng Việt
                 .setCancelable(false)
                 .setPositiveButton("Có", new DialogInterface.OnClickListener() {
                     public void onClick(DialogInterface dialog, int id) {
@@ -105,7 +108,13 @@ public class ChiTietSPKho_Fragment extends Fragment {
                         dialog.cancel(); // Đóng hộp thoại
                     }
                 });
+        Drawable drawableIcon = getResources().getDrawable(android.R.drawable.ic_dialog_alert);
+        drawableIcon.setTint(Color.RED);
+        builder.setIcon(drawableIcon);
+        Drawable drawableBg = getResources().getDrawable(R.drawable.bg_item_lg);
+        drawableBg.setTint(Color.YELLOW);
         AlertDialog alert = builder.create();
+        alert.getWindow().setBackgroundDrawable(drawableBg);
         alert.show(); // Hiển thị hộp thoại
     }
 

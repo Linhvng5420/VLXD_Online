@@ -129,6 +129,12 @@ public class ChiTietDonFragment extends Fragment {
                                 if (trangThaiTt == 0) {
                                     binding.btnTrangThai.setText(R.string.chua_thanh_toan);
                                 }
+                            }else if (trangThaiVc == 5){
+                                binding.btnTrangThai.setText("Chờ Lấy Hàng");
+                                if (LoginActivity.typeUser == 2){
+                                    binding.btnTrangThai.setEnabled(true);
+                                    binding.btnTrangThai.setText("Xác Nhận Đã Chuyển Giao");
+                                }
                             }
                         }
                     } else {

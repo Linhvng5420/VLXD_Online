@@ -22,7 +22,7 @@
         android:id="@+id/nav_warehouse_daxuat"
         android:icon="@drawable/nav_dagiao"
         android:orderInCategory="3"
-        android:title="Đã Xuất" />
+        android:title="Xuất Kho" />
 
     <item
         android:id="@+id/nav_warehouse_taikhoan"

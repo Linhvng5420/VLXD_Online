@@ -64,14 +64,14 @@ public class Warehouse_HomeActivity extends AppCompatActivity {
             if (itemId == R.id.nav_warehouse_kho) {
                 ReplaceFragment(new GiaoDienKho_Fragment(nhanVien.getEmailchu()));
             } else if (itemId == R.id.nav_warehouse_daxuat) {
-                ReplaceFragment(new DanhSachDonHangFragment(0));
+                ReplaceFragment(new QuanLyXuatKhoFragment(0));
             } else if (itemId == R.id.nav_warehouse_taikhoan) {
                 ReplaceFragment(new TaiKhoanNVFragment());
             } else if (itemId == R.id.nav_warehouse_nhapkho) {
                 ReplaceFragment(new GiaoDienDonHang_Fragment());
             } else if (itemId == R.id.nav_warehouse_donhang) {
                 //   ReplaceFragment(new ThongTinNhanHang_Fragment());
-                ReplaceFragment(new TaoDonXuatKhoFragment());
+                ReplaceFragment(new DSDonNVKhoFragment());
             }
 
             return true;
