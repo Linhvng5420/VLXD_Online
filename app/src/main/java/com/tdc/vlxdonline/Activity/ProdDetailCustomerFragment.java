@@ -407,11 +407,13 @@ public class ProdDetailCustomerFragment extends Fragment {
                 referDetailProd.child("thongtinchu").child(idChu).addValueEventListener(new ValueEventListener() {
                     @Override
                     public void onDataChange(@NonNull DataSnapshot snapshot) {
-                        if (snapshot.exists()) {
-                            String tenChu = snapshot.child("ten").getValue(String.class);
-                            binding.tvCuaHang.setText("Cửa Hàng " + tenChu);
-                            binding.tvCuaHang.setVisibility(View.VISIBLE);
-                        }
+                        try{
+                            if (snapshot.exists()) {
+                                String tenChu = snapshot.child("ten").getValue(String.class);
+                                binding.tvCuaHang.setText("Cửa Hàng " + tenChu);
+                                binding.tvCuaHang.setVisibility(View.VISIBLE);
+                            }
+                        }catch (Exception e){}
                     }
 
                     @Override
