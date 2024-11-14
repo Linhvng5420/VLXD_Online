@@ -2,25 +2,26 @@ package com.tdc.vlxdonline.Model;
 
 public class ThongTinChu{
     private String id, ten, sdt, email;
-    private String diaChi, STK;
+    private String diaChi, cccdtruoc, cccdsau;
 
     public ThongTinChu() {
     }
 
-    public ThongTinChu(String id, String ten, String sdt, String email, String diaChi, String STK) {
+    public ThongTinChu(String id, String ten, String sdt, String email, String diaChi, String cccdtruoc, String cccdsau) {
         this.id = id;
         this.ten = ten;
         this.sdt = sdt;
         this.email = email;
         this.diaChi = diaChi;
-        this.STK = STK;
+        this.cccdtruoc = cccdtruoc;
+        this.cccdsau = cccdsau;
     }
 
-    public String getID() {
+    public String getId() {
         return id;
     }
 
-    public void setID(String id) {
+    public void setId(String id) {
         this.id = id;
     }
 
@@ -56,11 +57,32 @@ public class ThongTinChu{
         this.diaChi = diaChi;
     }
 
-    public String getSTK() {
-        return STK;
+    public String getCccdtruoc() {
+        return cccdtruoc;
     }
 
-    public void setSTK(String STK) {
-        this.STK = STK;
+    public void setCccdtruoc(String cccdtruoc) {
+        this.cccdtruoc = cccdtruoc;
+    }
+
+    public String getCccdsau() {
+        return cccdsau;
+    }
+
+    public void setCccdsau(String cccdsau) {
+        this.cccdsau = cccdsau;
+    }
+
+    @Override
+    public String toString() {
+        return "ThongTinChu{" +
+                "id='" + id + '\'' +
+                ", ten='" + ten + '\'' +
+                ", sdt='" + sdt + '\'' +
+                ", email='" + email + '\'' +
+                ", diaChi='" + diaChi + '\'' +
+                ", cccdtruoc='" + cccdtruoc + '\'' +
+                ", cccdsau='" + cccdsau + '\'' +
+                '}';
     }
 }

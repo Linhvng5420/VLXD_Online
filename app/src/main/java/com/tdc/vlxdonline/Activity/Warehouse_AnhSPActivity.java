@@ -213,7 +213,7 @@ public class Warehouse_AnhSPActivity extends AppCompatActivity {
                 for (DataSnapshot items : snapshot.getChildren()) {
                     SanPham_Model sanPhamModel = items.getValue(SanPham_Model.class);
                     sanPhamModel.setId(items.getKey());
-                    if (sanPhamModel.getIdChu().equals(Owner_HomeActivity.infoChu.getID())) data.add(sanPhamModel);
+                    if (sanPhamModel.getIdChu().equals(Owner_HomeActivity.infoChu.getId())) data.add(sanPhamModel);
                 }
                 // Cập nhật adapter sau khi có dữ liệu
                 adapterSP.notifyDataSetChanged();

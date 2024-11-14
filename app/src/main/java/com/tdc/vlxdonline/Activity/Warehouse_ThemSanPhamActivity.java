@@ -176,7 +176,7 @@ public class Warehouse_ThemSanPhamActivity extends AppCompatActivity {
                 for (DataSnapshot items : snapshot.getChildren()) {
                     SanPham_Model sanPhamModel = items.getValue(SanPham_Model.class);
                     sanPhamModel.setId(items.getKey());
-                    if (sanPhamModel.getIdChu().equals(Owner_HomeActivity.infoChu.getID())) list_SP.add(sanPhamModel);
+                    if (sanPhamModel.getIdChu().equals(Owner_HomeActivity.infoChu.getId())) list_SP.add(sanPhamModel);
                 }
                 // Notify adapter sau khi có dữ liệu
                 adapter.notifyDataSetChanged();
@@ -322,7 +322,7 @@ public class Warehouse_ThemSanPhamActivity extends AppCompatActivity {
         sanPhamModel.setAnh(uri != null ? imagesUrl.toString() : sanPhamModel.getAnh());
         sanPhamModel.setDonVi(donVi);
         sanPhamModel.setDanhMuc(danhMuc);
-        sanPhamModel.setIdChu(Owner_HomeActivity.infoChu.getID());
+        sanPhamModel.setIdChu(Owner_HomeActivity.infoChu.getId());
 
         reference.child("ProdImages").child(sanPhamModel.getId()).child("-1").child("anh").setValue(sanPhamModel.getAnh());
         reference.child("products").child(sanPhamModel.getId()).setValue(sanPhamModel)

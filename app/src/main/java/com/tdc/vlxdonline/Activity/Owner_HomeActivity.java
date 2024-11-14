@@ -95,7 +95,7 @@ public class Owner_HomeActivity extends AppCompatActivity {
             public void onDataChange(@NonNull DataSnapshot snapshot) {
                 ThongTinChu chu = snapshot.getValue(ThongTinChu.class);
                 if (chu != null) {
-                    chu.setID(snapshot.getKey());
+                    chu.setId(snapshot.getKey());
                     Owner_HomeActivity.infoChu = chu;
                 }
             }

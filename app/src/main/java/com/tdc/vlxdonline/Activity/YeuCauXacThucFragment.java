@@ -90,8 +90,8 @@ public class YeuCauXacThucFragment extends Fragment {
         builder.setPositiveButton(android.R.string.yes, new DialogInterface.OnClickListener() {
             @Override
             public void onClick(DialogInterface dialog, int which) {
-                reference.child("thongbaochu").child(tt.getID()).child(Customer_HomeActivity.info.getID()).child("xacthuc").setValue("1");
-                reference.child("duyetkhachhang").child(tt.getID()).child(Customer_HomeActivity.info.getID()).child("trangthai").setValue("0");
+                reference.child("thongbaochu").child(tt.getId()).child(Customer_HomeActivity.info.getID()).child("xacthuc").setValue("1");
+                reference.child("duyetkhachhang").child(tt.getId()).child(Customer_HomeActivity.info.getID()).child("trangthai").setValue("0");
             }
         });
         builder.setNegativeButton(R.string.quay_lai, new DialogInterface.OnClickListener() {

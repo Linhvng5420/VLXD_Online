@@ -141,7 +141,7 @@ public class DanhSachDonHangFragment extends Fragment {
                             if (vc < 4 || tt < 2) continue;
                         }
 
-                        if (LoginActivity.typeUser == 0 && !Owner_HomeActivity.infoChu.getID().equals(don.getIdChu()))
+                        if (LoginActivity.typeUser == 0 && !Owner_HomeActivity.infoChu.getId().equals(don.getIdChu()))
                             continue;
                         else if (LoginActivity.typeUser == 1 && !don.getIdKhach().equals(Customer_HomeActivity.info.getID()))
                             continue;
