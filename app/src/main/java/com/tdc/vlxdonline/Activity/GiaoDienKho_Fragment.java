@@ -104,14 +104,18 @@ public class GiaoDienKho_Fragment extends Fragment {
                     // Duyệt qua từng sản phẩm trong DataSnapshot
                     for (DataSnapshot snapshot : dataSnapshot.getChildren()) {
                         Products product = snapshot.getValue(Products.class);
-                        product.setId(snapshot.getKey());
+
                         // Kiem tra id chu
-                        if (!product.getIdChu().equals(emailChu.substring(0, emailChu.indexOf("@")))) continue;
-                        // Kiểm tra danh mục và từ khóa tìm kiếm
-                        if (!category.isEmpty() && !category.equals(product.getDanhMuc())) continue;
-                        if (!tuKhoa.isEmpty() && !product.getTen().contains(tuKhoa) && !product.getMoTa().contains(tuKhoa))
-                            continue;
-                        dsSanPham.add(product); // Thêm sản phẩm vào danh sách
+                        if (!product.getId().startsWith("@")) {
+                            product = snapshot.getValue(Products.class);
+                            product.setId(snapshot.getKey());
+                            // Kiểm tra danh mục và từ khóa tìm kiếm
+                            if (!product.getIdChu().equals(emailChu)) continue;
+                            if (!category.isEmpty() && !category.equals(product.getDanhMuc())) continue;
+                            if (!tuKhoa.isEmpty() && !product.getTen().contains(tuKhoa) && !product.getMoTa().contains(tuKhoa))
+                                continue;
+                            dsSanPham.add(product); // Thêm sản phẩm vào danh sách
+                        }
                     }
 
                     // Khởi tạo adapter cho sản phẩm
@@ -171,20 +175,24 @@ public class GiaoDienKho_Fragment extends Fragment {
                         @Override
                         public void OnItemClick(View view, int position) {
                             if (category.equals(dsCategory.get(position).getId())) {
-                                category = ""; // Nếu danh mục đã được chọn, bỏ chọn
-                                view.setBackgroundColor(Color.TRANSPARENT); // Đặt màu nền về trong suốt
-                                preView = null; // Đặt view trước đó về null
+                                category = ""; // Bỏ chọn danh mục
+                                view.setBackgroundColor(Color.TRANSPARENT);
+                                preView = null;
                             } else {
-                                category = dsCategory.get(position).getId(); // Cập nhật danh mục hiện tại
-                                Drawable drawable = getActivity().getDrawable(R.drawable.bg_detail); // Lấy hình nền
-                                view.setBackground(drawable); // Thiết lập màu nền cho view hiện tại
-                                if (preView != null)
-                                    preView.setBackgroundColor(Color.TRANSPARENT); // Đặt màu nền view trước đó về trong suốt
+                                category = dsCategory.get(position).getId(); // Chọn danh mục mới
+                                Drawable drawable = getActivity().getDrawable(R.drawable.bg_detail);
+                                view.setBackground(drawable);
+                                if (preView != null) {
+                                    preView.setBackgroundColor(Color.TRANSPARENT); // Reset màu nền view trước đó
+                                }
                                 preView = view; // Cập nhật view trước đó
                             }
-                            reference.child("products").addListenerForSingleValueEvent(eventDocDanhSach); // Tải lại danh sách sản phẩm
+
+                            // Gọi sự kiện hiển thị sản phẩm với danh mục hiện tại
+                            reference.child("products").addListenerForSingleValueEvent(eventDocDanhSach);
                         }
                     });
+
 
                     // Thiết lập layout cho RecyclerView của danh mục
                     LinearLayoutManager linearLayoutManager = new LinearLayoutManager(getActivity());

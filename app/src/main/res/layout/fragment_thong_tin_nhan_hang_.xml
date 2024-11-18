@@ -35,10 +35,11 @@
                 android:textSize="16sp" />
 
             <!-- Receiver Info Header -->
-            <TextView
-                android:id="@+id/tv_thongTinKhach"
+            <androidx.recyclerview.widget.RecyclerView
+                android:id="@+id/rcv_thongTinKhach"
                 android:layout_width="match_parent"
-                android:layout_height="wrap_content"
+                android:layout_height="100dp"
+                android:visibility="gone"
                 android:layout_marginTop="5dp"
                 android:padding="10dp"
                 android:background="@drawable/edit_text"

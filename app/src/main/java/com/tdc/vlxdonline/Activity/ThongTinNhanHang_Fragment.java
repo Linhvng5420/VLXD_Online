@@ -22,6 +22,7 @@ import com.google.firebase.database.DatabaseReference;
 import com.google.firebase.database.FirebaseDatabase;
 import com.google.firebase.database.ValueEventListener;
 import com.tdc.vlxdonline.Adapter.ChiTietXuatAdapter;
+import com.tdc.vlxdonline.Adapter.TTKhachHangAdapter;
 import com.tdc.vlxdonline.Model.ChiTietDon;
 import com.tdc.vlxdonline.Model.DonHang;
 import com.tdc.vlxdonline.Model.KhachHang;
@@ -39,6 +40,8 @@ public class ThongTinNhanHang_Fragment extends Fragment {
     ArrayList<ChiTietDon> dataChiTietDon = new ArrayList<>();
     ChiTietXuatAdapter chiTietXuatAdapter;
     //boolean taoDon = false;
+    ArrayList<KhachHang> khachHangList;
+    TTKhachHangAdapter ttkhachHangAdapter;
     DatabaseReference referDatHang;
     KhachHang khachHang;
 
@@ -75,6 +78,21 @@ public class ThongTinNhanHang_Fragment extends Fragment {
     @Override
     public void onViewCreated(@NonNull View view, @Nullable Bundle savedInstanceState) {
         super.onViewCreated(view, savedInstanceState);
+        khachHangList = new ArrayList<>();
+        ttkhachHangAdapter = new TTKhachHangAdapter(getActivity(), khachHangList);
+        ttkhachHangAdapter.setOnItemInfoClick(new TTKhachHangAdapter.OnItemInfoClick() {
+            @Override
+            public void onItemClick(int position) {
+                khachHang = khachHangList.get(position);
+                binding.edtTenNguoiNhan.setText(khachHang.getTen());
+                binding.edtNhapSoDTNguoiNhan.setText(khachHang.getSdt());
+                binding.edtNhapDiaChi.setText(khachHang.getDiaChi());
+                binding.edtNhapSDT.setText(khachHang.getSdt());
+            }
+        });
+        binding.rcvThongTinKhach.setLayoutManager(new LinearLayoutManager(getActivity()));
+        binding.rcvThongTinKhach.setAdapter(ttkhachHangAdapter);
+
         binding.btnXacNhan.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
@@ -88,51 +106,101 @@ public class ThongTinNhanHang_Fragment extends Fragment {
                 }
             }
         });
+
         binding.edtNhapSDT.addTextChangedListener(new TextWatcher() {
             @Override
             public void beforeTextChanged(CharSequence charSequence, int i, int i1, int i2) {
-
             }
 
             @Override
             public void onTextChanged(CharSequence charSequence, int i, int i1, int i2) {
-                binding.tvThongTinKhach.setText("");
-                referDatHang.child("customers").addListenerForSingleValueEvent(new ValueEventListener() {
-                    @Override
-                    public void onDataChange(@NonNull DataSnapshot dataSnapshot) {
-                        if (!binding.edtNhapSDT.getText().toString().equals("")) {
+                String input = binding.edtNhapSDT.getText().toString();
+                khachHangList.clear();
+
+                if (!input.isEmpty()) {
+                    binding.rcvThongTinKhach.setVisibility(View.VISIBLE);
+
+                    referDatHang.child("customers").addListenerForSingleValueEvent(new ValueEventListener() {
+                        @Override
+                        public void onDataChange(@NonNull DataSnapshot dataSnapshot) {
                             for (DataSnapshot snapshot : dataSnapshot.getChildren()) {
                                 KhachHang temp = snapshot.getValue(KhachHang.class);
                                 temp.setID(snapshot.getKey());
-                                if (temp.getSdt().contains(binding.edtNhapSDT.getText().toString())) {
-                                    String chuoi = binding.tvThongTinKhach.getText().toString();
-                                    binding.tvThongTinKhach.setText(chuoi + "SDT: " + temp.getSdt() + ", Tên: " + temp.getTen() + "\n");
-                                    if (temp.getSdt().equals(binding.edtNhapSDT.getText().toString())) {
-                                        khachHang = temp;
-                                        binding.tvThongTinKhach.setText("Tên khách: " + temp.getTen() + "\nSố Điện Thoại: " + temp.getSdt()
-                                                + "\nĐịa Chỉ: " + temp.getDiaChi());
-                                        binding.edtTenNguoiNhan.setText(temp.getTen());
-                                        binding.edtNhapSoDTNguoiNhan.setText(temp.getSdt());
-                                        binding.edtNhapDiaChi.setText(temp.getDiaChi());
-                                    }
+                                if (temp.getSdt().contains(input)) {
+                                    khachHangList.add(temp);
                                 }
                             }
+                            ttkhachHangAdapter.notifyDataSetChanged(); // Cập nhật dữ liệu cho RecyclerView
+                            if (khachHangList.isEmpty()) {
+                                Toast.makeText(getActivity(), "Không tìm thấy khách hàng.", Toast.LENGTH_SHORT).show();
+                            }
                         }
-                    }
 
-                    @Override
-                    public void onCancelled(@NonNull DatabaseError error) {
+                        @Override
+                        public void onCancelled(@NonNull DatabaseError error) {
+                            Toast.makeText(getActivity(), "Lỗi tải dữ liệu!", Toast.LENGTH_SHORT).show();
+                        }
+                    });
 
-                    }
-                });
+                }else {
+                    khachHang = null;
+                    binding.edtTenNguoiNhan.setText("");
+                    binding.edtNhapSoDTNguoiNhan.setText("");
+                    binding.edtNhapDiaChi.setText("");
+                    binding.rcvThongTinKhach.setVisibility(View.GONE);
+                }
             }
 
             @Override
             public void afterTextChanged(Editable editable) {
-
             }
         });
+//        binding.edtNhapSDT.addTextChangedListener(new TextWatcher() {
+//            @Override
+//            public void beforeTextChanged(CharSequence charSequence, int i, int i1, int i2) {
+//
+//            }
+//
+//            @Override
+//            public void onTextChanged(CharSequence charSequence, int i, int i1, int i2) {
+//                binding.tvThongTinKhach.setText("");
+//                referDatHang.child("customers").addListenerForSingleValueEvent(new ValueEventListener() {
+//                    @Override
+//                    public void onDataChange(@NonNull DataSnapshot dataSnapshot) {
+//                        if (!binding.edtNhapSDT.getText().toString().equals("")) {
+//                            for (DataSnapshot snapshot : dataSnapshot.getChildren()) {
+//                                KhachHang temp = snapshot.getValue(KhachHang.class);
+//                                temp.setID(snapshot.getKey());
+//                                if (temp.getSdt().contains(binding.edtNhapSDT.getText().toString())) {
+//                                    String chuoi = binding.tvThongTinKhach.getText().toString();
+//                                    binding.tvThongTinKhach.setText(chuoi + "SDT: " + temp.getSdt() + ", Tên: " + temp.getTen() + "\n");
+//                                    if (temp.getSdt().equals(binding.edtNhapSDT.getText().toString())) {
+//                                        khachHang = temp;
+//                                        binding.tvThongTinKhach.setText("Tên khách: " + temp.getTen() + "\nSố Điện Thoại: " + temp.getSdt()
+//                                                + "\nĐịa Chỉ: " + temp.getDiaChi());
+//                                        binding.edtTenNguoiNhan.setText(temp.getTen());
+//                                        binding.edtNhapSoDTNguoiNhan.setText(temp.getSdt());
+//                                        binding.edtNhapDiaChi.setText(temp.getDiaChi());
+//                                    }
+//                                }
+//                            }
+//                        }
+//                    }
+//
+//                    @Override
+//                    public void onCancelled(@NonNull DatabaseError error) {
+//
+//                    }
+//                });
+//            }
+//
+//            @Override
+//            public void afterTextChanged(Editable editable) {
+//
+//            }
+//        });
     }
+
 
     private void TaoDonKhachHang() {
         donHang.setIdKhach(khachHang.getID());

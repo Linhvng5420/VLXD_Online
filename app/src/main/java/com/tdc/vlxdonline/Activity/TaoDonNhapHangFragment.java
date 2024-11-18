@@ -185,6 +185,7 @@ public class TaoDonNhapHangFragment extends Fragment {
                     for (DataSnapshot snapshot : dataSnapshot.getChildren()) {
                         Products product = snapshot.getValue(Products.class); // Lấy sản phẩm từ snapshot
                         product.setId(snapshot.getKey());
+                        if (!product.getIdChu().equals(Warehouse_HomeActivity.nhanVien.getEmailchu())) continue;
                         if (!category.isEmpty() && !category.equals(product.getDanhMuc())) continue; // Kiểm tra danh mục
                         if (!tuKhoa.isEmpty() && !product.getTen().contains(tuKhoa) && !product.getMoTa().contains(tuKhoa)) continue; // Kiểm tra từ khóa
                         dsSanPham.add(product); // Thêm sản phẩm vào danh sách
