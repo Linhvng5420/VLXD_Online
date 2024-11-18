@@ -59,7 +59,7 @@ public class Warehouse_DonViActivity extends AppCompatActivity {
         setEvent();
     }
 
-    //    private void saveDate() {
+    //        private void saveDate() {
 //        try {
 //            if (!edtNhapDV.getText().toString().isEmpty()) {
 //                donVi.setId(Long.parseLong(System.currentTimeMillis() + ""));
@@ -279,6 +279,7 @@ public class Warehouse_DonViActivity extends AppCompatActivity {
             inputMethodManager.hideSoftInputFromWindow(getCurrentFocus().getWindowToken(), 0);
         }
     }
+
     private void setCtronl() {
         edtNhapDV = findViewById(R.id.edtNhapDV);
         btnThem = findViewById(R.id.btnThemDV);
