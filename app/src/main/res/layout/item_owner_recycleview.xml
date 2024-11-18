@@ -1,7 +1,8 @@
 <LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
     android:layout_width="match_parent"
-    android:layout_height="90dp"
+    android:layout_height="wrap_content"
     android:background="@color/white"
+    android:minHeight="90dp"
     android:orientation="horizontal">
 
     <androidx.cardview.widget.CardView
@@ -23,13 +24,14 @@
                 android:layout_height="0dp"
                 android:layout_marginBottom="3dp"
                 android:layout_weight="1"
-                android:orientation="horizontal">
+                android:orientation="horizontal"
+                android:textAlignment="center">
 
                 <TextView
                     android:id="@+id/tvID"
                     android:layout_width="0dp"
                     android:layout_height="match_parent"
-                    android:layout_weight="1"
+                    android:layout_weight="2"
                     android:autoSizeMaxTextSize="22sp"
                     android:autoSizeTextType="uniform"
                     android:background="@drawable/bg_img_item"
@@ -49,7 +51,7 @@
                     android:autoSizeMaxTextSize="22sp"
                     android:autoSizeTextType="uniform"
                     android:background="@drawable/bg_img_item"
-                    android:gravity="center|end"
+                    android:gravity="center"
                     android:paddingLeft="10dp"
                     android:paddingRight="5dp"
                     android:text="N/A"
@@ -81,13 +83,14 @@
                     android:id="@+id/tvPhu"
                     android:layout_width="0dp"
                     android:layout_height="match_parent"
-                    android:layout_weight="1"
+                    android:layout_weight="1.5"
                     android:autoSizeMaxTextSize="20sp"
                     android:autoSizeTextType="uniform"
                     android:background="@drawable/bg_img_item"
-                    android:gravity="center|top"
+                    android:gravity="center|end"
                     android:paddingLeft="5dp"
                     android:paddingRight="5dp"
+                    android:textAlignment="center"
                     android:textColor="#F57F17"
                     android:textStyle="bold" />
             </LinearLayout>
