@@ -74,6 +74,7 @@ public class YeuCauXacThucFragment extends Fragment {
 
     private void setAdapterHT() {
         adapter = new ArrayAdapter<>(getActivity(), android.R.layout.simple_list_item_1, dataHienThi);
+        binding.lvDSChu.setAdapter(adapter);
         binding.lvDSChu.setOnItemClickListener(new AdapterView.OnItemClickListener() {
             @Override
             public void onItemClick(AdapterView<?> parent, View view, int position, long id) {
@@ -121,6 +122,7 @@ public class YeuCauXacThucFragment extends Fragment {
 
                     for (DataSnapshot snapshot : dataSnapshot.getChildren()) {
                         ThongTinChu tt = snapshot.getValue(ThongTinChu.class);
+                        tt.setId(snapshot.getKey());
                         if (tuKhoa.equals("") || tt.getTen().contains(tuKhoa) || tt.getEmail().contains(tuKhoa)) {
                             dataChu.add(tt);
                             dataHienThi.add("Tên Chủ: " + tt.getTen() + "\n" + "Email: " + tt.getEmail() + "\n" + "Số Điện Thoại: " + tt.getSdt());

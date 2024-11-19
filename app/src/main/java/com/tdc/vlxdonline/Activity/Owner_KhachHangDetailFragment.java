@@ -281,7 +281,8 @@ public class Owner_KhachHangDetailFragment extends Fragment {
         binding.ivAuthenticated.setOnLongClickListener(new View.OnLongClickListener() {
             @Override
             public boolean onLongClick(View v) {
-                if (LoginActivity.idUser.equals(idKH)) {
+                String idLG = LoginActivity.idUser.substring(0, LoginActivity.idUser.indexOf("@"));
+                if (idLG.equals(idKH)) {
                     try {
                         if (Customer_HomeActivity.info != null)
                             ((Customer_HomeActivity) getActivity()).ReplaceFragment(new YeuCauXacThucFragment());
