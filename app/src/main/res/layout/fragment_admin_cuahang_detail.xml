@@ -281,17 +281,28 @@
 
                 <ImageView
                     android:id="@+id/ivAuthenticated"
-                    android:layout_width="80dp"
-                    android:layout_height="80dp"
+                    android:layout_width="70dp"
+                    android:layout_height="70dp"
                     android:layout_gravity="center"
                     android:background="@drawable/common_google_signin_btn_icon_dark_normal_background"
                     android:contentDescription="Xác Minh Tài Khoản"
                     android:scaleType="fitCenter"
-                    android:src="?android:attr/fingerprintAuthDrawable"
+                    android:src="@drawable/baseline_fingerprint_24"
                     app:tint="#E53935" />
                 <!--                android:src="@android:drawable/ic_lock_lock"-->
                 <!--                android:src="?android:attr/fingerprintAuthDrawable"-->
 
+                <TextView
+                    android:id="@+id/tvAuthenticated"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_gravity="center"
+                    android:layout_marginTop="5dp"
+                    android:text="2024-05-04"
+                    android:textColor="#E53935"
+                    android:textSize="24sp"
+                    android:textStyle="bold"
+                    android:visibility="gone" />
             </LinearLayout>
         </ScrollView>
     </LinearLayout>

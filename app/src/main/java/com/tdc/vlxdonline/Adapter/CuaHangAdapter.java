@@ -1,5 +1,6 @@
 package com.tdc.vlxdonline.Adapter;
 
+import android.graphics.Color;
 import android.view.LayoutInflater;
 import android.view.ViewGroup;
 import android.widget.Toast;
@@ -111,11 +112,18 @@ public class CuaHangAdapter extends RecyclerView.Adapter<CuaHangAdapter.CuaHangV
                         Toast.makeText(binding.getRoot().getContext(), "Lỗi đăng nhập tài khoản", Toast.LENGTH_SHORT).show();
                         return;
                     } else {
-                        if (locktype.equals("chuaduyet")) binding.tvPhu.setText("Chưa Duyệt");
-                        else if (locktype.equals("vinhvien"))
+                        if (locktype.equals("chuaduyet")) {
+                            binding.tvPhu.setText("Chưa Duyệt");
+                            binding.tvPhu.setTextColor(Color.BLUE);
+                        } else if (locktype.equals("vinhvien")) {
                             binding.tvPhu.setText("Khóa Vĩnh Viễn");
-                        else if (locktype.equals("tamthoi"))
+                            binding.tvPhu.setTextColor(Color.RED);
+                            binding.tvTen.setTextColor(Color.RED);
+                        } else if (locktype.equals("tamthoi")) {
                             binding.tvPhu.setText("Khóa: " + locktime);
+                            binding.tvPhu.setTextColor(Color.RED);
+                            binding.tvTen.setTextColor(Color.RED);
+                        }
 
                         if (lock == false && !locktype.equals("chuaduyet"))
                             binding.tvPhu.setText(online ? "Online" : "Offline");
