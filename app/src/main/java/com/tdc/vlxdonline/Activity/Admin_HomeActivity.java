@@ -165,4 +165,13 @@ public class Admin_HomeActivity extends AppCompatActivity {
         super.onDestroy();
         binding = null;
     }
+
+    @Override
+    public void onBackPressed() {
+        if (getSupportActionBar() != null) {
+            getSupportActionBar().setTitle("Admin VLXDOnline");
+        }
+        super.onBackPressed();
+    }
+
 }

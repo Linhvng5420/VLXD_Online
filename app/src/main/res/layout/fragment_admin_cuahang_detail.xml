@@ -11,69 +11,6 @@
         android:layout_height="match_parent"
         android:orientation="vertical">
 
-        <LinearLayout
-            android:layout_width="match_parent"
-            android:layout_height="60dp">
-            <!-- Thanh Toolbar -->
-            <androidx.appcompat.widget.Toolbar
-                android:id="@+id/toolbar"
-                android:layout_width="match_parent"
-                android:layout_height="match_parent"
-                android:background="?attr/colorPrimary"
-                android:elevation="4dp"
-                android:theme="@style/ThemeOverlay.AppCompat.Dark.ActionBar"
-                app:layout_constraintEnd_toEndOf="parent"
-                app:layout_constraintStart_toStartOf="parent"
-                app:layout_constraintTop_toTopOf="parent"
-                app:title="Chi Tiết Cửa Hàng">
-
-                <LinearLayout
-                    android:layout_width="wrap_content"
-                    android:layout_height="match_parent"
-                    android:layout_gravity="center|end"
-                    android:orientation="horizontal">
-
-                    <!-- Nút Lưu -->
-                    <ImageButton
-                        android:id="@+id/btnSave"
-                        android:layout_width="wrap_content"
-                        android:layout_height="match_parent"
-                        android:layout_marginEnd="8dp"
-                        android:backgroundTint="@android:color/transparent"
-                        android:contentDescription="Lưu"
-                        android:src="@drawable/ic_save"
-                        android:tint="@color/white"
-                        android:visibility="gone"
-                        tools:ignore="UseAppTint" />
-
-                    <!-- Nút Chỉnh Sửa -->
-                    <ImageButton
-                        android:id="@+id/btnEdit"
-                        android:layout_width="wrap_content"
-                        android:layout_height="match_parent"
-                        android:layout_marginEnd="8dp"
-                        android:backgroundTint="@android:color/transparent"
-                        android:contentDescription="Chỉnh sửa"
-                        android:src="@drawable/ic_edit"
-                        android:tint="@color/white"
-                        android:visibility="visible"
-                        tools:ignore="UseAppTint" />
-
-                    <!-- Nút Hủy (ẩn mặc định) -->
-                    <ImageButton
-                        android:id="@+id/btnCancel"
-                        android:layout_width="wrap_content"
-                        android:layout_height="match_parent"
-                        android:backgroundTint="@android:color/transparent"
-                        android:contentDescription="Hủy"
-                        android:src="@android:drawable/ic_menu_close_clear_cancel"
-                        android:tint="@color/white"
-                        android:visibility="gone"
-                        tools:ignore="UseAppTint" />
-                </LinearLayout>
-            </androidx.appcompat.widget.Toolbar>
-        </LinearLayout>
-
         <ScrollView
             android:layout_width="match_parent"
             android:layout_height="match_parent">
@@ -83,7 +20,7 @@
                 android:layout_height="match_parent"
                 android:orientation="vertical">
 
-                <!-- EditText Tên Khách Hàng (Mặc định: Không Cho Sửa)-->
+                <!-- EditText Tên Cửa Hàng (Mặc định: Không Cho Sửa)-->
                 <com.google.android.material.textfield.TextInputLayout
                     android:id="@+id/tilID"
                     android:layout_width="match_parent"
@@ -97,7 +34,7 @@
                         android:layout_height="wrap_content"
                         android:enabled="false"
                         android:gravity="center"
-                        android:hint="ID Khách Hàng"
+                        android:hint="ID Cửa Hàng"
                         android:textColor="@color/black"
                         android:visibility="visible" />
                 </com.google.android.material.textfield.TextInputLayout>
@@ -194,14 +131,14 @@
                         android:layout_width="match_parent"
                         android:layout_height="wrap_content"
                         android:enabled="false"
-                        android:hint="Tên Khách Hàng"
+                        android:hint="Tên Cửa Hàng"
                         android:textColor="@color/black"
                         android:visibility="visible" />
                 </com.google.android.material.textfield.TextInputLayout>
 
                 <!-- EditText Chức Vụ -->
                 <com.google.android.material.textfield.TextInputLayout
-                    android:id="@+id/tilTen"
+                    android:id="@+id/tilTenKH"
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
                     android:layout_margin="10dp"
@@ -209,7 +146,7 @@
                     android:visibility="visible">
 
                     <com.google.android.material.textfield.TextInputEditText
-                        android:id="@+id/etTen"
+                        android:id="@+id/etTenKH"
                         android:layout_width="match_parent"
                         android:layout_height="wrap_content"
                         android:enabled="false"
@@ -267,7 +204,7 @@
                         android:layout_width="match_parent"
                         android:layout_height="wrap_content"
                         android:enabled="false"
-                        android:hint="Email Khách Hàng Đăng Nhập"
+                        android:hint="Email Cửa Hàng Đăng Nhập"
                         android:inputType="text|textEmailAddress"
                         android:textColor="#F80000" />
                 </com.google.android.material.textfield.TextInputLayout>
@@ -344,14 +281,16 @@
 
                 <ImageView
                     android:id="@+id/ivAuthenticated"
-                    android:layout_width="150dp"
-                    android:layout_height="wrap_content"
+                    android:layout_width="80dp"
+                    android:layout_height="80dp"
                     android:layout_gravity="center"
                     android:background="@drawable/common_google_signin_btn_icon_dark_normal_background"
                     android:contentDescription="Xác Minh Tài Khoản"
                     android:scaleType="fitCenter"
-                    android:src="@android:drawable/ic_lock_lock"
+                    android:src="?android:attr/fingerprintAuthDrawable"
                     app:tint="#E53935" />
+                <!--                android:src="@android:drawable/ic_lock_lock"-->
+                <!--                android:src="?android:attr/fingerprintAuthDrawable"-->
 
             </LinearLayout>
         </ScrollView>

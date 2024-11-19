@@ -110,12 +110,15 @@ public class CuaHangAdapter extends RecyclerView.Adapter<CuaHangAdapter.CuaHangV
                     if (lock == null) {
                         Toast.makeText(binding.getRoot().getContext(), "Lỗi đăng nhập tài khoản", Toast.LENGTH_SHORT).show();
                         return;
-                    }
-
-                    if (lock) {
-                        binding.tvPhu.setText(locktype.equals("vinhvien") ? "Khóa Vĩnh Viễn" : "Khóa: " + locktime);
                     } else {
-                        binding.tvPhu.setText(online ? "Online" : "Offline");
+                        if (locktype.equals("chuaduyet")) binding.tvPhu.setText("Chưa Duyệt");
+                        else if (locktype.equals("vinhvien"))
+                            binding.tvPhu.setText("Khóa Vĩnh Viễn");
+                        else if (locktype.equals("tamthoi"))
+                            binding.tvPhu.setText("Khóa: " + locktime);
+
+                        if (lock == false && !locktype.equals("chuaduyet"))
+                            binding.tvPhu.setText(online ? "Online" : "Offline");
                     }
                 }
 

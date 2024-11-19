@@ -61,10 +61,10 @@ public class Admin_CuaHangFragment extends Fragment {
             public void onItemClick(ThongTinChu cuahang) {
                 Bundle bundleIDKhachHang = new Bundle();
                 bundleIDKhachHang.putSerializable("idCH", cuahang.getId());
-                Owner_KhachHangDetailFragment khachHangDetailFragment = new Owner_KhachHangDetailFragment();
-                khachHangDetailFragment.setArguments(bundleIDKhachHang);
+                Admin_CuaHangDetailFragment adminCuaHangDetailFragment = new Admin_CuaHangDetailFragment();
+                adminCuaHangDetailFragment.setArguments(bundleIDKhachHang);
                 getParentFragmentManager().beginTransaction()
-                        .replace(R.id.fragment_container, khachHangDetailFragment)
+                        .replace(R.id.fragment_container, adminCuaHangDetailFragment)
                         .addToBackStack(null)
                         .commit();
             }
