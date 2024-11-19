@@ -35,6 +35,7 @@
                     android:autoSizeTextType="uniform"
                     android:gravity="start|center"
                     android:paddingLeft="5dp"
+                    android:paddingRight="-5dp"
                     android:text="ID-"
                     android:textColor="#B71C1C"
                     android:textSize="22sp"

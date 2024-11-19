@@ -35,7 +35,7 @@ public class Owner_KhachHangFragment extends Fragment {
     KhachHangAdapter adapter;
 
     // Email mà tài khoản quản lý đang đăng nhập (Đã bỏ @mail.com)
-    String idLogin = LoginActivity.idUser;
+    String idLogin = LoginActivity.idUser.substring(0, LoginActivity.idUser.indexOf("@"));
 
     // Lưu lại danh sách khách hàng ban đầu trước khi tìm kiếm
     private List<KhachHang> dsKhachHang;
@@ -47,7 +47,6 @@ public class Owner_KhachHangFragment extends Fragment {
     public void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         Log.d("l.d", "Owner_KhachHangFragment > onCreate: idLogin: " + idLogin);
-        idLogin = idLogin.substring(0, idLogin.indexOf("@"));
         dsKhachHang = new ArrayList<>();
     }
 
@@ -55,6 +54,14 @@ public class Owner_KhachHangFragment extends Fragment {
     public View onCreateView(LayoutInflater inflater, ViewGroup container,
                              Bundle savedInstanceState) {
         binding = FragmentOwnerKhachHangBinding.inflate(getLayoutInflater(), container, false);
+
+        //RecycleView: Thiết lập layout cho RecyclerView, sử dụng LinearLayoutManager để hiển thị danh sách theo chiều dọc
+        binding.ownerRcvKhachHang.setLayoutManager(new LinearLayoutManager(getContext()));
+        adapter = new KhachHangAdapter(dsKhachHang);
+        binding.ownerRcvKhachHang.setAdapter(adapter);
+        adapter.getKhachHangList().clear();
+        dsKhachHang.clear();
+
         return binding.getRoot();
     }
 
@@ -62,12 +69,6 @@ public class Owner_KhachHangFragment extends Fragment {
     @Override
     public void onViewCreated(@NonNull View view, @Nullable Bundle savedInstanceState) {
         super.onViewCreated(view, savedInstanceState);
-
-        //RecycleView: Thiết lập layout cho RecyclerView, sử dụng LinearLayoutManager để hiển thị danh sách theo chiều dọc
-        binding.ownerRcvKhachHang.setLayoutManager(new LinearLayoutManager(getContext()));
-        // Khởi tạo danh sách khách hàng trống và adapter
-        adapter = new KhachHangAdapter(dsKhachHang);
-        binding.ownerRcvKhachHang.setAdapter(adapter);
 
         // Firebase: lấy dữ liệu từ Firebase
         hienThiThongBao();
@@ -105,7 +106,6 @@ public class Owner_KhachHangFragment extends Fragment {
                     }
 
                     // Cập nhật dữ liệu khi hoàn thành việc lấy tất cả khách hàng
-                    adapter.sortKhachHangList();  // Sắp xếp nếu cần thiết
                     adapter.notifyDataSetChanged();  // Cập nhật RecyclerView
                 }
 
@@ -115,7 +115,7 @@ public class Owner_KhachHangFragment extends Fragment {
             });
         } else {
             DatabaseReference db = FirebaseDatabase.getInstance().getReference("duyetkhachhang");
-            db.child(idLogin).addListenerForSingleValueEvent(new ValueEventListener() {
+            db.child(idLogin).addValueEventListener(new ValueEventListener() {
                 @Override
                 public void onDataChange(@NonNull DataSnapshot dataSnapshot) {
                     for (DataSnapshot snapshot : dataSnapshot.getChildren()) {
@@ -158,7 +158,7 @@ public class Owner_KhachHangFragment extends Fragment {
                     // Cập nhật dữ liệu khi hoàn thành việc lấy tất cả khách hàng
                     counter[0]++;
                     if (counter[0] == customerIds.size()) {
-                        adapter.sortKhachHangList();  // Sắp xếp nếu cần thiết
+                        //adapter.sortKhachHangList();  // Sắp xếp nếu cần thiết
                         adapter.notifyDataSetChanged();  // Cập nhật RecyclerView
                     }
                 }

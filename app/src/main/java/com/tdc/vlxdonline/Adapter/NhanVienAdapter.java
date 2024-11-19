@@ -13,7 +13,6 @@ import com.google.firebase.database.DatabaseReference;
 import com.google.firebase.database.FirebaseDatabase;
 import com.google.firebase.database.ValueEventListener;
 import com.tdc.vlxdonline.Model.NhanVien;
-import com.tdc.vlxdonline.R;
 import com.tdc.vlxdonline.databinding.ItemOwnerRecycleviewBinding;
 
 import java.util.Collections;
@@ -97,7 +96,9 @@ public class NhanVienAdapter extends RecyclerView.Adapter<NhanVienAdapter.NhanVi
 
             // Kiểm tra nếu mã CCCD bắt đầu bằng ký tự '@'
             if (nhanVien.getCccd() != null && nhanVien.getCccd().startsWith("@")) {
-                binding.lnItem.setBackgroundResource(android.R.drawable.title_bar); // Đặt background đặc biệt
+                binding.tvTen.setTextColor(Color.RED); // Đặt background đặc biệt
+                binding.tvID.setTextColor(Color.RED); // Đặt background đặc biệt\
+                binding.tvID.setText(nhanVien.getCccd().substring(1));
             } else {
                 binding.lnItem.setBackgroundResource(com.google.android.gms.base.R.drawable.common_google_signin_btn_icon_dark_normal_background); // Đặt background mặc định
             }
@@ -145,7 +146,7 @@ public class NhanVienAdapter extends RecyclerView.Adapter<NhanVienAdapter.NhanVi
 
     // Thêm phương thức sắp xếp danh sách nhân viên theo mã NV
     public void sortNhanVienList() {
-        Collections.sort(nhanVienList, new Comparator<NhanVien>() {
+        /*Collections.sort(nhanVienList, new Comparator<NhanVien>() {
             @Override
             public int compare(NhanVien nv1, NhanVien nv2) {
                 // Lấy phần số của mã NV và so sánh
@@ -157,6 +158,6 @@ public class NhanVienAdapter extends RecyclerView.Adapter<NhanVienAdapter.NhanVi
             }
         });
 
-        notifyDataSetChanged(); // Cập nhật lại danh sách sau khi sắp xếp
+        notifyDataSetChanged(); // Cập nhật lại danh sách sau khi sắp xếp*/
     }
 }
