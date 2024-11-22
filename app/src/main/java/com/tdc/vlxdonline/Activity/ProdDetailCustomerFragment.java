@@ -51,7 +51,13 @@ public class ProdDetailCustomerFragment extends Fragment {
 
     public ProdDetailCustomerFragment(String idProduct) {
         idProd = idProduct;
-        idKhach = Customer_HomeActivity.info.getID();
+
+        // TODO 1 NGVlinh: Admin đăng nhập, viết dòng này để tránh UD Crash
+        if (Customer_HomeActivity.info == null) {
+            idKhach = "N/A";
+        } else
+            // Khách hàng đang đăng nhập
+            idKhach = Customer_HomeActivity.info.getID();
     }
 
     @Override
@@ -64,10 +70,18 @@ public class ProdDetailCustomerFragment extends Fragment {
                              Bundle savedInstanceState) {
         // Inflate the layout for this fragment
         binding = FragmentProdDetailCustomerBinding.inflate(inflater, container, false);
+        // TODO 2 NGVlinh: Admin đăng nhập, ẩn các nút mua, giỏ hàng
+        if (Customer_HomeActivity.info == null) {
+            idKhach = "N/A";
+            binding.btnDatHangNgay.setVisibility(View.INVISIBLE);
+            binding.lnGioHang.setVisibility(View.INVISIBLE);
+        }
+
+        // Khách hàng đăng nhập
         setAdapterAnh();
         setUpDisplay();
 
-        // NGVL VIẾT BẬY
+        // TODO 3 NGVLinh: Bắt sự kiện xem thông tin cửa hàng
         binding.tvCuaHang.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
