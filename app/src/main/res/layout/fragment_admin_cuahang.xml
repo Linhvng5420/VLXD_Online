@@ -31,7 +31,6 @@
             android:layout_marginTop="8dp"
             android:layout_marginEnd="16dp"
             android:background="@android:drawable/editbox_background_normal"
-
             android:iconifiedByDefault="false"
             android:inputType="text"
             android:queryHint="Tìm Kiếm: Nhập Tên, ID"
@@ -62,61 +61,73 @@
                 android:textSize="24sp"
                 android:textStyle="bold" />
 
-            <LinearLayout
+            <RadioGroup
                 android:layout_width="match_parent"
-                android:layout_height="match_parent"
-                android:layout_marginBottom="10dp"
+                android:layout_height="wrap_content"
                 android:background="#20C5C5C5"
                 android:orientation="horizontal">
 
-                <CheckBox
-                    android:id="@+id/checkBoxChuaDuyet"
+                <!-- Chưa Duyệt -->
+                <RadioButton
+                    android:id="@+id/checkboxChuaDuyet"
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
                     android:layout_weight="1"
-                    android:checked="false"
                     android:text="Chưa Duyệt"
                     android:textColor="#304FFE"
+                    android:textSize="12sp"
                     android:textStyle="bold" />
 
-                <CheckBox
-                    android:id="@+id/checkBoxOnline"
+                <!-- Online -->
+                <RadioButton
+                    android:id="@+id/checkboxOnline"
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
                     android:layout_weight="1"
-                    android:checked="false"
                     android:text="Online"
                     android:textColor="#43A047"
+                    android:textSize="12sp"
                     android:textStyle="bold" />
 
-                <CheckBox
-                    android:id="@+id/checkBoxOffline"
+                <!-- Offline -->
+                <RadioButton
+                    android:id="@+id/checkboxOffline"
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
                     android:layout_weight="1"
-                    android:checked="false"
                     android:text="Offline"
                     android:textColor="#E53935"
+                    android:textSize="12sp"
                     android:textStyle="bold" />
 
-                <CheckBox
-                    android:id="@+id/checkBoxLock"
+                <!-- Lock -->
+                <RadioButton
+                    android:id="@+id/checkboxLock"
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
                     android:layout_weight="1"
-                    android:checked="false"
                     android:text="Lock"
                     android:textColor="#FC02FF"
+                    android:textSize="12sp"
                     android:textStyle="bold" />
-            </LinearLayout>
 
+                <!-- Show All -->
+                <RadioButton
+                    android:id="@+id/checkboxAll"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_weight="1"
+                    android:text="Show All"
+                    android:textColor="@color/black"
+                    android:textSize="12sp"
+                    android:textStyle="bold" />
+            </RadioGroup>
         </LinearLayout>
 
         <androidx.recyclerview.widget.RecyclerView
             android:id="@+id/ownerRcvNhanVien"
             android:layout_width="0dp"
             android:layout_height="0dp"
-            android:layout_marginTop="2dp"
             android:padding="5dp"
             android:scrollbars="vertical"
             android:visibility="visible"
