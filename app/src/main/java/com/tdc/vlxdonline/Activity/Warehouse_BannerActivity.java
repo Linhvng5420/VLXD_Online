@@ -7,6 +7,7 @@ import android.os.Bundle;
 import android.view.View;
 import android.widget.Button;
 import android.widget.ImageView;
+import android.widget.ListView;
 import android.widget.Toast;
 
 import androidx.activity.result.ActivityResult;
@@ -40,17 +41,47 @@ public class Warehouse_BannerActivity extends AppCompatActivity {
 
     DatabaseReference reference = FirebaseDatabase.getInstance().getReference();
 
+    private Button btnThemBanner, btnXoaBanner;
+    private ImageView ivAnhBanner;
+    private ListView lvDanhSach;
+    private ActivityResultLauncher<Intent> imagePickerLauncher;
+
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.qlbanner_layout);
         setCtronl();
         getDate();
+        initImagePickerLauncher();
         setEvent();
+
+    }
+    private void initImagePickerLauncher() {
+        imagePickerLauncher = registerForActivityResult(
+                new ActivityResultContracts.StartActivityForResult(),
+                result -> {
+                    if (result.getResultCode() == Activity.RESULT_OK && result.getData() != null) {
+                        Uri selectedImageUri = result.getData().getData();
+                        if (selectedImageUri != null) {
+                            ivAnhBanner.setImageURI(selectedImageUri);
+                            uploadImageToFirebase(selectedImageUri);
+                        }
+                    }
+                }
+        );
     }
 
     private void setEvent() {
 
+        btnThemBanner.setOnClickListener(v -> {
+            Intent intent = new Intent(Intent.ACTION_PICK);
+            intent.setType("image/*");
+            imagePickerLauncher.launch(intent);
+        });
+
+        btnXoaBanner.setOnClickListener(v -> {
+            deleteBanner();
+        });
     }
 
     private void getDate() {
@@ -67,5 +98,24 @@ public class Warehouse_BannerActivity extends AppCompatActivity {
     }
     private void setCtronl() {
 
+        btnThemBanner = findViewById(R.id.btnThemBanner);
+        btnXoaBanner = findViewById(R.id.btnXoaBanner);
+        ivAnhBanner = findViewById(R.id.ivAnhBanner);
+        lvDanhSach = findViewById(R.id.lvDanhSach);
+
+        // Initialize Firebase
+        reference = FirebaseDatabase.getInstance().getReference("Banners");
+
+    }
+    private void uploadImageToFirebase(Uri imageUri) {
+        StorageReference storageReference = FirebaseStorage.getInstance()
+                .getReference("banners/" + System.currentTimeMillis() + ".jpg");
+
+        storageReference.putFile(imageUri)
+                .addOnSuccessListener(taskSnapshot -> storageReference.getDownloadUrl()
+                        .addOnSuccessListener(uri -> {
+                            Toast.makeText(this, "Tải ảnh lên thành công!", Toast.LENGTH_SHORT).show();
+                        }))
+                .addOnFailureListener(e -> Toast.makeText(this, "Lỗi tải ảnh: " + e.getMessage(), Toast.LENGTH_SHORT).show());
     }
 }
