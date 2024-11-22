@@ -27,25 +27,20 @@
                 android:layout_width="50dp"
                 android:layout_height="50dp"
                 android:layout_marginRight="80dp"
-                android:layout_marginLeft="45dp"
+                android:layout_marginLeft="10dp"
                 android:background="@drawable/add_donhang" />
 
             <TextView
                 android:id="@+id/tv_chiTiet"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
-                android:layout_marginRight="60dp"
+                android:layout_marginRight="130dp"
+                android:layout_marginLeft="10dp"
                 android:text="Đơn Nhập"
-                android:textSize="25sp"
+                android:textSize="25dp"
                 android:textStyle="bold" />
 
-            <Button
-                android:id="@+id/btn_loadDH"
-                android:layout_width="50dp"
-                android:layout_height="50dp"
-                android:layout_marginLeft="10dp"
-                android:layout_marginRight="38dp"
-                android:background="@drawable/reload" />
+
 
 
         </LinearLayout>

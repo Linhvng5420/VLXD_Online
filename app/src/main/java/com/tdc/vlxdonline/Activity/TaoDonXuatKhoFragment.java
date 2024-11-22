@@ -321,8 +321,10 @@ public class TaoDonXuatKhoFragment extends Fragment {
                 upLoad(); // Gọi phương thức tải lên đơn nhập
             }
         });
+
         return binding.getRoot(); // Trả về view của fragment
     }
+
 
 
     @Override

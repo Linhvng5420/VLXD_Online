@@ -59,12 +59,6 @@ public class GiaoDienDonHang_Fragment extends Fragment {
                 ((Warehouse_HomeActivity)getActivity()).ReplaceFragment(new TaoDonNhapHangFragment());
             }
         });
-        binding.btnLoadDH.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View view) {
-
-            }
-        });
 
         return binding.getRoot();
     }
