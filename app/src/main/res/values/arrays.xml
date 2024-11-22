@@ -1,0 +1,8 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+    <string-array name="tra_gop_options">
+        <item>6 tháng</item>
+        <item>12 tháng</item>
+        <item>24 tháng</item>
+    </string-array>
+</resources>

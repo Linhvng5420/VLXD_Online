@@ -16,11 +16,11 @@
         android:background="#F0E4CE"
         android:elevation="10dp"
         android:gravity="center"
+        android:orientation="horizontal"
+        android:padding="8dp"
         android:text="QUẢN LÝ SẢN PHẨM"
         android:textSize="40sp"
-        android:textStyle="bold"
-        android:orientation="horizontal"
-        android:padding="8dp">
+        android:textStyle="bold">
 
         <TextView
             android:layout_width="match_parent"
@@ -47,8 +47,8 @@
         <LinearLayout
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:orientation="vertical"
-            android:layout_marginBottom="3dp">
+            android:layout_marginBottom="3dp"
+            android:orientation="vertical">
 
             <LinearLayout
                 android:layout_width="match_parent"
@@ -91,42 +91,44 @@
                         android:id="@+id/edtNhapTen"
                         android:layout_width="match_parent"
                         android:layout_height="wrap_content"
+                        android:layout_marginBottom="3dp"
                         android:background="@drawable/edit_text_border"
-                        android:hint="Nhập Tên Sản Phẩm"
-                        android:layout_marginBottom="3dp"/>
+                        android:hint="Nhập Tên Sản Phẩm" />
 
                     <EditText
                         android:id="@+id/edtNhapgiaban"
                         android:layout_width="match_parent"
                         android:layout_height="wrap_content"
+                        android:layout_marginBottom="3dp"
                         android:background="@drawable/edit_text_border"
                         android:hint="Nhập Giá Bán"
-                        android:layout_marginBottom="3dp"/>
+                        android:inputType="number" />
 
                     <EditText
                         android:id="@+id/edtNhapgiaNhap"
                         android:layout_width="match_parent"
                         android:layout_height="wrap_content"
+                        android:layout_marginBottom="3dp"
                         android:background="@drawable/edit_text_border"
-                        android:hint="Nhập Giá Nhap"
-                        android:layout_marginBottom="3dp"/>
+                        android:hint="Nhập Giá Nhập"
+                        android:inputType="number" />
 
                     <EditText
                         android:id="@+id/edtNhapsoluong"
                         android:layout_width="match_parent"
                         android:layout_height="wrap_content"
+                        android:layout_marginBottom="3dp"
                         android:background="@drawable/edit_text_border"
                         android:hint="Nhập Số Lượng"
-                        android:layout_marginBottom="3dp"/>
+                        android:inputType="number" />
 
                     <EditText
                         android:id="@+id/edtDaban"
                         android:layout_width="match_parent"
                         android:layout_height="wrap_content"
+                        android:layout_marginBottom="3dp"
                         android:background="@drawable/edit_text_border"
-                        android:hint="Sản Phẩm Đã Bán"
-                        android:layout_marginBottom="3dp"/>
-
+                        android:hint="Sản Phẩm Đã Bán" />
                 </LinearLayout>
 
             </LinearLayout>
@@ -134,9 +136,9 @@
             <LinearLayout
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
+                android:layout_marginBottom="3dp"
                 android:background="#fff"
-                android:orientation="horizontal"
-                android:layout_marginBottom="3dp">
+                android:orientation="horizontal">
 
                 <Spinner
                     android:id="@+id/spdonVi"
@@ -177,24 +179,24 @@
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:layout_weight="1"
-                android:text="Thêm"
-                android:background="@drawable/edit_text_border"/>
+                android:background="@drawable/edit_text_border"
+                android:text="Thêm" />
 
             <Button
                 android:id="@+id/btnSua"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:layout_weight="1"
-                android:text="Sửa"
-                android:background="@drawable/edit_text_border"/>
+                android:background="@drawable/edit_text_border"
+                android:text="Sửa" />
 
             <Button
                 android:id="@+id/btnXoa"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:layout_weight="1"
-                android:text="Xoá"
-                android:background="@drawable/edit_text_border"/>
+                android:background="@drawable/edit_text_border"
+                android:text="Xoá" />
         </LinearLayout>
 
         <androidx.recyclerview.widget.RecyclerView

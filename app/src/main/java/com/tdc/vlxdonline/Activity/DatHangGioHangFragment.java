@@ -78,6 +78,16 @@ public class DatHangGioHangFragment extends Fragment {
                 XacNhanTaoDonHang();
             }
         });
+        binding.btnDatHangTraGop.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+                // Thực hiện chuyển đổi sang Fragment chi tiết, thay thế Fragment hiện tại
+                getParentFragmentManager().beginTransaction()
+                        .replace(R.id.frm_customer, new KhachHangTraGopFragment()) // Thay thế fragment_container hiện tại bằng fragment chi tiết
+                        .addToBackStack(null) // Cho phép quay lại màn hình trước khi nhấn nút Back
+                        .commit(); // Thực hiện chuyển đổi
+            }
+        });
     }
 
     // Hàm tạo danh sách các đơn hàng theo chủ cửa hàng dựa theo các sản phẩm đã chọn
@@ -178,6 +188,32 @@ public class DatHangGioHangFragment extends Fragment {
     }
 
     // Ham thong bao xac nhan mua hang cho khach hang
+//    private void XacNhanTaoDonHang() {
+//        AlertDialog.Builder builder = new AlertDialog.Builder(getActivity());
+//        builder.setTitle("Xác Nhận Mua Hàng!").setMessage("Hãy Chắc Chắn Rằng Bạn Sẽ Đặt Mua Các Sản Phẩm Đã Chọn!");
+//
+//        builder.setPositiveButton(android.R.string.yes, new DialogInterface.OnClickListener() {
+//            @Override
+//            public void onClick(DialogInterface dialog, int which) {
+//                TaoDonHang();
+//            }
+//        });
+//        builder.setNegativeButton(R.string.quay_lai, new DialogInterface.OnClickListener() {
+//            @Override
+//            public void onClick(DialogInterface dialog, int which) {
+//                dialog.cancel();
+//            }
+//        });
+//
+//        Drawable drawableIcon = getResources().getDrawable(android.R.drawable.ic_dialog_alert);
+//        drawableIcon.setTint(Color.RED);
+//        builder.setIcon(drawableIcon);
+//        Drawable drawableBg = getResources().getDrawable(R.drawable.bg_item_lg);
+//        drawableBg.setTint(Color.rgb(100, 220, 255));
+//        AlertDialog alertDialog = builder.create();
+//        alertDialog.getWindow().setBackgroundDrawable(drawableBg);
+//        alertDialog.show();
+//    }
     private void XacNhanTaoDonHang() {
         AlertDialog.Builder builder = new AlertDialog.Builder(getActivity());
         builder.setTitle("Xác Nhận Mua Hàng!").setMessage("Hãy Chắc Chắn Rằng Bạn Sẽ Đặt Mua Các Sản Phẩm Đã Chọn!");
@@ -185,7 +221,25 @@ public class DatHangGioHangFragment extends Fragment {
         builder.setPositiveButton(android.R.string.yes, new DialogInterface.OnClickListener() {
             @Override
             public void onClick(DialogInterface dialog, int which) {
-                TaoDonHang();
+                // Tính tổng tiền của đơn hàng
+                int tongTien = 0;
+                for (ChiTietDon chiTiet : dataChiTiet) {
+                    tongTien += chiTiet.getGia() * chiTiet.getSoLuong();
+                }
+
+                // Tạo Bundle để truyền tổng tiền sang KhachHangTraGopFragment
+                Bundle bundle = new Bundle();
+                bundle.putInt("tongTien", tongTien);  // Truyền tổng tiền
+
+                // Chuyển sang KhachHangTraGopFragment
+                KhachHangTraGopFragment fragment = new KhachHangTraGopFragment();
+                fragment.setArguments(bundle);
+
+                // Thực hiện chuyển Fragment
+                getParentFragmentManager().beginTransaction()
+                        .replace(R.id.frm_customer, fragment)  // Thay thế fragment hiện tại
+                        .addToBackStack(null)  // Cho phép quay lại màn hình trước
+                        .commit();
             }
         });
         builder.setNegativeButton(R.string.quay_lai, new DialogInterface.OnClickListener() {
@@ -204,6 +258,7 @@ public class DatHangGioHangFragment extends Fragment {
         alertDialog.getWindow().setBackgroundDrawable(drawableBg);
         alertDialog.show();
     }
+
 
     // Ham them cac don hang va chi tiet vao firebase
     private void TaoDonHang() {
