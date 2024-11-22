@@ -1,0 +1,43 @@
+<?xml version="1.0" encoding="utf-8"?>
+<FrameLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    tools:context=".Activity.DanhGiaDonHangFragment">
+
+    <LinearLayout
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        android:orientation="vertical">
+
+        <TextView
+            android:layout_width="match_parent"
+            android:layout_height="50dp"
+            android:background="@drawable/back6"
+            android:gravity="center"
+            android:text="ĐÁNH GIÁ"
+            android:textColor="#D7D7D7"
+            android:textSize="30dp"
+            android:textStyle="bold" />
+
+        <androidx.recyclerview.widget.RecyclerView
+            android:id="@+id/rc_danh_gia"
+            android:layout_width="match_parent"
+            android:layout_height="0dp"
+            android:layout_weight="1"/>
+
+        <TextView
+            android:id="@+id/btnXacNhanDG"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:padding="10dp"
+            android:gravity="center"
+            android:textColor="@color/white"
+            android:textSize="21dp"
+            android:textStyle="bold"
+            android:text="XÁC NHẬN"
+            android:background="@drawable/bg_detail"
+            android:backgroundTint="#0AF"/>
+    </LinearLayout>
+
+</FrameLayout>

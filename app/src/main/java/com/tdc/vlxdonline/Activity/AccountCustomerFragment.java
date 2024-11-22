@@ -34,6 +34,18 @@ public class AccountCustomerFragment extends Fragment {
     @Override
     public void onViewCreated(@NonNull View view, @Nullable Bundle savedInstanceState) {
         super.onViewCreated(view, savedInstanceState);
+        binding.ivChuaDg.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                ((Customer_HomeActivity) getActivity()).ReplaceFragment(new DonChuaDanhGiaFragment(idKH));
+            }
+        });
+        binding.ivDaDg.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                ((Customer_HomeActivity) getActivity()).ReplaceFragment(new DaDanhGiaFragment(0, idKH));
+            }
+        });
         // Sự kiện khi nhấn nút logout
         binding.btnLogout.setOnClickListener(new View.OnClickListener() {
             @Override

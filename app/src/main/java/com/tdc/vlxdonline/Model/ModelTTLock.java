@@ -6,8 +6,8 @@ public class ModelTTLock {
 
     public ModelTTLock() {
         locktime = "";
-        locktype = "";
-        lock = true;
+        locktype = "chuaduyet";
+        lock = false;
         online = false;
     }
 

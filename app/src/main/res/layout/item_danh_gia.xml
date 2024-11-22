@@ -1,0 +1,74 @@
+<?xml version="1.0" encoding="utf-8"?>
+<androidx.cardview.widget.CardView xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    android:orientation="vertical"
+    android:layout_width="match_parent"
+    android:layout_height="wrap_content"
+    app:cardUseCompatPadding="true"
+    app:cardElevation="10dp"
+    app:cardCornerRadius="8dp">
+
+    <LinearLayout
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:orientation="vertical">
+        <LinearLayout
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:orientation="horizontal">
+            <androidx.cardview.widget.CardView
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                app:cardUseCompatPadding="true"
+                android:background="@drawable/bg_img_detail">
+                <ImageView
+                    android:id="@+id/iv_anh_dg"
+                    android:layout_width="90dp"
+                    android:layout_height="90dp"
+                    android:scaleType="centerCrop"
+                    android:src="@drawable/user_account"/>
+            </androidx.cardview.widget.CardView>
+            <LinearLayout
+                android:layout_width="match_parent"
+                android:layout_height="match_parent"
+                android:orientation="vertical"
+                android:paddingHorizontal="5dp">
+                <TextView
+                    android:id="@+id/tv_ten_dg"
+                    android:layout_width="match_parent"
+                    android:layout_height="48dp"
+                    android:textSize="18dp"
+                    android:textStyle="bold"
+                    android:gravity="center_vertical"
+                    android:text="Ten San Pham || Ten Khach"/>
+                <LinearLayout
+                    android:layout_width="match_parent"
+                    android:layout_height="match_parent">
+                    <ImageView
+                        android:id="@+id/iv_start_dg1"
+                        style="@style/ThemeStar_DG"/>
+                    <ImageView
+                        android:id="@+id/iv_start_dg2"
+                        style="@style/ThemeStar_DG"/>
+                    <ImageView
+                        android:id="@+id/iv_start_dg3"
+                        style="@style/ThemeStar_DG"/>
+                    <ImageView
+                        android:id="@+id/iv_start_dg4"
+                        style="@style/ThemeStar_DG"/>
+                    <ImageView
+                        android:id="@+id/iv_start_dg5"
+                        style="@style/ThemeStar_DG"/>
+                </LinearLayout>
+            </LinearLayout>
+        </LinearLayout>
+        <EditText
+            android:id="@+id/edt_mota_dg"
+            android:layout_marginTop="-10dp"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:paddingHorizontal="5dp"
+            android:hint="Mo ta cam nhan cua ban ve san pham ....."/>
+    </LinearLayout>
+
+</androidx.cardview.widget.CardView>
