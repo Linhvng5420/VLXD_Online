@@ -1,14 +1,21 @@
 package com.tdc.vlxdonline.Activity;
 
 import android.app.AlertDialog;
+import android.app.Dialog;
 import android.content.res.Resources;
+import android.graphics.Typeface;
 import android.net.Uri;
 import android.os.Bundle;
 import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
+import android.view.Window;
+import android.widget.Button;
 import android.widget.EditText;
+import android.widget.LinearLayout;
+import android.widget.ScrollView;
+import android.widget.TextView;
 import android.widget.Toast;
 
 import androidx.annotation.NonNull;
@@ -63,6 +70,183 @@ public class Admin_CuaHangDetailFragment extends Fragment {
 
         setupAuthentButtons();
         setupDSSanPhamButton();
+
+
+        // Bắt sự kiện xem thông tin cửa hàng
+        binding.btnInfo.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+                String idChu = cuahangID;
+                DatabaseReference referDetailProd = FirebaseDatabase.getInstance().getReference();
+                referDetailProd.child("thongtinchu").child(idChu).addValueEventListener(new ValueEventListener() {
+                    @Override
+                    public void onDataChange(DataSnapshot snapshot) {
+                        if (snapshot.exists()) {
+                            String tenChu = snapshot.child("ten").getValue(String.class);
+                            String diaChi = snapshot.child("diaChi").getValue(String.class);
+                            String email = snapshot.child("email").getValue(String.class);
+                            String sdt = snapshot.child("sdt").getValue(String.class);
+
+                            Dialog dialog = new Dialog(getContext(), android.R.style.Theme_DeviceDefault_Light_NoActionBar_Fullscreen);
+                            dialog.requestWindowFeature(Window.FEATURE_NO_TITLE);
+
+                            ScrollView scrollView = new ScrollView(getContext());
+                            LinearLayout layout = new LinearLayout(getContext());
+                            layout.setOrientation(LinearLayout.VERTICAL);
+                            layout.setPadding(20, 20, 20, 20);
+
+                            Button btnClose = new Button(getContext());
+                            btnClose.setText("Đóng");
+                            btnClose.setTextSize(16);
+                            btnClose.setOnClickListener(new View.OnClickListener() {
+                                @Override
+                                public void onClick(View v) {
+                                    dialog.dismiss();
+                                }
+                            });
+                            layout.addView(btnClose);
+
+                            // Tạo các TextView và cho phép chọn để copy với kiểu chữ đậm
+                            TextView tvTenChu = new TextView(getContext());
+                            tvTenChu.setText("Tên: " + tenChu);
+                            tvTenChu.setTextSize(16);
+                            tvTenChu.setPadding(0, 10, 0, 10);
+                            tvTenChu.setTextIsSelectable(true);
+                            tvTenChu.setTypeface(null, Typeface.BOLD);  // Đặt kiểu chữ đậm
+                            layout.addView(tvTenChu);
+
+                            TextView tvDiaChi = new TextView(getContext());
+                            tvDiaChi.setText("Địa chỉ: " + diaChi);
+                            tvDiaChi.setTextSize(16);
+                            tvDiaChi.setPadding(0, 10, 0, 10);
+                            tvDiaChi.setTextIsSelectable(true);
+                            tvDiaChi.setTypeface(null, Typeface.BOLD);  // Đặt kiểu chữ đậm
+                            layout.addView(tvDiaChi);
+
+                            TextView tvEmail = new TextView(getContext());
+                            tvEmail.setText("Email: " + email);
+                            tvEmail.setTextSize(16);
+                            tvEmail.setPadding(0, 10, 0, 10);
+                            tvEmail.setTextIsSelectable(true);
+                            tvEmail.setTypeface(null, Typeface.BOLD);  // Đặt kiểu chữ đậm
+                            layout.addView(tvEmail);
+
+                            TextView tvSdt = new TextView(getContext());
+                            tvSdt.setText("Số điện thoại: " + sdt);
+                            tvSdt.setTextSize(16);
+                            tvSdt.setPadding(0, 10, 0, 10);
+                            tvSdt.setTextIsSelectable(true);
+                            tvSdt.setTypeface(null, Typeface.BOLD);  // Đặt kiểu chữ đậm
+                            layout.addView(tvSdt);
+
+                            referDetailProd.child("thongtinchusdc").child(idChu).addValueEventListener(new ValueEventListener() {
+                                @Override
+                                public void onDataChange(DataSnapshot dataSnapshot) {
+                                    if (dataSnapshot.exists()) {
+                                        TextView tvCSKH = new TextView(getContext());
+                                        tvCSKH.setText("Phone CSKH:");
+                                        tvCSKH.setTextSize(18);
+                                        tvCSKH.setTypeface(null, Typeface.BOLD);
+                                        tvCSKH.setPadding(0, 15, 0, 10);
+                                        tvCSKH.setTextIsSelectable(true);
+                                        layout.addView(tvCSKH);
+
+                                        for (DataSnapshot cuaHangSnapshot : dataSnapshot.child("cskh").getChildren()) {
+                                            String diaChiCuaHang = cuaHangSnapshot.getValue(String.class);
+                                            TextView tvCuaHangItem = new TextView(getContext());
+                                            tvCuaHangItem.setText("- " + diaChiCuaHang);
+                                            tvCuaHangItem.setTextSize(16);
+                                            tvCuaHangItem.setPadding(0, 5, 0, 5);
+                                            tvCuaHangItem.setTextIsSelectable(true);
+                                            layout.addView(tvCuaHangItem);
+                                        }
+
+                                        TextView tvCuaHang = new TextView(getContext());
+                                        tvCuaHang.setText("Danh sách cửa hàng:");
+                                        tvCuaHang.setTextSize(18);
+                                        tvCuaHang.setTypeface(null, Typeface.BOLD);
+                                        tvCuaHang.setPadding(0, 15, 0, 10);
+                                        tvCuaHang.setTextIsSelectable(true);
+                                        layout.addView(tvCuaHang);
+
+                                        for (DataSnapshot cuaHangSnapshot : dataSnapshot.child("cuahang").getChildren()) {
+                                            String diaChiCuaHang = cuaHangSnapshot.getValue(String.class);
+                                            TextView tvCuaHangItem = new TextView(getContext());
+                                            tvCuaHangItem.setText("- " + diaChiCuaHang);
+                                            tvCuaHangItem.setTextSize(16);
+                                            tvCuaHangItem.setPadding(0, 5, 0, 5);
+                                            tvCuaHangItem.setTextIsSelectable(true);
+                                            layout.addView(tvCuaHangItem);
+                                        }
+
+                                        TextView tvKho = new TextView(getContext());
+                                        tvKho.setText("Danh sách kho:");
+                                        tvKho.setTypeface(null, Typeface.BOLD);
+                                        tvKho.setTextSize(18);
+                                        tvKho.setPadding(0, 15, 0, 10);
+                                        tvKho.setTextIsSelectable(true);
+                                        layout.addView(tvKho);
+
+                                        for (DataSnapshot khoSnapshot : dataSnapshot.child("kho").getChildren()) {
+                                            String diaChiKho = khoSnapshot.getValue(String.class);
+                                            TextView tvKhoItem = new TextView(getContext());
+                                            tvKhoItem.setText("- " + diaChiKho);
+                                            tvKhoItem.setTextSize(16);
+                                            tvKhoItem.setPadding(0, 5, 0, 5);
+                                            tvKhoItem.setTextIsSelectable(true);
+                                            layout.addView(tvKhoItem);
+                                        }
+                                    }
+                                }
+
+                                @Override
+                                public void onCancelled(DatabaseError databaseError) {
+                                }
+                            });
+
+                            referDetailProd.child("thongtinchustk").child(idChu).addValueEventListener(new ValueEventListener() {
+                                @Override
+                                public void onDataChange(DataSnapshot dataSnapshot) {
+                                    if (dataSnapshot.exists()) {
+                                        TextView tvTaiKhoan = new TextView(getContext());
+                                        tvTaiKhoan.setText("Danh sách tài khoản:");
+                                        tvTaiKhoan.setTextSize(18);
+                                        tvTaiKhoan.setTypeface(null, Typeface.BOLD);
+                                        tvTaiKhoan.setPadding(0, 15, 0, 10);
+                                        tvTaiKhoan.setTextIsSelectable(true);
+                                        layout.addView(tvTaiKhoan);
+
+                                        for (DataSnapshot taiKhoanSnapshot : dataSnapshot.getChildren()) {
+                                            String thongTinTaiKhoan = taiKhoanSnapshot.getValue(String.class);
+                                            if (thongTinTaiKhoan != null) {
+                                                TextView tvTaiKhoanItem = new TextView(getContext());
+                                                tvTaiKhoanItem.setText("- " + thongTinTaiKhoan.toUpperCase());
+                                                tvTaiKhoanItem.setTextSize(16);
+                                                tvTaiKhoanItem.setPadding(0, 5, 0, 5);
+                                                tvTaiKhoanItem.setTextIsSelectable(true);
+                                                layout.addView(tvTaiKhoanItem);
+                                            }
+                                        }
+                                    }
+                                }
+
+                                @Override
+                                public void onCancelled(DatabaseError databaseError) {
+                                }
+                            });
+
+                            scrollView.addView(layout);
+                            dialog.setContentView(scrollView);
+                            dialog.show();
+                        } else Snackbar.make(view, "Không tìm thấy thông tin cửa hàng!", BaseTransientBottomBar.LENGTH_SHORT).show();
+                    }
+
+                    @Override
+                    public void onCancelled(DatabaseError error) {
+                    }
+                });
+            }
+        });
 
         return view;
     }

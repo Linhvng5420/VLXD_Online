@@ -1,9 +1,16 @@
 package com.tdc.vlxdonline.Activity;
 
+import android.app.Dialog;
+import android.graphics.Typeface;
 import android.os.Bundle;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
+import android.view.Window;
+import android.widget.Button;
+import android.widget.LinearLayout;
+import android.widget.ScrollView;
+import android.widget.TextView;
 
 import androidx.annotation.NonNull;
 import androidx.fragment.app.Fragment;
@@ -46,8 +53,8 @@ public class Admin_CuaHangFragment extends Fragment {
         adapter = new CuaHangAdapter(listChuCuaHang);
         binding.ownerRcvNhanVien.setAdapter(adapter);
 
-        // Mặc định là hiển thị tất cả NV và
-        binding.checkboxAll.isChecked();
+        // Mặc định CheckRadio Show All là hiển thị tất cả NV
+        binding.checkboxAll.setChecked(true);
 
         // Lắng nghe sự kiện thay đổi trạng thái của RadioGroup
         binding.RadioGroup.setOnCheckedChangeListener((group, checkedId) -> {
@@ -65,6 +72,7 @@ public class Admin_CuaHangFragment extends Fragment {
         // Get Data Firebase listChuCuaHang
         getDataCuaHang();
         setOnClickItemRecycleView();
+
         return view;
     }
 
