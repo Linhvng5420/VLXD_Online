@@ -176,26 +176,29 @@ public class Admin_CuaHangDetailFragment extends Fragment {
                     }
 
                     // Xử lý logic hiển thị hình ảnh dựa vào "locktype"
+                    binding.ivAuthenticated.setVisibility(View.VISIBLE);
+                    binding.tvAuthenticated.setVisibility(View.VISIBLE);
+
                     if ("chuaduyet".equals(locktype)) {
                         binding.ivAuthenticated.setImageResource(R.drawable.baseline_fingerprint_24);
+                        binding.tvAuthenticated.setText("Chưa Duyệt");
                     } else if ("vinhvien".equals(locktype)) {
                         binding.ivAuthenticated.setImageResource(R.drawable.baseline_lock_reset_24);
                         binding.tvAuthenticated.setText("Khóa Vĩnh Viễn");
-                        binding.tvAuthenticated.setVisibility(View.VISIBLE);
                     } else if ("tamthoi".equals(locktype)) {
                         binding.ivAuthenticated.setImageResource(R.drawable.baseline_lock_reset_24);
-
                         // Cập nhật thời gian khóa và hiển thị
                         if (locktime != null) {
-                            binding.tvAuthenticated.setText(locktime);
-                            binding.tvAuthenticated.setVisibility(View.VISIBLE);
+                            binding.tvAuthenticated.setText("Khóa Tới " + locktime);
                         } else {
-                            binding.ivAuthenticated.setImageResource(android.R.drawable.ic_lock_lock);
-                            binding.tvAuthenticated.setVisibility(View.INVISIBLE);
+                            binding.tvAuthenticated.setText("Lock Time Not Found");
                         }
-                    } else {
+                    } else if (online) {
                         binding.ivAuthenticated.setImageResource(android.R.drawable.ic_lock_lock);
-                        binding.tvAuthenticated.setVisibility(View.INVISIBLE);
+                        binding.tvAuthenticated.setText("Online");
+                    } else {
+                        binding.ivAuthenticated.setVisibility(View.INVISIBLE);
+                        binding.tvAuthenticated.setText("Offline");
                     }
                 } else
                     Log.d("l.d", "[l.d] Không tìm thấy cua hàng với ID: " + cuahangID);
@@ -330,7 +333,6 @@ public class Admin_CuaHangDetailFragment extends Fragment {
         dbRef.child("trangthai").child("locktime").setValue("");
         dbRef.child("trangthai").child("online").setValue(true);
 
-        binding.tvAuthenticated.setVisibility(View.GONE);
         binding.ivAuthenticated.setImageResource(android.R.drawable.ic_lock_lock);
 
         Toast.makeText(getContext(), "Tài khoản đã Xác Thực!", Toast.LENGTH_SHORT).show();
@@ -527,7 +529,8 @@ public class Admin_CuaHangDetailFragment extends Fragment {
         }
     }
 
-*//*
+*/
+    /*
     // ẢNH: HÀM ĐỂ HIỂN THỊ ẢNH CC
     private void hienThiAnhCCCD() {
         // Lấy dữ liệu của nhân viên từ Firebase
@@ -566,7 +569,8 @@ public class Admin_CuaHangDetailFragment extends Fragment {
             }
         });
     }
-*//*
+*/
+    /*
 
     private void checkPermissions() {
         // Kiểm tra xem ứng dụng có quyền truy cập vào bộ nhớ ngoài hay không
