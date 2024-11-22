@@ -62,6 +62,7 @@
                 android:textStyle="bold" />
 
             <RadioGroup
+                android:id="@+id/RadioGroup"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
                 android:background="#20C5C5C5"
@@ -75,7 +76,7 @@
                     android:layout_weight="1"
                     android:text="Chưa Duyệt"
                     android:textColor="#304FFE"
-                    android:textSize="12sp"
+                    android:textSize="13sp"
                     android:textStyle="bold" />
 
                 <!-- Online -->
@@ -86,7 +87,7 @@
                     android:layout_weight="1"
                     android:text="Online"
                     android:textColor="#43A047"
-                    android:textSize="12sp"
+                    android:textSize="13sp"
                     android:textStyle="bold" />
 
                 <!-- Offline -->
@@ -97,7 +98,7 @@
                     android:layout_weight="1"
                     android:text="Offline"
                     android:textColor="#E53935"
-                    android:textSize="12sp"
+                    android:textSize="13sp"
                     android:textStyle="bold" />
 
                 <!-- Lock -->
@@ -108,7 +109,7 @@
                     android:layout_weight="1"
                     android:text="Lock"
                     android:textColor="#FC02FF"
-                    android:textSize="12sp"
+                    android:textSize="13sp"
                     android:textStyle="bold" />
 
                 <!-- Show All -->
@@ -116,10 +117,11 @@
                     android:id="@+id/checkboxAll"
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
+                    android:layout_gravity="bottom"
                     android:layout_weight="1"
                     android:text="Show All"
                     android:textColor="@color/black"
-                    android:textSize="12sp"
+                    android:textSize="13sp"
                     android:textStyle="bold" />
             </RadioGroup>
         </LinearLayout>

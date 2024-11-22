@@ -1,7 +1,6 @@
 package com.tdc.vlxdonline.Activity;
 
 import android.os.Bundle;
-import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -33,7 +32,6 @@ public class Admin_CuaHangFragment extends Fragment {
     @Override
     public void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-
         listChuCuaHang = new ArrayList<>();
     }
 
@@ -48,10 +46,25 @@ public class Admin_CuaHangFragment extends Fragment {
         adapter = new CuaHangAdapter(listChuCuaHang);
         binding.ownerRcvNhanVien.setAdapter(adapter);
 
+        // Mặc định là hiển thị tất cả NV và
+        binding.checkboxAll.isChecked();
+
+        // Lắng nghe sự kiện thay đổi trạng thái của RadioGroup
+        binding.RadioGroup.setOnCheckedChangeListener((group, checkedId) -> {
+            if (checkedId == R.id.checkboxChuaDuyet) {
+                getDataCuaHangFilter("checkboxChuaDuyet");
+            } else if (checkedId == R.id.checkboxOnline) {
+                getDataCuaHangFilter("checkboxOnline");
+            } else if (checkedId == R.id.checkboxOffline) {
+                getDataCuaHangFilter("checkboxOffline");
+            } else if (checkedId == R.id.checkboxLock) {
+                getDataCuaHangFilter("checkboxLock");
+            } else getDataCuaHang();
+        });
+
         // Get Data Firebase listChuCuaHang
         getDataCuaHang();
         setOnClickItemRecycleView();
-        //
         return view;
     }
 
@@ -92,6 +105,65 @@ public class Admin_CuaHangFragment extends Fragment {
                 for (int i = 0; i < listChuCuaHang.size(); i++) {
                     adapter.notifyItemChanged(i);
                 }
+            }
+
+            @Override
+            public void onCancelled(@NonNull DatabaseError error) {
+            }
+        });
+    }
+
+    // Đọc ds cửa hàng theo filter: online(true), offline(false), locktype: lock(vinhvien & tamthoi), chuaduyet.
+    // Tương ứng với RiadioButton: checkboxChuaDuyet, checkboxOnline, checkboxOffline, checkboxLock
+    private void getDataCuaHangFilter(String filter) {
+        DatabaseReference dbAccount = FirebaseDatabase.getInstance().getReference("account");
+        DatabaseReference dbThongTinChu = FirebaseDatabase.getInstance().getReference("thongtinchu");
+
+        dbAccount.addListenerForSingleValueEvent(new ValueEventListener() {
+            @Override
+            public void onDataChange(@NonNull DataSnapshot snapshotAccount) {
+                dbThongTinChu.addListenerForSingleValueEvent(new ValueEventListener() {
+                    @Override
+                    public void onDataChange(@NonNull DataSnapshot snapshotThongTinChu) {
+                        listChuCuaHang.clear();
+                        adapter.getCuaHangList().clear();
+
+                        for (DataSnapshot dataSnapshotChu : snapshotThongTinChu.getChildren()) {
+                            ThongTinChu thongTinChu = dataSnapshotChu.getValue(ThongTinChu.class);
+
+                            if (thongTinChu != null) {
+                                String chuId = dataSnapshotChu.getKey();
+                                thongTinChu.setId(chuId);
+
+                                // Lấy thông tin trạng thái từ bảng account
+                                DataSnapshot trangThaiSnapshot = snapshotAccount.child(chuId).child("trangthai");
+                                if (trangThaiSnapshot.exists()) {
+                                    boolean online = trangThaiSnapshot.child("online").getValue(Boolean.class);
+                                    String locktype = trangThaiSnapshot.child("locktype").getValue(String.class);
+
+                                    // Áp dụng bộ lọc
+                                    if (filter.equals("checkboxChuaDuyet") && "chuaduyet".equals(locktype)) {
+                                        listChuCuaHang.add(thongTinChu);
+                                    } else if (filter.equals("checkboxOnline") && online) {
+                                        listChuCuaHang.add(thongTinChu);
+                                    } else if (filter.equals("checkboxOffline") && !online) {
+                                        listChuCuaHang.add(thongTinChu);
+                                    } else if (filter.equals("checkboxLock") &&
+                                            ("vinhvien".equals(locktype) || "tamthoi".equals(locktype))) {
+                                        listChuCuaHang.add(thongTinChu);
+                                    }
+                                }
+                            }
+                        }
+
+                        // Cập nhật danh sách cho adapter
+                        adapter.notifyDataSetChanged();
+                    }
+
+                    @Override
+                    public void onCancelled(@NonNull DatabaseError error) {
+                    }
+                });
             }
 
             @Override
