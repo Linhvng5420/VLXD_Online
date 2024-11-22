@@ -2,8 +2,13 @@ package com.tdc.vlxdonline.Activity;
 
 import android.app.AlertDialog;
 import android.app.Dialog;
+import android.content.ClipData;
+import android.content.ClipboardManager;
+import android.content.Context;
+import android.content.Intent;
 import android.content.res.Resources;
 import android.graphics.Typeface;
+import android.net.Uri;
 import android.os.Bundle;
 import android.util.Log;
 import android.view.LayoutInflater;
@@ -66,6 +71,7 @@ public class Admin_CuaHangDetailFragment extends Fragment {
 
         setupAuthentButtons();
         setupDSSanPhamButton();
+        setupCallButton();
 
         // Bắt sự kiện xem thông tin cửa hàng
         binding.btnInfo.setOnClickListener(new View.OnClickListener() {
@@ -589,5 +595,31 @@ public class Admin_CuaHangDetailFragment extends Fragment {
         dialog.show();
     }
 
+    private void setupCallButton() {
+        binding.btncall.setOnClickListener(view -> {
+            // Tạo AlertDialog để xác nhận
+            AlertDialog.Builder builder = new AlertDialog.Builder(getContext());
+            builder.setTitle("Xác nhận hành động")
+                    .setMessage("Bạn muốn gọi hay sao chép số điện thoại?");
+
+            // Nút "Gọi"
+            builder.setPositiveButton("Gọi", (dialog, which) -> {
+                Intent intent = new Intent(Intent.ACTION_DIAL);
+                intent.setData(Uri.parse("tel:" + cuahang.getSdt()));
+                startActivity(intent);
+            });
+
+            // Nút "Sao chép"
+            builder.setNegativeButton("Sao chép", (dialog, which) -> {
+                ClipboardManager clipboard = (ClipboardManager) getContext().getSystemService(Context.CLIPBOARD_SERVICE);
+                ClipData clip = ClipData.newPlainText("Số điện thoại", cuahang.getSdt());
+                clipboard.setPrimaryClip(clip);
+                Toast.makeText(getContext(), "Đã sao chép số điện thoại", Toast.LENGTH_SHORT).show();
+            });
+
+            // Hiển thị dialog
+            builder.show();
+        });
+    }
 
 }
