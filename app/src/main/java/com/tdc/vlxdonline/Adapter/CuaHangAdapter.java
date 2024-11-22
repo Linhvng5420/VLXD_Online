@@ -117,16 +117,21 @@ public class CuaHangAdapter extends RecyclerView.Adapter<CuaHangAdapter.CuaHangV
                             binding.tvPhu.setTextColor(Color.BLUE);
                         } else if (locktype.equals("vinhvien")) {
                             binding.tvPhu.setText("Khóa Vĩnh Viễn");
-                            binding.tvPhu.setTextColor(Color.RED);
-                            binding.tvTen.setTextColor(Color.RED);
+                            binding.tvPhu.setTextColor(Color.MAGENTA);
+                            binding.tvTen.setTextColor(Color.MAGENTA);
                         } else if (locktype.equals("tamthoi")) {
                             binding.tvPhu.setText("Khóa: " + locktime);
-                            binding.tvPhu.setTextColor(Color.RED);
-                            binding.tvTen.setTextColor(Color.RED);
+                            binding.tvPhu.setTextColor(Color.MAGENTA);
+                            binding.tvTen.setTextColor(Color.MAGENTA);
                         }
 
-                        if (lock == false && !locktype.equals("chuaduyet"))
+                        if (lock == false && !locktype.equals("chuaduyet")) {
+                            if (!online) {
+                                binding.tvTen.setTextColor(Color.RED);
+                                binding.tvPhu.setTextColor(Color.RED);
+                            }
                             binding.tvPhu.setText(online ? "Online" : "Offline");
+                        }
                     }
                 }
 

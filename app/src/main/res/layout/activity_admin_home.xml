@@ -75,6 +75,7 @@
                     android:text="Tên: N/A"
                     android:textColor="@color/white"
                     android:textSize="16sp" />
+
                 <TextView
                     android:id="@+id/user_sdt"
                     android:layout_width="wrap_content"
@@ -109,8 +110,8 @@
                     android:layout_height="wrap_content"
                     android:drawableStart="@drawable/nav_sanpham"
                     android:padding="16dp"
-                    android:text=" Sản Phẩm"
-                    android:textColor="@color/black"
+                    android:text=" Sản Phẩm Vi Phạm"
+                    android:textColor="#FB8C00"
                     android:textSize="18sp"
                     android:textStyle="bold" />
 
@@ -121,7 +122,7 @@
                     android:drawableStart="@drawable/baseline_report_24"
                     android:padding="16dp"
                     android:text=" Khách Hàng Khiếu Nại"
-                    android:textColor="#FB8C00"
+                    android:textColor="#E53935"
                     android:textSize="18sp"
                     android:textStyle="bold" />
             </LinearLayout>

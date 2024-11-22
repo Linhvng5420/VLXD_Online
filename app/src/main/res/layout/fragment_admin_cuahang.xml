@@ -15,7 +15,6 @@
             android:id="@+id/textView2"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:paddingTop="10dp"
             android:text="Quản Lý Cửa Hàng"
             android:textAlignment="center"
             android:textColor="#1A6D1D"
@@ -31,7 +30,7 @@
             android:layout_marginStart="16dp"
             android:layout_marginTop="8dp"
             android:layout_marginEnd="16dp"
-            android:background="@drawable/common_google_signin_btn_icon_dark_normal_background"
+            android:background="@android:drawable/editbox_background_normal"
 
             android:iconifiedByDefault="false"
             android:inputType="text"
@@ -45,8 +44,6 @@
             android:id="@+id/linearLayout"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:background="@drawable/common_google_signin_btn_icon_dark_normal_background"
-            android:backgroundTint="#6851A5"
             android:gravity="center"
             android:orientation="vertical"
             app:layout_constraintEnd_toEndOf="parent"
@@ -57,11 +54,62 @@
                 android:id="@+id/tvTitle"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
+                android:layout_marginTop="10dp"
+                android:background="#6851A5"
                 android:text="Danh Sách Cửa Hàng"
                 android:textAlignment="center"
                 android:textColor="@color/white"
                 android:textSize="24sp"
                 android:textStyle="bold" />
+
+            <LinearLayout
+                android:layout_width="match_parent"
+                android:layout_height="match_parent"
+                android:layout_marginBottom="10dp"
+                android:background="#20C5C5C5"
+                android:orientation="horizontal">
+
+                <CheckBox
+                    android:id="@+id/checkBoxChuaDuyet"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_weight="1"
+                    android:checked="false"
+                    android:text="Chưa Duyệt"
+                    android:textColor="#304FFE"
+                    android:textStyle="bold" />
+
+                <CheckBox
+                    android:id="@+id/checkBoxOnline"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_weight="1"
+                    android:checked="false"
+                    android:text="Online"
+                    android:textColor="#43A047"
+                    android:textStyle="bold" />
+
+                <CheckBox
+                    android:id="@+id/checkBoxOffline"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_weight="1"
+                    android:checked="false"
+                    android:text="Offline"
+                    android:textColor="#E53935"
+                    android:textStyle="bold" />
+
+                <CheckBox
+                    android:id="@+id/checkBoxLock"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_weight="1"
+                    android:checked="false"
+                    android:text="Lock"
+                    android:textColor="#FC02FF"
+                    android:textStyle="bold" />
+            </LinearLayout>
+
         </LinearLayout>
 
         <androidx.recyclerview.widget.RecyclerView
@@ -69,6 +117,7 @@
             android:layout_width="0dp"
             android:layout_height="0dp"
             android:layout_marginTop="2dp"
+            android:padding="5dp"
             android:scrollbars="vertical"
             android:visibility="visible"
             app:layout_constraintBottom_toBottomOf="parent"

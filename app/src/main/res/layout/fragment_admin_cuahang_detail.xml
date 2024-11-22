@@ -33,10 +33,17 @@
                         android:id="@+id/etID"
                         android:layout_width="match_parent"
                         android:layout_height="match_parent"
+                        android:autoSizeMaxTextSize="20sp"
+                        android:autoSizeMinTextSize="10sp"
+                        android:autoSizeStepGranularity="2sp"
+                        android:autoSizeTextType="uniform"
                         android:enabled="false"
                         android:gravity="center"
                         android:hint="ID Cửa Hàng"
+                        android:text="ID Cửa Hàng"
                         android:textColor="@color/black"
+                        android:textSize="20sp"
+                        android:textStyle="bold"
                         android:visibility="visible" />
                 </com.google.android.material.textfield.TextInputLayout>
 
@@ -54,6 +61,8 @@
                         <TextView
                             android:layout_width="match_parent"
                             android:layout_height="wrap_content"
+                            android:layout_marginTop="10dp"
+                            android:layout_marginBottom="-10dp"
                             android:gravity="center"
                             android:text="CCCD Mặt Trước"
                             android:textStyle="bold" />
@@ -71,6 +80,7 @@
                                 android:id="@+id/ivCCCD1"
                                 android:layout_width="190dp"
                                 android:layout_height="100dp"
+                                android:padding="5dp"
                                 android:scaleType="fitCenter"
                                 android:src="@drawable/add_a_photo_24" />
                         </androidx.cardview.widget.CardView>
@@ -85,6 +95,8 @@
                         <TextView
                             android:layout_width="match_parent"
                             android:layout_height="wrap_content"
+                            android:layout_marginTop="10dp"
+                            android:layout_marginBottom="-10dp"
                             android:gravity="center"
                             android:text="CCCD Mặt Sau"
                             android:textStyle="bold" />
@@ -102,6 +114,7 @@
                                 android:id="@+id/ivCCCD2"
                                 android:layout_width="190dp"
                                 android:layout_height="100dp"
+                                android:padding="5dp"
                                 android:scaleType="fitCenter"
                                 android:src="@drawable/add_a_photo_24" />
                         </androidx.cardview.widget.CardView>
@@ -178,7 +191,7 @@
                     <!-- EditText Email -->
 
                     <ImageButton
-                        android:id="@+id/btn_call"
+                        android:id="@+id/btncall"
                         android:layout_width="0dp"
                         android:layout_height="match_parent"
                         android:layout_marginStart="16dp"
@@ -247,10 +260,14 @@
                     <com.google.android.material.textfield.TextInputEditText
                         android:id="@+id/etDiaChi"
                         android:layout_width="match_parent"
-                        android:layout_height="match_parent"
+                        android:layout_height="wrap_content"
+                        android:autoSizeMinTextSize="12sp"
+                        android:autoSizeTextType="uniform"
                         android:enabled="false"
                         android:hint="Địa Chỉ"
-                        android:textColor="@color/black" />
+                        android:text="Ha Noi"
+                        android:textColor="@color/black"
+                        android:textSize="12sp" />
 
                 </com.google.android.material.textfield.TextInputLayout>
 
@@ -282,26 +299,45 @@
                         tools:listitem="@layout/item_owner_khachhang_tragop_rcv" />
                 </LinearLayout>
 
-                <Button
-                    android:id="@+id/btnDSSanPham"
-                    android:layout_width="wrap_content"
+                <LinearLayout
+                    android:layout_width="match_parent"
                     android:layout_height="wrap_content"
-                    android:layout_gravity="center"
                     android:layout_marginTop="5dp"
-                    android:autoSizeMaxTextSize="24sp"
-                    android:autoSizeTextType="uniform"
-                    android:background="@drawable/edit_text_tt"
-                    android:drawableRight="@drawable/baseline_store_24"
-                    android:drawableTint="@color/white"
-                    android:text="Danh Sách Sản Phẩm"
-                    android:textSize="24sp" />
+                    android:gravity="center"
+                    android:orientation="horizontal"
+                    android:padding="5dp">
+
+                    <Button
+                        android:id="@+id/btnDSSanPham"
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:layout_gravity="center"
+                        android:layout_marginRight="5dp"
+                        android:autoSizeTextType="uniform"
+                        android:background="@drawable/edit_text_tt"
+                        android:drawableLeft="@drawable/baseline_store_24"
+                        android:drawableTint="@color/white"
+                        android:text="Danh Sách Sản Phẩm"
+                        android:textSize="20sp" />
+
+                    <Button
+                        android:id="@+id/btnInfo"
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:layout_gravity="center"
+                        android:autoSizeMaxTextSize="24sp"
+                        android:autoSizeTextType="uniform"
+                        android:background="@drawable/edit_text_tt"
+                        android:drawableTint="@color/white"
+                        android:text="INFO"
+                        android:textSize="20sp" />
+                </LinearLayout>
 
                 <ImageView
                     android:id="@+id/ivAuthenticated"
                     android:layout_width="70dp"
                     android:layout_height="70dp"
                     android:layout_gravity="center"
-                    android:layout_marginTop="10dp"
                     android:background="@drawable/common_google_signin_btn_icon_dark_normal_background"
                     android:contentDescription="Xác Minh Tài Khoản"
                     android:scaleType="fitCenter"

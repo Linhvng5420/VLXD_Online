@@ -1,0 +1,71 @@
+<?xml version="1.0" encoding="utf-8"?>
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    android:layout_width="match_parent"
+    android:layout_height="90dp"
+    android:layout_marginBottom="5dp"
+    android:background="@drawable/common_google_signin_btn_icon_light_normal_background"
+    android:orientation="horizontal"
+    android:translationZ="10dp"
+    app:cardElevation="5dp"
+    app:cardUseCompatPadding="true">
+
+    <LinearLayout
+        android:layout_width="0dp"
+        android:layout_height="match_parent"
+        android:layout_weight="3"
+        android:background="@drawable/common_google_signin_btn_icon_dark_normal_background"
+        android:orientation="vertical">
+
+        <ImageView
+            android:id="@+id/imageView"
+            android:layout_width="match_parent"
+            android:layout_height="match_parent"
+            android:contentDescription="Loading..."
+            android:scaleType="fitCenter"
+            android:src="@drawable/cho_danh_gia" />
+    </LinearLayout>
+
+    <LinearLayout
+        android:layout_width="0dp"
+        android:layout_height="match_parent"
+        android:layout_weight="9"
+        android:orientation="vertical"
+        android:padding="5dp">
+
+        <TextView
+            android:id="@+id/tvTen"
+            android:layout_width="match_parent"
+            android:layout_height="0dp"
+            android:layout_weight="1"
+            android:autoSizeMaxTextSize="24sp"
+            android:autoSizeTextType="uniform"
+            android:text="Name Products"
+            android:textStyle="bold" />
+
+        <TextView
+            android:id="@+id/tv_ton_kho"
+            android:layout_width="match_parent"
+            android:layout_height="0dp"
+            android:layout_weight="1"
+            android:autoSizeMaxTextSize="24sp"
+            android:autoSizeTextType="uniform"
+            android:text="Count Products"
+            android:textColor="#43A047"
+            android:textStyle="bold" />
+
+        <TextView
+            android:id="@+id/tvGia"
+            android:layout_width="match_parent"
+            android:layout_height="0dp"
+            android:layout_weight="1"
+            android:autoSizeMaxTextSize="24sp"
+            android:autoSizeTextType="uniform"
+            android:text="Cost Products VND"
+            android:textAlignment="textEnd"
+            android:textColor="#E53935"
+            android:textStyle="bold" />
+
+    </LinearLayout>
+
+</LinearLayout>

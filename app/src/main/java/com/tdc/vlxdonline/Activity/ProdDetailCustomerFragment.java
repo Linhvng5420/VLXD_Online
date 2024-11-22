@@ -1,6 +1,7 @@
 package com.tdc.vlxdonline.Activity;
 
 import android.app.Dialog;
+import android.graphics.Color;
 import android.graphics.Typeface;
 import android.os.Bundle;
 import android.text.Editable;
@@ -73,8 +74,11 @@ public class ProdDetailCustomerFragment extends Fragment {
         // TODO 2 NGVlinh: Admin đăng nhập, ẩn các nút mua, giỏ hàng
         if (Customer_HomeActivity.info == null) {
             idKhach = "N/A";
-            binding.btnDatHangNgay.setVisibility(View.INVISIBLE);
+            binding.btnDatHangNgay.setText("Xóa Sản Phẩm Vi Phạm!");
+            binding.btnDatHangNgay.setTextColor(Color.WHITE);
+            binding.btnDatHangNgay.setBackgroundColor(Color.RED);
             binding.lnGioHang.setVisibility(View.INVISIBLE);
+            xoaSanPhamViPham_Admin();
         }
 
         // Khách hàng đăng nhập
@@ -459,6 +463,10 @@ public class ProdDetailCustomerFragment extends Fragment {
             }
         }
         return chuoi;
+    }
+
+    // TODO 4 NGVLinh: Xoa san pham vi pham
+    private void xoaSanPhamViPham_Admin() {
     }
 
     @Override
