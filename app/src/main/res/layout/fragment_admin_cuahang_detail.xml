@@ -328,9 +328,9 @@
                         android:autoSizeMaxTextSize="24sp"
                         android:autoSizeTextType="uniform"
                         android:background="@drawable/edit_text_tt"
-                        android:drawableTint="@color/white"
                         android:text="INFO"
-                        android:textSize="20sp" />
+                        android:textSize="18sp"
+                        app:backgroundTint="#388E3C" />
                 </LinearLayout>
 
                 <ImageView
@@ -357,6 +357,27 @@
                     android:textSize="24sp"
                     android:textStyle="bold" />
 
+                <TextView
+                    android:layout_width="match_parent"
+                    android:layout_height="match_parent"
+                    android:layout_gravity="center"
+                    android:layout_margin="15dp"
+                    android:text="Lịch Sử Khóa"
+                    android:textColor="@color/black"
+                    android:textSize="18sp"
+                    android:textStyle="bold" />
+
+                <ListView
+                    android:id="@+id/lvLyDoKhoa"
+                    android:layout_width="match_parent"
+                    android:layout_height="397dp"
+                    android:layout_gravity="center"
+                    android:layout_marginLeft="10dp"
+                    android:layout_marginTop="-10dp"
+                    android:layout_marginRight="10dp"
+                    android:background="@drawable/common_google_signin_btn_icon_dark_normal_background"
+                    android:textColor="@color/black"
+                    android:textSize="14sp" />
             </LinearLayout>
         </ScrollView>
     </LinearLayout>

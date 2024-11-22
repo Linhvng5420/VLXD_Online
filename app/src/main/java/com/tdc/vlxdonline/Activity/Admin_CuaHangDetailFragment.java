@@ -15,6 +15,7 @@ import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.view.Window;
+import android.widget.ArrayAdapter;
 import android.widget.Button;
 import android.widget.EditText;
 import android.widget.ImageButton;
@@ -36,12 +37,15 @@ import com.google.firebase.database.DatabaseError;
 import com.google.firebase.database.DatabaseReference;
 import com.google.firebase.database.FirebaseDatabase;
 import com.google.firebase.database.ValueEventListener;
+import com.tdc.vlxdonline.Model.LyDoKhoaTK;
 import com.tdc.vlxdonline.Model.ThongTinChu;
 import com.tdc.vlxdonline.R;
 import com.tdc.vlxdonline.databinding.FragmentAdminCuahangDetailBinding;
 
 import java.text.SimpleDateFormat;
+import java.util.ArrayList;
 import java.util.Calendar;
+import java.util.List;
 import java.util.Locale;
 
 public class Admin_CuaHangDetailFragment extends Fragment {
@@ -59,7 +63,6 @@ public class Admin_CuaHangDetailFragment extends Fragment {
         super.onCreate(savedInstanceState);
         cuahangID = getArguments().getSerializable("idCH").toString();
         Log.d("l.d", "[l.d] [l.d] onCreate: getAgruments cuahangID: " + cuahangID);
-
     }
 
     @Override
@@ -68,6 +71,9 @@ public class Admin_CuaHangDetailFragment extends Fragment {
         View view = binding.getRoot();
         setTopNavBarTitle();
         getData();
+
+        // Lấy lý do khóa nếu có
+        layLyDoBiKhoa();
 
         setupAuthentButtons();
         setupDSSanPhamButton();
@@ -363,12 +369,14 @@ public class Admin_CuaHangDetailFragment extends Fragment {
                     if (lock == null) {
                         Toast.makeText(binding.getRoot().getContext(), "Lỗi truy xuất Status", Toast.LENGTH_SHORT).show();
                         binding.ivAuthenticated.setVisibility(View.GONE);
+                        binding.tvAuthenticated.setVisibility(View.GONE);
                         return;
                     }
 
                     // Xử lý logic hiển thị hình ảnh dựa vào "locktype"
                     binding.ivAuthenticated.setVisibility(View.VISIBLE);
                     binding.tvAuthenticated.setVisibility(View.VISIBLE);
+                    binding.ivAuthenticated.setEnabled(true);
 
                     if ("chuaduyet".equals(locktype)) {
                         binding.ivAuthenticated.setVisibility(View.VISIBLE);
@@ -392,7 +400,9 @@ public class Admin_CuaHangDetailFragment extends Fragment {
                         binding.ivAuthenticated.setImageResource(android.R.drawable.ic_lock_lock);
                         binding.tvAuthenticated.setText("Online");
                     } else {
-                        binding.ivAuthenticated.setVisibility(View.INVISIBLE);
+                        binding.ivAuthenticated.setVisibility(View.VISIBLE);
+                        binding.ivAuthenticated.setEnabled(false);
+                        binding.ivAuthenticated.setImageResource(R.drawable.baseline_offline_24);
                         binding.tvAuthenticated.setText("Offline");
                     }
                 } else Log.d("l.d", "[l.d] Không tìm thấy cua hàng với ID: " + cuahangID);
@@ -401,6 +411,37 @@ public class Admin_CuaHangDetailFragment extends Fragment {
             @Override
             public void onCancelled(@NonNull DatabaseError error) {
                 Log.d("l.d", "[l.d] Đã xảy ra lỗi khi truy cập database: " + error.getMessage());
+            }
+        });
+    }
+
+    private void layLyDoBiKhoa() {
+        DatabaseReference dbLyDoKhoa = FirebaseDatabase.getInstance().getReference("lydokhoatk/" + cuahangID);
+        dbLyDoKhoa.addValueEventListener(new ValueEventListener() {
+            @Override
+            public void onDataChange(@NonNull DataSnapshot dataSnapshot) {
+                List<LyDoKhoaTK> lyDoKhoaList = new ArrayList<>();
+
+                // Duyệt qua dữ liệu từ Firebase
+                for (DataSnapshot snapshot : dataSnapshot.getChildren()) {
+                    // Lấy key (ngày) và value (lý do)
+                    String ngay = snapshot.getKey();
+                    String lyDo = snapshot.getValue(String.class);
+
+                    // Tạo đối tượng LyDoKhoa và thêm vào danh sách
+                    lyDoKhoaList.add(new LyDoKhoaTK(ngay, lyDo));
+                }
+                Log.d("LyDoKhoa", "Số lượng item: " + lyDoKhoaList.size() + lyDoKhoaList.toString());
+
+                // Hiển thị lên ListView
+                ArrayAdapter<LyDoKhoaTK> adapter = new ArrayAdapter<>(requireContext(), android.R.layout.simple_list_item_1, lyDoKhoaList);
+                binding.lvLyDoKhoa.setAdapter(adapter);
+                adapter.notifyDataSetChanged();
+            }
+
+            @Override
+            public void onCancelled(@NonNull DatabaseError databaseError) {
+                Log.e("LyDoKhoa", "Lỗi khi đọc dữ liệu: " + databaseError.getMessage());
             }
         });
     }
@@ -599,8 +640,7 @@ public class Admin_CuaHangDetailFragment extends Fragment {
         binding.btncall.setOnClickListener(view -> {
             // Tạo AlertDialog để xác nhận
             AlertDialog.Builder builder = new AlertDialog.Builder(getContext());
-            builder.setTitle("Xác nhận hành động")
-                    .setMessage("Bạn muốn gọi hay sao chép số điện thoại?");
+            builder.setTitle("Xác nhận hành động").setMessage("Bạn muốn gọi hay sao chép số điện thoại?");
 
             // Nút "Gọi"
             builder.setPositiveButton("Gọi", (dialog, which) -> {
