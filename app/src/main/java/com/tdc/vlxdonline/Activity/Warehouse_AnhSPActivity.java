@@ -2,6 +2,7 @@ package com.tdc.vlxdonline.Activity;
 
 import android.app.Activity;
 import android.app.AlertDialog;
+import android.app.ProgressDialog;
 import android.content.DialogInterface;
 import android.content.Intent;
 import android.net.Uri;
@@ -66,10 +67,21 @@ public class Warehouse_AnhSPActivity extends AppCompatActivity {
 
     DatabaseReference reference = FirebaseDatabase.getInstance().getReference();
 
+
+    // Hàm khởi tạo ProgressDialog
+    private ProgressDialog progressDialog;
+
+    private void initProgressDialog() {
+        progressDialog = new ProgressDialog(this);
+        progressDialog.setMessage("Đang thêm ảnh...");
+        progressDialog.setCancelable(false);
+    }
+
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.qlanhsp_layout);
+        initProgressDialog();
         setCtronl();
         setASpinner();
         DocSanPham();
@@ -104,7 +116,7 @@ public class Warehouse_AnhSPActivity extends AppCompatActivity {
         btnThemASP.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-
+                // TODO: Loading
                 uploadData();
             }
         });
@@ -115,7 +127,7 @@ public class Warehouse_AnhSPActivity extends AppCompatActivity {
                 long id = anhSP.getId();
                 if (id != 0) {
                     // Gọi phương thức xóa sản phẩm
-                   // deleteProduct(id);
+                    // deleteProduct(id);
                     showConfirmDialogXoa(id);
                     resetSelection();
                 } else {
@@ -133,7 +145,7 @@ public class Warehouse_AnhSPActivity extends AppCompatActivity {
                 public void onItemClick(int position) {
                     // Xử lý sự kiện click vào sản phẩm
                     if (position != RecyclerView.NO_POSITION) {
-                        if (list_ASP.get(position).getId()!=(anhSP.getId())) {
+                        if (list_ASP.get(position).getId() != (anhSP.getId())) {
                             btnThemASP.setEnabled(false);
                             btnXoaASP.setEnabled(true);
                             anhSP = list_ASP.get(position);
@@ -141,7 +153,7 @@ public class Warehouse_AnhSPActivity extends AppCompatActivity {
                             Glide.with(Warehouse_AnhSPActivity.this)
                                     .load(anhSP.getAnh())
                                     .into(ivAnhSP);
-                        }else {
+                        } else {
 //                            anhSP = new AnhSanPham();
 //                            ivAnhSP.setImageResource(R.drawable.add_a_photo_24);
 //                            btnThemASP.setEnabled(true);
@@ -169,6 +181,7 @@ public class Warehouse_AnhSPActivity extends AppCompatActivity {
                 getDate(idProduct);
                 adapter.notifyDataSetChanged();
             }
+
             @Override
             public void onNothingSelected(AdapterView<?> adapterView) {
 
@@ -213,7 +226,8 @@ public class Warehouse_AnhSPActivity extends AppCompatActivity {
                 for (DataSnapshot items : snapshot.getChildren()) {
                     SanPham_Model sanPhamModel = items.getValue(SanPham_Model.class);
                     sanPhamModel.setId(items.getKey());
-                    if (sanPhamModel.getIdChu().equals(Owner_HomeActivity.infoChu.getID())) data.add(sanPhamModel);
+                    if (sanPhamModel.getIdChu().equals(Owner_HomeActivity.infoChu.getID()))
+                        data.add(sanPhamModel);
                 }
                 // Cập nhật adapter sau khi có dữ liệu
                 adapterSP.notifyDataSetChanged();
@@ -224,8 +238,10 @@ public class Warehouse_AnhSPActivity extends AppCompatActivity {
             }
         });
     }
+
     public void uploadData() {
         if (uri != null) {
+            progressDialog.show();
             StorageReference storageReference = FirebaseStorage.getInstance().getReference().child("ProdImages Images")
                     .child(uri.getLastPathSegment());
             storageReference.putFile(uri).addOnSuccessListener(new OnSuccessListener<UploadTask.TaskSnapshot>() {
@@ -236,19 +252,24 @@ public class Warehouse_AnhSPActivity extends AppCompatActivity {
                     Uri urlImage = uriTask.getResult();
                     imagesUrl = urlImage.toString();
                     saveDate();
+
+                    uri = null;
+                    progressDialog.dismiss();
                 }
             });
         } else {
             saveDate();
         }
     }
+
     private void saveDate() {
         anhSP.setAnh(uri != null ? imagesUrl.toString() : anhSP.getAnh());  // Nếu bạn không cần thay đổi ảnh
-        reference.child("ProdImages").child(idProduct).child(System.currentTimeMillis()+"").child("anh").setValue(anhSP.getAnh());
+        reference.child("ProdImages").child(idProduct).child(System.currentTimeMillis() + "").child("anh").setValue(anhSP.getAnh());
         resetSelection();
     }
+
     private void deleteProduct(long id) {
-        if (id > -1){
+        if (id > -1) {
             DatabaseReference productRef = FirebaseDatabase.getInstance().getReference("ProdImages").child(idProduct).child(id + "");
             productRef.removeValue().addOnCompleteListener(new OnCompleteListener<Void>() {
                 @Override
@@ -262,10 +283,11 @@ public class Warehouse_AnhSPActivity extends AppCompatActivity {
                     }
                 }
             });
-        }else {
+        } else {
             Toast.makeText(this, "Khong duoc xoa anh mac dinh cua san pham", Toast.LENGTH_SHORT).show();
         }
     }
+
     private void showConfirmDialogXoa(long id) {
         AlertDialog.Builder builder = new AlertDialog.Builder(Warehouse_AnhSPActivity.this);
         builder.setTitle("Xác nhận xóa");
@@ -288,12 +310,14 @@ public class Warehouse_AnhSPActivity extends AppCompatActivity {
         AlertDialog dialog = builder.create();
         dialog.show();
     }
+
     private void resetSelection() {
         anhSP = new AnhSanPham();
         ivAnhSP.setImageResource(R.drawable.add_a_photo_24);
         btnXoaASP.setEnabled(false);
         btnThemASP.setEnabled(true);
     }
+
     private void setCtronl() {
         ivAnhSP = findViewById(R.id.ivAnhSP);
         btnThemASP = findViewById(R.id.btnThemASP);
