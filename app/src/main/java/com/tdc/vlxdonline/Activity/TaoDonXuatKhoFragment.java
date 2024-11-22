@@ -12,7 +12,9 @@ import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
 import androidx.fragment.app.Fragment;
 import androidx.recyclerview.widget.GridLayoutManager;
+import androidx.recyclerview.widget.ItemTouchHelper;
 import androidx.recyclerview.widget.LinearLayoutManager;
+import androidx.recyclerview.widget.RecyclerView;
 
 import android.text.Editable;
 import android.text.TextWatcher;
@@ -80,6 +82,46 @@ public class TaoDonXuatKhoFragment extends Fragment {
         chiTietXuatAdapter = new ChiTietXuatAdapter(getActivity(), dsChiTiet); // Khởi tạo adapter cho chi tiết đơn hàng
         binding.rcvChitiet.setLayoutManager(new LinearLayoutManager(getActivity())); // Thiết lập layout cho RecyclerView
         binding.rcvChitiet.setAdapter(chiTietXuatAdapter); // Gán adapter vào RecyclerView
+
+        //Cập nhật swipe lướt xóa item
+
+        ItemTouchHelper.SimpleCallback simpleCallback = new ItemTouchHelper.SimpleCallback(0, ItemTouchHelper.LEFT | ItemTouchHelper.RIGHT) {
+            @Override
+            public boolean onMove(@NonNull RecyclerView recyclerView, @NonNull RecyclerView.ViewHolder viewHolder, @NonNull RecyclerView.ViewHolder target) {
+                // Không xử lý sự kiện kéo/thả (drag & drop) ở đây
+                return false;
+            }
+
+            @Override
+            public void onSwiped(@NonNull RecyclerView.ViewHolder viewHolder, int direction) {
+                int position = viewHolder.getAdapterPosition(); // Vị trí của item bị lướt
+
+                // Tạo dialog xác nhận
+                new AlertDialog.Builder(getActivity())
+                        .setTitle("Xác nhận")
+                        .setMessage("Bạn có chắc chắn muốn xóa mục này không?")
+                        .setPositiveButton("Xóa", new DialogInterface.OnClickListener() {
+                            @Override
+                            public void onClick(DialogInterface dialog, int which) {
+                                // Xóa mục nếu người dùng xác nhận
+                                dsChiTiet.remove(position);
+                                chiTietXuatAdapter.notifyItemRemoved(position); // Cập nhật RecyclerView
+                            }
+                        })
+                        .setNegativeButton("Hủy", new DialogInterface.OnClickListener() {
+                            @Override
+                            public void onClick(DialogInterface dialog, int which) {
+                                // Khôi phục item nếu người dùng hủy
+                                chiTietXuatAdapter.notifyItemChanged(position);
+                            }
+                        })
+                        .setCancelable(false) // Không cho phép đóng dialog bằng cách chạm bên ngoài
+                        .show();
+            }
+
+        };
+        ItemTouchHelper itemTouchHelper = new ItemTouchHelper(simpleCallback);
+        itemTouchHelper.attachToRecyclerView(binding.rcvChitiet);
         donHang = new DonHang();
         String emailChu = Warehouse_HomeActivity.nhanVien.getEmailchu();
         donHang.setIdChu(emailChu);
@@ -171,11 +213,12 @@ public class TaoDonXuatKhoFragment extends Fragment {
         if (dsChiTiet.size() > 0) { // Kiểm tra danh sách chi tiết nhập
 //            showConfirm();
 
-            ((Warehouse_HomeActivity)getActivity()).ReplaceFragment(new ThongTinNhanHang_Fragment(donHang, dsChiTiet));
+            ((Warehouse_HomeActivity) getActivity()).ReplaceFragment(new ThongTinNhanHang_Fragment(donHang, dsChiTiet));
         } else {
             Toast.makeText(getActivity(), "Chưa có thông tin xuất kho", Toast.LENGTH_SHORT).show(); // Thông báo chưa có thông tin
         }
     }
+
 
     // Phương thức thiết lập hiển thị sản phẩm
     private void setHienThiSanPham() {
@@ -280,6 +323,7 @@ public class TaoDonXuatKhoFragment extends Fragment {
         });
         return binding.getRoot(); // Trả về view của fragment
     }
+
 
     @Override
     public void onDestroyView() {

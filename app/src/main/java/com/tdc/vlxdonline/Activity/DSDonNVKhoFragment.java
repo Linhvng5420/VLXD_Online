@@ -39,7 +39,6 @@ public class DSDonNVKhoFragment extends Fragment {
     private DatabaseReference referDanhSachDon;
     private ValueEventListener eventDocData;
     private Drawable draw;
-    private String emailchu = Warehouse_HomeActivity.nhanVien.getEmailchu();
 
     @Override
     public void onCreate(Bundle savedInstanceState) {
@@ -105,7 +104,6 @@ public class DSDonNVKhoFragment extends Fragment {
                         DonHang don = snapshot.getValue(DonHang.class);
                         if (!tuKhoa.isEmpty() && !don.getTenKhach().contains(tuKhoa) && !don.getDiaChi().contains(tuKhoa))
                             continue;
-                        if (!don.getIdChu().equals(emailchu.substring(0, emailchu.indexOf("@")))) continue;
                         if (!don.getIdTao().equals(Warehouse_HomeActivity.nhanVien.getCccd())) continue;
                         data.add(don); // Thêm User vào danh sách
                     }

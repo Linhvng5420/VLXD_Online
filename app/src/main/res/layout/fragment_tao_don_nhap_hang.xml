@@ -69,7 +69,7 @@
             android:gravity="center"
             android:orientation="horizontal"
             android:padding="2dp">
-            L
+
 
             <EditText
                 android:id="@+id/edtSoLuong"

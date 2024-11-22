@@ -25,6 +25,16 @@ public class DonNhapAdapter extends RecyclerView.Adapter<DonNhapAdapter.DonNhapH
         this.data = data;
         this.context = context;
     }
+    public interface OnDonNhapClickListener {
+        void onDonNhapClick(DonNhap donNhap);
+    }
+    private OnDonNhapClickListener listener;
+
+    public void setOnDonNhapClickListener(OnDonNhapClickListener listener) {
+        this.listener = listener;
+    }
+
+
 
     @NonNull
     @Override
@@ -41,7 +51,14 @@ public class DonNhapAdapter extends RecyclerView.Adapter<DonNhapAdapter.DonNhapH
         holder.tvmaNhap.setText(chiTiet.getId()+"");
         holder.tv_tongTien_nhap.setText(chiTiet.getTongTien()+"");
         holder.tvngayNhap.setText(chiTiet.getNgayTao());
-
+        holder.itemView.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                if (listener != null) {
+                    listener.onDonNhapClick(chiTiet);
+                }
+            }
+        });
     }
 
     @Override

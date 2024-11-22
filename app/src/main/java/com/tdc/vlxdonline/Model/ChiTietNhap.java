@@ -27,6 +27,9 @@ public class ChiTietNhap {
         this.anh = anh;
     }
 
+    public ChiTietNhap() {
+    }
+
     public ChiTietNhap(long idDon) {
         this.idDon = idDon;
     }

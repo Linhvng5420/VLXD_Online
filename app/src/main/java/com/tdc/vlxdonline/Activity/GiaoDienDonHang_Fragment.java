@@ -91,6 +91,21 @@ public class GiaoDienDonHang_Fragment extends Fragment {
 
     private void setAdapterDon(){
         adapter = new DonNhapAdapter(data, getActivity());
+        adapter.setOnDonNhapClickListener(new DonNhapAdapter.OnDonNhapClickListener() {
+            @Override
+            public void onDonNhapClick(DonNhap donNhap) {
+                // Chuyển sang giao diện chi tiết
+                ChiTietDonNhapFragment chiTietFragment = new ChiTietDonNhapFragment();
+
+                // Truyền dữ liệu qua Fragment
+                Bundle bundle = new Bundle();
+                bundle.putSerializable("donNhap", donNhap);
+                chiTietFragment.setArguments(bundle);
+
+                // Replace Fragment
+                ((Warehouse_HomeActivity) getActivity()).ReplaceFragment(chiTietFragment);
+            }
+        });
         binding.rcvDonhang.setLayoutManager(new LinearLayoutManager(getActivity(), LinearLayoutManager.VERTICAL, false));
         binding.rcvDonhang.setAdapter(adapter);
     }
