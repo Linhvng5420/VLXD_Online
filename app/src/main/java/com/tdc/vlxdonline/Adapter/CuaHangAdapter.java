@@ -1,5 +1,6 @@
 package com.tdc.vlxdonline.Adapter;
 
+import android.annotation.SuppressLint;
 import android.graphics.Color;
 import android.view.LayoutInflater;
 import android.view.ViewGroup;
@@ -14,6 +15,7 @@ import com.google.firebase.database.DatabaseReference;
 import com.google.firebase.database.FirebaseDatabase;
 import com.google.firebase.database.ValueEventListener;
 import com.tdc.vlxdonline.Model.ThongTinChu;
+import com.tdc.vlxdonline.R;
 import com.tdc.vlxdonline.databinding.ItemOwnerRecycleviewBinding;
 
 import java.util.List;
@@ -79,9 +81,13 @@ public class CuaHangAdapter extends RecyclerView.Adapter<CuaHangAdapter.CuaHangV
         }
 
         public void binding(ThongTinChu cuaHang) {
+            // Reset các trạng thái mặc định để tránh bị ảnh hưởng từ các lần cập nhật trước
+            binding.tvPhu.setTextColor(Color.BLACK);
+            binding.tvTen.setTextColor(Color.BLACK);
+            binding.tvPhu.setText("");
+
             binding.tvID.setText(cuaHang.getId());
             binding.tvSDT.setText(cuaHang.getSdt());
-            String tenCuaHang = "N/A";
 
             DatabaseReference dbTenCuaHang = FirebaseDatabase.getInstance().getReference("thongtinchu/" + cuaHang.getId() + "/cuahang");
 
@@ -94,11 +100,9 @@ public class CuaHangAdapter extends RecyclerView.Adapter<CuaHangAdapter.CuaHangV
 
                 @Override
                 public void onCancelled(@NonNull DatabaseError error) {
-
                 }
             });
 
-            // Lấy trạng thái tài khoản cửa hàng
             DatabaseReference db = FirebaseDatabase.getInstance().getReference("account/" + cuaHang.getId());
             db.addValueEventListener(new ValueEventListener() {
                 @Override
@@ -112,24 +116,28 @@ public class CuaHangAdapter extends RecyclerView.Adapter<CuaHangAdapter.CuaHangV
                         Toast.makeText(binding.getRoot().getContext(), "Lỗi đăng nhập tài khoản", Toast.LENGTH_SHORT).show();
                         return;
                     } else {
-                        if (locktype.equals("chuaduyet")) {
+                        binding.tvTen.setTextColor(Color.BLACK);
+                        binding.tvPhu.setTextColor(0xFF388E3C); // Màu xanh lá cây
+
+                        if ("chuaduyet".equals(locktype)) {
                             binding.tvPhu.setText("Chưa Duyệt");
                             binding.tvPhu.setTextColor(Color.BLUE);
-                        } else if (locktype.equals("vinhvien")) {
+                        } else if ("vinhvien".equals(locktype)) {
                             binding.tvPhu.setText("Khóa Vĩnh Viễn");
                             binding.tvPhu.setTextColor(Color.MAGENTA);
                             binding.tvTen.setTextColor(Color.MAGENTA);
-                        } else if (locktype.equals("tamthoi")) {
+                        } else if ("tamthoi".equals(locktype)) {
                             binding.tvPhu.setText("Khóa: " + locktime);
                             binding.tvPhu.setTextColor(Color.MAGENTA);
                             binding.tvTen.setTextColor(Color.MAGENTA);
                         }
 
-                        if (lock == false && !locktype.equals("chuaduyet")) {
+                        if (!lock && !"chuaduyet".equals(locktype)) {
                             if (!online) {
                                 binding.tvTen.setTextColor(Color.RED);
                                 binding.tvPhu.setTextColor(Color.RED);
                             }
+
                             binding.tvPhu.setText(online ? "Online" : "Offline");
                         }
                     }

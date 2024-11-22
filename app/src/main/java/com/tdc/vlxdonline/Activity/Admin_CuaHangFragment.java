@@ -80,19 +80,18 @@ public class Admin_CuaHangFragment extends Fragment {
                 adapter.getCuaHangList().clear();
 
                 for (DataSnapshot dataSnapshot : snapshot.getChildren()) {
-                    ThongTinChu thongTinChu = new ThongTinChu();
-                    thongTinChu = dataSnapshot.getValue(ThongTinChu.class);
+                    ThongTinChu thongTinChu = dataSnapshot.getValue(ThongTinChu.class);
 
                     if (thongTinChu != null) {
                         thongTinChu.setId(dataSnapshot.getKey());
                         listChuCuaHang.add(thongTinChu);
-                    } else {
-                        binding.tvTitle.setText("Danh Sách Cửa Hàng Rỗng");
-                        Log.d("l.d", "getDataCuaHang: null");
                     }
                 }
-                Log.d("l.d", "getDataCuaHang: " + listChuCuaHang.toString());
-                adapter.notifyDataSetChanged();
+
+                // Chỉ cập nhật thay đổi từng item
+                for (int i = 0; i < listChuCuaHang.size(); i++) {
+                    adapter.notifyItemChanged(i);
+                }
             }
 
             @Override

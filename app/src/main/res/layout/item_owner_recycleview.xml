@@ -107,7 +107,8 @@
                     android:gravity="start|end"
                     android:paddingLeft="5dp"
                     android:paddingRight="5dp"
-                    android:textColor="#43A047"
+                    android:text="N/A"
+                    android:textColor="#00796B"
                     android:textStyle="bold" />
             </LinearLayout>
         </LinearLayout>
