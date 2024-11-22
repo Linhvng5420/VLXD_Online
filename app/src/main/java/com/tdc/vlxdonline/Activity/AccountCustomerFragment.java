@@ -75,6 +75,16 @@ public class AccountCustomerFragment extends Fragment {
                         .commit(); // Thực hiện chuyển đổi
             }
         });
+//        binding.btnTraGop.setOnClickListener(new View.OnClickListener() {
+//            @Override
+//            public void onClick(View view) {
+//                // Thực hiện chuyển đổi sang Fragment chi tiết, thay thế Fragment hiện tại
+//                getParentFragmentManager().beginTransaction()
+//                        .replace(R.id.frm_customer, new KhachHangTraGopFragment()) // Thay thế fragment_container hiện tại bằng fragment chi tiết
+//                        .addToBackStack(null) // Cho phép quay lại màn hình trước khi nhấn nút Back
+//                        .commit(); // Thực hiện chuyển đổi
+//            }
+//        });
 
         binding.lnAbout.setOnClickListener(new View.OnClickListener() {
             @Override
