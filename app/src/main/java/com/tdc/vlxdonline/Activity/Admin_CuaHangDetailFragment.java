@@ -4,7 +4,6 @@ import android.app.AlertDialog;
 import android.app.Dialog;
 import android.content.res.Resources;
 import android.graphics.Typeface;
-import android.net.Uri;
 import android.os.Bundle;
 import android.util.Log;
 import android.view.LayoutInflater;
@@ -13,6 +12,8 @@ import android.view.ViewGroup;
 import android.view.Window;
 import android.widget.Button;
 import android.widget.EditText;
+import android.widget.ImageButton;
+import android.widget.ImageView;
 import android.widget.LinearLayout;
 import android.widget.ScrollView;
 import android.widget.TextView;
@@ -46,12 +47,7 @@ public class Admin_CuaHangDetailFragment extends Fragment {
 
     ThongTinChu cuahang;
 
-    // Mã yêu cầu cho việc chọn ảnh
-    private static final int PICK_IMAGE_AVATA_ID = 1;
-    private static final int PICK_IMAGE_FRONT_ID = 2;
-    private static final int PICK_IMAGE_BACK_ID = 3;
-    // Uri để lưu trữ đường dẫn đến ảnh được chọn (biến này không lưu lại link ảnh từ firebase tải về)
-    private Uri uriAvata, uriAnhCCTruoc, uriAnhCCSau;
+    String anhCC2, anhCC1;
 
     @Override
     public void onCreate(Bundle savedInstanceState) {
@@ -70,7 +66,6 @@ public class Admin_CuaHangDetailFragment extends Fragment {
 
         setupAuthentButtons();
         setupDSSanPhamButton();
-
 
         // Bắt sự kiện xem thông tin cửa hàng
         binding.btnInfo.setOnClickListener(new View.OnClickListener() {
@@ -238,7 +233,8 @@ public class Admin_CuaHangDetailFragment extends Fragment {
                             scrollView.addView(layout);
                             dialog.setContentView(scrollView);
                             dialog.show();
-                        } else Snackbar.make(view, "Không tìm thấy thông tin cửa hàng!", BaseTransientBottomBar.LENGTH_SHORT).show();
+                        } else
+                            Snackbar.make(view, "Không tìm thấy thông tin cửa hàng!", BaseTransientBottomBar.LENGTH_SHORT).show();
                     }
 
                     @Override
@@ -247,6 +243,9 @@ public class Admin_CuaHangDetailFragment extends Fragment {
                 });
             }
         });
+
+        binding.ivCCCD1.setOnClickListener(v -> showImageView(anhCC1));
+        binding.ivCCCD2.setOnClickListener(v -> showImageView(anhCC2));
 
         return view;
     }
@@ -311,8 +310,8 @@ public class Admin_CuaHangDetailFragment extends Fragment {
             @Override
             public void onDataChange(@NonNull DataSnapshot dataSnapshot) {
                 if (dataSnapshot.exists()) {
-                    String anhCC1 = dataSnapshot.child("cccdtruoc").getValue(String.class);
-                    String anhCC2 = dataSnapshot.child("cccdsau").getValue(String.class);
+                    anhCC1 = dataSnapshot.child("cccdtruoc").getValue(String.class);
+                    anhCC2 = dataSnapshot.child("cccdsau").getValue(String.class);
 
                     // Hiển thị hình ảnh
                     try {
@@ -554,4 +553,41 @@ public class Admin_CuaHangDetailFragment extends Fragment {
             }
         });
     }
+
+    private void showImageView(String imagePath) {
+        Dialog dialog = new Dialog(getContext());
+        dialog.setContentView(R.layout.dialog_image_view);
+        dialog.getWindow().setLayout(ViewGroup.LayoutParams.MATCH_PARENT, ViewGroup.LayoutParams.MATCH_PARENT);
+
+        ImageView ivZoomedImage = dialog.findViewById(R.id.ivZoomedImage);
+        ImageButton btnRotate = dialog.findViewById(R.id.btnRotate);
+
+        // Load ảnh (dùng Glide)
+        Glide.with(this).load(imagePath).into(ivZoomedImage);
+
+        btnRotate.setOnClickListener(new View.OnClickListener() {
+            private boolean isZoomedIn = false; // Biến kiểm tra trạng thái phóng to
+
+            @Override
+            public void onClick(View v) {
+                // Kiểm tra trạng thái và thay đổi hành động
+                if (isZoomedIn) {
+                    // Quay về trạng thái ban đầu (fitcenter)
+                    ivZoomedImage.setRotation(0);
+                    ivZoomedImage.setScaleType(ImageView.ScaleType.CENTER); // Đảm bảo ảnh phủ kín màn hình
+                    isZoomedIn = false;
+                } else {
+                    // Xoay ảnh 90 độ và làm sao cho ảnh phủ hết màn hình
+                    ivZoomedImage.setRotation(90);
+                    ivZoomedImage.setScaleType(ImageView.ScaleType.FIT_CENTER); // Đảm bảo ảnh phủ hết màn hình
+                    isZoomedIn = true;
+                }
+            }
+        });
+
+
+        dialog.show();
+    }
+
+
 }
