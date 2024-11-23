@@ -43,7 +43,8 @@ public class Owner_DashboardFragment extends Fragment {
     @Override
     public void onViewCreated(@NonNull View view, @Nullable Bundle savedInstanceState) {
         super.onViewCreated(view, savedInstanceState);
-        // Đọc trạng thái shop (0-đóng 1-mở)
+
+        // Đọc trạng thái shop
         dbThongBaoChu = FirebaseDatabase.getInstance().getReference("account").child(idOwnerLogin).child("trangthai/online");
         dbThongBaoChu.addValueEventListener(new ValueEventListener() {
             @Override
