@@ -131,12 +131,13 @@
 
         <TextView
             android:id="@+id/t_warn"
+            android:visibility="gone"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:layout_marginBottom="5dp"
             android:background="#FFF"
             android:padding="10dp"
-            android:text="Lưu ý: Khi chọn phương thức trả góp sẽ có tính phí trả góp theo phần trăm tổng tiền đơn hàng. Đối với trả góp một tháng 2% và trả góp 2 tháng 5%!"
+            android:text="Lưu ý: Khi chọn phương thức trả góp sẽ có tính phí trả góp theo phần trăm tổng tiền đơn hàng. Đối với trả góp một tháng 2% và trả góp hai tháng 5%!"
             android:textColor="#F00" />
 
         <LinearLayout

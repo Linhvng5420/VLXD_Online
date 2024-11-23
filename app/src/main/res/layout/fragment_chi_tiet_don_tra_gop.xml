@@ -113,7 +113,7 @@
                 android:textSize="18dp"
                 android:textStyle="bold"
                 android:text="Đợt Trả Góp"/>
-            <androidx.recyclerview.widget.RecyclerView
+            <ListView
                 android:id="@+id/rc_traGop"
                 android:layout_width="match_parent"
                 android:layout_height="200dp"/>

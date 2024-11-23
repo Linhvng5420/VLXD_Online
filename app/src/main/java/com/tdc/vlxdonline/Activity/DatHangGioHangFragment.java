@@ -14,6 +14,8 @@ import androidx.recyclerview.widget.LinearLayoutManager;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
+import android.widget.AdapterView;
+import android.widget.ArrayAdapter;
 import android.widget.Toast;
 
 import com.google.firebase.database.DataSnapshot;
@@ -43,6 +45,10 @@ public class DatHangGioHangFragment extends Fragment {
     ArrayList<DonHang> dataDon = new ArrayList<>();
     ArrayList<ChiTietDon> dataChiTiet = new ArrayList<>();
     ChiTietDonHangAdapter adapter;
+    // Thanh Toan
+    ArrayList<String> dataThanhT = new ArrayList<>();
+    ArrayAdapter adapterTT;
+    int thanhToan = 0;
 
     public DatHangGioHangFragment(ArrayList<ChiTietDon> data) {
         dataChiTiet = data;
@@ -62,6 +68,7 @@ public class DatHangGioHangFragment extends Fragment {
         binding.edtSdtNguoiNhan.setText(khach.getSdt());
         binding.edtDiaChiNhan.setText(khach.getDiaChi());
         referDatHangGio = FirebaseDatabase.getInstance().getReference();
+        setThanhToan();
         setAdapterChiTiet();
         setProdEvent();
         // Inflate the layout for this fragment
@@ -71,6 +78,23 @@ public class DatHangGioHangFragment extends Fragment {
     @Override
     public void onViewCreated(@NonNull View view, @Nullable Bundle savedInstanceState) {
         super.onViewCreated(view, savedInstanceState);
+        // Loai thanh toan
+        binding.spThanhToan.setOnItemSelectedListener(new AdapterView.OnItemSelectedListener() {
+            @Override
+            public void onItemSelected(AdapterView<?> parent, View view, int position, long id) {
+                thanhToan = position;
+                if (position == 0) {
+                    binding.tWarn.setVisibility(View.GONE);
+                }else {
+                    binding.tWarn.setVisibility(View.VISIBLE);
+                }
+            }
+
+            @Override
+            public void onNothingSelected(AdapterView<?> parent) {
+
+            }
+        });
         binding.btnDatHang.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
@@ -210,6 +234,13 @@ public class DatHangGioHangFragment extends Fragment {
         referDatHangGio.child("products").removeEventListener(prodEvent);
         for (int i = 0; i < dataDon.size(); i++) {
             DonHang tempDon = dataDon.get(i);
+            if (thanhToan == 1) {
+                tempDon.setPhiTraGop(tempDon.getTongTien()*2/100);
+                tempDon.setTongTien(tempDon.getTongTien()+ tempDon.getPhiTraGop());
+            } else if (thanhToan == 2) {
+                tempDon.setPhiTraGop(tempDon.getTongTien()*5/100);
+                tempDon.setTongTien(tempDon.getTongTien()+ tempDon.getPhiTraGop());
+            }
             referDatHangGio.child("bills").child(tempDon.getId() + "").setValue(tempDon);
         }
         for (int i = 0; i < dataChiTiet.size(); i++) {
@@ -303,6 +334,15 @@ public class DatHangGioHangFragment extends Fragment {
         AlertDialog alertDialog = builder.create();
         alertDialog.getWindow().setBackgroundDrawable(drawableBg);
         alertDialog.show();
+    }
+
+    private void setThanhToan(){
+        // Xu ly phuong thuc thanh toan
+        dataThanhT.add("Thanh Toán Trực Tiếp");
+        dataThanhT.add("Trả Góp Một Tháng");
+        dataThanhT.add("Trả Góp Hai Tháng");
+        adapterTT = new ArrayAdapter(getActivity(), android.R.layout.simple_dropdown_item_1line, dataThanhT);
+        binding.spThanhToan.setAdapter(adapterTT);
     }
 
     private StringBuilder chuyenChuoi(int soTien) {
