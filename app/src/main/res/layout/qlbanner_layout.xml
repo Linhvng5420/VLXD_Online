@@ -6,7 +6,7 @@
     android:layout_height="match_parent"
     android:background="@drawable/back3"
     android:orientation="vertical"
-    tools:context=".Activity.Warehouse_DanhMucActivity">
+    tools:context=".Activity.Warehouse_BannerActivity">
 
 
     <LinearLayout
