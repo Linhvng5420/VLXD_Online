@@ -37,7 +37,7 @@ public class NhanDonFragment extends Fragment {
     String idChu;
 
     public NhanDonFragment(String emailChu) {
-        idChu = emailChu.substring(0, emailChu.indexOf("@"));
+        idChu = emailChu;
     }
 
     public void onCreate(Bundle savedInstanceState) {

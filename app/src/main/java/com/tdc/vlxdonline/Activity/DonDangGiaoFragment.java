@@ -69,7 +69,7 @@ public class DonDangGiaoFragment extends Fragment {
                     for (DataSnapshot snapshot : dataSnapshot.getChildren()) {
                         DonHang don = snapshot.getValue(DonHang.class);
 
-                        if (don.getTrangThai() != 2 && don.getTrangThai() != 3) continue;
+                        if (don.getTrangThai() != 2 && don.getTrangThai() != 3 && don.getTrangThai() != 5) continue;
                         if (!don.getIdGiao().equals(Shipper_HomeActivity.nv.getCccd())) continue;
 
                         dsDon.add(don); // Thêm User vào danh sách
