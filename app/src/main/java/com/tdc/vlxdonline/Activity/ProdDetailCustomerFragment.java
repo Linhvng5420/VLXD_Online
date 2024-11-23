@@ -34,6 +34,7 @@ import com.tdc.vlxdonline.Model.Products;
 import com.tdc.vlxdonline.databinding.FragmentProdDetailCustomerBinding;
 
 import java.util.ArrayList;
+import java.util.concurrent.atomic.AtomicInteger;
 
 public class ProdDetailCustomerFragment extends Fragment {
 
@@ -370,15 +371,16 @@ public class ProdDetailCustomerFragment extends Fragment {
                 try {
                     dataAnh.clear(); // Xóa danh sách cũ trước khi cập nhật
 
+                    int itemCount = (int) dataSnapshot.getChildrenCount();
+                    AtomicInteger atomicInteger = new AtomicInteger(0);
                     // Duyệt qua từng User trong DataSnapshot
                     for (DataSnapshot snapshot : dataSnapshot.getChildren()) {
                         AnhSanPham image = snapshot.getValue(AnhSanPham.class);
                         dataAnh.add(image.getAnh());
+                        if (atomicInteger.incrementAndGet() == itemCount) imageAdapter.notifyDataSetChanged();
                     }
 
                     Glide.with(getActivity()).load(dataAnh.get(0)).into(binding.imgDetail);
-
-                    imageAdapter.notifyDataSetChanged();
                 } catch (Exception e) {
 
                 }

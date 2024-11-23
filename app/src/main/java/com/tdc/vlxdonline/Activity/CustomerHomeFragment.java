@@ -59,6 +59,7 @@ public class CustomerHomeFragment extends Fragment {
     ArrayList<Banner> dataBanner = new ArrayList<>();
     BannerAdapter bannerAdapter;
     Timer timer;
+    LinearSnapHelper helper;
 
     // Item khac
     private String category = "";
@@ -272,21 +273,24 @@ public class CustomerHomeFragment extends Fragment {
         binding.rcBanner.setAdapter(bannerAdapter);
 
         // Set tu chuyen banner
-        LinearSnapHelper helper = new LinearSnapHelper();
-        helper.attachToRecyclerView(binding.rcBanner);
-        if (timer != null) timer.cancel();
-        timer = new Timer();
-        timer.schedule(new TimerTask() {
-            @Override
-            public void run() {
-                int position = linearLayoutManager.findLastCompletelyVisibleItemPosition();
-                if (position < (bannerAdapter.getItemCount() - 1)) {
-                    linearLayoutManager.smoothScrollToPosition(binding.rcBanner, new RecyclerView.State(), position + 1);
-                }else {
-                    linearLayoutManager.smoothScrollToPosition(binding.rcBanner, new RecyclerView.State(), 0);
+        if (helper == null) {
+            helper = new LinearSnapHelper();
+            helper.attachToRecyclerView(binding.rcBanner);
+        }
+        if (timer == null) {
+            timer = new Timer();
+            timer.schedule(new TimerTask() {
+                @Override
+                public void run() {
+                    int position = linearLayoutManager.findLastCompletelyVisibleItemPosition();
+                    if (position < (bannerAdapter.getItemCount() - 1)) {
+                        linearLayoutManager.smoothScrollToPosition(binding.rcBanner, new RecyclerView.State(), position + 1);
+                    } else {
+                        linearLayoutManager.smoothScrollToPosition(binding.rcBanner, new RecyclerView.State(), 0);
+                    }
                 }
-            }
-        },0,3000);
+            }, 0, 3000);
+        }
     }
 
     private void readcategorysFromDatabase() {
@@ -344,6 +348,7 @@ public class CustomerHomeFragment extends Fragment {
         super.onDestroyView();
         binding = null;
         timer.cancel();
+        timer = null;
 
         // Loại bỏ listener của Firebase
         if (mDatabase != null && eventDocDanhSach != null) {
