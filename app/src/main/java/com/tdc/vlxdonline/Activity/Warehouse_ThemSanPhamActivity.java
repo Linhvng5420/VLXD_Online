@@ -319,7 +319,7 @@ public class Warehouse_ThemSanPhamActivity extends AppCompatActivity {
 
         sanPhamModel.setTonKho(edtNhapsoluong.getText().toString());
         sanPhamModel.setMoTa(edtMoTa.getText().toString());
-        sanPhamModel.setAnh(uri != null ? imagesUrl.toString() : sanPhamModel.getAnh());
+        sanPhamModel.setAnh(imagesUrl != null ? imagesUrl.toString() : sanPhamModel.getAnh());
         sanPhamModel.setDonVi(donVi);
         sanPhamModel.setDanhMuc(danhMuc);
         sanPhamModel.setIdChu(Owner_HomeActivity.infoChu.getId());
@@ -417,7 +417,7 @@ public class Warehouse_ThemSanPhamActivity extends AppCompatActivity {
         builder.setPositiveButton("Sửa", new DialogInterface.OnClickListener() {
             @Override
             public void onClick(DialogInterface dialog, int which) {
-                saveDate();
+                uploadData();
             }
         });
 
