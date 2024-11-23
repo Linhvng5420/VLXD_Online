@@ -19,6 +19,6 @@ public class LyDoKhoaTK {
 
     @Override
     public String toString() {
-        return "[ " + ngay + " ] " + lyDo;
+        return ngay.toUpperCase() + ": " + lyDo;
     }
 }

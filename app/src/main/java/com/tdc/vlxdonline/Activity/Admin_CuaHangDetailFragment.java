@@ -56,8 +56,9 @@ public class Admin_CuaHangDetailFragment extends Fragment {
     String cuahangID; // Key Firebase thongtinchu, ID chủ cửa hàng, không phải cccd
 
     ThongTinChu cuahang;
-
     String anhCC2, anhCC1;
+    ArrayAdapter<LyDoKhoaTK> adapter;
+    List<LyDoKhoaTK> lyDoKhoaList = new ArrayList<>();
 
     @Override
     public void onCreate(Bundle savedInstanceState) {
@@ -74,9 +75,11 @@ public class Admin_CuaHangDetailFragment extends Fragment {
         getData();
 
         // Lấy lý do khóa nếu có
+        adapter = new ArrayAdapter<>(getContext(), android.R.layout.simple_list_item_1, lyDoKhoaList);
+        binding.lvLyDoKhoa.setAdapter(adapter);
         layLyDoBiKhoa();
 
-        setupAuthentButtons();
+        setupAuthentButton();
         setupDSSanPhamButton();
         setupCallButton();
 
@@ -217,7 +220,7 @@ public class Admin_CuaHangDetailFragment extends Fragment {
                                 public void onDataChange(DataSnapshot dataSnapshot) {
                                     if (dataSnapshot.exists()) {
                                         TextView tvTaiKhoan = new TextView(getContext());
-                                        tvTaiKhoan.setText("Danh sách tài khoản:");
+                                        tvTaiKhoan.setText("Danh sách cửa hàng:");
                                         tvTaiKhoan.setTextSize(18);
                                         tvTaiKhoan.setTypeface(null, Typeface.BOLD);
                                         tvTaiKhoan.setPadding(0, 15, 0, 10);
@@ -294,7 +297,7 @@ public class Admin_CuaHangDetailFragment extends Fragment {
                             binding.etCCCD.setText(dataSnapshot.child("cccd").getValue(String.class));
                             binding.etDiaChi.setText(cuahang.getDiaChi());
 
-                            getButtonStatus();
+                            getAuthentButtonStatu();
                         } else {
                             Log.d("l.d", "[l.d] Cửa Hàng không tồn tại trong cơ sở dữ liệu.");
                         }
@@ -354,7 +357,7 @@ public class Admin_CuaHangDetailFragment extends Fragment {
     }
 
     //-BUTTON DUYỆT-KHÓA-MỞ KHÓA
-    private void getButtonStatus() {
+    private void getAuthentButtonStatu() {
         DatabaseReference db = FirebaseDatabase.getInstance().getReference("account/" + cuahangID);
         db.addValueEventListener(new ValueEventListener() {
             @Override
@@ -414,12 +417,47 @@ public class Admin_CuaHangDetailFragment extends Fragment {
         });
     }
 
+    private void setupAuthentButton() {
+        binding.ivAuthenticated.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+                DatabaseReference dbRef = FirebaseDatabase.getInstance().getReference("account/" + cuahangID);
+                dbRef.child("trangthai").addListenerForSingleValueEvent(new ValueEventListener() {
+                    @Override
+                    public void onDataChange(@NonNull DataSnapshot snapshot) {
+                        if (snapshot.exists()) {
+                            boolean isLocked = snapshot.child("lock").getValue(Boolean.class);
+                            String lockType = snapshot.child("locktype").getValue(String.class);
+
+                            if ("chuaduyet".equals(lockType)) {
+                                // Nếu trạng thái là "chuaduyet", cập nhật thành xác thực
+                                MoKhoaCuaHang(dbRef);
+                                Toast.makeText(getContext(), "Cửa hàng đã Duyệt và Online!", Toast.LENGTH_SHORT).show();
+                            } else if ("".equals(lockType)) {
+                                // Hiển thị dialog chọn loại khóa
+                                showLockTypeDialog(dbRef);
+                            } else if ("vinhvien".equals(lockType) || "tamthoi".equals(lockType)) {
+                                // Hiển thị dialog để mở khóa cửa hàng
+                                showUnlockDialog(dbRef);
+                            }
+                        }
+                    }
+
+                    @Override
+                    public void onCancelled(@NonNull DatabaseError error) {
+                        Toast.makeText(getContext(), "Lỗi khi lấy dữ liệu trạng thái!", Toast.LENGTH_SHORT).show();
+                    }
+                });
+            }
+        });
+    }
+
     private void layLyDoBiKhoa() {
         DatabaseReference dbLyDoKhoa = FirebaseDatabase.getInstance().getReference("lydokhoatk/" + cuahangID);
         dbLyDoKhoa.addValueEventListener(new ValueEventListener() {
             @Override
             public void onDataChange(@NonNull DataSnapshot dataSnapshot) {
-                List<LyDoKhoaTK> lyDoKhoaList = new ArrayList<>();
+                lyDoKhoaList.clear();
                 long countLock = 0;
                 long countUnLock = 0;
 
@@ -436,52 +474,16 @@ public class Admin_CuaHangDetailFragment extends Fragment {
                         countLock++;
                     } else countUnLock++;
                 }
-                binding.tvLichSuKhoa.setText("Lịch Sử Khóa (Lock " + countLock + " lần, Admin UL " + countUnLock + " lần)");
+                binding.tvLichSuKhoa.setText("Lịch Sử Khóa (Lock " + countLock + " lần, UnLock " + countUnLock + " lần)");
                 Log.d("LyDoKhoa", "Số lượng item: " + lyDoKhoaList.size() + lyDoKhoaList.toString());
 
-                // Hiển thị lên ListView
-                ArrayAdapter<LyDoKhoaTK> adapter = new ArrayAdapter<>(requireContext(), android.R.layout.simple_list_item_1, lyDoKhoaList);
-                binding.lvLyDoKhoa.setAdapter(adapter);
+                // cập nhật listview
+                adapter.notifyDataSetChanged();
             }
 
             @Override
             public void onCancelled(@NonNull DatabaseError databaseError) {
                 Log.e("LyDoKhoa", "Lỗi khi đọc dữ liệu: " + databaseError.getMessage());
-            }
-        });
-    }
-
-    private void setupAuthentButtons() {
-        binding.ivAuthenticated.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View view) {
-                DatabaseReference dbRef = FirebaseDatabase.getInstance().getReference("account/" + cuahangID);
-                dbRef.child("trangthai").addListenerForSingleValueEvent(new ValueEventListener() {
-                    @Override
-                    public void onDataChange(@NonNull DataSnapshot snapshot) {
-                        if (snapshot.exists()) {
-                            boolean isLocked = snapshot.child("lock").getValue(Boolean.class);
-                            String lockType = snapshot.child("locktype").getValue(String.class);
-
-                            if ("chuaduyet".equals(lockType)) {
-                                // Nếu trạng thái là "chuaduyet", cập nhật thành xác thực
-                                MoKhoaCuaHang(dbRef);
-                                Toast.makeText(getContext(), "Tài khoản đã Duyệt và Onlien!", Toast.LENGTH_SHORT).show();
-                            } else if ("".equals(lockType)) {
-                                // Hiển thị dialog chọn loại khóa
-                                showLockTypeDialog(dbRef);
-                            } else if ("vinhvien".equals(lockType) || "tamthoi".equals(lockType)) {
-                                // Hiển thị dialog để mở khóa tài khoản
-                                showUnlockDialog(dbRef);
-                            }
-                        }
-                    }
-
-                    @Override
-                    public void onCancelled(@NonNull DatabaseError error) {
-                        Toast.makeText(getContext(), "Lỗi khi lấy dữ liệu trạng thái!", Toast.LENGTH_SHORT).show();
-                    }
-                });
             }
         });
     }
@@ -505,7 +507,8 @@ public class Admin_CuaHangDetailFragment extends Fragment {
     private void showDateLockDialog(DatabaseReference dbRef) {
         String[] daysOptions = {"7 ngày", "25 ngày", "30 ngày", "60 ngày", "90 ngày"};
         new AlertDialog.Builder(getContext()).setTitle("Chọn Thời Gian Khóa").setItems(daysOptions, (dialog, which) -> {
-            Snackbar.make(getView(), "Đã Chọn ngày khóa: " + daysOptions[which], Toast.LENGTH_SHORT).setAnimationMode(BaseTransientBottomBar.ANIMATION_MODE_FADE).show();
+            //Snackbar.make(getView(), "Đã Chọn ngày khóa: " + daysOptions[which], Toast.LENGTH_SHORT).setAnimationMode(BaseTransientBottomBar.ANIMATION_MODE_FADE).show();
+            Toast.makeText(getContext(), "Đã Chọn ngày khóa: " + daysOptions[which], Toast.LENGTH_SHORT).show();
 
             int[] days = {7, 25, 30, 60, 90};
             Calendar calendar = Calendar.getInstance();
@@ -521,43 +524,14 @@ public class Admin_CuaHangDetailFragment extends Fragment {
         }).show();
     }
 
-    // Hàm khóa tài khoản vĩnh viễn
-    private void lockAccount(DatabaseReference dbRef, String lockType, String lockTime) {
-        dbRef.child("trangthai").child("lock").setValue(true);
-        dbRef.child("trangthai").child("locktype").setValue(lockType);
-        dbRef.child("trangthai").child("locktime").setValue(lockTime);
-        dbRef.child("trangthai").child("online").setValue(false);
-    }
-
-    // Hàm mở khóa tài khoản
-    private void MoKhoaCuaHang(DatabaseReference dbRef) {
-        new AlertDialog.Builder(getContext()).setTitle("Xác Nhận").setMessage("Bạn có chắc muốn cho cửa hàng Online?").setPositiveButton("Online", (dialog, which) -> {
-            dbRef.child("trangthai").child("lock").setValue(false);
-            dbRef.child("trangthai").child("locktype").setValue("");
-            dbRef.child("trangthai").child("locktime").setValue("");
-            dbRef.child("trangthai").child("online").setValue(true);
-
-            binding.ivAuthenticated.setImageResource(android.R.drawable.ic_lock_lock);
-        }).setNegativeButton("Hủy", null).show();
-    }
-
-    // Hiển thị dialog mở khóa
-    private void showUnlockDialog(DatabaseReference dbRef) {
-        new AlertDialog.Builder(getContext()).setTitle("Mở Khóa Tài Khoản").setMessage("Bạn có chắc muốn mở khóa tài khoản này không?").setPositiveButton("Mở Khóa", (dialog, which) -> {
-            showLyDoDialog("UL");
-            MoKhoaCuaHang(dbRef);
-            Toast.makeText(getContext(), "Tài khoản đã Online!", Toast.LENGTH_SHORT).show();
-        }).setNegativeButton("Hủy", null).show();
-    }
-
-    // Hiển thị dialog nhập lý do khóa
+    // Hiển thị dialog nhập lý do khóa/mở cửa hàng
     private void showLyDoDialog(String messenger) {
-        // Tạo EditText để nhập lý do khóa
+        // Tạo EditText để nhập lý do khóa/mở
         EditText input = new EditText(getContext());
-        input.setHint("Nhập lý do khóa tài khoản...");
+        input.setHint("nhập lý do...");
 
         // Hiển thị hộp thoại yêu cầu nhập lý do khóa
-        new AlertDialog.Builder(getContext()).setTitle("Khóa Tài Khoản").setMessage("Vui lòng nhập lý do khóa tài khoản:").setView(input).setPositiveButton("Tiếp Tục", (dialog, which) -> {
+        new AlertDialog.Builder(getContext()).setTitle("Nhập Lý Do").setMessage("Vui lòng nhập lý do khóa/mở cửa hàng:").setView(input).setPositiveButton("Tiếp Tục", (dialog, which) -> {
             String lydo = input.getText().toString().trim();
             Log.d("l.d", "showLockDialog: " + lydo);
 
@@ -567,7 +541,7 @@ public class Admin_CuaHangDetailFragment extends Fragment {
             }
 
             // Lấy thời gian hiện tại làm key
-            String key = new SimpleDateFormat("yy-MM-dd", Locale.getDefault()).format(new Date());
+            String key = new SimpleDateFormat("ddMMyy_HHmmss", Locale.getDefault()).format(new Date());
             key += " " + messenger;
 
             // Tạo reference tới đúng vị trí trong Firebase
@@ -579,6 +553,43 @@ public class Admin_CuaHangDetailFragment extends Fragment {
                     Snackbar.make(getView(), "Đã lưu lý do!", Toast.LENGTH_SHORT).setAnimationMode(BaseTransientBottomBar.ANIMATION_MODE_FADE).show();
             });
         }).show();
+    }
+
+    // Hiển thị dialog mở khóa
+    private void showUnlockDialog(DatabaseReference dbRef) {
+        new AlertDialog.Builder(getContext()).setTitle("Mở Khóa Cửa Hàng")
+                .setMessage("Bạn có chắc muốn mở khóa cửa hàng này không?")
+                .setPositiveButton("Mở Khóa", (dialog, which) -> {
+                    showLyDoDialog("UL");
+
+                    dbRef.child("trangthai").child("lock").setValue(false);
+                    dbRef.child("trangthai").child("locktype").setValue("");
+                    dbRef.child("trangthai").child("locktime").setValue("");
+                    dbRef.child("trangthai").child("online").setValue(true);
+
+                    binding.ivAuthenticated.setImageResource(android.R.drawable.ic_lock_lock);
+                    Log.d("l.d", "showUnlockDialog: Mở khóa cửa hàng");
+                }).setNegativeButton("Hủy", null).show();
+    }
+
+    // Hàm khóa cửa hàng vĩnh viễn
+    private void lockAccount(DatabaseReference dbRef, String lockType, String lockTime) {
+        dbRef.child("trangthai").child("lock").setValue(true);
+        dbRef.child("trangthai").child("locktype").setValue(lockType);
+        dbRef.child("trangthai").child("locktime").setValue(lockTime);
+        dbRef.child("trangthai").child("online").setValue(false);
+    }
+
+    // Hàm mở khóa cửa hàng
+    private void MoKhoaCuaHang(DatabaseReference dbRef) {
+        new AlertDialog.Builder(getContext()).setTitle("Xác Nhận").setMessage("Bạn có chắc muốn cho cửa hàng Online?").setPositiveButton("Online", (dialog, which) -> {
+            dbRef.child("trangthai").child("lock").setValue(false);
+            dbRef.child("trangthai").child("locktype").setValue("");
+            dbRef.child("trangthai").child("locktime").setValue("");
+            dbRef.child("trangthai").child("online").setValue(true);
+
+            binding.ivAuthenticated.setImageResource(android.R.drawable.ic_lock_lock);
+        }).setNegativeButton("Hủy", null).show();
     }
 
     //-BUTTON DANH SÁCH SẢN PHẨM CỦA CỬA HÀNG
