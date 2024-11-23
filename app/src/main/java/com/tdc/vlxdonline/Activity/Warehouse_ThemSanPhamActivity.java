@@ -366,6 +366,7 @@ public class Warehouse_ThemSanPhamActivity extends AppCompatActivity {
                     progressDialog.dismiss();
                 }
             });
+            
         } else {
             saveDate();
             clearSelection();
