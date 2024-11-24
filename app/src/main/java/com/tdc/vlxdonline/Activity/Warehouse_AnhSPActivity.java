@@ -266,6 +266,7 @@ public class Warehouse_AnhSPActivity extends AppCompatActivity {
         anhSP.setAnh(uri != null ? imagesUrl.toString() : anhSP.getAnh());  // Nếu bạn không cần thay đổi ảnh
         reference.child("ProdImages").child(idProduct).child(System.currentTimeMillis() + "").child("anh").setValue(anhSP.getAnh());
         resetSelection();
+        Toast.makeText(this, "Thêm ảnh thành công", Toast.LENGTH_SHORT).show();
     }
 
     private void deleteProduct(long id) {
