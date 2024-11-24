@@ -2,6 +2,7 @@ package com.tdc.vlxdonline.Activity;
 
 import android.app.Activity;
 import android.app.AlertDialog;
+import android.app.ProgressDialog;
 import android.content.Context;
 import android.content.DialogInterface;
 import android.content.Intent;
@@ -77,10 +78,19 @@ public class Warehouse_ThemSanPhamActivity extends AppCompatActivity {
 
     DatabaseReference reference = FirebaseDatabase.getInstance().getReference();
 
+    private ProgressDialog progressDialog;
+
+    private void initProgressDialog() {
+        progressDialog = new ProgressDialog(this);
+        progressDialog.setMessage("Đang thêm ảnh...");
+        progressDialog.setCancelable(false);
+    }
+
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.taosanpham_layout);
+        initProgressDialog();
         setControl();
         getDate();
         getDonVi();
@@ -335,6 +345,7 @@ public class Warehouse_ThemSanPhamActivity extends AppCompatActivity {
     }
     public void uploadData() {
         if (uri != null) {
+            progressDialog.show();
             StorageReference storageReference = FirebaseStorage.getInstance().getReference().child("SanPham Images")
                     .child(uri.getLastPathSegment());
             storageReference.putFile(uri).addOnSuccessListener(new OnSuccessListener<UploadTask.TaskSnapshot>() {
@@ -346,6 +357,7 @@ public class Warehouse_ThemSanPhamActivity extends AppCompatActivity {
                     imagesUrl = urlImage.toString();
                     saveDate();
                     clearSelection();
+                    progressDialog.dismiss();
                 }
             });
         } else {

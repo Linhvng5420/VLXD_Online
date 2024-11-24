@@ -2,6 +2,7 @@ package com.tdc.vlxdonline.Activity;
 
 import android.app.Activity;
 import android.app.AlertDialog;
+import android.app.ProgressDialog;
 import android.content.Context;
 import android.content.DialogInterface;
 import android.content.Intent;
@@ -62,10 +63,19 @@ public class Warehouse_DanhMucActivity extends AppCompatActivity {
 
     DatabaseReference reference = FirebaseDatabase.getInstance().getReference();
 
+    private ProgressDialog progressDialog;
+
+    private void initProgressDialog() {
+        progressDialog = new ProgressDialog(this);
+        progressDialog.setMessage("Đang thêm ảnh...");
+        progressDialog.setCancelable(false);
+    }
+
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.danhmuc_layout);
+        initProgressDialog();
         setCtronl();
         getDate();
         setEvent();
@@ -200,6 +210,7 @@ public class Warehouse_DanhMucActivity extends AppCompatActivity {
     public void uploadData() {
         if (!edtNhapDM.getText().toString().isEmpty()) {
             if (uri != null) {
+                progressDialog.show();
                 StorageReference storageReference = FirebaseStorage.getInstance().getReference().child("categorys Images")
                         .child(uri.getLastPathSegment());
                 storageReference.putFile(uri).addOnSuccessListener(new OnSuccessListener<UploadTask.TaskSnapshot>() {
@@ -210,10 +221,12 @@ public class Warehouse_DanhMucActivity extends AppCompatActivity {
                         Uri urlImage = uriTask.getResult();
                         imagesUrl = urlImage.toString();
                         saveData();
+                        progressDialog.dismiss();
                     }
                 });
             } else {
                 saveData();
+                clearSelection();
             }
         }
     }
