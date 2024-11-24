@@ -76,6 +76,7 @@ public class ProdDetailCustomerFragment extends Fragment {
             idKhach = Customer_HomeActivity.info.getID();
     }
 
+
     @Override
     public void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -343,7 +344,14 @@ public class ProdDetailCustomerFragment extends Fragment {
         binding.lnXemDg.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                ((Customer_HomeActivity) getActivity()).ReplaceFragment(new DaDanhGiaFragment(1, idProd));
+                // Nếu Customer_HomeActivity đang chạy
+                if (getActivity() instanceof Customer_HomeActivity) {
+                    ((Customer_HomeActivity) getActivity()).ReplaceFragment(new DaDanhGiaFragment(1, idProd));
+                } else {
+
+                    DaDanhGiaFragment fragment = new DaDanhGiaFragment(1, idProd);
+                    getParentFragmentManager().beginTransaction().replace(R.id.fragment_container, fragment).addToBackStack(null).commit();
+                }
             }
         });
     }
@@ -479,30 +487,32 @@ public class ProdDetailCustomerFragment extends Fragment {
                     }
 
                     // TODO: Hiển thị tên cửa hàng từ dữ liệu của chủ sản phẩm
-                    String idChu = prod.getIdChu(); // Lấy id của chủ sản phẩm
-                    referDetailProd = FirebaseDatabase.getInstance().getReference();
-                    referDetailProd.child("thongtinchu").child(idChu).addValueEventListener(new ValueEventListener() {
-                        @Override
-                        public void onDataChange(@NonNull DataSnapshot snapshot) {
-                            try {
-                                // Kiểm tra nếu binding và dữ liệu tồn tại
-                                if (binding != null && snapshot.exists()) {
-                                    // Lấy tên chủ cửa hàng từ snapshot
-                                    String tenChu = snapshot.child("ten").getValue(String.class);
-                                    // Hiển thị tên cửa hàng trên giao diện
-                                    binding.tvCuaHang.setText("Cửa Hàng " + tenChu);
-                                    binding.tvCuaHang.setVisibility(View.VISIBLE);
+                    if (prod != null) {
+                        String idChu = prod.getIdChu(); // Lấy id của chủ sản phẩm
+                        referDetailProd = FirebaseDatabase.getInstance().getReference();
+                        referDetailProd.child("thongtinchu").child(idChu).addValueEventListener(new ValueEventListener() {
+                            @Override
+                            public void onDataChange(@NonNull DataSnapshot snapshot) {
+                                try {
+                                    // Kiểm tra nếu binding và dữ liệu tồn tại
+                                    if (binding != null && snapshot.exists()) {
+                                        // Lấy tên chủ cửa hàng từ snapshot
+                                        String tenChu = snapshot.child("ten").getValue(String.class);
+                                        // Hiển thị tên cửa hàng trên giao diện
+                                        binding.tvCuaHang.setText("Cửa Hàng " + tenChu);
+                                        binding.tvCuaHang.setVisibility(View.VISIBLE);
+                                    }
+                                } catch (Exception e) {
+                                    // Có thể thêm thông báo lỗi nếu cần
                                 }
-                            } catch (Exception e) {
-                                // Có thể thêm thông báo lỗi nếu cần
                             }
-                        }
 
-                        @Override
-                        public void onCancelled(@NonNull DatabaseError error) {
-                            // Xử lý khi việc lấy dữ liệu bị hủy (nếu cần)
-                        }
-                    });
+                            @Override
+                            public void onCancelled(@NonNull DatabaseError error) {
+                                // Xử lý khi việc lấy dữ liệu bị hủy (nếu cần)
+                            }
+                        });
+                    }
                 }
 
                 @Override
@@ -537,7 +547,6 @@ public class ProdDetailCustomerFragment extends Fragment {
     private void Admin_KhachHangKhieuNai() {
         // Hiển thị danh sách khiếu nại của khách hàng trong dialog
         DatabaseReference dbKhieuNai_LyDo = FirebaseDatabase.getInstance().getReference("khieunai/" + idProd);
-
         dbKhieuNai_LyDo.addListenerForSingleValueEvent(new ValueEventListener() {
             @Override
             public void onDataChange(@NonNull DataSnapshot dataSnapshot) {
@@ -611,7 +620,7 @@ public class ProdDetailCustomerFragment extends Fragment {
                 });
 
                 // Kiểm tra xem khiếu nại của sp đã đc xem xét hay chưa
-                boolean daxem = dataSnapshot.child("daxem").getValue(Boolean.class);
+                Boolean daxem = dataSnapshot.child("daxem").getValue(Boolean.class);
                 String status = daxem ? "Đóng" : "Tiếp Nhận";
                 builder.setNegativeButton(status, (dialog, which) -> {
                     if (!daxem) {

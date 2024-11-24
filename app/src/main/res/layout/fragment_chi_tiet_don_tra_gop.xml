@@ -14,7 +14,7 @@
             android:layout_height="match_parent"
             android:orientation="vertical">
             <TextView
-                android:id="@+id/tv_name_shop"
+                android:id="@+id/tv_nameUser"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
                 android:background="@drawable/bg_item_lg"
@@ -103,10 +103,37 @@
                 android:id="@+id/rc_chi_tietDon"
                 android:layout_width="match_parent"
                 android:layout_height="200dp"/>
+            <LinearLayout
+                android:layout_marginTop="5dp"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:background="@drawable/bg_detail"
+                android:backgroundTint="#0DF"
+                android:orientation="horizontal"
+                android:padding="10dp">
+
+                <TextView
+                    android:layout_width="wrap_content"
+                    android:layout_height="40dp"
+                    android:gravity="center_vertical"
+                    android:text="Tổng Cộng: "
+                    android:textSize="21dp"
+                    android:textStyle="bold" />
+
+                <TextView
+                    android:id="@+id/tv_tong_tien"
+                    android:layout_width="match_parent"
+                    android:layout_height="match_parent"
+                    android:gravity="center_vertical"
+                    android:text="200.000.000"
+                    android:textColor="#F00"
+                    android:textSize="25dp"
+                    android:textStyle="bold" />
+            </LinearLayout>
             <TextView
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
-                android:layout_marginVertical="10dp"
+                android:layout_marginVertical="5dp"
                 android:background="#0CF"
                 android:gravity="center"
                 android:padding="10dp"
@@ -114,12 +141,39 @@
                 android:textStyle="bold"
                 android:text="Đợt Trả Góp"/>
             <ListView
-                android:id="@+id/rc_traGop"
+                android:id="@+id/lv_traGop"
                 android:layout_width="match_parent"
-                android:layout_height="200dp"/>
+                android:layout_height="200dp"
+                android:layout_marginBottom="5dp"/>
+            <LinearLayout
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:background="@drawable/bg_detail"
+                android:backgroundTint="#0DF"
+                android:orientation="horizontal"
+                android:padding="10dp">
+
+                <TextView
+                    android:layout_width="wrap_content"
+                    android:layout_height="40dp"
+                    android:gravity="center_vertical"
+                    android:text="Tổng Nợ: "
+                    android:textSize="21dp"
+                    android:textStyle="bold" />
+
+                <TextView
+                    android:id="@+id/tv_tong_no"
+                    android:layout_width="match_parent"
+                    android:layout_height="match_parent"
+                    android:gravity="center_vertical"
+                    android:text="200.000.000"
+                    android:textColor="#F00"
+                    android:textSize="25dp"
+                    android:textStyle="bold" />
+            </LinearLayout>
             <Button
                 android:id="@+id/btn_traGop"
-                android:layout_marginTop="10dp"
+                android:layout_marginTop="5dp"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
                 android:backgroundTint="#0AF"

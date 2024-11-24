@@ -6,12 +6,11 @@ public class TraGop {
     private int thuTu, soTien;
     private boolean trangThai = false;
 
-    public TraGop(long idDon, String hanTra, int thuTu, int soTien, boolean trangThai) {
+    public TraGop(long idDon, String hanTra, int thuTu, int soTien) {
         this.idDon = idDon;
         this.hanTra = hanTra;
         this.thuTu = thuTu;
         this.soTien = soTien;
-        this.trangThai = trangThai;
     }
 
     public TraGop() {
