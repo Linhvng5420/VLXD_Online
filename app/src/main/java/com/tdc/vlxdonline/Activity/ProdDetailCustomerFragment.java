@@ -406,7 +406,8 @@ public class ProdDetailCustomerFragment extends Fragment {
                     for (DataSnapshot snapshot : dataSnapshot.getChildren()) {
                         AnhSanPham image = snapshot.getValue(AnhSanPham.class);
                         dataAnh.add(image.getAnh());
-                        if (atomicInteger.incrementAndGet() == itemCount) imageAdapter.notifyDataSetChanged();
+                        if (atomicInteger.incrementAndGet() == itemCount)
+                            imageAdapter.notifyDataSetChanged();
                     }
 
                     Glide.with(getActivity()).load(dataAnh.get(0)).into(binding.imgDetail);
@@ -423,62 +424,80 @@ public class ProdDetailCustomerFragment extends Fragment {
     }
 
     private void readProdFromDatabase() {
-        if (event == null){
+        // Kiểm tra nếu event chưa được khởi tạo
+        if (event == null) {
             event = new ValueEventListener() {
                 @Override
                 public void onDataChange(DataSnapshot dataSnapshot) {
                     try {
+                        // Lấy thông tin sản phẩm từ snapshot và gán vào biến Products
                         Products product = dataSnapshot.getValue(Products.class);
                         if (product != null) {
+                            // Gán sản phẩm vào biến toàn cục 'prod'
                             prod = product;
+
+                            // Hiển thị hình ảnh của sản phẩm sử dụng Glide
                             Glide.with(getActivity()).load(product.getAnh()).into(binding.ivAnhChinh);
+
+                            // Hiển thị thông tin chi tiết của sản phẩm trên giao diện
                             binding.tvTenSpDetail.setText(product.getTen());
                             binding.tvGiaSpDetail.setText(chuyenChuoi(product.getGiaBan()) + " VND");
                             binding.tvTonKhoDetail.setText("Kho: " + product.getTonKho());
                             binding.tvSoSao.setText(product.getSoSao());
+
+                            // Kiểm tra số lượng tồn kho, nếu bằng 0 thì đặt soLuong = 0
                             if (product.getTonKho().equals("0")) {
                                 soLuong = 0;
                             }
+                            // Hiển thị số lượng sản phẩm
                             binding.edtSoLuong.setText(soLuong + "");
                             binding.tvDaBanDetail.setText("Đã Bán: " + product.getDaBan());
                             binding.tvDonViDetail.setText(product.getDonVi());
                             binding.tvMoTaDetail.setText(product.getMoTa());
                         } else {
+                            // Hiển thị thông báo khi sản phẩm đã bị xóa
                             Toast.makeText(getActivity(), "Sản Phẩm Đã Bị Xóa!", Toast.LENGTH_SHORT).show();
                         }
                     } catch (Exception e) {
+                        // Bắt lỗi và hiển thị thông báo khi xảy ra vấn đề
+                        Toast.makeText(getActivity(), "Lỗi Rồi Nè Má!", Toast.LENGTH_SHORT).show();
                     }
 
-
-                // TODO 5 NGVLinh: Hiển Thị Tên Cửa Hàng
-                String idChu = prod.getIdChu();
-                referDetailProd = FirebaseDatabase.getInstance().getReference();
-                referDetailProd.child("thongtinchu").child(idChu).addValueEventListener(new ValueEventListener() {
-                    @Override
-                    public void onDataChange(@NonNull DataSnapshot snapshot) {
-                        try {
-                            if (binding != null && snapshot.exists()) {
-                                String tenChu = snapshot.child("ten").getValue(String.class);
-                                binding.tvCuaHang.setText("Cửa Hàng " + tenChu);
-                                binding.tvCuaHang.setVisibility(View.VISIBLE);
+                    // TODO: Hiển thị tên cửa hàng từ dữ liệu của chủ sản phẩm
+                    String idChu = prod.getIdChu(); // Lấy id của chủ sản phẩm
+                    referDetailProd = FirebaseDatabase.getInstance().getReference();
+                    referDetailProd.child("thongtinchu").child(idChu).addValueEventListener(new ValueEventListener() {
+                        @Override
+                        public void onDataChange(@NonNull DataSnapshot snapshot) {
+                            try {
+                                // Kiểm tra nếu binding và dữ liệu tồn tại
+                                if (binding != null && snapshot.exists()) {
+                                    // Lấy tên chủ cửa hàng từ snapshot
+                                    String tenChu = snapshot.child("ten").getValue(String.class);
+                                    // Hiển thị tên cửa hàng trên giao diện
+                                    binding.tvCuaHang.setText("Cửa Hàng " + tenChu);
+                                    binding.tvCuaHang.setVisibility(View.VISIBLE);
+                                }
+                            } catch (Exception e) {
+                                // Có thể thêm thông báo lỗi nếu cần
                             }
-                        } catch (Exception e) {
                         }
-                    }
 
-                    @Override
-                    public void onCancelled(@NonNull DatabaseError error) {
+                        @Override
+                        public void onCancelled(@NonNull DatabaseError error) {
+                            // Xử lý khi việc lấy dữ liệu bị hủy (nếu cần)
+                        }
+                    });
+                }
 
-                    }
-                });
-            }
+                @Override
+                public void onCancelled(@NonNull DatabaseError error) {
 
-            @Override
-            public void onCancelled(DatabaseError databaseError) {
-                System.out.println("The read failed: " + databaseError.getCode());
-            }
-        });
+                }
+            };
+        }
 
+        // Lấy tham chiếu đến dữ liệu sản phẩm và thêm lắng nghe sự kiện
         referDetailProd.child("products").child(idProd).addValueEventListener(event);
     }
 
