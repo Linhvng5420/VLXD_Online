@@ -98,6 +98,13 @@ public class AccountCustomerFragment extends Fragment {
                         .commit(); // Thực hiện chuyển đổi
             }
         });
+
+        binding.btnTraGop.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                ((Customer_HomeActivity) getActivity()).ReplaceFragment(new QuanLyTraGopFragment());
+            }
+        });
     }
 
     @Override

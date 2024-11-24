@@ -10,6 +10,7 @@ import androidx.annotation.Nullable;
 import androidx.appcompat.app.AlertDialog;
 import androidx.fragment.app.Fragment;
 
+import android.os.Trace;
 import android.text.Editable;
 import android.text.TextWatcher;
 import android.view.LayoutInflater;
@@ -28,9 +29,12 @@ import com.google.firebase.database.ValueEventListener;
 import com.tdc.vlxdonline.Model.ChiTietDon;
 import com.tdc.vlxdonline.Model.DonHang;
 import com.tdc.vlxdonline.Model.Products;
+import com.tdc.vlxdonline.Model.TraGop;
 import com.tdc.vlxdonline.R;
 import com.tdc.vlxdonline.databinding.FragmentDatHangNgayBinding;
 
+import java.time.LocalDate;
+import java.time.format.DateTimeFormatter;
 import java.util.ArrayList;
 
 public class DatHangNgayFragment extends Fragment {
@@ -288,8 +292,14 @@ public class DatHangNgayFragment extends Fragment {
                 @Override
                 public void onClick(DialogInterface dialog, int which) {
                     if (thanhToan == 1) {
-                        donHang.setPhiTraGop(donHang.getTongTien()*2/100);
-                        donHang.setTongTien(donHang.getTongTien()+ donHang.getPhiTraGop());
+                        donHang.setPhiTraGop(donHang.getTongTien() * 2 / 100);
+                        donHang.setTongTien(donHang.getTongTien() + donHang.getPhiTraGop());
+                        LocalDate nowDate = LocalDate.now();
+                        DateTimeFormatter formatter = DateTimeFormatter.ofPattern("dd-MM-yyyy");
+                        for (int i = 0; i < 4; i++) {
+                            TraGop tempTG = new TraGop(donHang.getId(), nowDate.format(formatter), i+1, donHang.getTongTien()/4);
+                            referDatHangNgay.child("tragop").child(donHang.getId()+"").child((i+1)+"").setValue(tempTG);
+                        }
                     } else if (thanhToan == 2) {
                         donHang.setPhiTraGop(donHang.getTongTien()*5/100);
                         donHang.setTongTien(donHang.getTongTien()+ donHang.getPhiTraGop());
