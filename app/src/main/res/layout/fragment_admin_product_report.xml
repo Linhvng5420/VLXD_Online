@@ -15,9 +15,9 @@
         android:gravity="center"
         android:paddingLeft="20dp"
         android:paddingRight="20dp"
-        android:textColor="#D32F2F"
         android:text="Danh Sách Sản Phẩm Bị Khách Hàng Khiếu Nại"
         android:textAlignment="center"
+        android:textColor="#D32F2F"
         android:textSize="24sp"
         android:textStyle="bold" />
 
@@ -28,15 +28,47 @@
         android:layout_marginRight="10dp"
         android:background="@drawable/edit_text_border" />
 
+    <RadioGroup
+        android:layout_width="match_parent"
+        android:layout_height="40dp"
+        android:layout_marginLeft="30dp"
+        android:layout_marginTop="10dp"
+        android:layout_marginRight="30dp"
+        android:background="@android:drawable/editbox_dropdown_light_frame"
+        android:orientation="horizontal">
+
+        <RadioButton
+            android:id="@+id/rbReporting"
+            android:layout_width="0dp"
+            android:layout_height="wrap_content"
+            android:layout_weight="1"
+            android:autoSizeMaxTextSize="20sp"
+            android:autoSizeTextType="uniform"
+            android:text="Reporting"
+            android:textColor="#E70B0B"
+            android:textStyle="bold" />
+
+        <RadioButton
+            android:id="@+id/rbReported"
+            android:layout_width="0dp"
+            android:layout_height="wrap_content"
+            android:layout_weight="1"
+            android:autoSizeMaxTextSize="20sp"
+            android:autoSizeTextType="uniform"
+            android:text="Reported"
+            android:textColor="#08D30B"
+            android:textStyle="bold" />
+    </RadioGroup>
+
     <TextView
         android:id="@+id/tv_ton_kho"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:layout_marginTop="5dp"
         android:layout_marginBottom="-5dp"
-        android:paddingRight="20sp"
+        android:paddingLeft="20sp"
         android:text="N/A Products"
-        android:textAlignment="textEnd"
+        android:textAlignment="textStart"
         android:textStyle="bold" />
 
     <androidx.recyclerview.widget.RecyclerView

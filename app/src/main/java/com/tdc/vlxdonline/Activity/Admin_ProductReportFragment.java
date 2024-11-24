@@ -31,7 +31,7 @@ public class Admin_ProductReportFragment extends Fragment {
     List<Products> dsSanPham = new ArrayList<>();
     AdminSanPhamAdapter adapter;
 
-    int countSP = 0; // đếm số lượng sp bị report
+    int countReport = 0; // đếm số lượng sp bị reporting
 
     @Override
     public void onCreate(Bundle savedInstanceState) {
@@ -49,24 +49,42 @@ public class Admin_ProductReportFragment extends Fragment {
         adapter = new AdminSanPhamAdapter(new ArrayList<>());
         binding.rcvSanPham.setAdapter(adapter);
 
-        getDataSanPham();
+        // Radio button mặc định là reporting
+        binding.rbReporting.setChecked(true);
+        binding.rbReported.setChecked(false);
+
+        getDataSanPham("Reporting");
         setupOnClickItem();
+
+        binding.rbReported.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+                getDataSanPham("Reported");
+            }
+        });
+
+        binding.rbReporting.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+                getDataSanPham("Reporting");
+            }
+        });
 
         return view;
     }
 
-    private void getDataSanPham() {
+    private void getDataSanPham(String type) {
         // Xóa danh sách cũ
         dsSanPham.clear();
         adapter.getDsSanPham().clear();
         adapter.notifyDataSetChanged();
-        countSP = 0;
+        countReport = 0;
 
         DatabaseReference db = FirebaseDatabase.getInstance().getReference();
         db.child("khieunai").addValueEventListener(new ValueEventListener() {
             @Override
             public void onDataChange(@NonNull DataSnapshot snapshotKhieuNai) {
-                // Danh sách tạm thời để tránh cập nhật UI liên tục
+                // Danh sách tạm thời để tránh cập nhật UI liên tục, nhan doi lstv
                 Map<String, Products> tempProductMap = new HashMap<>();
 
                 // Lấy danh sách khiếu nại
@@ -77,16 +95,27 @@ public class Admin_ProductReportFragment extends Fragment {
                         dbSP.child("products/" + productId).addValueEventListener(new ValueEventListener() {
                             @Override
                             public void onDataChange(@NonNull DataSnapshot snapshotSP) {
-                                countSP = 0;
+                                countReport = 0;
+                                Boolean daxem = snapshotKhieuNai.child("/" + productId + "/daxem").getValue(Boolean.class);
+
                                 Products product = snapshotSP.getValue(Products.class);
-                                if (product != null && snapshotKhieuNai.child("/" + productId + "/daxem").getValue(Boolean.class) == false) {
+                                if (product == null) return;
+
+                                // Hiển thị ds theo kiểu: Chưa Kiểm Tra Report
+                                if (type.equals("Reporting") && !daxem) {
                                     // Cập nhật hoặc thêm sản phẩm mới vào danh sách tạm thời
                                     tempProductMap.put(productId, product);
-                                    countSP++;
-                                } else {
-                                    // Xóa sản phẩm nếu không còn tồn tại
-                                    tempProductMap.remove(productId);
-                                }
+                                    countReport++;
+                                } else
+                                    // Hiển thị ds theo kiểu: Đã Kiểm Tra Report
+                                    if (type.equals("Reported") && daxem) {
+                                        // Cập nhật hoặc thêm sản phẩm mới vào danh sách tạm thời
+                                        tempProductMap.put(productId, product);
+                                        countReport++;
+                                    } else {
+                                        // Xóa sản phẩm nếu không còn tồn tại
+                                        tempProductMap.remove(productId);
+                                    }
 
                                 // Cập nhật danh sách chính và giao diện
                                 updateProductList(tempProductMap);
@@ -127,7 +156,7 @@ public class Admin_ProductReportFragment extends Fragment {
         adapter.notifyDataSetChanged();
 
         // Hiển thị số lượng sản phẩm bị báo cáo
-        binding.tvTonKho.setText("Số lượng sản phẩm đang bị báo cáo: " + countSP);
+        binding.tvTonKho.setText("Report: " + countReport);
     }
 
 

@@ -28,6 +28,7 @@ import androidx.recyclerview.widget.RecyclerView;
 import com.bumptech.glide.Glide;
 import com.google.android.gms.tasks.OnCompleteListener;
 import com.google.android.gms.tasks.Task;
+import com.google.android.material.snackbar.Snackbar;
 import com.google.firebase.database.DataSnapshot;
 import com.google.firebase.database.DatabaseError;
 import com.google.firebase.database.DatabaseReference;
@@ -45,7 +46,6 @@ import java.util.List;
 import java.util.concurrent.atomic.AtomicInteger;
 
 public class ProdDetailCustomerFragment extends Fragment {
-
     FragmentProdDetailCustomerBinding binding;
     private String idKhach;
     // Id product duoc chon
@@ -79,7 +79,8 @@ public class ProdDetailCustomerFragment extends Fragment {
     public View onCreateView(LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState) {
         // Inflate the layout for this fragment
         binding = FragmentProdDetailCustomerBinding.inflate(inflater, container, false);
-        // TODO 2 NGVlinh: Admin đăng nhập, ẩn các nút mua, giỏ hàng
+
+        // TODO 2 NGVlinh: Admin đăng nhập, ẩn các nút mua, giỏ hàng, đánh giá
         if (Customer_HomeActivity.info == null) {
             idKhach = "N/A";
             binding.btnDatHangNgay.setText("Xem Khiếu Nại Của Khách Hàng");
@@ -87,6 +88,7 @@ public class ProdDetailCustomerFragment extends Fragment {
             binding.btnDatHangNgay.setTextColor(Color.WHITE);
             binding.btnDatHangNgay.setBackgroundColor(Color.RED);
             binding.lnGioHang.setVisibility(View.INVISIBLE);
+            binding.lnXemDg.setVisibility(View.INVISIBLE);
         }
 
         // Khách hàng đăng nhập
@@ -570,32 +572,39 @@ public class ProdDetailCustomerFragment extends Fragment {
 
                 // Xóa SP Vi Phạm
                 builder.setPositiveButton("Xóa Sản Phẩm", (dialog, which) -> {
-                    DatabaseReference dbanPham = FirebaseDatabase.getInstance().getReference("products/" + idProd);
-                    dbanPham.removeValue().addOnCompleteListener(new OnCompleteListener<Void>() {
-                        @Override
-                        public void onComplete(@NonNull Task<Void> task) {
-                            if (task.isSuccessful()) {
-                                DatabaseReference dbStore = FirebaseDatabase.getInstance().getReference();
-                                dbStore.child("ProdImages").child(idProd).removeValue(); // Xóa ảnh trong bảng "ProdImages")
+                    new AlertDialog.Builder(getContext()).setTitle("Xác Nhận Xóa Sản Phẩm")
+                            .setMessage("Bạn có chắc chắn muốn xóa sản phẩm này?")
+                            .setPositiveButton("Xóa", (dialog1, which1) -> {
+                                // Xóa sản phẩm trong bảng "products"
+                                DatabaseReference dbanPham = FirebaseDatabase.getInstance().getReference("products/" + idProd);
+                                dbanPham.removeValue().addOnCompleteListener(new OnCompleteListener<Void>() {
+                                    @Override
+                                    public void onComplete(@NonNull Task<Void> task) {
+                                        if (task.isSuccessful()) {
+                                            DatabaseReference dbStore = FirebaseDatabase.getInstance().getReference();
+                                            dbStore.child("ProdImages").child(idProd).removeValue(); // Xóa ảnh trong bảng "ProdImages")
 
-                                // xóa khiếu nại của sản phẩm
-                                dbKhieuNai_LyDo.removeValue();
+                                            // xóa khiếu nại của sản phẩm
+                                            dbKhieuNai_LyDo.removeValue();
 
-                                Toast.makeText(getActivity(), "XÓA SẢN PHẨM THÀNH CÔNG", Toast.LENGTH_SHORT).show();
-                            } else {
-                                Toast.makeText(getActivity(), "Xóa sản phẩm thất bại", Toast.LENGTH_SHORT).show();
-                            }
-                        }
-                    });
+                                            // Quay lại màn hình trước và thông báo xóa thành công
+                                            getActivity().getSupportFragmentManager().popBackStack();
+                                            Toast.makeText(getActivity(), "XÓA SẢN PHẨM VI PHẠM THÀNH CÔNG", Toast.LENGTH_SHORT).show();
+                                        } else {
+                                            Toast.makeText(getActivity(), "Xóa sản phẩm thất bại", Toast.LENGTH_SHORT).show();
+                                        }
+                                    }
+                                });
+                            }).setNegativeButton("Hủy", null).show();
                 });
 
-                // Thay đổi trạng thái đã tiếp nhận khi nhận khiếu nại hay chưa
-                // lấy giá trị child "daxem"
+                // Kiểm tra xem khiếu nại của sp đã đc xem xét hay chưa
                 boolean daxem = dataSnapshot.child("daxem").getValue(Boolean.class);
-                String status = daxem ? "Đã Tiếp Nhận" : "Tiếp Nhận";
+                String status = daxem ? "Đóng" : "Tiếp Nhận";
                 builder.setNegativeButton(status, (dialog, which) -> {
                     if (!daxem) {
                         dbKhieuNai_LyDo.child("daxem").setValue(true);
+                        Snackbar.make(binding.getRoot(), "Admin Đã Xem Và Ghi Nhận Khiếu Nại", Snackbar.LENGTH_SHORT).show();
                     }
                 });
                 builder.show();
