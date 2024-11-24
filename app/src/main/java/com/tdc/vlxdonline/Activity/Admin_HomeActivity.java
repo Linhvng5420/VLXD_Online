@@ -19,7 +19,6 @@ import com.tdc.vlxdonline.R;
 import com.tdc.vlxdonline.databinding.ActivityAdminHomeBinding;
 
 public class Admin_HomeActivity extends AppCompatActivity {
-
     private ActivityAdminHomeBinding binding;
     private ActionBarDrawerToggle drawerToggle;
     private String accountID = LoginActivity.accountID;
@@ -104,7 +103,6 @@ public class Admin_HomeActivity extends AppCompatActivity {
     private void setupMenuListeners() {
         binding.navCuaHang.setOnClickListener(view -> handleMenuClick(new Admin_CuaHangFragment()));
         binding.navSanPham.setOnClickListener(view -> handleMenuClick(new Admin_ProductReportFragment()));
-//        binding.navKhieuNai.setOnClickListener(view -> handleMenuClick(new Admin_KhieuNaiFragment()));
     }
 
     // Xử lý sự kiện click menu

@@ -110,19 +110,8 @@
                     android:layout_height="wrap_content"
                     android:drawableStart="@drawable/nav_sanpham"
                     android:padding="16dp"
-                    android:text=" Sản Phẩm Vi Phạm"
-                    android:textColor="#FB8C00"
-                    android:textSize="18sp"
-                    android:textStyle="bold" />
-
-                <TextView
-                    android:id="@+id/nav_khieu_nai"
-                    android:layout_width="match_parent"
-                    android:layout_height="wrap_content"
-                    android:drawableStart="@drawable/baseline_report_24"
-                    android:padding="16dp"
                     android:text=" Khách Hàng Khiếu Nại"
-                    android:textColor="#E53935"
+                    android:textColor="#FB8C00"
                     android:textSize="18sp"
                     android:textStyle="bold" />
             </LinearLayout>
