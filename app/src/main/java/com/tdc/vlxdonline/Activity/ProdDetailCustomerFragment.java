@@ -80,6 +80,8 @@ public class ProdDetailCustomerFragment extends Fragment {
     @Override
     public void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
+        if (Customer_HomeActivity.info == null)
+            Admin_KhachHangKhieuNai();
     }
 
     @Override
@@ -550,85 +552,90 @@ public class ProdDetailCustomerFragment extends Fragment {
         dbKhieuNai_LyDo.addListenerForSingleValueEvent(new ValueEventListener() {
             @Override
             public void onDataChange(@NonNull DataSnapshot dataSnapshot) {
-                // Tạo danh sách để hiển thị khiếu nại
-                List<String> complaintList = new ArrayList<>();
-                List<String> customerKeys = new ArrayList<>(); // Danh sách mã khách hàng
+                if (dataSnapshot.exists()) {
+                    // Tạo danh sách để hiển thị khiếu nại
+                    List<String> complaintList = new ArrayList<>();
+                    List<String> customerKeys = new ArrayList<>(); // Danh sách mã khách hàng
 
-                // Lấy dữ liệu từ Firebase
-                for (DataSnapshot snapshot : dataSnapshot.child("lydo").getChildren()) {
-                    String customerId = snapshot.getKey(); // Mã khách hàng
-                    String complaint = snapshot.getValue(String.class); // Lời khiếu nại
+                    // Lấy dữ liệu từ Firebase
+                    for (DataSnapshot snapshot : dataSnapshot.child("lydo").getChildren()) {
+                        String customerId = snapshot.getKey(); // Mã khách hàng
+                        String complaint = snapshot.getValue(String.class); // Lời khiếu nại
 
-                    if (customerId != null && complaint != null) {
-                        complaintList.add("[" + customerId + "] " + complaint);
-                        customerKeys.add(customerId);
+                        if (customerId != null && complaint != null) {
+                            complaintList.add("[" + customerId + "] " + complaint);
+                            customerKeys.add(customerId);
+                        }
                     }
-                }
 
-                // Nếu không có khiếu nại
-                if (complaintList.isEmpty()) {
-                    complaintList.add("Không có khiếu nại nào.");
-                }
-
-                // Hiển thị dialog với ListView
-                AlertDialog.Builder builder = new AlertDialog.Builder(getContext());
-                builder.setTitle("Danh sách khiếu nại");
-                ArrayAdapter<String> adapter = new ArrayAdapter<>(getContext(), android.R.layout.simple_list_item_1, complaintList);
-
-                builder.setAdapter(adapter, (dialog, which) -> {
-                    if (which < customerKeys.size()) {
-                        String selectedCustomerId = customerKeys.get(which);
-                        // Chuyển sang trang thông tin chi tiết của khách hàng
-                        Bundle bundle = new Bundle();
-                        bundle.putString("idKH", selectedCustomerId); // Gửi mã khách hàng qua bundle
-
-                        Owner_KhachHangDetailFragment fragment = new Owner_KhachHangDetailFragment();
-                        fragment.setArguments(bundle);
-
-                        // Mở fragment chi tiết và tắt thanh điều hướng của fragment đó
-                        FragmentTransaction transaction = getActivity().getSupportFragmentManager().beginTransaction();
-                        transaction.replace(R.id.fragment_container, fragment);
-                        transaction.addToBackStack(null);
-                        transaction.commit();
+                    // Nếu không có khiếu nại
+                    if (complaintList.isEmpty()) {
+                        complaintList.add("Không có khiếu nại nào.");
                     }
-                });
 
-                // Xóa SP Vi Phạm
-                builder.setPositiveButton("Xóa Sản Phẩm", (dialog, which) -> {
-                    new AlertDialog.Builder(getContext()).setTitle("Xác Nhận Xóa Sản Phẩm").setMessage("Bạn có chắc chắn muốn xóa sản phẩm này?").setPositiveButton("Xóa", (dialog1, which1) -> {
-                        // Xóa sản phẩm trong bảng "products"
-                        DatabaseReference dbanPham = FirebaseDatabase.getInstance().getReference("products/" + idProd);
-                        dbanPham.removeValue().addOnCompleteListener(new OnCompleteListener<Void>() {
-                            @Override
-                            public void onComplete(@NonNull Task<Void> task) {
-                                if (task.isSuccessful()) {
-                                    DatabaseReference dbStore = FirebaseDatabase.getInstance().getReference();
-                                    dbStore.child("ProdImages").child(idProd).removeValue(); // Xóa ảnh trong bảng "ProdImages")
+                    // Hiển thị dialog với ListView
+                    AlertDialog.Builder builder = new AlertDialog.Builder(getContext());
+                    builder.setTitle("Danh sách khiếu nại");
+                    ArrayAdapter<String> adapter = new ArrayAdapter<>(getContext(), android.R.layout.simple_list_item_1, complaintList);
 
-                                    // xóa khiếu nại của sản phẩm
-                                    dbKhieuNai_LyDo.removeValue();
+                    builder.setAdapter(adapter, (dialog, which) -> {
+                        if (which < customerKeys.size()) {
+                            String selectedCustomerId = customerKeys.get(which);
+                            // Chuyển sang trang thông tin chi tiết của khách hàng
+                            Bundle bundle = new Bundle();
+                            bundle.putString("idKH", selectedCustomerId); // Gửi mã khách hàng qua bundle
 
-                                    // Quay lại màn hình trước và thông báo xóa thành công
-                                    getActivity().getSupportFragmentManager().popBackStack();
-                                    Toast.makeText(getActivity(), "XÓA SẢN PHẨM VI PHẠM THÀNH CÔNG", Toast.LENGTH_SHORT).show();
-                                } else {
-                                    Toast.makeText(getActivity(), "Xóa sản phẩm thất bại", Toast.LENGTH_SHORT).show();
+                            Owner_KhachHangDetailFragment fragment = new Owner_KhachHangDetailFragment();
+                            fragment.setArguments(bundle);
+
+                            // Mở fragment chi tiết và tắt thanh điều hướng của fragment đó
+                            FragmentTransaction transaction = getActivity().getSupportFragmentManager().beginTransaction();
+                            transaction.replace(R.id.fragment_container, fragment);
+                            transaction.addToBackStack(null);
+                            transaction.commit();
+                        }
+                    });
+
+                    // Xóa SP Vi Phạm
+                    builder.setPositiveButton("Xóa Sản Phẩm", (dialog, which) -> {
+                        new AlertDialog.Builder(getContext()).setTitle("Xác Nhận Xóa Sản Phẩm").setMessage("Bạn có chắc chắn muốn xóa sản phẩm này?").setPositiveButton("Xóa", (dialog1, which1) -> {
+                            // Xóa sản phẩm trong bảng "products"
+                            DatabaseReference dbSanPham = FirebaseDatabase.getInstance().getReference("products/" + idProd);
+                            dbSanPham.removeValue().addOnCompleteListener(new OnCompleteListener<Void>() {
+                                @Override
+                                public void onComplete(@NonNull Task<Void> task) {
+                                    if (task.isSuccessful()) {
+                                        DatabaseReference dbStore = FirebaseDatabase.getInstance().getReference();
+                                        dbStore.child("ProdImages").child(idProd).removeValue(); // Xóa ảnh trong bảng "ProdImages")
+
+                                        // xóa khiếu nại của sản phẩm
+                                        dbKhieuNai_LyDo.removeValue();
+
+                                        // Quay lại màn hình trước và thông báo xóa thành công
+                                        getActivity().getSupportFragmentManager().popBackStack();
+                                        Toast.makeText(getActivity(), "XÓA SẢN PHẨM VI PHẠM THÀNH CÔNG", Toast.LENGTH_SHORT).show();
+                                    } else {
+                                        Toast.makeText(getActivity(), "Xóa sản phẩm thất bại", Toast.LENGTH_SHORT).show();
+                                    }
                                 }
-                            }
-                        });
-                    }).setNegativeButton("Hủy", null).show();
-                });
+                            });
+                        }).setNegativeButton("Hủy", null).show();
+                    });
 
-                // Kiểm tra xem khiếu nại của sp đã đc xem xét hay chưa
-                Boolean daxem = dataSnapshot.child("daxem").getValue(Boolean.class);
-                String status = daxem ? "Đóng" : "Tiếp Nhận";
-                builder.setNegativeButton(status, (dialog, which) -> {
-                    if (!daxem) {
-                        dbKhieuNai_LyDo.child("daxem").setValue(true);
-                        Snackbar.make(binding.getRoot(), "Admin Đã Xem Và Ghi Nhận Khiếu Nại", Snackbar.LENGTH_SHORT).show();
-                    }
-                });
-                builder.show();
+                    // Kiểm tra xem khiếu nại của sp đã đc xem xét hay chưa
+                    Boolean daxem = dataSnapshot.child("daxem").getValue(Boolean.class);
+                    String status = daxem ? "Đóng" : "Tiếp Nhận";
+                    builder.setNegativeButton(status, (dialog, which) -> {
+                        if (!daxem) {
+                            dbKhieuNai_LyDo.child("daxem").setValue(true);
+                            Snackbar.make(binding.getRoot(), "Admin Đã Xem Và Ghi Nhận Khiếu Nại", Snackbar.LENGTH_SHORT).show();
+                        }
+                    });
+                    builder.show();
+                } else {
+                    binding.btnDatHangNgay.setText("Không Có Khiếu Nại");
+                    Snackbar.make(binding.getRoot(), "Sản Phẩm Hiện Không có khiếu nại nào.", Snackbar.LENGTH_SHORT).show();
+                }
             }
 
             @Override
