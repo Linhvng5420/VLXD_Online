@@ -29,7 +29,7 @@
                 <androidx.recyclerview.widget.RecyclerView
                     android:id="@+id/rc_anh_sp"
                     android:layout_width="match_parent"
-                    android:layout_height="wrap_content"
+                    android:layout_height="match_parent"
                     android:background="@drawable/backnav"
                     android:paddingVertical="5dp" />
 
@@ -183,9 +183,9 @@
                         android:layout_width="match_parent"
                         android:layout_height="50dp"
                         android:layout_marginVertical="5dp"
-                        android:backgroundTint="@color/white"
+                        android:backgroundTint="#EC1212"
                         android:text="Đặt Hàng Ngay"
-                        android:textColor="@color/black"
+                        android:textColor="@color/white"
                         android:textSize="21dp"
                         android:textStyle="bold" />
                 </LinearLayout>
