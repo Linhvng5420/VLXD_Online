@@ -16,6 +16,11 @@ import com.tdc.vlxdonline.R;
 
 public class QuanLyKhoFragment extends Fragment {
     TextView tvQLSP, tvQLDM, tvQLDV, tvQLAnhSP, tvQLBanner;
+    String idChu;
+
+    public QuanLyKhoFragment(String idChu) {
+        this.idChu = idChu;
+    }
 
     @Override
     public void onCreate(Bundle savedInstanceState) {
@@ -73,6 +78,7 @@ public class QuanLyKhoFragment extends Fragment {
             @Override
             public void onClick(View view) {
                 Intent intent = new Intent(getActivity(), Warehouse_BannerActivity.class);
+                intent.putExtra("idChu", idChu); // Truyền emailUser qua Intent
                 startActivity(intent);
             }
         });

@@ -82,7 +82,7 @@ public class Owner_HomeActivity extends AppCompatActivity {
             } else if (itemId == R.id.nav_owner_donhang) {
                 ReplaceFragment(new DanhSachDonHangFragment(0));
             } else if (itemId == R.id.nav_owner_kho) {
-                ReplaceFragment(new QuanLyKhoFragment());
+                ReplaceFragment(new QuanLyKhoFragment(idChu));
             }
 
             return true;

@@ -102,6 +102,8 @@ public class ChiTietGiaoHangFragment extends Fragment {
                                 if (trangThaiTt == 0) {
                                     binding.btnTrangThai.setText(R.string.chua_thanh_toan);
                                 }
+                            } else if (trangThaiVc == 5) {
+                                binding.btnTrangThai.setText("Chờ Lấy Hàng");
                             }
                         }
                     } else {
@@ -155,8 +157,11 @@ public class ChiTietGiaoHangFragment extends Fragment {
     }
 
     private void ChuyenTrangThaiGiaoHang(int trangThaiHienTai) {
-        if (trangThaiHienTai==1) reference.child("bills").child(idDon+"").child("idGiao").setValue(Shipper_HomeActivity.nv.getCccd());
         int update = trangThaiHienTai + 1;
+        if (trangThaiHienTai==1) {
+            update = 5;
+            reference.child("bills").child(idDon+"").child("idGiao").setValue(Shipper_HomeActivity.nv.getCccd());
+        }
         reference.child("bills").child(idDon + "").child("trangThai").setValue(update);
     }
 
