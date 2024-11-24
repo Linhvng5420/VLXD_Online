@@ -25,9 +25,14 @@ import com.google.firebase.database.DatabaseReference;
 import com.google.firebase.database.FirebaseDatabase;
 import com.google.firebase.database.ValueEventListener;
 import com.tdc.vlxdonline.Adapter.AdapterCenterDrop;
+import com.tdc.vlxdonline.Model.KhachHang;
+import com.tdc.vlxdonline.Model.ModelTTLock;
+import com.tdc.vlxdonline.Model.ThongTinChu;
 import com.tdc.vlxdonline.R;
 import com.tdc.vlxdonline.databinding.ActivityRegisterBinding;
 
+import java.security.MessageDigest;
+import java.security.NoSuchAlgorithmException;
 import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.Map;
@@ -43,6 +48,7 @@ public class RegisterActivity extends AppCompatActivity {
     private InputFragment emailFragment;
     private InputFragment passwordFragment;
     private InputFragment rePasswordFragment;
+    private InputFragment cccdFragment;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -78,14 +84,9 @@ public class RegisterActivity extends AppCompatActivity {
         binding.tvSignin.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                backToLogin();
+                onBackPressed();
             }
         });
-    }
-
-    private void backToLogin() {
-        Intent intent = new Intent(RegisterActivity.this, LoginActivity.class);
-        startActivity(intent);
     }
 
     private void KhoiTao() {
@@ -113,6 +114,7 @@ public class RegisterActivity extends AppCompatActivity {
         String email = this.emailFragment.getEditText().getText().toString();
         String sdt = this.sdtFragment.getEditText().getText().toString();
         String ten = this.tenFragment.getEditText().getText().toString();
+        String cccd = this.cccdFragment.getEditText().getText().toString();
         String type = this.getTypeString();
 
         // Kiểm tra tên account
@@ -123,6 +125,12 @@ public class RegisterActivity extends AppCompatActivity {
 
         // Kiểm tra số điện thoại account bằng regex
         if (!sdt.matches("^\\d{10,11}$")) {
+            Toast.makeText(this, "Số điện thoại không hợp lệ", Toast.LENGTH_SHORT).show();
+            return;
+        }
+
+        // Kiểm tra số điện thoại account bằng regex
+        if (!cccd.matches("^\\d{10,11}$")) {
             Toast.makeText(this, "Số điện thoại không hợp lệ", Toast.LENGTH_SHORT).show();
             return;
         }
@@ -146,7 +154,7 @@ public class RegisterActivity extends AppCompatActivity {
         }
 
         // Kiểm tra type account
-        if (!type.equals("chu") && !type.equals("kh") && !type.equals("nv")) {
+        if (!type.equals("chu") && !type.equals("kh")) {
             Toast.makeText(this, "Loại tài khoản không hợp lệ", Toast.LENGTH_SHORT).show();
             return;
         }
@@ -163,27 +171,40 @@ public class RegisterActivity extends AppCompatActivity {
                     Toast.makeText(getApplicationContext(), "Email đã tồn tại!", Toast.LENGTH_SHORT).show();
                 } else {
                     // Email chưa tồn tại, thêm account mới
-                    String accountId = dbRef.push().getKey();
+                    String accountId = email.substring(0, email.indexOf("@"));
 
                     // Tạo một Map để chứa dữ liệu account mới
                     Map<String, Object> newAccount = new HashMap<>();
 
                     newAccount.put("email", email);
-                    newAccount.put("pass", pass);
+                    newAccount.put("pass", hashPassword(pass));
                     newAccount.put("type", type);
 
-                    // Thêm tài khoản vào Firebase
+// Thêm tài khoản vào Firebase
                     dbRef.child(accountId).setValue(newAccount).addOnCompleteListener(new OnCompleteListener<Void>() {
                         @Override
                         public void onComplete(@NonNull Task<Void> task) {
                             if (task.isSuccessful()) {
                                 Toast.makeText(getApplicationContext(), "Thêm tài khoản thành công!", Toast.LENGTH_SHORT).show();
-                                backToLogin();
+                                onBackPressed();
                             } else {
                                 Toast.makeText(getApplicationContext(), "Thêm tài khoản thất bại!", Toast.LENGTH_SHORT).show();
                             }
                         }
                     });
+
+                    // Refer them thong tin nguoi dung
+                    DatabaseReference tempRefer = FirebaseDatabase.getInstance().getReference();
+                    if (type.equals("chu")) {
+                        ThongTinChu tempChu = new ThongTinChu(null, ten, sdt, email, "N/A", "N/A", "N/A");
+                        tempRefer.child("thongtinchu").child(accountId).setValue(tempChu);
+                        tempRefer.child("thongtinchu").child(accountId).child("cccd").setValue(cccd);
+                        tempRefer.child("thongtinchu").child(accountId).child("cuahang").setValue("N/A");
+                        tempRefer.child("account").child(accountId).child("trangthai").setValue(new ModelTTLock());
+                    } else {
+                        KhachHang tempKH = new KhachHang(null, ten, sdt, email, "N/A", "N/A", "N/A", cccd, "N/A");
+                        tempRefer.child("customers").child(accountId).setValue(tempKH);
+                    }
                 }
             }
 
@@ -219,6 +240,30 @@ public class RegisterActivity extends AppCompatActivity {
         getSupportFragmentManager().beginTransaction()
                 .replace(R.id.fragment_rePass, this.rePasswordFragment)
                 .commit();
+
+        this.cccdFragment = InputFragment.newInstance("Căn Cước Công Dân", "Nhập Số Căn Cước Công Dân .....", false, 5);
+        getSupportFragmentManager().beginTransaction()
+                .replace(R.id.fragment_cccd, this.cccdFragment)
+                .commit();
+    }
+
+    private String hashPassword(String password) {
+        try {
+            MessageDigest md = MessageDigest.getInstance("SHA-256");
+            byte[] hash = md.digest(password.getBytes());
+            StringBuilder hexString = new StringBuilder();
+
+            for (byte b : hash) {
+                String hex = Integer.toHexString(0xff & b);
+                if (hex.length() == 1) hexString.append('0');
+                hexString.append(hex);
+            }
+
+            return hexString.toString();
+        } catch (NoSuchAlgorithmException e) {
+            e.printStackTrace();
+            return null;
+        }
     }
 
 }

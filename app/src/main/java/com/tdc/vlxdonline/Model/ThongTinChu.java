@@ -2,7 +2,7 @@ package com.tdc.vlxdonline.Model;
 
 public class ThongTinChu{
     private String id, ten, sdt, email;
-    private String diaChi, cccdtruoc, cccdsau;
+    private String diaChi, cuahang, cccdtruoc, cccdsau;
 
     public ThongTinChu() {
     }
@@ -15,6 +15,14 @@ public class ThongTinChu{
         this.diaChi = diaChi;
         this.cccdtruoc = cccdtruoc;
         this.cccdsau = cccdsau;
+    }
+
+    public String getCuahang() {
+        return cuahang;
+    }
+
+    public void setCuahang(String cuahang) {
+        this.cuahang = cuahang;
     }
 
     public String getId() {

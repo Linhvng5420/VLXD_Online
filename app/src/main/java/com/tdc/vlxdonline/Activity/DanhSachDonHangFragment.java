@@ -138,7 +138,7 @@ public class DanhSachDonHangFragment extends Fragment {
                         if (trangThaiLoc == 0 && vc == 4 && tt == 2) continue;
                             // 1 la chua da hoan thanh, continue neu don chua xac nhan hoan thanh
                         else if (trangThaiLoc == 1) {
-                            if (vc < 4 || tt < 2) continue;
+                            if (vc != 4 || tt < 2) continue;
                         }
 
                         if (LoginActivity.typeUser == 0 && !Owner_HomeActivity.infoChu.getId().equals(don.getIdChu()))

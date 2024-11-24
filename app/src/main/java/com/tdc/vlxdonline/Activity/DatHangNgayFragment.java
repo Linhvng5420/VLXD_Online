@@ -15,6 +15,8 @@ import android.text.TextWatcher;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
+import android.widget.AdapterView;
+import android.widget.ArrayAdapter;
 import android.widget.Toast;
 
 import com.bumptech.glide.Glide;
@@ -29,6 +31,8 @@ import com.tdc.vlxdonline.Model.Products;
 import com.tdc.vlxdonline.R;
 import com.tdc.vlxdonline.databinding.FragmentDatHangNgayBinding;
 
+import java.util.ArrayList;
+
 public class DatHangNgayFragment extends Fragment {
 
     private FragmentDatHangNgayBinding binding;
@@ -42,6 +46,10 @@ public class DatHangNgayFragment extends Fragment {
     // Khac
     private int soLuong;
     DatabaseReference referDatHangNgay;
+    // Thanh Toan
+    ArrayList<String> dataThanhT = new ArrayList<>();
+    ArrayAdapter adapterTT;
+    int thanhToan = 0;
 
     public DatHangNgayFragment(String idProduct, int soLuong) {
         this.idProd = idProduct;
@@ -72,6 +80,23 @@ public class DatHangNgayFragment extends Fragment {
     @Override
     public void onViewCreated(@NonNull View view, @Nullable Bundle savedInstanceState) {
         super.onViewCreated(view, savedInstanceState);
+        // Loai thanh toan
+        binding.spThanhToan.setOnItemSelectedListener(new AdapterView.OnItemSelectedListener() {
+            @Override
+            public void onItemSelected(AdapterView<?> parent, View view, int position, long id) {
+                thanhToan = position;
+                if (position == 0) {
+                    binding.tWarn.setVisibility(View.GONE);
+                }else {
+                    binding.tWarn.setVisibility(View.VISIBLE);
+                }
+            }
+
+            @Override
+            public void onNothingSelected(AdapterView<?> parent) {
+
+            }
+        });
         // Su kien nhap du lieu
         binding.edtTenNguoiNhan.addTextChangedListener(new TextWatcher() {
             @Override
@@ -204,6 +229,13 @@ public class DatHangNgayFragment extends Fragment {
     }
 
     private void KhoiTao() {
+        // Xu ly phuong thuc thanh toan
+        dataThanhT.add("Thanh Toán Trực Tiếp");
+        dataThanhT.add("Trả Góp Một Tháng");
+        dataThanhT.add("Trả Góp Hai Tháng");
+        adapterTT = new ArrayAdapter(getActivity(), android.R.layout.simple_dropdown_item_1line, dataThanhT);
+        binding.spThanhToan.setAdapter(adapterTT);
+
         binding.edtTenNguoiNhan.setText(Customer_HomeActivity.info.getTen());
         binding.edtSdtNguoiNhan.setText(Customer_HomeActivity.info.getSdt());
         binding.edtDiaChiNhan.setText(Customer_HomeActivity.info.getDiaChi());
@@ -255,6 +287,13 @@ public class DatHangNgayFragment extends Fragment {
             builder.setPositiveButton(android.R.string.yes, new DialogInterface.OnClickListener() {
                 @Override
                 public void onClick(DialogInterface dialog, int which) {
+                    if (thanhToan == 1) {
+                        donHang.setPhiTraGop(donHang.getTongTien()*2/100);
+                        donHang.setTongTien(donHang.getTongTien()+ donHang.getPhiTraGop());
+                    } else if (thanhToan == 2) {
+                        donHang.setPhiTraGop(donHang.getTongTien()*5/100);
+                        donHang.setTongTien(donHang.getTongTien()+ donHang.getPhiTraGop());
+                    }
                     referDatHangNgay.child("bills").child(donHang.getId()+"").setValue(donHang);
                     referDatHangNgay.child("BillDetails").child(donHang.getId()+"").child(idProd).setValue(chiTietDon);
                     referDatHangNgay.child("products").child(idProd).child("tonKho").setValue((Integer.parseInt(prod.getTonKho()) - soLuong) + "");

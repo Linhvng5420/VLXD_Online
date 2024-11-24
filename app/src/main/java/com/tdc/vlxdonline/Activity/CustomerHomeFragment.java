@@ -59,6 +59,7 @@ public class CustomerHomeFragment extends Fragment {
     ArrayList<Banner> dataBanner = new ArrayList<>();
     BannerAdapter bannerAdapter;
     Timer timer;
+    LinearSnapHelper helper;
 
     // Item khac
     private String category = "";
@@ -82,6 +83,7 @@ public class CustomerHomeFragment extends Fragment {
         binding.svCustomerHome.setBackground(draw);
         setAdapterProduct();
         setAdapterCategory();
+        setBannerChange();
         KhoiTao();
         // Inflate the layout for this fragment
         return binding.getRoot();
@@ -142,8 +144,6 @@ public class CustomerHomeFragment extends Fragment {
         dataLoc.add("Lọc Theo");
         dataLoc.add("Số sao từ 1 - 3");
         dataLoc.add("Số sao từ 4 - 5");
-        dataLoc.add("Giá nhỏ hơn trung bình");
-        dataLoc.add("Giá lớn hơn trung bình");
         adapterLoc = new AdapterCenterDrop(getActivity(), R.layout.item_center_drop, dataLoc);
         binding.spLoc.setAdapter(adapterLoc);
 
@@ -252,7 +252,7 @@ public class CustomerHomeFragment extends Fragment {
                         Banner banner = snapshot.getValue(Banner.class);
                         dataBanner.add(banner); // Thêm User vào danh sách
                     }
-                    setBannerChange();
+                    bannerAdapter.notifyDataSetChanged();
                 }catch (Exception e){
 
                 }
@@ -272,21 +272,24 @@ public class CustomerHomeFragment extends Fragment {
         binding.rcBanner.setAdapter(bannerAdapter);
 
         // Set tu chuyen banner
-        LinearSnapHelper helper = new LinearSnapHelper();
-        helper.attachToRecyclerView(binding.rcBanner);
-        if (timer != null) timer.cancel();
-        timer = new Timer();
-        timer.schedule(new TimerTask() {
-            @Override
-            public void run() {
-                int position = linearLayoutManager.findLastCompletelyVisibleItemPosition();
-                if (position < (bannerAdapter.getItemCount() - 1)) {
-                    linearLayoutManager.smoothScrollToPosition(binding.rcBanner, new RecyclerView.State(), position + 1);
-                }else {
-                    linearLayoutManager.smoothScrollToPosition(binding.rcBanner, new RecyclerView.State(), 0);
+        if (helper == null) {
+            helper = new LinearSnapHelper();
+            helper.attachToRecyclerView(binding.rcBanner);
+        }
+        if (timer == null) {
+            timer = new Timer();
+            timer.schedule(new TimerTask() {
+                @Override
+                public void run() {
+                    int position = linearLayoutManager.findLastCompletelyVisibleItemPosition();
+                    if (position < (bannerAdapter.getItemCount() - 1)) {
+                        linearLayoutManager.smoothScrollToPosition(binding.rcBanner, new RecyclerView.State(), position + 1);
+                    } else {
+                        linearLayoutManager.smoothScrollToPosition(binding.rcBanner, new RecyclerView.State(), 0);
+                    }
                 }
-            }
-        },0,3000);
+            }, 0, 3000);
+        }
     }
 
     private void readcategorysFromDatabase() {
@@ -344,6 +347,7 @@ public class CustomerHomeFragment extends Fragment {
         super.onDestroyView();
         binding = null;
         timer.cancel();
+        timer = null;
 
         // Loại bỏ listener của Firebase
         if (mDatabase != null && eventDocDanhSach != null) {

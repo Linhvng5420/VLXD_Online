@@ -9,8 +9,8 @@
     <LinearLayout
         android:layout_width="match_parent"
         android:layout_height="match_parent"
-        android:orientation="vertical"
-        android:background="@drawable/back3">
+        android:background="@drawable/back3"
+        android:orientation="vertical">
 
         <TextView
             android:layout_width="match_parent"
@@ -18,9 +18,9 @@
             android:background="@drawable/back6"
             android:gravity="center"
             android:text="ĐẶT HÀNG NGAY"
+            android:textColor="#D7D7D7"
             android:textSize="30dp"
-            android:textStyle="bold"
-            android:textColor="#D7D7D7"/>
+            android:textStyle="bold" />
 
         <LinearLayout
             android:layout_width="match_parent"
@@ -227,7 +227,6 @@
         <LinearLayout
             android:layout_width="match_parent"
             android:layout_height="50dp"
-            android:layout_marginBottom="9dp"
             android:background="@drawable/bg_detail"
             android:backgroundTint="#0AF"
             android:orientation="horizontal">
@@ -262,14 +261,44 @@
                 android:textStyle="bold" />
         </LinearLayout>
 
+        <LinearLayout
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:padding="5dp">
+
+            <TextView
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:paddingVertical="5dp"
+                android:text="Thanh Toán: "
+                android:textSize="18dp" />
+
+            <Spinner
+                android:id="@+id/sp_thanhToan"
+                android:layout_width="match_parent"
+                android:layout_height="match_parent"
+                android:background="@color/white" />
+        </LinearLayout>
+
+        <TextView
+            android:id="@+id/t_warn"
+            android:visibility="gone"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:background="#FFF"
+            android:padding="10dp"
+            android:text="Lưu ý: Khi chọn phương thức trả góp sẽ có tính phí trả góp theo phần trăm tổng tiền đơn hàng. Đối với trả góp một tháng 2% và trả góp hai tháng 5%!"
+            android:textColor="#F00" />
+
         <Button
             android:id="@+id/btn_dat_ngay"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
+            android:layout_marginHorizontal="10dp"
+            android:layout_marginTop="5dp"
             android:backgroundTint="#5000FF"
             android:text="Đặt Hàng Ngay"
             android:textSize="25dp"
-            android:textStyle="bold"
-            android:layout_marginHorizontal="10dp"/>
+            android:textStyle="bold" />
     </LinearLayout>
 </FrameLayout>

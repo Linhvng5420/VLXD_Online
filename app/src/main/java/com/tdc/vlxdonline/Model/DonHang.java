@@ -8,6 +8,7 @@ public class DonHang {
     private String anh, tenKhach, sdt, diaChi, ngayTao;
     private int tongTien, trangThai, trangThaiTT, phiTraGop;
     private long id;
+    private boolean daDanhGia = false;
 
     public DonHang(String anh, long id, String idChu, String idKhach, int tongTien, int trangThai, int trangThaiTT, String idTao, String idGiao, int phiTraGop, String tenKhach, String sdt, String diaChi, String ngayTao) {
         this.id = id;
@@ -42,6 +43,14 @@ public class DonHang {
         String formattedDate = today.format(formatter);
         this.ngayTao = formattedDate;
         this.anh = "";
+    }
+
+    public boolean isDaDanhGia() {
+        return daDanhGia;
+    }
+
+    public void setDaDanhGia(boolean daDanhGia) {
+        this.daDanhGia = daDanhGia;
     }
 
     public String getAnh() {

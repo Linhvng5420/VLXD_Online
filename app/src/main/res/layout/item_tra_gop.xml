@@ -1,0 +1,59 @@
+<?xml version="1.0" encoding="utf-8"?>
+<androidx.cardview.widget.CardView xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    android:layout_width="match_parent"
+    android:layout_height="wrap_content"
+    app:cardUseCompatPadding="true"
+    app:cardElevation="5dp"
+    app:cardCornerRadius="8dp">
+
+    <LinearLayout
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:orientation="vertical">
+        <LinearLayout
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content">
+            <TextView
+                android:id="@+id/tv_dotTT"
+                android:layout_width="0dp"
+                android:layout_weight="1"
+                android:layout_height="35dp"
+                android:background="@drawable/bg_img_detail"
+                android:gravity="center"
+                android:textSize="18dp"
+                android:text="Đợt 1"/>
+            <TextView
+                android:id="@+id/tv_tongTT"
+                android:layout_width="0dp"
+                android:layout_weight="1"
+                android:layout_height="35dp"
+                android:background="@drawable/bg_img_detail"
+                android:gravity="center"
+                android:textSize="18dp"
+                android:text="100.000.000"
+                android:textStyle="bold"
+                android:textColor="#F00"/>
+        </LinearLayout>
+        <TextView
+            android:id="@+id/tv_hanTT"
+            android:layout_width="match_parent"
+            android:layout_height="35dp"
+            android:background="@drawable/bg_img_detail"
+            android:gravity="center"
+            android:textSize="18dp"
+            android:text="27-12-2004"
+            android:textStyle="bold"/>
+        <TextView
+            android:id="@+id/tv_tt_thanh_toan"
+            android:layout_width="match_parent"
+            android:layout_height="35dp"
+            android:background="@drawable/bg_img_detail"
+            android:backgroundTint="#0FA"
+            android:gravity="center"
+            android:textSize="18dp"
+            android:text="Đã Thanh Toán"
+            android:textStyle="bold"/>
+    </LinearLayout>
+
+</androidx.cardview.widget.CardView>

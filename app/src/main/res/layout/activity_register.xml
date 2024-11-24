@@ -13,14 +13,6 @@
         android:gravity="center"
         android:orientation="vertical">
 
-        <TextView
-            android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            android:gravity="center"
-            android:text="VLXD Online"
-            android:textSize="50dp"
-            android:textStyle="bold"/>
-
         <FrameLayout
             android:id="@+id/fragment_ten"
             android:layout_width="match_parent"
@@ -47,6 +39,12 @@
 
         <FrameLayout
             android:id="@+id/fragment_rePass"
+            android:layout_marginTop="10dp"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content" />
+
+        <FrameLayout
+            android:id="@+id/fragment_cccd"
             android:layout_marginTop="10dp"
             android:layout_width="match_parent"
             android:layout_height="wrap_content" />

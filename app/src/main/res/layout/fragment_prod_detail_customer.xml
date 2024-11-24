@@ -28,7 +28,7 @@
                 <androidx.recyclerview.widget.RecyclerView
                     android:id="@+id/rc_anh_sp"
                     android:layout_width="match_parent"
-                    android:layout_height="wrap_content"
+                    android:layout_height="10dp"
                     android:background="@drawable/backnav"
                     android:paddingVertical="5dp" />
 
@@ -187,6 +187,40 @@
                         android:textColor="@color/black"
                         android:textSize="21dp"
                         android:textStyle="bold" />
+                </LinearLayout>
+                <LinearLayout
+                    android:id="@+id/ln_xem_dg"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:background="@drawable/bg_detail"
+                    android:layout_margin="10dp"
+                    android:paddingHorizontal="10dp">
+                    <TextView
+                        android:id="@+id/tv_soSao"
+                        android:layout_width="wrap_content"
+                        android:layout_height="50dp"
+                        android:gravity="center_vertical"
+                        android:text="4.5"
+                        android:textSize="21dp"
+                        android:textStyle="bold"/>
+                    <ImageView
+                        android:layout_width="25dp"
+                        android:layout_height="25dp"
+                        android:layout_marginHorizontal="5dp"
+                        android:layout_gravity="center_vertical"
+                        android:src="@drawable/star"/>
+                    <TextView
+                        android:layout_width="0dp"
+                        android:layout_height="match_parent"
+                        android:layout_weight="1"
+                        android:gravity="center_vertical"
+                        android:text="Xem Đánh Giá Sản Phẩm"
+                        android:textSize="20dp"/>
+                    <ImageView
+                        android:layout_marginTop="5dp"
+                        android:layout_width="30dp"
+                        android:layout_height="match_parent"
+                        android:src="@drawable/arrow_right"/>
                 </LinearLayout>
             </LinearLayout>
         </ScrollView>

@@ -98,7 +98,7 @@
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:gravity="center|top"
-            android:text="Owner"
+            android:text="Tiêu Kim Cương"
             android:textColor="#E91E63"
             android:textSize="34sp"
             android:textStyle="bold" />
@@ -122,7 +122,7 @@
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:gravity="center|top"
-            android:text="Linh Nguyen Van"
+            android:text="Nguyễn Văn Linh"
             android:textColor="#E91E63"
             android:textSize="34sp"
             android:textStyle="bold" />
@@ -147,6 +147,78 @@
             android:layout_height="wrap_content"
             android:gravity="center|top"
             android:text="Lê Công Chiến"
+            android:textColor="#E91E63"
+            android:textSize="34sp"
+            android:textStyle="bold" />
+
+        <TextView
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:gravity="center|top"
+            android:text="Developer"
+            android:textColor="@color/black"
+            android:textSize="20sp"
+            android:textStyle="bold" />
+
+        <ImageView
+            android:layout_width="match_parent"
+            android:layout_height="116dp"
+            android:layout_marginTop="20dp"
+            app:srcCompat="@drawable/dev" />
+
+        <TextView
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:gravity="center|top"
+            android:text="Phù Văn Thiện"
+            android:textColor="#E91E63"
+            android:textSize="34sp"
+            android:textStyle="bold" />
+
+        <TextView
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:gravity="center|top"
+            android:text="Developer"
+            android:textColor="@color/black"
+            android:textSize="20sp"
+            android:textStyle="bold" />
+
+        <ImageView
+            android:layout_width="match_parent"
+            android:layout_height="116dp"
+            android:layout_marginTop="20dp"
+            app:srcCompat="@drawable/dev" />
+
+        <TextView
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:gravity="center|top"
+            android:text="Trịnh Minh Thiên"
+            android:textColor="#E91E63"
+            android:textSize="34sp"
+            android:textStyle="bold" />
+
+        <TextView
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:gravity="center|top"
+            android:text="Developer"
+            android:textColor="@color/black"
+            android:textSize="20sp"
+            android:textStyle="bold" />
+
+        <ImageView
+            android:layout_width="match_parent"
+            android:layout_height="116dp"
+            android:layout_marginTop="20dp"
+            app:srcCompat="@drawable/dev" />
+
+        <TextView
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:gravity="center|top"
+            android:text="Nguyễn Cao Toán"
             android:textColor="#E91E63"
             android:textSize="34sp"
             android:textStyle="bold" />

@@ -107,8 +107,38 @@
             android:id="@+id/rc_chi_tiet_dat_gio"
             android:layout_width="match_parent"
             android:layout_height="0dp"
-            android:layout_marginVertical="5dp"
+            android:layout_marginTop="5dp"
             android:layout_weight="1" />
+
+        <LinearLayout
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:padding="5dp">
+
+            <TextView
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:paddingVertical="5dp"
+                android:text="Thanh Toán: "
+                android:textSize="18dp" />
+
+            <Spinner
+                android:id="@+id/sp_thanhToan"
+                android:layout_width="match_parent"
+                android:layout_height="match_parent"
+                android:background="@color/white" />
+        </LinearLayout>
+
+        <TextView
+            android:id="@+id/t_warn"
+            android:visibility="gone"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_marginBottom="5dp"
+            android:background="#FFF"
+            android:padding="10dp"
+            android:text="Lưu ý: Khi chọn phương thức trả góp sẽ có tính phí trả góp theo phần trăm tổng tiền đơn hàng. Đối với trả góp một tháng 2% và trả góp hai tháng 5%!"
+            android:textColor="#F00" />
 
         <LinearLayout
             android:layout_width="match_parent"

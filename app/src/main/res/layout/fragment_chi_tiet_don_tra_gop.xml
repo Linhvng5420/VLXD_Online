@@ -1,0 +1,132 @@
+<?xml version="1.0" encoding="utf-8"?>
+<FrameLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    tools:context=".Activity.ChiTietDonTraGopFragment">
+
+    <ScrollView
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        android:background="@drawable/back3">
+        <LinearLayout
+            android:layout_width="match_parent"
+            android:layout_height="match_parent"
+            android:orientation="vertical">
+            <TextView
+                android:id="@+id/tv_name_shop"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:background="@drawable/bg_item_lg"
+                android:backgroundTint="#0DF"
+                android:layout_marginTop="-10dp"
+                android:paddingTop="15dp"
+                android:gravity="center"
+                android:text="Shop: ABC"
+                android:textSize="25dp"
+                android:textStyle="bold"
+                android:paddingBottom="10dp"/>
+            <LinearLayout
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_marginHorizontal="10dp"
+                android:layout_marginTop="10dp"
+                android:layout_marginBottom="5dp"
+                android:orientation="vertical">
+
+                <TextView
+                    android:id="@+id/tv_ten_nguoi_nhan"
+                    android:layout_width="match_parent"
+                    android:layout_height="45dp"
+                    android:background="@drawable/bg_img_item"
+                    android:backgroundTint="#DDD"
+                    android:gravity="center_vertical"
+                    android:paddingLeft="10dp"
+                    android:text="Ten Nguoi Nhan"
+                    android:textSize="21dp"
+                    android:textStyle="bold" />
+
+                <LinearLayout
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:layout_marginVertical="5dp"
+                    android:orientation="horizontal">
+
+                    <ImageView
+                        android:layout_width="45dp"
+                        android:layout_height="45dp"
+                        android:layout_marginRight="10dp"
+                        android:background="@drawable/bg_img_item"
+                        android:src="@drawable/call" />
+
+                    <TextView
+                        android:id="@+id/tv_sdt_nguoi_nhan"
+                        android:layout_width="match_parent"
+                        android:layout_height="45dp"
+                        android:background="@drawable/bg_img_item"
+                        android:backgroundTint="#DDD"
+                        android:gravity="center"
+                        android:paddingLeft="5dp"
+                        android:text="0384756476"
+                        android:textSize="21dp"
+                        android:textStyle="bold" />
+                </LinearLayout>
+
+                <TextView
+                    android:id="@+id/tv_dia_chi_nhan"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:background="@drawable/bg_img_item"
+                    android:backgroundTint="#DDD"
+                    android:gravity="top"
+                    android:paddingHorizontal="10dp"
+                    android:paddingVertical="5dp"
+                    android:text="Dia Chi Nguoi Nhan"
+                    android:textSize="21dp"
+                    android:textStyle="bold" />
+
+                <TextView
+                    android:id="@+id/tv_ngay_tao"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:layout_marginTop="5dp"
+                    android:background="@drawable/bg_img_item"
+                    android:backgroundTint="#DDD"
+                    android:paddingTop="5dp"
+                    android:paddingBottom="10dp"
+                    android:gravity="center"
+                    android:text="Ngày Tạo: 20/10/2024"
+                    android:textSize="21dp"
+                    android:textStyle="bold" />
+            </LinearLayout>
+            <androidx.recyclerview.widget.RecyclerView
+                android:id="@+id/rc_chi_tietDon"
+                android:layout_width="match_parent"
+                android:layout_height="200dp"/>
+            <TextView
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_marginVertical="10dp"
+                android:background="#0CF"
+                android:gravity="center"
+                android:padding="10dp"
+                android:textSize="18dp"
+                android:textStyle="bold"
+                android:text="Đợt Trả Góp"/>
+            <ListView
+                android:id="@+id/rc_traGop"
+                android:layout_width="match_parent"
+                android:layout_height="200dp"/>
+            <Button
+                android:id="@+id/btn_traGop"
+                android:layout_marginTop="10dp"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:backgroundTint="#0AF"
+                android:textSize="18dp"
+                android:textStyle="bold"
+                android:text="Xác Nhận Hoàn Thành Một Đợt"/>
+        </LinearLayout>
+    </ScrollView>
+
+</FrameLayout>
