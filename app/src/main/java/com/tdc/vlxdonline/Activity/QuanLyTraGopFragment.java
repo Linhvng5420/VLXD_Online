@@ -2,6 +2,7 @@ package com.tdc.vlxdonline.Activity;
 
 import android.os.Bundle;
 
+import androidx.annotation.NonNull;
 import androidx.fragment.app.Fragment;
 import androidx.recyclerview.widget.LinearLayoutManager;
 
@@ -9,6 +10,8 @@ import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 
+import com.google.firebase.database.DataSnapshot;
+import com.google.firebase.database.DatabaseError;
 import com.google.firebase.database.DatabaseReference;
 import com.google.firebase.database.FirebaseDatabase;
 import com.google.firebase.database.ValueEventListener;
@@ -23,7 +26,7 @@ public class QuanLyTraGopFragment extends Fragment {
     FragmentQuanLyTraGopBinding binding;
     ArrayList<DonHang> data = new ArrayList<>();
     DonHangAdapter adapter;
-    DatabaseReference reference = FirebaseDatabase.getInstance().getReference("bills");
+    DatabaseReference reference;
     ValueEventListener event;
     String idKhach = Customer_HomeActivity.info.getID();
 
@@ -36,6 +39,7 @@ public class QuanLyTraGopFragment extends Fragment {
     public View onCreateView(LayoutInflater inflater, ViewGroup container,
                              Bundle savedInstanceState) {
         binding = FragmentQuanLyTraGopBinding.inflate(inflater, container, false);
+        reference = FirebaseDatabase.getInstance().getReference("bills");
         setAdapterDon();
         DocDataTraGop();
         // Inflate the layout for this fragment
@@ -43,7 +47,29 @@ public class QuanLyTraGopFragment extends Fragment {
     }
 
     private void DocDataTraGop(){
+        if (event == null) {
+            event = new ValueEventListener() {
+                @Override
+                public void onDataChange(@NonNull DataSnapshot dataSnapshot) {
+                    try{
+                        data.clear();
+                        for (DataSnapshot snapshot : dataSnapshot.getChildren()) {
+                            DonHang temp = snapshot.getValue(DonHang.class);
+                            if (temp.getIdKhach().equals(idKhach) && temp.getTrangThaiTT() == 1) {
+                                data.add(temp);
+                            }
+                        }
+                        adapter.notifyDataSetChanged();
+                    }catch (Exception e){}
+                }
 
+                @Override
+                public void onCancelled(@NonNull DatabaseError error) {
+
+                }
+            };
+            reference.addValueEventListener(event);
+        }
     }
 
     private void setAdapterDon(){
@@ -51,7 +77,7 @@ public class QuanLyTraGopFragment extends Fragment {
         adapter.setOnItemDonHangClick(new DonHangAdapter.OnItemDonHangClick() {
             @Override
             public void onItemClick(int position) {
-
+                ((Customer_HomeActivity) getActivity()).ReplaceFragment(new ChiTietDonTraGopFragment(data.get(position).getId(), 1));
             }
         });
         binding.rcDonTraGop.setLayoutManager(new LinearLayoutManager(getActivity(), LinearLayoutManager.VERTICAL, false));
