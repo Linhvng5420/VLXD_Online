@@ -82,7 +82,7 @@ public class Warehouse_ThemSanPhamActivity extends AppCompatActivity {
 
     private void initProgressDialog() {
         progressDialog = new ProgressDialog(this);
-        progressDialog.setMessage("Đang thêm ảnh...");
+        progressDialog.setMessage ("Đang thêm ảnh...");
         progressDialog.setCancelable(false);
     }
 
@@ -289,6 +289,7 @@ public class Warehouse_ThemSanPhamActivity extends AppCompatActivity {
                             sanPhamModel = list_SP.get(position);
 
                             // Hiển thị thông tin sản phẩm lên các EditText
+
                             edtNhapten.setText(sanPhamModel.getTen());
                             edtNhapgiaban.setText(sanPhamModel.getGia());
                             edtgiaNhap.setText(sanPhamModel.getGiaNhap());
@@ -318,6 +319,7 @@ public class Warehouse_ThemSanPhamActivity extends AppCompatActivity {
             });
         } else {
             Toast.makeText(this, "Adapter chưa được khởi tạo", Toast.LENGTH_SHORT).show();
+            sanPhamModel.setAnh(imagesUrl != null ? imagesUrl.toString() : sanPhamModel.getAnh());
         }
     }
 
@@ -332,7 +334,11 @@ public class Warehouse_ThemSanPhamActivity extends AppCompatActivity {
         sanPhamModel.setAnh(imagesUrl != null ? imagesUrl.toString() : sanPhamModel.getAnh());
         sanPhamModel.setDonVi(donVi);
         sanPhamModel.setDanhMuc(danhMuc);
+//        String id = Owner_HomeActivity.infoChu.getId();
+//        id = id.substring(0, id.indexOf("@")); //Mã ID
+//        sanPhamModel.setIdChu(id);
         sanPhamModel.setIdChu(Owner_HomeActivity.infoChu.getId());
+
 
         reference.child("ProdImages").child(sanPhamModel.getId()).child("-1").child("anh").setValue(sanPhamModel.getAnh());
         reference.child("products").child(sanPhamModel.getId()).setValue(sanPhamModel)
@@ -360,6 +366,7 @@ public class Warehouse_ThemSanPhamActivity extends AppCompatActivity {
                     progressDialog.dismiss();
                 }
             });
+            
         } else {
             saveDate();
             clearSelection();
@@ -416,7 +423,6 @@ public class Warehouse_ThemSanPhamActivity extends AppCompatActivity {
                 dialog.dismiss();
             }
         });
-
         AlertDialog dialog = builder.create();
         dialog.show();
     }
