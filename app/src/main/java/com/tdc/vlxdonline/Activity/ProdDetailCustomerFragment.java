@@ -23,6 +23,8 @@ import androidx.recyclerview.widget.LinearLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
 
 import com.bumptech.glide.Glide;
+import com.google.android.gms.tasks.OnCompleteListener;
+import com.google.android.gms.tasks.Task;
 import com.google.firebase.database.DataSnapshot;
 import com.google.firebase.database.DatabaseError;
 import com.google.firebase.database.DatabaseReference;
@@ -467,6 +469,18 @@ public class ProdDetailCustomerFragment extends Fragment {
 
     // TODO 4 NGVLinh: Xoa san pham vi pham
     private void xoaSanPhamViPham_Admin() {
+        DatabaseReference productRef = FirebaseDatabase.getInstance().getReference("products").child(idProd);
+        productRef.removeValue().addOnCompleteListener(new OnCompleteListener<Void>() {
+            @Override
+            public void onComplete(@NonNull Task<Void> task) {
+                if (task.isSuccessful()) {
+                    Toast.makeText(getActivity(), "Xóa sản phẩm thành công", Toast.LENGTH_SHORT).show();
+                } else {
+                    Toast.makeText(getActivity(), "Xóa sản phẩm thất bại", Toast.LENGTH_SHORT).show();
+                }
+            }
+        });
+//        reference.child("ProdImages").child(id).removeValue(); // Xóa ảnh trong bảng "ProdImages")
     }
 
     @Override
