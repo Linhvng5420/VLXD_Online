@@ -33,6 +33,7 @@ public class Owner_NhanVienFragment extends Fragment {
 
     // Email mà tài khoản quản lý đang đăng nhập
     String emailLogin = LoginActivity.idUser;
+    String idlogin = emailLogin.substring(0, emailLogin.indexOf("@"));
 
     // Lưu lại danh sách nhân viên ban đầu trước khi tìm kiếm
     private List<NhanVien> dsNhanVien = new ArrayList<>();
@@ -110,15 +111,15 @@ public class Owner_NhanVienFragment extends Fragment {
 
                         // Lọc theo nhân viên của Chủ CH theo email
                         // Nếu emailUser là admin, hiển thị tất cả nhân viên có trong Firebase
-                        if (emailLogin != null && "admin@tdc.com".equals(emailLogin)) {
-                            nhanVienAdapter.getNhanVienList().add(nhanVien);
-                            dsNhanVien.add(nhanVien); // Lưu vào danh sách gốc
-                        } else
-                            // Chủ cửa hàng đăng nhập, hiển thị nhân viên của chủ cửa hàng
-                            if (emailLogin != null && nhanVien.getEmailchu().equals(emailLogin)) {
+                        if (emailLogin != null) {
+                            if ("admin@tdc.com".equals(emailLogin) || "admin".equals(emailLogin)) {
+                                nhanVienAdapter.getNhanVienList().add(nhanVien);
+                                dsNhanVien.add(nhanVien); // Lưu vào danh sách gốc
+                            } else if (nhanVien.getEmailchu().equals(emailLogin) || nhanVien.getEmailchu().equals(idlogin)) {
                                 nhanVienAdapter.getNhanVienList().add(nhanVien);
                                 dsNhanVien.add(nhanVien); // Lưu vào danh sách gốc
                             }
+                        }
                     } else
                         Snackbar.make(getView(), "Danh Sách Nhân Viên Rỗng", Toast.LENGTH_SHORT).show();
                 }

@@ -27,9 +27,8 @@ import com.tdc.vlxdonline.databinding.FragmentOwnerSettingBinding;
 public class Owner_SettingFragment extends Fragment {
     FragmentOwnerSettingBinding binding;
 
-    String idUser = null;
-    int statusShop = -1;
-    DatabaseReference dbThongBaoChu;
+    String idUser;
+    boolean statusShop;
 
     @Override
     public void onCreate(Bundle savedInstanceState) {
@@ -51,14 +50,14 @@ public class Owner_SettingFragment extends Fragment {
         setupToolbar(view);
 
         // Đọc trạng thái shop (0-đóng 1-mở)
-        dbThongBaoChu = FirebaseDatabase.getInstance().getReference("thongbaochu").child(idUser).child("trangthaishop");
-        dbThongBaoChu.addValueEventListener(new ValueEventListener() {
+        DatabaseReference dbAccount = FirebaseDatabase.getInstance().getReference("account").child(idUser).child("trangthai/online");
+        dbAccount.addValueEventListener(new ValueEventListener() {
             @Override
             public void onDataChange(@NonNull DataSnapshot snapshot) {
                 if (snapshot.exists()) {
-                    statusShop = snapshot.getValue(Integer.class);
-                    binding.tvDongCuaHang.setVisibility(statusShop == 0 ? View.GONE : View.VISIBLE);
-                    binding.tvMoCuaHang.setVisibility(statusShop == 1 ? View.GONE : View.VISIBLE);
+                    statusShop = snapshot.getValue(boolean.class);
+                    binding.tvDongCuaHang.setVisibility(!statusShop ? View.GONE : View.VISIBLE);
+                    binding.tvMoCuaHang.setVisibility(statusShop ? View.GONE : View.VISIBLE);
                 }
             }
 
@@ -96,13 +95,16 @@ public class Owner_SettingFragment extends Fragment {
                         .setTitle("ĐÓNG GIAN HÀNG")
                         .setMessage("Bạn có chắc chắn muốn đóng gian hàng?")
                         .setPositiveButton("Đồng ý", (dialog, which) -> {
+                            DatabaseReference dbAccount = FirebaseDatabase.getInstance().getReference("account").child(idUser).child("trangthai/online");
+                            dbAccount.setValue(false);
+
                             DatabaseReference db = FirebaseDatabase.getInstance().getReference("products");
 
                             // Lấy tất cả các sản phẩm từ Firebase
                             db.addListenerForSingleValueEvent(new ValueEventListener() {
                                 @Override
                                 public void onDataChange(@NonNull DataSnapshot snapshot) {
-                                    // Duyệt qua tất cả các sản phẩm
+                                    /*// Duyệt qua tất cả các sản phẩm
                                     for (DataSnapshot productSnapshot : snapshot.getChildren()) {
                                         // Lấy idChu của mỗi sản phẩm
                                         String idChu = productSnapshot.child("idChu").getValue(String.class);
@@ -116,10 +118,9 @@ public class Owner_SettingFragment extends Fragment {
                                                 db.child(idProduct).child("id").setValue("@" + idProduct);
                                             }
                                         }
-                                    }
+                                    }*/
+
                                     // Thông báo sau khi cập nhật
-//                                    Toast.makeText(getContext(), "Gian hàng đã đóng thành công", Toast.LENGTH_SHORT).show();
-                                    dbThongBaoChu.setValue(0);
                                     binding.tvDongCuaHang.setVisibility(View.GONE);
                                     binding.tvMoCuaHang.setVisibility(View.VISIBLE);
                                     Snackbar.make(view, "Gian Hàng Của Bạn Đã Offline", Snackbar.LENGTH_LONG)
@@ -145,13 +146,15 @@ public class Owner_SettingFragment extends Fragment {
                         .setTitle("MỞ GIAN HÀNG")
                         .setMessage("Bạn có chắc chắn muốn mở gian hàng?")
                         .setPositiveButton("Đồng ý", (dialog, which) -> {
-                            DatabaseReference db = FirebaseDatabase.getInstance().getReference("products");
+                            DatabaseReference dbAccount = FirebaseDatabase.getInstance().getReference("account").child(idUser).child("trangthai/online");
+                            dbAccount.setValue(true);
 
+                            DatabaseReference db = FirebaseDatabase.getInstance().getReference("products");
                             // Lấy tất cả các sản phẩm từ Firebase
                             db.addListenerForSingleValueEvent(new ValueEventListener() {
                                 @Override
                                 public void onDataChange(@NonNull DataSnapshot snapshot) {
-                                    // Duyệt qua tất cả các sản phẩm
+                                    /*// Duyệt qua tất cả các sản phẩm
                                     for (DataSnapshot productSnapshot : snapshot.getChildren()) {
                                         // Lấy idChu của mỗi sản phẩm
                                         String idChu = productSnapshot.child("idChu").getValue(String.class);
@@ -168,9 +171,9 @@ public class Owner_SettingFragment extends Fragment {
                                                 db.child(key).child("id").setValue(key);
                                             }
                                         }
-                                    }
+                                    }*/
+
                                     // Thông báo sau khi cập nhật
-                                    dbThongBaoChu.setValue(1);
                                     binding.tvDongCuaHang.setVisibility(View.VISIBLE);
                                     binding.tvMoCuaHang.setVisibility(View.GONE);
                                     Snackbar.make(view, "Gian Hàng Của Bạn Đã Online", Snackbar.LENGTH_LONG)

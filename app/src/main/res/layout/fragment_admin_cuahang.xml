@@ -1,0 +1,144 @@
+<?xml version="1.0" encoding="utf-8"?>
+<FrameLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    tools:context=".Activity.Admin_CuaHangFragment">
+
+    <androidx.constraintlayout.widget.ConstraintLayout
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        android:background="@color/white">
+
+        <TextView
+            android:id="@+id/textView2"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:text="Quản Lý Cửa Hàng"
+            android:textAlignment="center"
+            android:textColor="#1A6D1D"
+            android:textSize="32sp"
+            android:textStyle="bold"
+            app:layout_constraintTop_toTopOf="parent"
+            tools:layout_editor_absoluteX="-5dp" />
+
+        <SearchView
+            android:id="@+id/searchView"
+            android:layout_width="0dp"
+            android:layout_height="46dp"
+            android:layout_marginStart="16dp"
+            android:layout_marginTop="8dp"
+            android:layout_marginEnd="16dp"
+            android:background="@android:drawable/editbox_background_normal"
+            android:iconifiedByDefault="false"
+            android:inputType="text"
+            android:queryHint="Tìm Kiếm: Nhập Tên, ID"
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintHorizontal_bias="0.0"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintTop_toBottomOf="@+id/textView2" />
+
+        <LinearLayout
+            android:id="@+id/linearLayout"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:gravity="center"
+            android:orientation="vertical"
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintTop_toBottomOf="@+id/searchView">
+
+            <TextView
+                android:id="@+id/tvTitle"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_marginTop="10dp"
+                android:background="#6851A5"
+                android:text="Danh Sách Cửa Hàng"
+                android:textAlignment="center"
+                android:textColor="@color/white"
+                android:textSize="24sp"
+                android:textStyle="bold" />
+
+            <RadioGroup
+                android:id="@+id/RadioGroup"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:background="#20C5C5C5"
+                android:orientation="horizontal">
+
+                <!-- Chưa Duyệt -->
+                <RadioButton
+                    android:id="@+id/checkboxChuaDuyet"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_weight="1"
+                    android:text="Chưa Duyệt"
+                    android:textColor="#304FFE"
+                    android:textSize="13sp"
+                    android:textStyle="bold" />
+
+                <!-- Online -->
+                <RadioButton
+                    android:id="@+id/checkboxOnline"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_weight="1"
+                    android:text="Online"
+                    android:textColor="#43A047"
+                    android:textSize="13sp"
+                    android:textStyle="bold" />
+
+                <!-- Offline -->
+                <RadioButton
+                    android:id="@+id/checkboxOffline"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_weight="1"
+                    android:text="Offline"
+                    android:textColor="#E53935"
+                    android:textSize="13sp"
+                    android:textStyle="bold" />
+
+                <!-- Lock -->
+                <RadioButton
+                    android:id="@+id/checkboxLock"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_weight="1"
+                    android:text="Lock"
+                    android:textColor="#FC02FF"
+                    android:textSize="13sp"
+                    android:textStyle="bold" />
+
+                <!-- Show All -->
+                <RadioButton
+                    android:id="@+id/checkboxAll"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_gravity="bottom"
+                    android:layout_weight="1"
+                    android:text="Show All"
+                    android:textColor="@color/black"
+                    android:textSize="13sp"
+                    android:textStyle="bold" />
+            </RadioGroup>
+        </LinearLayout>
+
+        <androidx.recyclerview.widget.RecyclerView
+            android:id="@+id/ownerRcvNhanVien"
+            android:layout_width="0dp"
+            android:layout_height="0dp"
+            android:padding="5dp"
+            android:scrollbars="vertical"
+            android:visibility="visible"
+            app:layout_constraintBottom_toBottomOf="parent"
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintHorizontal_bias="0.5"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintTop_toBottomOf="@+id/linearLayout"
+            tools:listitem="@layout/item_owner_recycleview" />
+    </androidx.constraintlayout.widget.ConstraintLayout>
+
+</FrameLayout>

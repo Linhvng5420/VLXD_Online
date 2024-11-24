@@ -29,6 +29,7 @@ public class LoginActivity extends AppCompatActivity {
     public static String typeEmployee = "null";
     DatabaseReference dbRef = FirebaseDatabase.getInstance().getReference();
     public static String idUser = ""; // Email
+    public static String accountID = ""; // Key của Account trong filebase
 
     private ProgressDialog progressDialog;
 
@@ -43,7 +44,7 @@ public class LoginActivity extends AppCompatActivity {
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         initProgressDialog();
-        
+
         binding = ActivityLoginBinding.inflate(getLayoutInflater());
         setContentView(binding.getRoot());
         binding.tvSignup.setPaintFlags(binding.tvSignup.getPaintFlags() | Paint.UNDERLINE_TEXT_FLAG);
@@ -163,10 +164,12 @@ public class LoginActivity extends AppCompatActivity {
             public void onDataChange(DataSnapshot dataSnapshot) {
                 boolean isValid = false;
                 for (DataSnapshot snapshot : dataSnapshot.getChildren()) {
+                    Object idObj = snapshot.getKey();
                     Object emailObj = snapshot.child("email").getValue();
                     Object passObj = snapshot.child("pass").getValue();
                     Object typeObj = snapshot.child("type").getValue();
 
+                    accountID = idObj != null ? idObj.toString() : null;
                     String dbEmail = emailObj != null ? emailObj.toString() : null;
                     String dbPass = passObj != null ? passObj.toString() : null;
                     String dbType = typeObj != null ? typeObj.toString() : null;
@@ -182,6 +185,9 @@ public class LoginActivity extends AppCompatActivity {
                                 break;
                             case "kh":
                                 typeUser = 1;
+                                break;
+                            case "admin":
+                                typeUser = 3;
                                 break;
                         }
                         idUser = dbEmail;
@@ -204,6 +210,9 @@ public class LoginActivity extends AppCompatActivity {
                         startActivity(intent);
                     } else if (typeUser == 2) {
                         getTypeEmployee(email);
+                    } else if (typeUser == 3) {
+                        Toast.makeText(LoginActivity.this, accountID + " - " + idUser, Toast.LENGTH_LONG).show();
+                        startActivity(new Intent(LoginActivity.this, Admin_HomeActivity.class));
                     }
                 } else {
                     Toast.makeText(LoginActivity.this, "Sai thông tin đăng nhập!", Toast.LENGTH_SHORT).show();
@@ -241,6 +250,6 @@ public class LoginActivity extends AppCompatActivity {
     @Override
     public void onBackPressed() {
         super.onBackPressed();
-        onDestroy();
+        finishAffinity();
     }
 }

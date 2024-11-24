@@ -24,8 +24,8 @@ import com.tdc.vlxdonline.databinding.FragmentOwnerDashboardBinding;
 public class Owner_DashboardFragment extends Fragment {
     FragmentOwnerDashboardBinding binding;
     String emailOwnerLogin = LoginActivity.idUser;
-    String idOwnerLogin = emailOwnerLogin.substring(0, LoginActivity.idUser.indexOf("@"));
-    int statusShop = -1;
+    String idOwnerLogin = emailOwnerLogin.substring(0, LoginActivity.idUser.indexOf("@")); //Mã ID
+    boolean statusShop;
     DatabaseReference dbThongBaoChu;
 
     @Override
@@ -34,8 +34,7 @@ public class Owner_DashboardFragment extends Fragment {
     }
 
     @Override
-    public View onCreateView(LayoutInflater inflater, ViewGroup container,
-                             Bundle savedInstanceState) {
+    public View onCreateView(LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState) {
         // Inflate the layout for this fragment
         binding = FragmentOwnerDashboardBinding.inflate(inflater, container, false);
         return binding.getRoot();
@@ -44,16 +43,17 @@ public class Owner_DashboardFragment extends Fragment {
     @Override
     public void onViewCreated(@NonNull View view, @Nullable Bundle savedInstanceState) {
         super.onViewCreated(view, savedInstanceState);
-        // Đọc trạng thái shop (0-đóng 1-mở)
-        dbThongBaoChu = FirebaseDatabase.getInstance().getReference("thongbaochu").child(idOwnerLogin).child("trangthaishop");
+
+        // Đọc trạng thái shop
+        dbThongBaoChu = FirebaseDatabase.getInstance().getReference("account").child(idOwnerLogin).child("trangthai/online");
         dbThongBaoChu.addValueEventListener(new ValueEventListener() {
             @Override
             public void onDataChange(@NonNull DataSnapshot snapshot) {
                 if (snapshot.exists()) {
-                    statusShop = snapshot.getValue(Integer.class);
-                    binding.tvThongBao.setText(statusShop == 1 ? "Cửa Hàng Đang Online" : "Cửa Hàng Đang Offline");
+                    statusShop = snapshot.getValue(boolean.class);
+                    binding.tvThongBao.setText(statusShop ? "Cửa Hàng Đang Online" : "Cửa Hàng Đang Offline");
 
-                    if (statusShop == 0) {
+                    if (!statusShop) {
                         binding.tvThongBao.setBackgroundTintList(ColorStateList.valueOf(Color.RED));
                     } else {
                         binding.tvThongBao.setBackgroundTintList(ColorStateList.valueOf(Color.parseColor("#43A047")));
@@ -71,14 +71,11 @@ public class Owner_DashboardFragment extends Fragment {
         getDataNhanVien();
         getDataKhachHang();
         getDataKho();
-        
+
         binding.btnSetting.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
-                getParentFragmentManager().beginTransaction()
-                        .replace(R.id.fragment_container, new Owner_SettingFragment())
-                        .addToBackStack(null)
-                        .commit();
+                getParentFragmentManager().beginTransaction().replace(R.id.fragment_container, new Owner_SettingFragment()).addToBackStack(null).commit();
             }
         });
     }
@@ -201,9 +198,7 @@ public class Owner_DashboardFragment extends Fragment {
 
                 // Cập nhật UI với số lượng nhân viên
                 binding.tvSLNV1.setText(String.valueOf(totalEmployees));
-                binding.tvSLNV2.setText(
-                        "Kho: " + khoEmployees + " \nGiao Hàng: " + giaoHangEmployees + " \nKhác: " + otherEmployees
-                );
+                binding.tvSLNV2.setText("Kho: " + khoEmployees + " \nGiao Hàng: " + giaoHangEmployees + " \nKhác: " + otherEmployees);
             }
 
             @Override

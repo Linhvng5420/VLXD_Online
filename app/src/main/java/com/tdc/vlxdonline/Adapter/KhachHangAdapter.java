@@ -1,5 +1,6 @@
 package com.tdc.vlxdonline.Adapter;
 
+import android.graphics.Color;
 import android.view.LayoutInflater;
 import android.view.ViewGroup;
 
@@ -16,8 +17,6 @@ import com.tdc.vlxdonline.Model.KhachHang;
 import com.tdc.vlxdonline.R;
 import com.tdc.vlxdonline.databinding.ItemOwnerRecycleviewBinding;
 
-import java.util.Collections;
-import java.util.Comparator;
 import java.util.List;
 
 public class KhachHangAdapter extends RecyclerView.Adapter<KhachHangAdapter.KhachHangViewHolder> {
@@ -116,8 +115,9 @@ public class KhachHangAdapter extends RecyclerView.Adapter<KhachHangAdapter.Khac
                             if (status != null) {
                                 if (status.equals("1")) {
                                     binding.tvPhu.setText("Đã Xác Thực");
-                                    binding.tvPhu.setTextColor(binding.tvPhu.getContext().getResources().getColor(R.color.light_gray));
-                                } else {
+                                    binding.tvPhu.setTextColor(Color.RED);
+                                }
+                                if (status.equals("0")) {
                                     binding.tvPhu.setText("Chưa Xác Thực");
                                     binding.tvPhu.setTextColor(binding.tvPhu.getContext().getResources().getColor(R.color.black));
                                     binding.tvPhu.invalidate();
@@ -140,22 +140,5 @@ public class KhachHangAdapter extends RecyclerView.Adapter<KhachHangAdapter.Khac
     public void updateList(List<KhachHang> filteredList) {
         this.khachHangList = filteredList;
         notifyDataSetChanged(); // Thông báo cho adapter biết dữ liệu đã thay đổi
-    }
-
-    // Thêm phương thức sắp xếp danh sách khách hàng theo mã
-    public void sortKhachHangList() {
-        Collections.sort(khachHangList, new Comparator<KhachHang>() {
-            @Override
-            public int compare(KhachHang kh1, KhachHang kh2) {
-                // Lấy phần số của mã NV và so sánh
-                String id1 = kh1.getID().replaceAll("[^0-9]", ""); // Lấy số từ mã NV1
-                String id2 = kh2.getID().replaceAll("[^0-9]", ""); // Lấy số từ mã NV2
-
-                // So sánh các số sử dụng Long để tránh lỗi số quá lớn
-                return Long.compare(Long.parseLong(id1), Long.parseLong(id2));
-            }
-        });
-
-        notifyDataSetChanged(); // Cập nhật lại danh sách sau khi sắp xếp
     }
 }
