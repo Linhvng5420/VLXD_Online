@@ -55,7 +55,7 @@ public class Admin_CuaHangSanPhamFragment extends Fragment {
         binding.rcvSanPham.setAdapter(adapter);
 
         getDataSanPham();
-        
+
         setupOnClickItem();
 
         return view;

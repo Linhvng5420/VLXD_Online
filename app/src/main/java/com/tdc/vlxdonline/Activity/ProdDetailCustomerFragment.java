@@ -58,6 +58,7 @@ public class ProdDetailCustomerFragment extends Fragment {
         // TODO 1 NGVlinh: Admin đăng nhập, viết dòng này để tránh UD Crash
         if (Customer_HomeActivity.info == null) {
             idKhach = "N/A";
+//            idProd = getArguments().getString("idSP");
         } else
             // Khách hàng đang đăng nhập
             idKhach = Customer_HomeActivity.info.getID();
@@ -420,7 +421,7 @@ public class ProdDetailCustomerFragment extends Fragment {
                 }
 
 
-                // NGVL VIẾT BẬY
+                // TODO 5 NGVLinh: Hiển Thị Tên Cửa Hàng
                 String idChu = prod.getIdChu();
                 referDetailProd = FirebaseDatabase.getInstance().getReference();
                 referDetailProd.child("thongtinchu").child(idChu).addValueEventListener(new ValueEventListener() {
@@ -469,18 +470,23 @@ public class ProdDetailCustomerFragment extends Fragment {
 
     // TODO 4 NGVLinh: Xoa san pham vi pham
     private void xoaSanPhamViPham_Admin() {
-        DatabaseReference productRef = FirebaseDatabase.getInstance().getReference("products").child(idProd);
-        productRef.removeValue().addOnCompleteListener(new OnCompleteListener<Void>() {
+        binding.btnDatHangNgay.setOnClickListener(new View.OnClickListener() {
             @Override
-            public void onComplete(@NonNull Task<Void> task) {
-                if (task.isSuccessful()) {
-                    Toast.makeText(getActivity(), "Xóa sản phẩm thành công", Toast.LENGTH_SHORT).show();
-                } else {
-                    Toast.makeText(getActivity(), "Xóa sản phẩm thất bại", Toast.LENGTH_SHORT).show();
-                }
+            public void onClick(View view) {
+                DatabaseReference productRef = FirebaseDatabase.getInstance().getReference("products").child(idProd);
+                productRef.removeValue().addOnCompleteListener(new OnCompleteListener<Void>() {
+                    @Override
+                    public void onComplete(@NonNull Task<Void> task) {
+                        if (task.isSuccessful()) {
+                            Toast.makeText(getActivity(), "Xóa sản phẩm thành công", Toast.LENGTH_SHORT).show();
+                        } else {
+                            Toast.makeText(getActivity(), "Xóa sản phẩm thất bại", Toast.LENGTH_SHORT).show();
+                        }
+                    }
+                });
+//        reference.child("ProdImages").child(id).removeValue(); // Xóa ảnh trong bảng "ProdImages")
             }
         });
-//        reference.child("ProdImages").child(id).removeValue(); // Xóa ảnh trong bảng "ProdImages")
     }
 
     @Override
