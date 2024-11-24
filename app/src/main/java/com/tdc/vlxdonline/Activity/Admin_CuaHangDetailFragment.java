@@ -515,7 +515,7 @@ public class Admin_CuaHangDetailFragment extends Fragment {
             calendar.add(Calendar.DAY_OF_YEAR, days[which]);
 
             // Lấy ngày khóa tạm thời
-            String lockTime = new SimpleDateFormat("yyyy-MM-dd", Locale.getDefault()).format(calendar.getTime());
+            String lockTime = new SimpleDateFormat("dd-MM-yyyy", Locale.getDefault()).format(calendar.getTime());
 
             // Truyền ngày được lựa chọn trong daysOptions dialog, chỉ lấy số
             String number = daysOptions[which].substring(0, daysOptions[which].indexOf(" ngày"));
@@ -524,24 +524,27 @@ public class Admin_CuaHangDetailFragment extends Fragment {
         }).show();
     }
 
-    // Hiển thị dialog nhập lý do khóa/mở cửa hàng
+    // Hiển thị dialog nhập lý do khóa/mở cửa hàng và lưu lý do vào Firebase
     private void showLyDoDialog(String messenger) {
         // Tạo EditText để nhập lý do khóa/mở
         EditText input = new EditText(getContext());
-        input.setHint("nhập lý do...");
+        input.setHint("Cửa Hàng Vi Phạm Chính Sách CTY");
+        if (messenger.equals("UL"))
+            input.setHint("Cửa Hàng Đã Cam Kết Không Tái Phạm");
+
 
         // Hiển thị hộp thoại yêu cầu nhập lý do khóa
         new AlertDialog.Builder(getContext()).setTitle("Nhập Lý Do").setMessage("Vui lòng nhập lý do khóa/mở cửa hàng:").setView(input).setPositiveButton("Tiếp Tục", (dialog, which) -> {
             String lydo = input.getText().toString().trim();
-            Log.d("l.d", "showLockDialog: " + lydo);
 
-            if (lydo.isBlank()) {
-                lydo = "Admin " + LoginUserID + " Chưa Nhập Lý Do ";
-                Log.d("l.d", "showLockDialog Lý Do Trống: " + lydo);
-            }
+            if (lydo.isBlank())
+                lydo = LoginUserID + " - Cửa Hàng Vi Phạm Chính Sách CTY";
+
+            if (messenger.equals("UL"))
+                lydo = LoginUserID + " - Cửa Hàng Đã Cam Kết Không Tái Phạm";
 
             // Lấy thời gian hiện tại làm key
-            String key = new SimpleDateFormat("ddMMyy_HHmmss", Locale.getDefault()).format(new Date());
+            String key = new SimpleDateFormat("ssmmHH-ddMMyy", Locale.getDefault()).format(new Date());
             key += " " + messenger;
 
             // Tạo reference tới đúng vị trí trong Firebase
