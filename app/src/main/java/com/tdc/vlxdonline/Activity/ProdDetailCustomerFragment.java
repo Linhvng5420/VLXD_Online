@@ -2,17 +2,20 @@ package com.tdc.vlxdonline.Activity;
 
 import android.app.AlertDialog;
 import android.app.Dialog;
+import android.content.DialogInterface;
 import android.graphics.Color;
 import android.graphics.Typeface;
 import android.os.Bundle;
 import android.text.Editable;
 import android.text.TextWatcher;
+import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.view.Window;
 import android.widget.ArrayAdapter;
 import android.widget.Button;
+import android.widget.EditText;
 import android.widget.LinearLayout;
 import android.widget.ScrollView;
 import android.widget.TextView;
@@ -41,8 +44,11 @@ import com.tdc.vlxdonline.Model.Products;
 import com.tdc.vlxdonline.R;
 import com.tdc.vlxdonline.databinding.FragmentProdDetailCustomerBinding;
 
+import java.text.SimpleDateFormat;
 import java.util.ArrayList;
+import java.util.Date;
 import java.util.List;
+import java.util.Locale;
 import java.util.concurrent.atomic.AtomicInteger;
 
 public class ProdDetailCustomerFragment extends Fragment {
@@ -88,14 +94,13 @@ public class ProdDetailCustomerFragment extends Fragment {
             binding.btnDatHangNgay.setTextColor(Color.WHITE);
             binding.btnDatHangNgay.setBackgroundColor(Color.RED);
             binding.lnGioHang.setVisibility(View.INVISIBLE);
-            binding.lnXemDg.setVisibility(View.INVISIBLE);
         }
 
         // Khách hàng đăng nhập
         setAdapterAnh();
         setUpDisplay();
 
-        // TODO 3 NGVLinh: Bắt sự kiện xem thông tin cửa hàng
+        // TODO NGVLinh: Bắt sự kiện xem thông tin cửa hàng
         binding.tvCuaHang.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
@@ -272,8 +277,16 @@ public class ProdDetailCustomerFragment extends Fragment {
                     else
                         Toast.makeText(getActivity(), "Hiện Tại Sản Phẩm Đã Bán Hết!", Toast.LENGTH_SHORT).show();
                 } else {
-                    KhachHangKhieuNai();
+                    Admin_KhachHangKhieuNai();
                 }
+            }
+        });
+
+        // TODO Thiên: Khiếu Nại
+        binding.btnKhieunai.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+                KH_ShowDialogKhieuNai();
             }
         });
 
@@ -520,7 +533,8 @@ public class ProdDetailCustomerFragment extends Fragment {
         return chuoi;
     }
 
-    private void KhachHangKhieuNai() {
+    // Admin đọc ds Khách Hàng Khiếu Nại về sản phẩm hiện tại
+    private void Admin_KhachHangKhieuNai() {
         // Hiển thị danh sách khiếu nại của khách hàng trong dialog
         DatabaseReference dbKhieuNai_LyDo = FirebaseDatabase.getInstance().getReference("khieunai/" + idProd);
 
@@ -572,30 +586,28 @@ public class ProdDetailCustomerFragment extends Fragment {
 
                 // Xóa SP Vi Phạm
                 builder.setPositiveButton("Xóa Sản Phẩm", (dialog, which) -> {
-                    new AlertDialog.Builder(getContext()).setTitle("Xác Nhận Xóa Sản Phẩm")
-                            .setMessage("Bạn có chắc chắn muốn xóa sản phẩm này?")
-                            .setPositiveButton("Xóa", (dialog1, which1) -> {
-                                // Xóa sản phẩm trong bảng "products"
-                                DatabaseReference dbanPham = FirebaseDatabase.getInstance().getReference("products/" + idProd);
-                                dbanPham.removeValue().addOnCompleteListener(new OnCompleteListener<Void>() {
-                                    @Override
-                                    public void onComplete(@NonNull Task<Void> task) {
-                                        if (task.isSuccessful()) {
-                                            DatabaseReference dbStore = FirebaseDatabase.getInstance().getReference();
-                                            dbStore.child("ProdImages").child(idProd).removeValue(); // Xóa ảnh trong bảng "ProdImages")
+                    new AlertDialog.Builder(getContext()).setTitle("Xác Nhận Xóa Sản Phẩm").setMessage("Bạn có chắc chắn muốn xóa sản phẩm này?").setPositiveButton("Xóa", (dialog1, which1) -> {
+                        // Xóa sản phẩm trong bảng "products"
+                        DatabaseReference dbanPham = FirebaseDatabase.getInstance().getReference("products/" + idProd);
+                        dbanPham.removeValue().addOnCompleteListener(new OnCompleteListener<Void>() {
+                            @Override
+                            public void onComplete(@NonNull Task<Void> task) {
+                                if (task.isSuccessful()) {
+                                    DatabaseReference dbStore = FirebaseDatabase.getInstance().getReference();
+                                    dbStore.child("ProdImages").child(idProd).removeValue(); // Xóa ảnh trong bảng "ProdImages")
 
-                                            // xóa khiếu nại của sản phẩm
-                                            dbKhieuNai_LyDo.removeValue();
+                                    // xóa khiếu nại của sản phẩm
+                                    dbKhieuNai_LyDo.removeValue();
 
-                                            // Quay lại màn hình trước và thông báo xóa thành công
-                                            getActivity().getSupportFragmentManager().popBackStack();
-                                            Toast.makeText(getActivity(), "XÓA SẢN PHẨM VI PHẠM THÀNH CÔNG", Toast.LENGTH_SHORT).show();
-                                        } else {
-                                            Toast.makeText(getActivity(), "Xóa sản phẩm thất bại", Toast.LENGTH_SHORT).show();
-                                        }
-                                    }
-                                });
-                            }).setNegativeButton("Hủy", null).show();
+                                    // Quay lại màn hình trước và thông báo xóa thành công
+                                    getActivity().getSupportFragmentManager().popBackStack();
+                                    Toast.makeText(getActivity(), "XÓA SẢN PHẨM VI PHẠM THÀNH CÔNG", Toast.LENGTH_SHORT).show();
+                                } else {
+                                    Toast.makeText(getActivity(), "Xóa sản phẩm thất bại", Toast.LENGTH_SHORT).show();
+                                }
+                            }
+                        });
+                    }).setNegativeButton("Hủy", null).show();
                 });
 
                 // Kiểm tra xem khiếu nại của sp đã đc xem xét hay chưa
@@ -615,6 +627,52 @@ public class ProdDetailCustomerFragment extends Fragment {
                 Toast.makeText(getContext(), "Lỗi tải dữ liệu khiếu nại", Toast.LENGTH_SHORT).show();
             }
         });
+    }
+
+    // Khách Hàng Khiếu Nại
+    private void KH_ShowDialogKhieuNai() {
+        // Tạo EditText để nhập lý do
+        EditText input = new EditText(getContext());
+        input.setHint("Nhập lý do khiếu nại");
+        input.setPadding(20, 20, 20, 20);
+
+        AlertDialog.Builder builder = new AlertDialog.Builder(getContext());
+        builder.setTitle("Khiếu Nại").setView(input).setPositiveButton("Gửi", new DialogInterface.OnClickListener() {
+            @Override
+            public void onClick(DialogInterface dialog, int which) {
+                String reason = input.getText().toString().trim();
+                if (!reason.isEmpty()) {
+                    String lydo = input.getText().toString().trim();
+
+                    DatabaseReference dbRef = FirebaseDatabase.getInstance().getReference("khieunai/" + idProd);
+                    dbRef.addListenerForSingleValueEvent(new ValueEventListener() {
+                        @Override
+                        public void onDataChange(DataSnapshot dataSnapshot) {
+                            if (dataSnapshot.exists()) {
+                                int solan = dataSnapshot.child("solan").getValue(Integer.class);
+                                dbRef.child("solan").setValue(solan + 1);
+                            } else {
+                                String date = new SimpleDateFormat("dd-MM-yyyy", Locale.getDefault()).format(new Date());
+                                dbRef.child("idchu").setValue(prod.getIdChu());
+                                dbRef.child("idsp").setValue(prod.getId());
+                                dbRef.child("lydo/" + idKhach).setValue(date + ": " + lydo);
+                                dbRef.child("solan").setValue(1);
+                                dbRef.child("daxem").setValue(false);
+                            }
+
+                            Snackbar.make(binding.getRoot(), "Đã gửi khiếu nại: " + reason, Snackbar.LENGTH_SHORT).show();
+                        }
+
+                        @Override
+                        public void onCancelled(DatabaseError databaseError) {
+                            Log.e("FirebaseComplaint", "Lỗi khi đọc dữ liệu: " + databaseError.getMessage());
+                        }
+                    });
+                } else {
+                    Toast.makeText(getContext(), "Vui lòng nhập lý do khiếu nại!", Toast.LENGTH_SHORT).show();
+                }
+            }
+        }).setNegativeButton("Hủy", null).create().show();
     }
 
     @Override

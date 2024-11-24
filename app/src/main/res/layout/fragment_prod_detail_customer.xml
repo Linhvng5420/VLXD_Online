@@ -1,5 +1,6 @@
 <?xml version="1.0" encoding="utf-8"?>
 <FrameLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
@@ -188,13 +189,15 @@
                         android:textSize="21dp"
                         android:textStyle="bold" />
                 </LinearLayout>
+
                 <LinearLayout
                     android:id="@+id/ln_xem_dg"
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
-                    android:background="@drawable/bg_detail"
                     android:layout_margin="10dp"
+                    android:background="@drawable/bg_detail"
                     android:paddingHorizontal="10dp">
+
                     <TextView
                         android:id="@+id/tv_soSao"
                         android:layout_width="wrap_content"
@@ -202,25 +205,28 @@
                         android:gravity="center_vertical"
                         android:text="4.5"
                         android:textSize="21dp"
-                        android:textStyle="bold"/>
+                        android:textStyle="bold" />
+
                     <ImageView
                         android:layout_width="25dp"
                         android:layout_height="25dp"
-                        android:layout_marginHorizontal="5dp"
                         android:layout_gravity="center_vertical"
-                        android:src="@drawable/star"/>
+                        android:layout_marginHorizontal="5dp"
+                        android:src="@drawable/star" />
+
                     <TextView
                         android:layout_width="0dp"
                         android:layout_height="match_parent"
                         android:layout_weight="1"
                         android:gravity="center_vertical"
                         android:text="Xem Đánh Giá Sản Phẩm"
-                        android:textSize="20dp"/>
+                        android:textSize="20dp" />
+
                     <ImageView
-                        android:layout_marginTop="5dp"
                         android:layout_width="30dp"
                         android:layout_height="match_parent"
-                        android:src="@drawable/arrow_right"/>
+                        android:layout_marginTop="5dp"
+                        android:src="@drawable/arrow_right" />
                 </LinearLayout>
             </LinearLayout>
         </ScrollView>
@@ -271,15 +277,34 @@
                     android:textStyle="bold" />
             </LinearLayout>
 
-            <Button
-                android:id="@+id/btn_addToCart"
+            <LinearLayout
                 android:layout_width="match_parent"
-                android:layout_height="match_parent"
-                android:backgroundTint="@color/white"
-                android:text="Thêm Vào Giỏ Hàng"
-                android:textColor="@color/black"
-                android:textSize="18dp"
-                android:textStyle="bold" />
+                android:layout_height="wrap_content"
+                android:layout_gravity="center"
+                android:orientation="horizontal">
+
+                <Button
+                    android:id="@+id/btn_addToCart"
+                    android:layout_width="0dp"
+                    android:layout_height="wrap_content"
+                    android:layout_weight="1"
+                    android:backgroundTint="@color/white"
+                    android:text="Thêm Vào Giỏ Hàng"
+                    android:textColor="@color/black"
+                    android:textSize="18dp"
+                    android:textStyle="bold" />
+
+                <Button
+                    android:id="@+id/btnKhieunai"
+                    android:layout_width="40dp"
+                    android:layout_height="40dp"
+                    android:layout_marginLeft="5dp"
+                    android:background="@android:drawable/stat_sys_warning"
+                    android:paddingTop="5dp"
+                    android:textSize="18dp"
+                    android:textStyle="bold"
+                    app:backgroundTint="#f00" />
+            </LinearLayout>
 
         </LinearLayout>
     </LinearLayout>
