@@ -38,6 +38,7 @@
                 android:orientation="horizontal">
 
                 <ImageView
+                    android:id="@+id/btnCall"
                     android:layout_width="45dp"
                     android:layout_height="45dp"
                     android:layout_marginRight="10dp"

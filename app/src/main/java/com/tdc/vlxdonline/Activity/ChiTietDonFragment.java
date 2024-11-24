@@ -1,7 +1,13 @@
 package com.tdc.vlxdonline.Activity;
 
+import android.app.AlertDialog;
+import android.content.ClipData;
+import android.content.ClipboardManager;
+import android.content.Context;
+import android.content.Intent;
 import android.graphics.Color;
 import android.graphics.drawable.Drawable;
+import android.net.Uri;
 import android.os.Bundle;
 
 import androidx.annotation.NonNull;
@@ -60,6 +66,7 @@ public class ChiTietDonFragment extends Fragment {
         referDetailDon = FirebaseDatabase.getInstance().getReference();
         KhoiTao();
         docChiTietDon();
+        setupCallButton();
         return binding.getRoot();
     }
 
@@ -216,6 +223,32 @@ public class ChiTietDonFragment extends Fragment {
             }
         }
         return chuoi;
+    }
+    private void setupCallButton() {
+        binding.btnCall.setOnClickListener(view -> {
+            // Tạo AlertDialog để xác nhận
+            AlertDialog.Builder builder = new AlertDialog.Builder(getContext());
+            builder.setTitle("Xác nhận hành động")
+                    .setMessage("Bạn muốn gọi hay sao chép số điện thoại?");
+
+            // Nút "Gọi"
+            builder.setPositiveButton("Gọi", (dialog, which) -> {
+                Intent intent = new Intent(Intent.ACTION_DIAL);
+                intent.setData(Uri.parse("tel:" + donHang.getSdt()));
+                startActivity(intent);
+            });
+
+            // Nút "Sao chép"
+            builder.setNegativeButton("Sao chép", (dialog, which) -> {
+                ClipboardManager clipboard = (ClipboardManager) getContext().getSystemService(Context.CLIPBOARD_SERVICE);
+                ClipData clip = ClipData.newPlainText("Số điện thoại", donHang.getSdt());
+                clipboard.setPrimaryClip(clip);
+                Toast.makeText(getContext(), "Đã sao chép số điện thoại", Toast.LENGTH_SHORT).show();
+            });
+
+            // Hiển thị dialog
+            builder.show();
+        });
     }
 
     @Override

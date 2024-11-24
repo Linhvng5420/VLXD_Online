@@ -15,6 +15,7 @@
         android:background="@color/light_gray"
         android:gravity="center"
         android:text="CHI TIẾT NHẬP"
+        android:textStyle="bold"
         android:layout_marginBottom="20dp"
         android:padding="8dp"
         android:textSize="30dp" />
@@ -89,31 +90,36 @@
         android:layout_weight="1"
         android:layout_height="0dp"/>
     <LinearLayout
-        android:layout_width="wrap_content"
+        android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:layout_marginTop="30dp"
+        android:gravity="center"
+        android:paddingTop="10dp"
+        android:paddingBottom="10dp"
         android:layout_gravity="center"
+        android:background="@color/common_google_signin_btn_text_dark_default"
         android:orientation="horizontal">
         <TextView
-            android:layout_width="match_parent"
+            android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:textColor="#fff"
+            android:textColor="#000"
             android:textSize="25dp"
             android:text="Tổng tiền: "/>
         <TextView
             android:id="@+id/tv_tongTienDonNhap"
-            android:layout_width="match_parent"
+            android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:textSize="25dp"
-            android:textColor="#fff"
+            android:textColor="#000"
             android:text="1000000"/>
     </LinearLayout>
     <Button
-        android:layout_marginTop="30dp"
+        android:layout_marginTop="20dp"
+        android:layout_marginBottom="10dp"
         android:id="@+id/btn_quayLai"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:backgroundTint="@color/light_gray"
+        android:backgroundTint="@color/material_dynamic_neutral100"
         android:textColor="#000"
         android:text="Quay Lại"/>
 

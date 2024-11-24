@@ -1,5 +1,6 @@
 <?xml version="1.0" encoding="utf-8"?>
 <FrameLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
@@ -236,15 +237,34 @@
                     android:textStyle="bold" />
             </LinearLayout>
 
-            <Button
-                android:id="@+id/btn_addToCart"
+            <LinearLayout
                 android:layout_width="match_parent"
-                android:layout_height="match_parent"
-                android:backgroundTint="@color/white"
-                android:text="Thêm Vào Giỏ Hàng"
-                android:textColor="@color/black"
-                android:textSize="18dp"
-                android:textStyle="bold" />
+                android:layout_height="wrap_content"
+                android:orientation="horizontal">
+
+                <Button
+                    android:id="@+id/btn_addToCart"
+                    android:layout_width="0dp"
+                    android:layout_weight="1"
+                    android:layout_height="wrap_content"
+                    android:backgroundTint="@color/white"
+                    android:text="Thêm Vào Giỏ Hàng"
+                    android:textColor="@color/black"
+                    android:textSize="18dp"
+                    android:textStyle="bold" />
+
+                <Button
+                    android:id="@+id/btnKhieunai"
+                    android:layout_width="40dp"
+                    android:layout_height="40dp"
+                    android:paddingTop="5dp"
+                    android:background="@android:drawable/stat_sys_warning"
+                    android:textSize="18dp"
+                    android:layout_marginLeft="5dp"
+                    android:textStyle="bold"
+                    app:backgroundTint="#f00" />
+            </LinearLayout>
+
 
         </LinearLayout>
     </LinearLayout>

@@ -1,15 +1,20 @@
 package com.tdc.vlxdonline.Activity;
 
+import android.app.AlertDialog;
 import android.app.Dialog;
+import android.content.DialogInterface;
 import android.graphics.Typeface;
+import android.icu.text.SimpleDateFormat;
 import android.os.Bundle;
 import android.text.Editable;
 import android.text.TextWatcher;
+import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.view.Window;
 import android.widget.Button;
+import android.widget.EditText;
 import android.widget.LinearLayout;
 import android.widget.ScrollView;
 import android.widget.TextView;
@@ -34,6 +39,8 @@ import com.tdc.vlxdonline.Model.Products;
 import com.tdc.vlxdonline.databinding.FragmentProdDetailCustomerBinding;
 
 import java.util.ArrayList;
+import java.util.Date;
+import java.util.Locale;
 
 public class ProdDetailCustomerFragment extends Fragment {
 
@@ -282,6 +289,78 @@ public class ProdDetailCustomerFragment extends Fragment {
             @Override
             public void onClick(View v) {
                 addToCart();
+            }
+        });
+
+        binding.btnKhieunai.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+                showDialogKhieuNai();
+            }
+        });
+    }
+
+
+    private void showDialogKhieuNai() {
+        // Tạo EditText để nhập lý do
+        EditText input = new EditText(getContext());
+        input.setHint("Nhập lý do khiếu nại");
+        input.setPadding(20, 20, 20, 20);
+
+        AlertDialog.Builder builder = new AlertDialog.Builder(getContext());
+        builder.setTitle("Khiếu Nại")
+                .setView(input)
+                .setPositiveButton("Gửi", new DialogInterface.OnClickListener() {
+                    @Override
+                    public void onClick(DialogInterface dialog, int which) {
+                        String reason = input.getText().toString().trim();
+                        if (!reason.isEmpty()) {
+                            Toast.makeText(getContext(), "Đã gửi khiếu nại: " + reason, Toast.LENGTH_SHORT).show();
+                            // Xử lý gửi khiếu nại ở đây
+                            String lydo = input.getText().toString().trim();
+
+                            fetchComplaintsWithDetails(lydo);
+                        } else {
+                            Toast.makeText(getContext(), "Vui lòng nhập lý do khiếu nại!", Toast.LENGTH_SHORT).show();
+                        }
+                    }
+                })
+                .setNegativeButton("Hủy", new DialogInterface.OnClickListener() {
+                    @Override
+                    public void onClick(DialogInterface dialog, int which) {
+                        dialog.dismiss();
+                    }
+                })
+                .create()
+                .show();
+    }
+
+
+    private void fetchComplaintsWithDetails(String lydo) {
+        // Tham chiếu đến nút "khieunai"
+        DatabaseReference dbRef = FirebaseDatabase.getInstance().getReference("khieunai/" + idProd);
+        dbRef.addListenerForSingleValueEvent(new ValueEventListener() {
+            @Override
+            public void onDataChange(DataSnapshot dataSnapshot) {
+                if (dataSnapshot.exists()) {
+                    // tang so lan kn
+                    int solan = dataSnapshot.child("solan").getValue(Integer.class);
+                    dbRef.child("solan").setValue(solan+1);
+
+                } else {
+                    String date = new SimpleDateFormat("ddMMyyyy", Locale.getDefault()).format(new Date());
+                    dbRef.child("idchu").setValue(prod.getIdChu());
+                    dbRef.child("idsp").setValue(prod.getId());
+                    dbRef.child("lydo").setValue(lydo);
+                    dbRef.child("ngay").setValue(date);
+                    dbRef.child("solan").setValue(1);
+
+                }
+            }
+
+            @Override
+            public void onCancelled(DatabaseError databaseError) {
+                Log.e("FirebaseComplaint", "Lỗi khi đọc dữ liệu: " + databaseError.getMessage());
             }
         });
     }
