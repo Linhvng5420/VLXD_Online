@@ -479,30 +479,32 @@ public class ProdDetailCustomerFragment extends Fragment {
                     }
 
                     // TODO: Hiển thị tên cửa hàng từ dữ liệu của chủ sản phẩm
-                    String idChu = prod.getIdChu(); // Lấy id của chủ sản phẩm
-                    referDetailProd = FirebaseDatabase.getInstance().getReference();
-                    referDetailProd.child("thongtinchu").child(idChu).addValueEventListener(new ValueEventListener() {
-                        @Override
-                        public void onDataChange(@NonNull DataSnapshot snapshot) {
-                            try {
-                                // Kiểm tra nếu binding và dữ liệu tồn tại
-                                if (binding != null && snapshot.exists()) {
-                                    // Lấy tên chủ cửa hàng từ snapshot
-                                    String tenChu = snapshot.child("ten").getValue(String.class);
-                                    // Hiển thị tên cửa hàng trên giao diện
-                                    binding.tvCuaHang.setText("Cửa Hàng " + tenChu);
-                                    binding.tvCuaHang.setVisibility(View.VISIBLE);
+                    if (prod != null) {
+                        String idChu = prod.getIdChu(); // Lấy id của chủ sản phẩm
+                        referDetailProd = FirebaseDatabase.getInstance().getReference();
+                        referDetailProd.child("thongtinchu").child(idChu).addValueEventListener(new ValueEventListener() {
+                            @Override
+                            public void onDataChange(@NonNull DataSnapshot snapshot) {
+                                try {
+                                    // Kiểm tra nếu binding và dữ liệu tồn tại
+                                    if (binding != null && snapshot.exists()) {
+                                        // Lấy tên chủ cửa hàng từ snapshot
+                                        String tenChu = snapshot.child("ten").getValue(String.class);
+                                        // Hiển thị tên cửa hàng trên giao diện
+                                        binding.tvCuaHang.setText("Cửa Hàng " + tenChu);
+                                        binding.tvCuaHang.setVisibility(View.VISIBLE);
+                                    }
+                                } catch (Exception e) {
+                                    // Có thể thêm thông báo lỗi nếu cần
                                 }
-                            } catch (Exception e) {
-                                // Có thể thêm thông báo lỗi nếu cần
                             }
-                        }
 
-                        @Override
-                        public void onCancelled(@NonNull DatabaseError error) {
-                            // Xử lý khi việc lấy dữ liệu bị hủy (nếu cần)
-                        }
-                    });
+                            @Override
+                            public void onCancelled(@NonNull DatabaseError error) {
+                                // Xử lý khi việc lấy dữ liệu bị hủy (nếu cần)
+                            }
+                        });
+                    }
                 }
 
                 @Override
