@@ -103,7 +103,7 @@ public class Admin_HomeActivity extends AppCompatActivity {
     // Thiết lập các sự kiện click cho menu
     private void setupMenuListeners() {
         binding.navCuaHang.setOnClickListener(view -> handleMenuClick(new Admin_CuaHangFragment()));
-//        binding.navSanPham.setOnClickListener(view -> handleMenuClick(new Admin_SanPhamFragment()));
+        binding.navSanPham.setOnClickListener(view -> handleMenuClick(new Admin_ProductReportFragment()));
 //        binding.navKhieuNai.setOnClickListener(view -> handleMenuClick(new Admin_KhieuNaiFragment()));
     }
 

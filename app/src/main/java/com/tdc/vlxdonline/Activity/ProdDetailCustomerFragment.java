@@ -1,5 +1,6 @@
 package com.tdc.vlxdonline.Activity;
 
+import android.app.AlertDialog;
 import android.app.Dialog;
 import android.graphics.Color;
 import android.graphics.Typeface;
@@ -58,7 +59,6 @@ public class ProdDetailCustomerFragment extends Fragment {
         // TODO 1 NGVlinh: Admin đăng nhập, viết dòng này để tránh UD Crash
         if (Customer_HomeActivity.info == null) {
             idKhach = "N/A";
-//            idProd = getArguments().getString("idSP");
         } else
             // Khách hàng đang đăng nhập
             idKhach = Customer_HomeActivity.info.getID();
@@ -81,7 +81,6 @@ public class ProdDetailCustomerFragment extends Fragment {
             binding.btnDatHangNgay.setTextColor(Color.WHITE);
             binding.btnDatHangNgay.setBackgroundColor(Color.RED);
             binding.lnGioHang.setVisibility(View.INVISIBLE);
-            xoaSanPhamViPham_Admin();
         }
 
         // Khách hàng đăng nhập
@@ -246,22 +245,41 @@ public class ProdDetailCustomerFragment extends Fragment {
             }
         });
 
+        // Su Kien Mua Ngay hoac Xoa SP
+        binding.btnDatHangNgay.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                if (Customer_HomeActivity.info != null) {
+                    if (soLuong > 0)
+                        ((Customer_HomeActivity) getActivity()).ReplaceFragment(new DatHangNgayFragment(idProd, soLuong));
+                    else
+                        Toast.makeText(getActivity(), "Hiện Tại Sản Phẩm Đã Bán Hết!", Toast.LENGTH_SHORT).show();
+                } else {
+                    DatabaseReference productRef = FirebaseDatabase.getInstance().getReference("products").child(idProd);
+                    new AlertDialog.Builder(getContext()).setTitle("Xóa Sản Phẩm").setMessage("").setPositiveButton("Xóa", (dialog, which) -> {
+                        productRef.removeValue().addOnCompleteListener(new OnCompleteListener<Void>() {
+                            @Override
+                            public void onComplete(@NonNull Task<Void> task) {
+                                if (task.isSuccessful()) {
+                                    DatabaseReference dbStore = FirebaseDatabase.getInstance().getReference();
+                                    dbStore.child("ProdImages").child(idProd).removeValue(); // Xóa ảnh trong bảng "ProdImages")
+                                    Toast.makeText(getActivity(), "Xóa sản phẩm thành công", Toast.LENGTH_SHORT).show();
+                                } else {
+                                    Toast.makeText(getActivity(), "Xóa sản phẩm thất bại", Toast.LENGTH_SHORT).show();
+                                }
+                            }
+                        });
+                    }).setNegativeButton("Hủy", null).show();
+                }
+            }
+        });
+
         return binding.getRoot();
     }
 
     @Override
     public void onViewCreated(@NonNull View view, @Nullable Bundle savedInstanceState) {
         super.onViewCreated(view, savedInstanceState);
-        // Su Kien Mua Ngay
-        binding.btnDatHangNgay.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View v) {
-                if (soLuong > 0)
-                    ((Customer_HomeActivity) getActivity()).ReplaceFragment(new DatHangNgayFragment(idProd, soLuong));
-                else
-                    Toast.makeText(getActivity(), "Hiện Tại Sản Phẩm Đã Bán Hết!", Toast.LENGTH_SHORT).show();
-            }
-        });
         // Su Kien Tang Giam SL
         binding.btnGiam.setOnClickListener(new View.OnClickListener() {
             @Override
@@ -466,27 +484,6 @@ public class ProdDetailCustomerFragment extends Fragment {
             }
         }
         return chuoi;
-    }
-
-    // TODO 4 NGVLinh: Xoa san pham vi pham
-    private void xoaSanPhamViPham_Admin() {
-        binding.btnDatHangNgay.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View view) {
-                DatabaseReference productRef = FirebaseDatabase.getInstance().getReference("products").child(idProd);
-                productRef.removeValue().addOnCompleteListener(new OnCompleteListener<Void>() {
-                    @Override
-                    public void onComplete(@NonNull Task<Void> task) {
-                        if (task.isSuccessful()) {
-                            Toast.makeText(getActivity(), "Xóa sản phẩm thành công", Toast.LENGTH_SHORT).show();
-                        } else {
-                            Toast.makeText(getActivity(), "Xóa sản phẩm thất bại", Toast.LENGTH_SHORT).show();
-                        }
-                    }
-                });
-//        reference.child("ProdImages").child(id).removeValue(); // Xóa ảnh trong bảng "ProdImages")
-            }
-        });
     }
 
     @Override

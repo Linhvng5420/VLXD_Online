@@ -35,10 +35,12 @@ public class AdminSanPhamAdapter extends RecyclerView.Adapter<AdminSanPhamAdapte
 
     // Biến callback cho sự kiện nhấn vào item
     private OnItemClickListener onItemClickListener;
+
     // Giao diện cho sự kiện nhấn vào item
     public interface OnItemClickListener {
         void onItemClick(Products products); // Phương thức được gọi khi một item được nhấn
     }
+
     // Phương thức thiết lập listener cho sự kiện nhấn vào item
     public void setOnItemClickListener(OnItemClickListener listener) {
         this.onItemClickListener = listener;
@@ -77,9 +79,11 @@ public class AdminSanPhamAdapter extends RecyclerView.Adapter<AdminSanPhamAdapte
         }
 
         public void bind(Products sanPham) {
+            binding.tvID.setText(sanPham.getId());
             binding.tvTen.setText(sanPham.getTen());
             binding.tvTonKho.setText("Tồn Kho: " + sanPham.getTonKho() + " " + sanPham.getDonVi());
-            binding.tvGia.setText("Giá: " + sanPham.getGiaBan() + " VND");
+            binding.tvGia.setText("Giá Bán: " + sanPham.getGiaBan() + "VND");
+            binding.tvGiaNhap.setText("Giá Nhập: " + sanPham.getGiaNhap() + "VND");
 
             // Hiển thị ảnh sản phẩm từ Firebase
             DatabaseReference db = FirebaseDatabase.getInstance().getReference("products");
@@ -91,11 +95,7 @@ public class AdminSanPhamAdapter extends RecyclerView.Adapter<AdminSanPhamAdapte
 
                         // Kiểm tra nếu giá trị không rỗng và không phải "N/A"
                         if (image != null && !image.equals("N/A")) {
-                            Glide.with(binding.getRoot().getContext())
-                                    .load(image)
-                                    .placeholder(R.drawable.baseline_downloading_24)
-                                    .error(android.R.drawable.ic_menu_report_image)
-                                    .into(binding.imageView);
+                            Glide.with(binding.getRoot().getContext()).load(image).placeholder(R.drawable.baseline_downloading_24).error(android.R.drawable.ic_menu_report_image).into(binding.imageView);
                         } else {
                             // Nếu không có ảnh, hiển thị ảnh mặc định
                             binding.imageView.setImageResource(R.drawable.cho_danh_gia);

@@ -71,13 +71,10 @@ public class Admin_CuaHangSanPhamFragment extends Fragment {
         db.child("products").addValueEventListener(new ValueEventListener() {
             @Override
             public void onDataChange(@NonNull DataSnapshot dataSnapshot) {
-                // Xóa danh sách cũ trước khi thêm dữ liệu mới
                 adapter.getDsSanPham().clear();
                 dsSanPham.clear();
 
-                // Lặp qua tất cả các DataSnapshot con để lấy thông tin nhân viên
                 for (DataSnapshot snapshot : dataSnapshot.getChildren()) {
-                    // Lấy đối tượng NhanVien từ snapshot
                     Products product = new Products();
                     product = snapshot.getValue(Products.class);
                     if (product != null) {
@@ -85,10 +82,10 @@ public class Admin_CuaHangSanPhamFragment extends Fragment {
                         // Lọc theo nhân viên của Chủ CH theo email
                         if (product.getIdChu().equals(cuahangID)) {
                             adapter.getDsSanPham().add(product);
-                            dsSanPham.add(product); // Lưu vào danh sách gốc
+                            dsSanPham.add(product);
                         }
                     } else
-                        Snackbar.make(getView(), "Danh Sách Nhân Viên Rỗng", Toast.LENGTH_SHORT).show();
+                        Snackbar.make(getView(), "Danh Sách SP Rỗng", Toast.LENGTH_SHORT).show();
                 }
 
                 // Thông báo cho adapter cập nhật dữ liệu
