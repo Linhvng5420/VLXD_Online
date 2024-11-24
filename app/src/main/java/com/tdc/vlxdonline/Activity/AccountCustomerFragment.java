@@ -53,8 +53,11 @@ public class AccountCustomerFragment extends Fragment {
                 new AlertDialog.Builder(getContext()).setTitle("Đăng Xuất").setMessage("Đăng Xuất Khỏi Ứng Dụng").setPositiveButton("Có", (dialog, which) -> {
                     // Xóa thông tin đăng nhập
                     LoginActivity.idUser = null;
+                    LoginActivity.typeEmployee = null;
                     LoginActivity.typeUser = -1;
-
+                    LoginActivity.accountID = null;
+                    Customer_HomeActivity.info = null;
+                    
                     // Quay về màn hình LoginActivity
                     Intent intent = new Intent(getActivity(), LoginActivity.class);
                     // Đóng hết các màn hình hiện có hoặc ẩn để quay lại màn hình đăng nhập

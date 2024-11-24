@@ -27,13 +27,13 @@ public class LoginActivity extends AppCompatActivity {
     ActivityLoginBinding binding;
     public static int typeUser;
     public static String typeEmployee = "null";
-    DatabaseReference dbRef = FirebaseDatabase.getInstance().getReference();
     public static String idUser = ""; // Email
     public static String accountID = ""; // Key của Account trong filebase
 
-    private ProgressDialog progressDialog;
+    DatabaseReference dbRef = FirebaseDatabase.getInstance().getReference();
 
     // Hàm khởi tạo ProgressDialog
+    private ProgressDialog progressDialog;
     private void initProgressDialog() {
         progressDialog = new ProgressDialog(this);
         progressDialog.setMessage("Đang đăng nhập...");
