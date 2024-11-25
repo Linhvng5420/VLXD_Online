@@ -534,28 +534,31 @@ public class Admin_CuaHangDetailFragment extends Fragment {
 
 
         // Hiển thị hộp thoại yêu cầu nhập lý do khóa
-        new AlertDialog.Builder(getContext()).setTitle("Nhập Lý Do").setMessage("Vui lòng nhập lý do khóa/mở cửa hàng:").setView(input).setPositiveButton("Tiếp Tục", (dialog, which) -> {
-            String lydo = input.getText().toString().trim();
+        new AlertDialog.Builder(getContext()).setTitle("Nhập Lý Do")
+                .setMessage("Vui lòng nhập lý do khóa/mở cửa hàng:")
+                .setView(input)
+                .setPositiveButton("Tiếp Tục", (dialog, which) -> {
+                    String lydo = input.getText().toString().trim();
 
-            if (lydo.isBlank())
-                lydo = LoginUserID + " - Cửa Hàng Vi Phạm Chính Sách CTY";
+                    if (lydo.isBlank())
+                        lydo = LoginUserID + " - Cửa Hàng Vi Phạm Chính Sách CTY";
 
-            if (messenger.equals("UL"))
-                lydo = LoginUserID + " - Cửa Hàng Đã Cam Kết Không Tái Phạm";
+                    if (messenger.equals("UL"))
+                        lydo = LoginUserID + " - Cửa Hàng Đã Cam Kết Không Tái Phạm";
 
-            // Lấy thời gian hiện tại làm key
-            String key = new SimpleDateFormat("ssmmHH-ddMMyy", Locale.getDefault()).format(new Date());
-            key += " " + messenger;
+                    // Lấy thời gian hiện tại làm key
+                    String key = new SimpleDateFormat("HHmmss-ddMMyy", Locale.getDefault()).format(new Date());
+                    key += " " + messenger;
 
-            // Tạo reference tới đúng vị trí trong Firebase
-            DatabaseReference db = FirebaseDatabase.getInstance().getReference("lydokhoatk/" + cuahangID);
-            db.child(key).setValue(lydo).addOnCompleteListener(task -> {
-                if (!task.isSuccessful()) {
-                    Toast.makeText(getContext(), "Lỗi khi xửa lý firebase!", Toast.LENGTH_SHORT).show();
-                } else
-                    Snackbar.make(getView(), "Đã lưu lý do!", Toast.LENGTH_SHORT).setAnimationMode(BaseTransientBottomBar.ANIMATION_MODE_FADE).show();
-            });
-        }).show();
+                    // Tạo reference tới đúng vị trí trong Firebase
+                    DatabaseReference db = FirebaseDatabase.getInstance().getReference("lydokhoatk/" + cuahangID);
+                    db.child(key).setValue(lydo).addOnCompleteListener(task -> {
+                        if (!task.isSuccessful()) {
+                            Toast.makeText(getContext(), "Lỗi khi xửa lý firebase!", Toast.LENGTH_SHORT).show();
+                        } else
+                            Snackbar.make(getView(), "Đã lưu lý do!", Toast.LENGTH_SHORT).setAnimationMode(BaseTransientBottomBar.ANIMATION_MODE_FADE).show();
+                    });
+                }).show();
     }
 
     // Hiển thị dialog mở khóa

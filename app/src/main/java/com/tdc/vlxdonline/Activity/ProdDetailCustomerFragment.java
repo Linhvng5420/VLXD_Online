@@ -473,7 +473,7 @@ public class ProdDetailCustomerFragment extends Fragment {
                                     }
 
                                     // Lấy thời gian hiện tại làm key
-                                    String key = new SimpleDateFormat("ssmmHH-ddMMyy", Locale.getDefault()).format(new Date());
+                                    String key = new SimpleDateFormat("HHmmss-ddMMyy", Locale.getDefault()).format(new Date());
                                     key += " XSP_" + prod.getId();
 
                                     // Lưu lý do vào Firebase
