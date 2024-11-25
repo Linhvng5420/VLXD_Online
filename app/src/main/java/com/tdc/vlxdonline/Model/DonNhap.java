@@ -22,7 +22,6 @@ public class DonNhap implements Serializable {
 
     public DonNhap() {
         id = System.currentTimeMillis();
-
         // id chu, id tạo lấy từ nhân viên đang đăng nhập (Warehouse_HomeActivity)
         idChu = Warehouse_HomeActivity.nhanVien.getEmailchu();
         idTao = Warehouse_HomeActivity.nhanVien.getCccd();

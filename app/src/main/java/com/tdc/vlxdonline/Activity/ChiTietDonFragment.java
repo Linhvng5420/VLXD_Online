@@ -198,6 +198,7 @@ public class ChiTietDonFragment extends Fragment {
 
     private void ChuyenTrangThaiGiaoHang(int trangThaiHienTai) {
         int update = trangThaiHienTai + 1;
+        if (trangThaiHienTai == 5) update = 2;
         referDetailDon.child("bills").child(idDon + "").child("trangThai").setValue(update);
     }
 
