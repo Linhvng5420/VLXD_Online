@@ -154,10 +154,6 @@ public class Warehouse_AnhSPActivity extends AppCompatActivity {
                                     .load(anhSP.getAnh())
                                     .into(ivAnhSP);
                         } else {
-//                            anhSP = new AnhSanPham();
-//                            ivAnhSP.setImageResource(R.drawable.add_a_photo_24);
-//                            btnThemASP.setEnabled(true);
-//                            btnXoaASP.setEnabled(false);
                             resetSelection();
                         }
 
@@ -178,8 +174,9 @@ public class Warehouse_AnhSPActivity extends AppCompatActivity {
             @Override
             public void onItemSelected(AdapterView<?> adapterView, View view, int i, long l) {
                 idProduct = data.get(i).getId();
-                getDate(idProduct);
+                ivAnhSP.setImageResource(R.drawable.add_a_photo_24);
                 adapter.notifyDataSetChanged();
+                resetSelection();
             }
 
             @Override
