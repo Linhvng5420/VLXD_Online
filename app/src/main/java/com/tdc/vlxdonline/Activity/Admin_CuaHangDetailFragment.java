@@ -541,7 +541,7 @@ public class Admin_CuaHangDetailFragment extends Fragment {
                 lydo = LoginUserID + " - Cửa Hàng Vi Phạm Chính Sách CTY";
 
             if (messenger.equals("UL"))
-                lydo = LoginUserID + " - ửa Hàng Đã Cam Kết Không Tái Phạm";
+                lydo = LoginUserID + " - Cửa Hàng Đã Cam Kết Không Tái Phạm";
 
             // Lấy thời gian hiện tại làm key
             String key = new SimpleDateFormat("ssmmHH-ddMMyy", Locale.getDefault()).format(new Date());
