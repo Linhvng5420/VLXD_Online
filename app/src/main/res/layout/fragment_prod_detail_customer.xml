@@ -33,10 +33,9 @@
                 <androidx.recyclerview.widget.RecyclerView
                     android:id="@+id/rc_anh_sp"
                     android:layout_width="match_parent"
-                    android:layout_height="60dp"
+                    android:layout_height="wrap_content"
                     android:background="@drawable/backnav"
-                    android:paddingTop="10dp"
-                    android:paddingBottom="5dp" />
+                    android:paddingVertical="5dp" />
 
                 <LinearLayout
                     android:layout_width="match_parent"
@@ -61,7 +60,6 @@
                                 android:layout_width="120dp"
                                 android:layout_height="120dp"
                                 android:background="@drawable/bg_img_detail"
-                                android:padding="5dp"
                                 android:scaleType="fitCenter"
                                 android:src="@drawable/cho_danh_gia" />
 
@@ -165,9 +163,8 @@
                             <TextView
                                 android:layout_width="match_parent"
                                 android:layout_height="wrap_content"
-                                android:layout_marginLeft="10dp"
                                 android:layout_marginBottom="-2dp"
-                                android:paddingHorizontal="5dp"
+                                android:paddingHorizontal="10dp"
                                 android:text="Mô tả:"
                                 android:textColor="@color/black"
                                 android:textSize="16dp"
@@ -177,14 +174,11 @@
                                 android:id="@+id/tv_moTa_detail"
                                 android:layout_width="match_parent"
                                 android:layout_height="wrap_content"
-                                android:layout_marginLeft="10dp"
-                                android:layout_marginBottom="5dp"
-                                android:paddingHorizontal="5dp"
+                                android:paddingHorizontal="10dp"
                                 android:paddingBottom="5dp"
                                 android:text="Thép cuộn CB240 chất lượng cao, độ dày 1mm, đàn hồi tốt, cứng cáp, chắc chắn."
                                 android:textColor="@color/black"
-                                android:textSize="15dp"
-                                android:textStyle="bold" />
+                                android:textSize="15dp" />
                         </LinearLayout>
 
                     </LinearLayout>
@@ -231,8 +225,7 @@
                         android:layout_weight="1"
                         android:gravity="center_vertical"
                         android:text="Xem Đánh Giá Sản Phẩm"
-                        android:textSize="20dp"
-                        android:textStyle="bold" />
+                        android:textSize="20dp" />
 
                     <ImageView
                         android:layout_width="30dp"
