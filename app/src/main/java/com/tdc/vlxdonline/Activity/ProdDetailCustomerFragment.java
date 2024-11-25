@@ -538,44 +538,40 @@ public class ProdDetailCustomerFragment extends Fragment {
     private void KH_ShowDialogKhieuNai() {
         // Tạo EditText để nhập lý do
         EditText input = new EditText(getContext());
-        input.setHint("Nhập lý do khiếu nại");
+        input.setHint("Sản Phẩm Có Dấu Hiệu Vi Phạm");
         input.setPadding(20, 20, 20, 20);
 
         AlertDialog.Builder builder = new AlertDialog.Builder(getContext());
-        builder.setTitle("Khiếu Nại").setView(input).setPositiveButton("Gửi", new DialogInterface.OnClickListener() {
+        builder.setTitle("Khiếu Nại").setMessage("Nhập Lý Do Khiếu Nại").setView(input).setPositiveButton("Gửi", new DialogInterface.OnClickListener() {
             @Override
             public void onClick(DialogInterface dialog, int which) {
-                String reason = input.getText().toString().trim();
-                if (!reason.isEmpty()) {
-                    String lydo = input.getText().toString().trim();
+                DatabaseReference dbRef = FirebaseDatabase.getInstance().getReference("khieunai/" + idProd);
+                dbRef.addListenerForSingleValueEvent(new ValueEventListener() {
+                    @Override
+                    public void onDataChange(DataSnapshot dataSnapshot) {
+                        String lydo = "Sản Phẩm Có Dấu Hiệu Vi Phạm";
+                        lydo = input.getText().toString().trim();
 
-                    DatabaseReference dbRef = FirebaseDatabase.getInstance().getReference("khieunai/" + idProd);
-                    dbRef.addListenerForSingleValueEvent(new ValueEventListener() {
-                        @Override
-                        public void onDataChange(DataSnapshot dataSnapshot) {
-                            if (dataSnapshot.exists()) {
-                                int solan = dataSnapshot.child("solan").getValue(Integer.class);
-                                dbRef.child("solan").setValue(solan + 1);
-                            } else {
-                                String date = new SimpleDateFormat("dd-MM-yyyy", Locale.getDefault()).format(new Date());
-                                dbRef.child("idchu").setValue(prod.getIdChu());
-                                dbRef.child("idsp").setValue(prod.getId());
-                                dbRef.child("lydo/" + idKhach).setValue(date + ": " + lydo);
-                                dbRef.child("solan").setValue(1);
-                                dbRef.child("daxem").setValue(false);
-                            }
-
-                            Snackbar.make(binding.getRoot(), "Đã gửi khiếu nại: " + reason, Snackbar.LENGTH_SHORT).show();
+                        if (dataSnapshot.exists()) {
+                            int solan = dataSnapshot.child("solan").getValue(Integer.class);
+                            dbRef.child("solan").setValue(solan + 1);
+                        } else {
+                            String date = new SimpleDateFormat("dd-MM-yyyy", Locale.getDefault()).format(new Date());
+                            dbRef.child("idchu").setValue(prod.getIdChu());
+                            dbRef.child("idsp").setValue(prod.getId());
+                            dbRef.child("lydo/" + idKhach).setValue(date + ": " + lydo);
+                            dbRef.child("solan").setValue(1);
+                            dbRef.child("daxem").setValue(false);
                         }
 
-                        @Override
-                        public void onCancelled(DatabaseError databaseError) {
-                            Log.e("FirebaseComplaint", "Lỗi khi đọc dữ liệu: " + databaseError.getMessage());
-                        }
-                    });
-                } else {
-                    Toast.makeText(getContext(), "Vui lòng nhập lý do khiếu nại!", Toast.LENGTH_SHORT).show();
-                }
+                        Snackbar.make(binding.getRoot(), "Đã gửi khiếu nại: " + lydo, Snackbar.LENGTH_SHORT).show();
+                    }
+
+                    @Override
+                    public void onCancelled(DatabaseError databaseError) {
+                        Log.e("FirebaseComplaint", "Lỗi khi đọc dữ liệu: " + databaseError.getMessage());
+                    }
+                });
             }
         }).setNegativeButton("Hủy", null).create().show();
     }
