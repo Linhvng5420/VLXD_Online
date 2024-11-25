@@ -430,7 +430,7 @@ public class ProdDetailCustomerFragment extends Fragment {
 
                     // Hiển thị dialog với ListView
                     AlertDialog.Builder builder = new AlertDialog.Builder(getContext());
-                    builder.setTitle("Danh sách khiếu nại");
+                    builder.setTitle("Sản Phẩm Đã Bị Khiếu Nại " + dataSnapshot.child("solan").getValue(Integer.class) + " Lần");
                     ArrayAdapter<String> adapter = new ArrayAdapter<>(getContext(), android.R.layout.simple_list_item_1, complaintList);
 
                     builder.setAdapter(adapter, (dialog, which) -> {
@@ -467,7 +467,7 @@ public class ProdDetailCustomerFragment extends Fragment {
                             }
 
                             // Lấy thời gian hiện tại làm key
-                            String key = new SimpleDateFormat("HHmmss-ddMMyy", Locale.getDefault()).format(new Date());
+                            String key = new SimpleDateFormat("HH:mm:ss-ddMMyy", Locale.getDefault()).format(new Date());
                             key += " XSP_" + prod.getId();
 
                             // Lưu lý do vào Firebase
@@ -503,13 +503,13 @@ public class ProdDetailCustomerFragment extends Fragment {
                     // Kiểm tra xem khiếu nại của sp đã đc xem xét hay chưa
                     Boolean daxem = dataSnapshot.child("daxem").getValue(Boolean.class);
                     if (!daxem) {
-                        builder.setNeutralButton("Tiếp Nhận Khiếu Nại", (dialog, which) -> {
+                        builder.setNeutralButton("Tiếp Nhận", (dialog, which) -> {
                             dbKhieuNai_LyDo.child("daxem").setValue(true);
                             Snackbar.make(binding.getRoot(), "Admin Đã Xem Và Ghi Nhận Khiếu Nại", Snackbar.LENGTH_SHORT).show();
                         });
                     }
 
-                    builder.setPositiveButton("Đóng", null).show();
+                    builder.setNegativeButton("Đóng", null).show();
 
                 } else {
                     binding.btnDatHangNgay.setText("Không Có Khiếu Nại");
@@ -542,7 +542,7 @@ public class ProdDetailCustomerFragment extends Fragment {
                         String lydo = "Sản Phẩm Có Dấu Hiệu Vi Phạm";
                         lydo = input.getText().toString().trim();
 
-                        if (dataSnapshot.exists()) {
+                        if (dataSnapshot.child("lydo/" + idKhach).exists()) {
                             int solan = dataSnapshot.child("solan").getValue(Integer.class);
                             dbRef.child("solan").setValue(solan + 1);
                         } else {

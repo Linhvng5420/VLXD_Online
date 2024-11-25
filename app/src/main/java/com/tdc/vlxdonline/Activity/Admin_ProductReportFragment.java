@@ -95,7 +95,6 @@ public class Admin_ProductReportFragment extends Fragment {
                         dbSP.child("products/" + productId).addValueEventListener(new ValueEventListener() {
                             @Override
                             public void onDataChange(@NonNull DataSnapshot snapshotSP) {
-                                countReport = 0;
                                 Boolean daxem = snapshotKhieuNai.child("/" + productId + "/daxem").getValue(Boolean.class);
 
                                 Products product = snapshotSP.getValue(Products.class);
@@ -159,7 +158,6 @@ public class Admin_ProductReportFragment extends Fragment {
         binding.tvTonKho.setText("Report: " + countReport);
     }
 
-
     private void setupOnClickItem() {
         adapter.setOnItemClickListener(new AdminSanPhamAdapter.OnItemClickListener() {
             @Override
@@ -174,5 +172,13 @@ public class Admin_ProductReportFragment extends Fragment {
                         .commit();
             }
         });
+    }
+
+    @Override
+    public void onStop() {
+        super.onStop();
+
+        // Radio button mặc định là reporting
+        binding.rbReporting.setChecked(true);
     }
 }

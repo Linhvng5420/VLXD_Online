@@ -219,13 +219,17 @@ public class Admin_CuaHangDetailFragment extends Fragment {
                                 @Override
                                 public void onDataChange(DataSnapshot dataSnapshot) {
                                     if (dataSnapshot.exists()) {
-                                        TextView tvTaiKhoan = new TextView(getContext());
-                                        tvTaiKhoan.setText("Danh sách cửa hàng:");
-                                        tvTaiKhoan.setTextSize(18);
-                                        tvTaiKhoan.setTypeface(null, Typeface.BOLD);
-                                        tvTaiKhoan.setPadding(0, 15, 0, 10);
-                                        tvTaiKhoan.setTextIsSelectable(true);
-                                        layout.addView(tvTaiKhoan);
+                                        try {
+                                            TextView tvTaiKhoan = new TextView(getContext());
+                                            tvTaiKhoan.setText("Danh sách cửa hàng:");
+                                            tvTaiKhoan.setTextSize(18);
+                                            tvTaiKhoan.setTypeface(null, Typeface.BOLD);
+                                            tvTaiKhoan.setPadding(0, 15, 0, 10);
+                                            tvTaiKhoan.setTextIsSelectable(true);
+                                            layout.addView(tvTaiKhoan);
+                                        } catch (Exception e) {
+                                            throw new RuntimeException(e);
+                                        }
 
                                         for (DataSnapshot taiKhoanSnapshot : dataSnapshot.getChildren()) {
                                             String thongTinTaiKhoan = taiKhoanSnapshot.getValue(String.class);
@@ -547,7 +551,7 @@ public class Admin_CuaHangDetailFragment extends Fragment {
                         lydo = LoginUserID + " - Cửa Hàng Đã Cam Kết Không Tái Phạm";
 
                     // Lấy thời gian hiện tại làm key
-                    String key = new SimpleDateFormat("HHmmss-ddMMyy", Locale.getDefault()).format(new Date());
+                    String key = new SimpleDateFormat("HH:mm:ss-ddMMyy", Locale.getDefault()).format(new Date());
                     key += " " + messenger;
 
                     // Tạo reference tới đúng vị trí trong Firebase

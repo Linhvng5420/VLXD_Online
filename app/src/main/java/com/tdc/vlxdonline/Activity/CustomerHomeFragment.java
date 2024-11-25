@@ -215,7 +215,7 @@ public class CustomerHomeFragment extends Fragment {
                     Toast.makeText(getActivity(), "Hiện Tại Sản Phẩm Đã Bán Hết!", Toast.LENGTH_SHORT).show();
             }
         });
-        binding.rcProdCustomerHome.setLayoutManager(new GridLayoutManager(getActivity(), 2));
+        binding.rcProdCustomerHome.setLayoutManager(new GridLayoutManager(getActivity(), 3));
         binding.rcProdCustomerHome.setAdapter(productAdapter);
     }
 

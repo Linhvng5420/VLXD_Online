@@ -32,7 +32,7 @@
         style="@style/item_lg"
         android:hint="Nhập Email ....."
         android:inputType="text|textEmailAddress"
-        android:text="admin1@m.c" />
+        android:text="kh1@m.c" />
 
     <TextView
         android:layout_width="match_parent"
