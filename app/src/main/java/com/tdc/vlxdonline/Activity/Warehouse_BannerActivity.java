@@ -71,23 +71,28 @@ public class Warehouse_BannerActivity extends AppCompatActivity {
     private void updateControl() {
         // Trường hợp không user này chưa có hình ảnh nào
         if (this.keyData.isEmpty()) {
+            // Chưa có hình ảnh thì show nút "Thêm" và show ảnh mặc định ra
             this.btnThem.setText("Thêm");
             this.ivAnhBannerl.setImageURI(null);
             this.ivAnhBannerl.setImageResource(this.ID_BASE_IMAGE_VIEW_IMAGE);
         } else {
+            // Ngược lại nếu có hình ảnh, Show nút "Sửa" và show hình ảnh thì firebase ra
             this.btnThem.setText("Sửa");
             Glide.with(this).load(currentBanner.getAnh()).into(this.ivAnhBannerl);
         }
     }
 
     private void getBaseData(Runnable processAfterDone) {
-        idChu = getIntent().getStringExtra("idChu");
+        String chuoiEmail = getIntent().getStringExtra("idChu");
+
         // Kiểm tra idChu
-        if (idChu == null || idChu.isEmpty()) {
+        if (chuoiEmail == null || chuoiEmail.isEmpty()) {
             Toast.makeText(this, "Lỗi xác thực người dùng !", Toast.LENGTH_SHORT).show();
             finish(); // Kết thúc Activity và quay lại màn hình trước
             return;
         }
+
+        idChu = chuoiEmail.substring(0, chuoiEmail.indexOf("@")); // Giu nguyen phan idChu nay, Dung lam Key cho firebase
         
         // Lấy dữ liệu Banner hiện tại
         this.openProgressDialog("Đang lấy dữ liệu ...");
@@ -239,7 +244,7 @@ public class Warehouse_BannerActivity extends AppCompatActivity {
         // Tạo reference đến Firebase Storage
         FirebaseStorage storage = FirebaseStorage.getInstance();
         StorageReference storageRef = storage.getReference("Banner Images");
-        String key = keyData.isEmpty() ? String.valueOf(System.currentTimeMillis()) : keyData;
+        String key = keyData.isEmpty() ? this.idChu : keyData;
         StorageReference fileRef = storageRef.child("banner_" + key + ".jpg");
 
         fileRef.putFile(this.currentImageUri)
