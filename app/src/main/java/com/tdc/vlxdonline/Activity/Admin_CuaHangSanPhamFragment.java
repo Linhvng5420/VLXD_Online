@@ -46,7 +46,7 @@ public class Admin_CuaHangSanPhamFragment extends Fragment {
         // Inflate the layout for this fragment
         binding = FragmentAdminCuahangSanphamBinding.inflate(inflater, container, false);
         View view = binding.getRoot();
-        binding.tvID.setText("ID Cửa Hàng [ " + cuahangID + " ]");
+        binding.tvID.setText("Cửa Hàng @" + cuahangID);
         showSoLuongDanhSachSP();
 
         // Khởi tạo Recycleview
