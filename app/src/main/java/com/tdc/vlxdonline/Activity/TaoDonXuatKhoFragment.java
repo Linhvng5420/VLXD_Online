@@ -81,7 +81,7 @@ public class TaoDonXuatKhoFragment extends Fragment {
         binding.rcvChitiet.setAdapter(chiTietXuatAdapter); // Gán adapter vào RecyclerView
         donHang = new DonHang();
         String emailChu = Warehouse_HomeActivity.nhanVien.getEmailchu();
-        donHang.setIdChu(emailChu.substring(0, emailChu.indexOf("@")));
+        donHang.setIdChu(emailChu);
         donHang.setIdTao(Warehouse_HomeActivity.nhanVien.getCccd());
         dsChiTiet.clear();
         chiTietXuatAdapter.notifyDataSetChanged();
@@ -187,7 +187,7 @@ public class TaoDonXuatKhoFragment extends Fragment {
                     dsSanPham.clear(); // Xóa danh sách cũ
                     for (DataSnapshot snapshot : dataSnapshot.getChildren()) {
                         Products product = snapshot.getValue(Products.class); // Lấy sản phẩm từ snapshot
-                        if (!product.getIdChu().equals(emailChu.substring(0, emailChu.indexOf("@")))) continue;
+                        if (!product.getIdChu().equals(emailChu)) continue;
                         if (!category.isEmpty() && !category.equals(product.getDanhMuc()))
                             continue; // Kiểm tra danh mục
                         if (!tuKhoa.isEmpty() && !product.getTen().contains(tuKhoa) && !product.getMoTa().contains(tuKhoa))

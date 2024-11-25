@@ -134,7 +134,7 @@ public class QuanLyXuatKhoFragment extends Fragment {
                         DonHang don = snapshot.getValue(DonHang.class);
                         if (!tuKhoa.isEmpty() && !don.getTenKhach().contains(tuKhoa) && !don.getDiaChi().contains(tuKhoa))
                             continue;
-                        if (!don.getIdChu().equals(emailchu.substring(0, emailchu.indexOf("@")))) continue;
+                        if (!don.getIdChu().equals(emailchu)) continue;
                         if (trangThaiLoc == 0 && don.getTrangThai() != 5) continue;
                         if (trangThaiLoc == 1 && don.getTrangThai() == 5) continue;
 
