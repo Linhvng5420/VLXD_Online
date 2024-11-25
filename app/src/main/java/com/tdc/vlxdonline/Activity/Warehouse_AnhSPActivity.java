@@ -169,34 +169,50 @@ public class Warehouse_AnhSPActivity extends AppCompatActivity {
         }
 
     }
-
-
     private void setASpinner() {
         adapterSP = new ArrayAdapter(this, android.R.layout.simple_spinner_dropdown_item, data);
         spAnhSP.setAdapter(adapterSP);
         spAnhSP.setOnItemSelectedListener(new AdapterView.OnItemSelectedListener() {
             @Override
             public void onItemSelected(AdapterView<?> adapterView, View view, int i, long l) {
+                // Lấy ID sản phẩm từ Spinner
                 idProduct = data.get(i).getId();
+
+                // Gọi phương thức lấy dữ liệu ảnh sản phẩm
                 getDate(idProduct);
+
+                // Reset ImageView khi thay đổi sản phẩm (hiển thị ảnh mặc định)
+                ivAnhSP.setImageResource(R.drawable.add_a_photo_24);
+
+                // Reset đối tượng AnhSanPham
+                anhSP = new AnhSanPham();
+
+                // Cập nhật lại adapter ảnh sản phẩm
                 adapter.notifyDataSetChanged();
+
+                // Reset trạng thái của các nút
+                resetSelection();
             }
 
             @Override
             public void onNothingSelected(AdapterView<?> adapterView) {
-
+                // Nếu không chọn gì, có thể giữ trạng thái hiện tại hoặc làm gì đó khác
             }
         });
+        // Thiết lập RecyclerView với GridLayoutManager
         GridLayoutManager gridLayoutManager = new GridLayoutManager(this, 2);
         recyclerView.setLayoutManager(gridLayoutManager);
+
+        // Thiết lập Adapter cho RecyclerView
         adapter = new AnhSP_Adapter(Warehouse_AnhSPActivity.this, list_ASP) {
             @Override
             public void onItemClick(int position) {
+                // Xử lý sự kiện click vào ảnh sản phẩm
             }
         };
         recyclerView.setAdapter(adapter);
-    }
 
+    }
     private void getDate(String idSP) {
         reference = FirebaseDatabase.getInstance().getReference();
         listener = reference.child("ProdImages").child(idSP).addValueEventListener(new ValueEventListener() {
