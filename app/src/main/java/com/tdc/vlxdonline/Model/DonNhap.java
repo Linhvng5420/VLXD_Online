@@ -2,10 +2,11 @@ package com.tdc.vlxdonline.Model;
 
 import com.tdc.vlxdonline.Activity.Warehouse_HomeActivity;
 
+import java.io.Serializable;
 import java.time.LocalDate;
 import java.time.format.DateTimeFormatter;
 
-public class DonNhap {
+public class DonNhap implements Serializable {
     private String  idChu, idTao;
     private int  tongTien = 0;
     private long id;
@@ -21,7 +22,6 @@ public class DonNhap {
 
     public DonNhap() {
         id = System.currentTimeMillis();
-
         // id chu, id tạo lấy từ nhân viên đang đăng nhập (Warehouse_HomeActivity)
         idChu = Warehouse_HomeActivity.nhanVien.getEmailchu();
         idTao = Warehouse_HomeActivity.nhanVien.getCccd();

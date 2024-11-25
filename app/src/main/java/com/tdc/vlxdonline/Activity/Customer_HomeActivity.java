@@ -40,7 +40,7 @@ public class Customer_HomeActivity extends AppCompatActivity {
 
         referCustomerActi = FirebaseDatabase.getInstance().getReference();
         String email = getIntent().getStringExtra("emailUser");
-        try{
+        try {
             referCustomerActi.child("customers").child(email.substring(0, email.indexOf('@'))).addValueEventListener(new ValueEventListener() {
                 @Override
                 public void onDataChange(DataSnapshot dataSnapshot) {
@@ -50,7 +50,7 @@ public class Customer_HomeActivity extends AppCompatActivity {
                         Customer_HomeActivity.info.setEmail(email);
                         Customer_HomeActivity.info.setID(email.substring(0, email.indexOf('@')));
                         Toast.makeText(Customer_HomeActivity.this, "Hello " + info.getTen(), Toast.LENGTH_LONG).show();
-                    }else{
+                    } else {
                         Toast.makeText(Customer_HomeActivity.this, "Tài Khoản Đã Bị Xóa!", Toast.LENGTH_LONG).show();
                     }
                 }
@@ -60,9 +60,10 @@ public class Customer_HomeActivity extends AppCompatActivity {
                     System.out.println("The read failed: " + databaseError.getCode());
                 }
             });
-        }catch (Exception e){}
+        } catch (Exception e) {
+        }
 
-		// Bắt sự kiện
+        // Bắt sự kiện
         ReplaceFragment(new CustomerHomeFragment());
         EventNavigationBottom();
     }
@@ -89,11 +90,12 @@ public class Customer_HomeActivity extends AppCompatActivity {
     // Replace khi ấn chọn màn hình khác hiện tại
     public void ReplaceFragment(Fragment fragment) {
         FragmentManager fragmentManager = getSupportFragmentManager();
-        Fragment currentFragment = fragmentManager.findFragmentById(customerHomeBinding.frmCustomer.getId());
-        if (currentTag == null && currentFragment != null) currentTag = currentFragment.getClass().getName();
+        Fragment currentFragment = fragmentManager.findFragmentById(customerHomeBinding.fragmentContainer.getId());
+        if (currentTag == null && currentFragment != null)
+            currentTag = currentFragment.getClass().getName();
         if (currentTag == null || !currentTag.equals(fragment.getClass().getName()) || currentTag.equals(ProdDetailCustomerFragment.class.getName())) {
             FragmentTransaction fragmentTransaction = fragmentManager.beginTransaction();
-            fragmentTransaction.replace(customerHomeBinding.frmCustomer.getId(), fragment);
+            fragmentTransaction.replace(customerHomeBinding.fragmentContainer.getId(), fragment);
             fragmentTransaction.addToBackStack(fragment.getClass().getName());
             fragmentTransaction.commit();
         }
@@ -134,22 +136,24 @@ public class Customer_HomeActivity extends AppCompatActivity {
         drawableIcon.setTint(Color.RED);
         builder.setIcon(drawableIcon);
         Drawable drawableBg = getResources().getDrawable(R.drawable.bg_item_lg);
-        drawableBg.setTint(Color.rgb(100,220,255));
+        drawableBg.setTint(Color.rgb(100, 220, 255));
         AlertDialog alertDialog = builder.create();
         alertDialog.getWindow().setBackgroundDrawable(drawableBg);
         alertDialog.show();
     }
 
     // Hàm đổi icon navbar khi quay lại fragment trước
-    private void ChangeNavItem(){
-        if (currentTag.equals(CustomerHomeFragment.class.getName())) {
-            customerHomeBinding.navCustomer.setSelectedItemId(R.id.nav_customer_sanpham);
-        } else if (currentTag.equals(CartFragment.class.getName())) {
-            customerHomeBinding.navCustomer.setSelectedItemId(R.id.nav_customer_giohang);
-        } else if (currentTag.equals(DanhSachDonHangFragment.class.getName())) {
-            customerHomeBinding.navCustomer.setSelectedItemId(R.id.nav_customer_donhang);
-        } else if (currentTag.equals(AccountCustomerFragment.class.getName())) {
-            customerHomeBinding.navCustomer.setSelectedItemId(R.id.nav_customer_taikhoan);
+    private void ChangeNavItem() {
+        if (info != null) {
+            if (currentTag.equals(CustomerHomeFragment.class.getName())) {
+                customerHomeBinding.navCustomer.setSelectedItemId(R.id.nav_customer_sanpham);
+            } else if (currentTag.equals(CartFragment.class.getName())) {
+                customerHomeBinding.navCustomer.setSelectedItemId(R.id.nav_customer_giohang);
+            } else if (currentTag.equals(DanhSachDonHangFragment.class.getName())) {
+                customerHomeBinding.navCustomer.setSelectedItemId(R.id.nav_customer_donhang);
+            } else if (currentTag.equals(AccountCustomerFragment.class.getName())) {
+                customerHomeBinding.navCustomer.setSelectedItemId(R.id.nav_customer_taikhoan);
+            }
         }
     }
 }

@@ -219,13 +219,17 @@ public class Admin_CuaHangDetailFragment extends Fragment {
                                 @Override
                                 public void onDataChange(DataSnapshot dataSnapshot) {
                                     if (dataSnapshot.exists()) {
-                                        TextView tvTaiKhoan = new TextView(getContext());
-                                        tvTaiKhoan.setText("Danh sách cửa hàng:");
-                                        tvTaiKhoan.setTextSize(18);
-                                        tvTaiKhoan.setTypeface(null, Typeface.BOLD);
-                                        tvTaiKhoan.setPadding(0, 15, 0, 10);
-                                        tvTaiKhoan.setTextIsSelectable(true);
-                                        layout.addView(tvTaiKhoan);
+                                        try {
+                                            TextView tvTaiKhoan = new TextView(getContext());
+                                            tvTaiKhoan.setText("Danh sách cửa hàng:");
+                                            tvTaiKhoan.setTextSize(18);
+                                            tvTaiKhoan.setTypeface(null, Typeface.BOLD);
+                                            tvTaiKhoan.setPadding(0, 15, 0, 10);
+                                            tvTaiKhoan.setTextIsSelectable(true);
+                                            layout.addView(tvTaiKhoan);
+                                        } catch (Exception e) {
+                                            throw new RuntimeException(e);
+                                        }
 
                                         for (DataSnapshot taiKhoanSnapshot : dataSnapshot.getChildren()) {
                                             String thongTinTaiKhoan = taiKhoanSnapshot.getValue(String.class);
@@ -474,7 +478,7 @@ public class Admin_CuaHangDetailFragment extends Fragment {
                         countLock++;
                     } else countUnLock++;
                 }
-                binding.tvLichSuKhoa.setText("Lịch Sử Khóa (Lock " + countLock + " lần, UnLock " + countUnLock + " lần)");
+                binding.tvLichSuKhoa.setText("Lịch Sử Vi Phạm " + countLock + " lần, Tha " + countUnLock + " lần");
                 Log.d("LyDoKhoa", "Số lượng item: " + lyDoKhoaList.size() + lyDoKhoaList.toString());
 
                 // cập nhật listview
@@ -534,28 +538,31 @@ public class Admin_CuaHangDetailFragment extends Fragment {
 
 
         // Hiển thị hộp thoại yêu cầu nhập lý do khóa
-        new AlertDialog.Builder(getContext()).setTitle("Nhập Lý Do").setMessage("Vui lòng nhập lý do khóa/mở cửa hàng:").setView(input).setPositiveButton("Tiếp Tục", (dialog, which) -> {
-            String lydo = input.getText().toString().trim();
+        new AlertDialog.Builder(getContext()).setTitle("Nhập Lý Do")
+                .setMessage("Vui lòng nhập lý do khóa/mở cửa hàng:")
+                .setView(input)
+                .setPositiveButton("Tiếp Tục", (dialog, which) -> {
+                    String lydo = input.getText().toString().trim();
 
-            if (lydo.isBlank())
-                lydo = LoginUserID + " - Cửa Hàng Vi Phạm Chính Sách CTY";
+                    if (lydo.isBlank())
+                        lydo = LoginUserID + " - Cửa Hàng Vi Phạm Chính Sách CTY";
 
-            if (messenger.equals("UL"))
-                lydo = LoginUserID + " - Cửa Hàng Đã Cam Kết Không Tái Phạm";
+                    if (messenger.equals("UL"))
+                        lydo = LoginUserID + " - Cửa Hàng Đã Cam Kết Không Tái Phạm";
 
-            // Lấy thời gian hiện tại làm key
-            String key = new SimpleDateFormat("ssmmHH-ddMMyy", Locale.getDefault()).format(new Date());
-            key += " " + messenger;
+                    // Lấy thời gian hiện tại làm key
+                    String key = new SimpleDateFormat("HH:mm:ss-ddMMyy", Locale.getDefault()).format(new Date());
+                    key += " " + messenger;
 
-            // Tạo reference tới đúng vị trí trong Firebase
-            DatabaseReference db = FirebaseDatabase.getInstance().getReference("lydokhoatk/" + cuahangID);
-            db.child(key).setValue(lydo).addOnCompleteListener(task -> {
-                if (!task.isSuccessful()) {
-                    Toast.makeText(getContext(), "Lỗi khi xửa lý firebase!", Toast.LENGTH_SHORT).show();
-                } else
-                    Snackbar.make(getView(), "Đã lưu lý do!", Toast.LENGTH_SHORT).setAnimationMode(BaseTransientBottomBar.ANIMATION_MODE_FADE).show();
-            });
-        }).show();
+                    // Tạo reference tới đúng vị trí trong Firebase
+                    DatabaseReference db = FirebaseDatabase.getInstance().getReference("lydokhoatk/" + cuahangID);
+                    db.child(key).setValue(lydo).addOnCompleteListener(task -> {
+                        if (!task.isSuccessful()) {
+                            Toast.makeText(getContext(), "Lỗi khi xửa lý firebase!", Toast.LENGTH_SHORT).show();
+                        } else
+                            Snackbar.make(getView(), "Đã lưu lý do!", Toast.LENGTH_SHORT).setAnimationMode(BaseTransientBottomBar.ANIMATION_MODE_FADE).show();
+                    });
+                }).show();
     }
 
     // Hiển thị dialog mở khóa
@@ -609,8 +616,6 @@ public class Admin_CuaHangDetailFragment extends Fragment {
                     public void onDataChange(@NonNull DataSnapshot snapshot) {
                         if (snapshot.exists()) {
                             soluongSP[0] = snapshot.getChildrenCount();
-                            Toast.makeText(getContext(), "Cửa hàng hiện có " + soluongSP[0] + " sản phẩm", Toast.LENGTH_SHORT).show();
-
                             // chuyển sang fragment danh sách sản phẩm
                             Bundle bundle = new Bundle();
                             bundle.putString("idCH", cuahangID);

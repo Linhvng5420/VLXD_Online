@@ -685,12 +685,14 @@ public class Owner_NhanVienDetailFragment extends Fragment {
 
                     // Hiển thị hình ảnh
                     if (!anhCC1.equals("N/A") && !anhCC1.equals("")) {
+                        binding.ivCCCD1.setImageDrawable(getResources().getDrawable(R.drawable.baseline_downloading_24));
                         Glide.with(getContext()).load(anhCC1) // Tải ảnh từ URL
                                 .into(binding.ivCCCD1); // imageViewCC là ID của ImageView trong layout
                     } else
                         binding.ivCCCD1.setImageDrawable(getResources().getDrawable(android.R.drawable.ic_menu_report_image));
 
                     if (!anhCC2.equals("N/A") && !anhCC2.equals("")) {
+                        binding.ivCCCD2.setImageDrawable(getResources().getDrawable(R.drawable.baseline_downloading_24));
                         Glide.with(getContext()).load(anhCC2) // Tải ảnh từ URL
                                 .into(binding.ivCCCD2); // imageViewCC2 là ID của ImageView trong layout
                     } else

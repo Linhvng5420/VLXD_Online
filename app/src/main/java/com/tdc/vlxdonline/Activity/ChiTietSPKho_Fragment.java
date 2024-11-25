@@ -125,37 +125,41 @@ public class ChiTietSPKho_Fragment extends Fragment {
         if (!giaBanMoi.isEmpty()) {
 
             int giaMoi = Integer.parseInt(giaBanMoi); // Chuyển đổi số lượng nhập thành số nguyên
-            DatabaseReference reference = FirebaseDatabase.getInstance().getReference();
+            if (giaMoi > Integer.parseInt(product.getGiaNhap())) {
+                DatabaseReference reference = FirebaseDatabase.getInstance().getReference();
 
 
-            // Lấy số lượng hiện có từ Firebase
-            reference.child("products").child(idProduct).addListenerForSingleValueEvent(new ValueEventListener() {
-                @Override
-                public void onDataChange(DataSnapshot snapshot) {
-                    try {
-                        Products product = snapshot.getValue(Products.class); // Lấy thông tin sản phẩm
-                        if (product != null) {
+                // Lấy số lượng hiện có từ Firebase
+                reference.child("products").child(idProduct).addListenerForSingleValueEvent(new ValueEventListener() {
+                    @Override
+                    public void onDataChange(DataSnapshot snapshot) {
+                        try {
+                            Products product = snapshot.getValue(Products.class); // Lấy thông tin sản phẩm
+                            if (product != null) {
 
-                            // Cập nhật số lượng trong kho lên Firebase
-                            reference.child("products").child(idProduct).child("giaBan").setValue(String.valueOf(giaMoi))
-                                    .addOnSuccessListener(aVoid -> {
-                                        Toast.makeText(getActivity(), "Đã thay doi gia san pham!", Toast.LENGTH_SHORT).show();
-                                        binding.tvGiaSpDetail.setText(giaMoi + " VND"); // Cập nhật UI
-                                        binding.edtThayDoiGia.setText(""); // Xóa ô nhập
-                                    })
-                                    .addOnFailureListener(e ->
-                                            Toast.makeText(getActivity(), "Không thể cập nhật gia!", Toast.LENGTH_SHORT).show()); // Xử lý lỗi
+                                // Cập nhật số lượng trong kho lên Firebase
+                                reference.child("products").child(idProduct).child("giaBan").setValue(String.valueOf(giaMoi))
+                                        .addOnSuccessListener(aVoid -> {
+                                            Toast.makeText(getActivity(), "Đã thay doi gia san pham!", Toast.LENGTH_SHORT).show();
+                                            binding.tvGiaSpDetail.setText(giaMoi + " VND"); // Cập nhật UI
+                                            binding.edtThayDoiGia.setText(""); // Xóa ô nhập
+                                        })
+                                        .addOnFailureListener(e ->
+                                                Toast.makeText(getActivity(), "Không thể cập nhật gia!", Toast.LENGTH_SHORT).show()); // Xử lý lỗi
+                            }
+                        }catch (Exception e){
+                            Log.e("Lỗi", "Lỗi khi thay đổi giá: " + e.getMessage());
                         }
-                    }catch (Exception e){
-                        Log.e("Lỗi", "Lỗi khi thay đổi giá: " + e.getMessage());
                     }
-                }
 
-                @Override
-                public void onCancelled(DatabaseError error) {
-                    Log.d("l.d", "Lỗi khi thêm số lượng");
-                }
-            });
+                    @Override
+                    public void onCancelled(DatabaseError error) {
+                        Log.d("l.d", "Lỗi khi thêm số lượng");
+                    }
+                });
+            }else {
+                Toast.makeText(getActivity(), "Giá bán phải lớn hơn giá nhập", Toast.LENGTH_SHORT).show();
+            }
 
 
         } else {
@@ -169,8 +173,9 @@ public class ChiTietSPKho_Fragment extends Fragment {
             @Override
             public void onDataChange(DataSnapshot dataSnapshot) {
                 try {
-                    Products product = dataSnapshot.getValue(Products.class); // Lấy thông tin sản phẩm
-                    if (product != null) {
+                    Products prod = dataSnapshot.getValue(Products.class); // Lấy thông tin sản phẩm
+                    if (prod != null) {
+                        product = prod;
                         // Tải hình ảnh và cập nhật thông tin sản phẩm lên UI
                         Glide.with(getActivity()).load(product.getAnh()).into(binding.ivAnhChinh);
                         Glide.with(getActivity()).load(product.getAnh()).into(binding.imgDetail);

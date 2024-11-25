@@ -9,21 +9,23 @@ import androidx.recyclerview.widget.RecyclerView;
 
 import com.bumptech.glide.Glide;
 import com.tdc.vlxdonline.Model.ChiTietDon;
+import com.tdc.vlxdonline.Model.ChiTietNhap;
 import com.tdc.vlxdonline.databinding.ItemDetailDonBinding;
+import com.tdc.vlxdonline.databinding.ItemDetailNhapBinding;
 
 import java.util.ArrayList;
 
-public class ChiTietDonHangAdapter extends RecyclerView.Adapter<ChiTietDonHangAdapter.ChiTietDonHolder> {
+public class ChiTietDonNhapAdapter extends RecyclerView.Adapter<ChiTietDonNhapAdapter.ChiTietDonHolder> {
 
     Activity context;
-    ArrayList<ChiTietDon> data;
+    ArrayList<ChiTietNhap> data;
     OnChiTietDonClick onChiTietDonClick;
 
     public void setOnChiTietDonClick(OnChiTietDonClick onChiTietDonClick) {
         this.onChiTietDonClick = onChiTietDonClick;
     }
 
-    public ChiTietDonHangAdapter(Activity context, ArrayList<ChiTietDon> data) {
+    public ChiTietDonNhapAdapter(Activity context, ArrayList<ChiTietNhap> data) {
         this.context = context;
         this.data = data;
     }
@@ -31,22 +33,19 @@ public class ChiTietDonHangAdapter extends RecyclerView.Adapter<ChiTietDonHangAd
     @NonNull
     @Override
     public ChiTietDonHolder onCreateViewHolder(@NonNull ViewGroup parent, int viewType) {
-        return new ChiTietDonHolder(ItemDetailDonBinding.inflate(context.getLayoutInflater(), parent, false));
+        return new ChiTietDonHolder(ItemDetailNhapBinding.inflate(context.getLayoutInflater(), parent, false));
     }
 
     @Override
     public void onBindViewHolder(@NonNull ChiTietDonHolder holder, int position) {
-        ChiTietDon chiTiet = data.get(position);
+        ChiTietNhap chiTiet = data.get(position);
 
-        Glide.with(context).load(chiTiet.getAnh()).into(holder.binding.imgDetailDon);
-        holder.binding.tvNameDetailDon.setText(chiTiet.getTen());
-        holder.binding.tvGiaDetailDon.setText(getChuoiTong(chiTiet.getGia()) + " đ");
-        holder.binding.tvSlDetailDon.setText(String.format("Số Lượng: %d", chiTiet.getSoLuong()));
+        Glide.with(context).load(chiTiet.getAnh()).into(holder.binding.imgDetailNhap);
+        holder.binding.tvNameDetailNhap.setText(chiTiet.getTen());
+        holder.binding.tvGiaDetailNhap.setText(getChuoiTong(chiTiet.getGia()) + " đ");
+        holder.binding.tvSlDetailNhap.setText(String.format("Số Lượng: %d", chiTiet.getSoLuong()));
         int tong = chiTiet.getSoLuong() * chiTiet.getGia();
-        holder.binding.tvTongDetailDon.setText("Thành Tiền: " + getChuoiTong(tong) + " đ");
-
-        final int pos = position;
-        holder.position = pos;
+        holder.binding.tvTongDetailNhap.setText("Thành Tiền: " + getChuoiTong(tong) + " đ");
     }
 
     @Override
@@ -56,10 +55,10 @@ public class ChiTietDonHangAdapter extends RecyclerView.Adapter<ChiTietDonHangAd
 
     public class ChiTietDonHolder extends RecyclerView.ViewHolder {
 
-        ItemDetailDonBinding binding;
+        ItemDetailNhapBinding binding;
         int position;
 
-        public ChiTietDonHolder(@NonNull ItemDetailDonBinding itemView) {
+        public ChiTietDonHolder(@NonNull ItemDetailNhapBinding itemView) {
             super(itemView.getRoot());
             binding = itemView;
             binding.getRoot().setOnClickListener(new View.OnClickListener() {

@@ -16,7 +16,7 @@ import com.tdc.vlxdonline.databinding.FragmentAccountCustomerBinding;
 
 public class AccountCustomerFragment extends Fragment {
     FragmentAccountCustomerBinding binding;
-    String idKH = LoginActivity.idUser.substring(0, LoginActivity.idUser.indexOf("@"));
+    String idKH = Customer_HomeActivity.info.getID();
 
     @Override
     public void onCreate(Bundle savedInstanceState) {
@@ -85,7 +85,7 @@ public class AccountCustomerFragment extends Fragment {
 
                 // Thực hiện chuyển đổi sang Fragment chi tiết, thay thế Fragment hiện tại
                 getParentFragmentManager().beginTransaction()
-                        .replace(R.id.frm_customer, khachHangDetailFragment) // Thay thế fragment_container hiện tại bằng fragment chi tiết
+                        .replace(R.id.fragment_container, khachHangDetailFragment) // Thay thế fragment_container hiện tại bằng fragment chi tiết
                         .addToBackStack("detail") // Cho phép quay lại màn hình trước khi nhấn nút Back
                         .commit(); // Thực hiện chuyển đổi
             }
@@ -106,7 +106,7 @@ public class AccountCustomerFragment extends Fragment {
             public void onClick(View view) {
                 // Thực hiện chuyển đổi sang Fragment chi tiết, thay thế Fragment hiện tại
                 getParentFragmentManager().beginTransaction()
-                        .replace(R.id.frm_customer, new Owner_SettingAboutFragment()) // Thay thế fragment_container hiện tại bằng fragment chi tiết
+                        .replace(R.id.fragment_container, new Owner_SettingAboutFragment()) // Thay thế fragment_container hiện tại bằng fragment chi tiết
                         .addToBackStack("about") // Cho phép quay lại màn hình trước khi nhấn nút Back
                         .commit(); // Thực hiện chuyển đổi
             }
@@ -115,7 +115,7 @@ public class AccountCustomerFragment extends Fragment {
         binding.btnTraGop.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                ((Customer_HomeActivity) getActivity()).ReplaceFragment(new QuanLyTraGopFragment());
+                ((Customer_HomeActivity) getActivity()).ReplaceFragment(new QuanLyTraGopFragment(idKH, null));
             }
         });
     }

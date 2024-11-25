@@ -117,7 +117,14 @@ public class Warehouse_AnhSPActivity extends AppCompatActivity {
             @Override
             public void onClick(View v) {
                 // TODO: Loading
-                uploadData();
+                if (
+                        uri == null || edtChonASP.getText().toString().trim().isEmpty()){
+
+                    Toast.makeText(Warehouse_AnhSPActivity.this,
+                            "Vui lòng chọn hình ảnh sản phẩm!", Toast.LENGTH_SHORT).show();
+                } else {
+                    uploadData();
+                }
             }
         });
         btnXoaASP.setOnClickListener(new View.OnClickListener() {
@@ -154,10 +161,6 @@ public class Warehouse_AnhSPActivity extends AppCompatActivity {
                                     .load(anhSP.getAnh())
                                     .into(ivAnhSP);
                         } else {
-//                            anhSP = new AnhSanPham();
-//                            ivAnhSP.setImageResource(R.drawable.add_a_photo_24);
-//                            btnThemASP.setEnabled(true);
-//                            btnXoaASP.setEnabled(false);
                             resetSelection();
                         }
 
@@ -178,8 +181,15 @@ public class Warehouse_AnhSPActivity extends AppCompatActivity {
             @Override
             public void onItemSelected(AdapterView<?> adapterView, View view, int i, long l) {
                 idProduct = data.get(i).getId();
+
                 getDate(idProduct);
+
+                ivAnhSP.setImageResource(R.drawable.add_a_photo_24);
+
+                anhSP = new AnhSanPham();
+
                 adapter.notifyDataSetChanged();
+                resetSelection();
             }
 
             @Override

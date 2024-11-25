@@ -5,6 +5,7 @@ import android.app.Dialog;
 import android.content.DialogInterface;
 import android.graphics.Color;
 import android.graphics.Typeface;
+import android.graphics.drawable.Drawable;
 import android.os.Bundle;
 import android.text.Editable;
 import android.text.TextWatcher;
@@ -29,7 +30,6 @@ import androidx.recyclerview.widget.LinearLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
 
 import com.bumptech.glide.Glide;
-import com.google.android.material.snackbar.BaseTransientBottomBar;
 import com.google.android.material.snackbar.Snackbar;
 import com.google.firebase.database.DataSnapshot;
 import com.google.firebase.database.DatabaseError;
@@ -75,12 +75,11 @@ public class ProdDetailCustomerFragment extends Fragment {
             idKhach = Customer_HomeActivity.info.getID();
     }
 
-
     @Override
     public void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-        if (Customer_HomeActivity.info == null)
-            Admin_KhachHangKhieuNai();
+        // Admin đọc ds Khách Hàng Khiếu Nại về sản phẩm hiện tại
+        if (Customer_HomeActivity.info == null) Admin_KhachHangKhieuNai();
     }
 
     @Override
@@ -102,174 +101,31 @@ public class ProdDetailCustomerFragment extends Fragment {
         setAdapterAnh();
         setUpDisplay();
 
-        // TODO NGVLinh: Bắt sự kiện xem thông tin cửa hàng
+        // TODO NGVLinh: Bắt sự kiện xem thông tin cửa hàng hoặc xem sản phẩm của cửa hàng
         binding.tvCuaHang.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
-                String idChu = prod.getIdChu();
-                referDetailProd = FirebaseDatabase.getInstance().getReference();
-                referDetailProd.child("thongtinchu").child(idChu).addValueEventListener(new ValueEventListener() {
+                // hiển thị dialog chọn xem thông tin cửa hàng hoặc sản phẩm của cửa hàng
+                new AlertDialog.Builder(getContext()).setTitle(binding.tvCuaHang.getText().toString()).setPositiveButton("Xem Thông Tin", new DialogInterface.OnClickListener() {
                     @Override
-                    public void onDataChange(DataSnapshot snapshot) {
-                        try {
-                            if (snapshot.exists()) {
-                                String tenChu = snapshot.child("ten").getValue(String.class);
-                                String diaChi = snapshot.child("diaChi").getValue(String.class);
-                                String email = snapshot.child("email").getValue(String.class);
-                                String sdt = snapshot.child("sdt").getValue(String.class);
-
-                                Dialog dialog = new Dialog(getContext(), android.R.style.Theme_DeviceDefault_Light_NoActionBar_Fullscreen);
-                                dialog.requestWindowFeature(Window.FEATURE_NO_TITLE);
-
-                                ScrollView scrollView = new ScrollView(getContext());
-                                LinearLayout layout = new LinearLayout(getContext());
-                                layout.setOrientation(LinearLayout.VERTICAL);
-                                layout.setPadding(20, 20, 20, 20);
-
-                                Button btnClose = new Button(getContext());
-                                btnClose.setText("Đóng");
-                                btnClose.setTextSize(16);
-                                btnClose.setOnClickListener(new View.OnClickListener() {
-                                    @Override
-                                    public void onClick(View v) {
-                                        dialog.dismiss();
-                                    }
-                                });
-                                layout.addView(btnClose);
-
-                                // Tạo các TextView và cho phép chọn để copy với kiểu chữ đậm
-                                TextView tvTenChu = new TextView(getContext());
-                                tvTenChu.setText("Tên: " + tenChu);
-                                tvTenChu.setTextSize(16);
-                                tvTenChu.setPadding(0, 10, 0, 10);
-                                tvTenChu.setTextIsSelectable(true);
-                                tvTenChu.setTypeface(null, Typeface.BOLD);  // Đặt kiểu chữ đậm
-                                layout.addView(tvTenChu);
-
-                                TextView tvDiaChi = new TextView(getContext());
-                                tvDiaChi.setText("Địa chỉ: " + diaChi);
-                                tvDiaChi.setTextSize(16);
-                                tvDiaChi.setPadding(0, 10, 0, 10);
-                                tvDiaChi.setTextIsSelectable(true);
-                                tvDiaChi.setTypeface(null, Typeface.BOLD);  // Đặt kiểu chữ đậm
-                                layout.addView(tvDiaChi);
-
-                                TextView tvEmail = new TextView(getContext());
-                                tvEmail.setText("Email: " + email);
-                                tvEmail.setTextSize(16);
-                                tvEmail.setPadding(0, 10, 0, 10);
-                                tvEmail.setTextIsSelectable(true);
-                                tvEmail.setTypeface(null, Typeface.BOLD);  // Đặt kiểu chữ đậm
-                                layout.addView(tvEmail);
-
-                                TextView tvSdt = new TextView(getContext());
-                                tvSdt.setText("Số điện thoại: " + sdt);
-                                tvSdt.setTextSize(16);
-                                tvSdt.setPadding(0, 10, 0, 10);
-                                tvSdt.setTextIsSelectable(true);
-                                tvSdt.setTypeface(null, Typeface.BOLD);  // Đặt kiểu chữ đậm
-                                layout.addView(tvSdt);
-
-                                referDetailProd.child("thongtinchusdc").child(idChu).addValueEventListener(new ValueEventListener() {
-                                    @Override
-                                    public void onDataChange(DataSnapshot dataSnapshot) {
-                                        try {
-                                            if (dataSnapshot.exists()) {
-                                                TextView tvCuaHang = new TextView(getContext());
-                                                tvCuaHang.setText("Danh sách cửa hàng:");
-                                                tvCuaHang.setTextSize(18);
-                                                tvCuaHang.setTypeface(null, Typeface.BOLD);
-                                                tvCuaHang.setPadding(0, 15, 0, 10);
-                                                tvCuaHang.setTextIsSelectable(true);
-                                                layout.addView(tvCuaHang);
-
-                                                for (DataSnapshot cuaHangSnapshot : dataSnapshot.child("cuahang").getChildren()) {
-                                                    String diaChiCuaHang = cuaHangSnapshot.getValue(String.class);
-                                                    TextView tvCuaHangItem = new TextView(getContext());
-                                                    tvCuaHangItem.setText("- " + diaChiCuaHang);
-                                                    tvCuaHangItem.setTextSize(16);
-                                                    tvCuaHangItem.setPadding(0, 5, 0, 5);
-                                                    tvCuaHangItem.setTextIsSelectable(true);
-                                                    layout.addView(tvCuaHangItem);
-                                                }
-
-                                                TextView tvKho = new TextView(getContext());
-                                                tvKho.setText("Danh sách kho:");
-                                                tvKho.setTypeface(null, Typeface.BOLD);
-                                                tvKho.setTextSize(18);
-                                                tvKho.setPadding(0, 15, 0, 10);
-                                                tvKho.setTextIsSelectable(true);
-                                                layout.addView(tvKho);
-
-                                                for (DataSnapshot khoSnapshot : dataSnapshot.child("kho").getChildren()) {
-                                                    String diaChiKho = khoSnapshot.getValue(String.class);
-                                                    TextView tvKhoItem = new TextView(getContext());
-                                                    tvKhoItem.setText("- " + diaChiKho);
-                                                    tvKhoItem.setTextSize(16);
-                                                    tvKhoItem.setPadding(0, 5, 0, 5);
-                                                    tvKhoItem.setTextIsSelectable(true);
-                                                    layout.addView(tvKhoItem);
-                                                }
-                                            }
-                                        } catch (Exception e) {
-                                        }
-                                    }
-
-                                    @Override
-                                    public void onCancelled(DatabaseError databaseError) {
-                                    }
-                                });
-
-                                referDetailProd.child("thongtinchustk").child(idChu).addValueEventListener(new ValueEventListener() {
-                                    @Override
-                                    public void onDataChange(DataSnapshot dataSnapshot) {
-                                        try {
-                                            if (dataSnapshot.exists()) {
-                                                TextView tvTaiKhoan = new TextView(getContext());
-                                                tvTaiKhoan.setText("Danh sách tài khoản:");
-                                                tvTaiKhoan.setTextSize(18);
-                                                tvTaiKhoan.setTypeface(null, Typeface.BOLD);
-                                                tvTaiKhoan.setPadding(0, 15, 0, 10);
-                                                tvTaiKhoan.setTextIsSelectable(true);
-                                                layout.addView(tvTaiKhoan);
-
-                                                for (DataSnapshot taiKhoanSnapshot : dataSnapshot.getChildren()) {
-                                                    String thongTinTaiKhoan = taiKhoanSnapshot.getValue(String.class);
-                                                    if (thongTinTaiKhoan != null) {
-                                                        TextView tvTaiKhoanItem = new TextView(getContext());
-                                                        tvTaiKhoanItem.setText("- " + thongTinTaiKhoan.toUpperCase());
-                                                        tvTaiKhoanItem.setTextSize(16);
-                                                        tvTaiKhoanItem.setPadding(0, 5, 0, 5);
-                                                        tvTaiKhoanItem.setTextIsSelectable(true);
-                                                        layout.addView(tvTaiKhoanItem);
-                                                    }
-                                                }
-                                            }
-                                        } catch (Exception e) {
-                                        }
-                                    }
-
-                                    @Override
-                                    public void onCancelled(DatabaseError databaseError) {
-                                    }
-                                });
-
-                                scrollView.addView(layout);
-                                dialog.setContentView(scrollView);
-                                dialog.show();
-                            }
-                        } catch (Exception e) {
-                        }
+                    public void onClick(DialogInterface dialogInterface, int i) {
+                        HienThiThongTinCuaHang();
                     }
-
+                }).setNeutralButton("Xem Sản Phẩm", new DialogInterface.OnClickListener() {
                     @Override
-                    public void onCancelled(DatabaseError error) {
+                    public void onClick(DialogInterface dialogInterface, int i) {
+                        // Tạo bundle để chuyển sang trang danh sách sản phẩm của cửa hàng Admin_CuaHangSanPhamFragment
+                        Bundle bundle = new Bundle();
+                        bundle.putString("idCH", prod.getIdChu());
+                        Admin_CuaHangSanPhamFragment fragment = new Admin_CuaHangSanPhamFragment();
+                        fragment.setArguments(bundle);
+                        getParentFragmentManager().beginTransaction().replace(R.id.fragment_container, fragment).addToBackStack("tempTag").commit();
                     }
-                });
+                }).setIcon(R.drawable.baseline_store_24).show();
             }
         });
 
-        // TODO 3 NGVLinh: Đặt Hàng Ngay(KH) / Xóa SP Vi Phạm(Admin)
+        // TODO 3 NGVLinh: Đặt Hàng Ngay(KH) / Admin đọc ds Khách Hàng Khiếu Nại về sản phẩm hiện tại
         binding.btnDatHangNgay.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
@@ -350,7 +206,7 @@ public class ProdDetailCustomerFragment extends Fragment {
                     ((Customer_HomeActivity) getActivity()).ReplaceFragment(new DaDanhGiaFragment(1, idProd));
                 } else {
                     DaDanhGiaFragment fragment = new DaDanhGiaFragment(1, idProd);
-                    getParentFragmentManager().beginTransaction().replace(R.id.fragment_container, fragment).addToBackStack(null).commit();
+                    getParentFragmentManager().beginTransaction().replace(R.id.fragment_container, fragment).addToBackStack("tempTag").commit();
                 }
             }
         });
@@ -479,7 +335,8 @@ public class ProdDetailCustomerFragment extends Fragment {
                             binding.tvMoTaDetail.setText(product.getMoTa());
                         } else {
                             // Hiển thị thông báo khi sản phẩm đã bị xóa
-                            Toast.makeText(getActivity(), "Sản Phẩm Đã Bị Xóa!", Toast.LENGTH_SHORT).show();
+                            ShowWar();
+                            getActivity().getSupportFragmentManager().popBackStack();
                         }
                     } catch (Exception e) {
                         // Bắt lỗi và hiển thị thông báo khi xảy ra vấn đề
@@ -572,7 +429,7 @@ public class ProdDetailCustomerFragment extends Fragment {
 
                     // Hiển thị dialog với ListView
                     AlertDialog.Builder builder = new AlertDialog.Builder(getContext());
-                    builder.setTitle("Danh sách khiếu nại");
+                    builder.setTitle("Sản Phẩm Đã Bị Khiếu Nại " + dataSnapshot.child("solan").getValue(Integer.class) + " Lần");
                     ArrayAdapter<String> adapter = new ArrayAdapter<>(getContext(), android.R.layout.simple_list_item_1, complaintList);
 
                     builder.setAdapter(adapter, (dialog, which) -> {
@@ -588,7 +445,7 @@ public class ProdDetailCustomerFragment extends Fragment {
                             // Mở fragment chi tiết và tắt thanh điều hướng của fragment đó
                             FragmentTransaction transaction = getActivity().getSupportFragmentManager().beginTransaction();
                             transaction.replace(R.id.fragment_container, fragment);
-                            transaction.addToBackStack(null);
+                            transaction.addToBackStack("tempTag");
                             transaction.commit();
                         }
                     });
@@ -600,66 +457,57 @@ public class ProdDetailCustomerFragment extends Fragment {
                         input.setHint("Sản Phẩm Vi Phạm Chính Sách CTY");
 
                         // Hiển thị hộp thoại yêu cầu nhập lý do xóa
-                        new AlertDialog.Builder(getContext())
-                                .setTitle("Xóa Sản Phẩm Vi Phạm")
-                                .setMessage("Nhập Lý Do Xóa Sản Phẩm Vi Phạm")
-                                .setView(input)
-                                .setPositiveButton("Xóa", (dialog1, which1) -> {
-                                    String lydo = input.getText().toString().trim();
+                        new AlertDialog.Builder(getContext()).setTitle("Xóa Sản Phẩm Vi Phạm").setMessage("Nhập Lý Do Xóa Sản Phẩm Vi Phạm").setView(input).setPositiveButton("Xóa", (dialog1, which1) -> {
+                            String lydo = input.getText().toString().trim();
 
-                                    // Nếu lý do trống, gán lý do mặc định
-                                    if (lydo.isBlank()) {
-                                        lydo = LoginActivity.accountID + " - Sản Phẩm Vi Phạm Chính Sách CTY";
-                                    }
+                            // Nếu lý do trống, gán lý do mặc định
+                            if (lydo.isBlank()) {
+                                lydo = LoginActivity.accountID + " - Sản Phẩm Vi Phạm Chính Sách CTY";
+                            }
 
-                                    // Lấy thời gian hiện tại làm key
-                                    String key = new SimpleDateFormat("ssmmHH-ddMMyy", Locale.getDefault()).format(new Date());
-                                    key += " XSP_" + prod.getId();
+                            // Lấy thời gian hiện tại làm key
+                            String key = new SimpleDateFormat("HH:mm:ss-ddMMyy", Locale.getDefault()).format(new Date());
+                            key += " XSP_" + prod.getId();
 
-                                    // Lưu lý do vào Firebase
-                                    DatabaseReference db = FirebaseDatabase.getInstance().getReference("lydokhoatk/" + prod.getIdChu());
-                                    db.child(key).setValue(lydo).addOnCompleteListener(task -> {
-                                        if (!task.isSuccessful()) {
-                                            Toast.makeText(getContext(), "Lỗi khi xử lý Firebase!", Toast.LENGTH_SHORT).show();
-                                        } else {
-                                            Snackbar.make(getView(), "Đã lưu lý do!", Toast.LENGTH_SHORT)
-                                                    .setAnimationMode(BaseTransientBottomBar.ANIMATION_MODE_FADE)
-                                                    .show();
-                                        }
-                                    });
+                            // Lưu lý do vào Firebase
+                            DatabaseReference db = FirebaseDatabase.getInstance().getReference("lydokhoatk/" + prod.getIdChu());
+                            db.child(key).setValue(lydo).addOnCompleteListener(task -> {
+                                if (!task.isSuccessful()) {
+                                    Toast.makeText(getContext(), "Lỗi khi xử lý Firebase!", Toast.LENGTH_SHORT).show();
+                                }
+                            });
 
-                                    // Tiến hành xóa sản phẩm trong Firebase
-                                    DatabaseReference dbSanPham = FirebaseDatabase.getInstance().getReference("products/" + idProd);
-                                    dbSanPham.removeValue().addOnCompleteListener(task2 -> {
-                                        if (task2.isSuccessful()) {
-                                            DatabaseReference dbStore = FirebaseDatabase.getInstance().getReference();
-                                            dbStore.child("ProdImages").child(idProd).removeValue(); // Xóa ảnh trong bảng "ProdImages"
+                            // Tiến hành xóa sản phẩm trong Firebase
+                            DatabaseReference dbSanPham = FirebaseDatabase.getInstance().getReference("products/" + idProd);
+                            dbSanPham.removeValue().addOnCompleteListener(task2 -> {
+                                if (task2.isSuccessful()) {
+                                    DatabaseReference dbStore = FirebaseDatabase.getInstance().getReference();
+                                    dbStore.child("ProdImages").child(idProd).removeValue(); // Xóa ảnh trong bảng "ProdImages"
 
-                                            // Xóa khiếu nại liên quan đến sản phẩm
-                                            dbKhieuNai_LyDo.removeValue();
+                                    // Xóa khiếu nại liên quan đến sản phẩm
+                                    dbKhieuNai_LyDo.removeValue();
 
-                                            // Quay lại màn hình trước và thông báo xóa thành công
-                                            getActivity().getSupportFragmentManager().popBackStack();
-                                            Snackbar.make(getView(), "Xóa sản phẩm thành công", Snackbar.LENGTH_SHORT).show();
-                                        } else {
-                                            Toast.makeText(getActivity(), "Xóa sản phẩm thất bại", Toast.LENGTH_SHORT).show();
-                                        }
-                                    });
-                                })
-                                .setNegativeButton("Hủy", null)
-                                .show();
+                                    // Quay lại màn hình trước và thông báo xóa thành công
+//                                    getActivity().getSupportFragmentManager().popBackStack();
+//                                    Snackbar.make(getView(), "Xóa sản phẩm thành công", Snackbar.LENGTH_SHORT).show();
+                                } else {
+                                    Toast.makeText(getActivity(), "Xóa sản phẩm thất bại", Toast.LENGTH_SHORT).show();
+                                }
+                            });
+                        }).setNegativeButton("Hủy", null).show();
                     });
 
                     // Kiểm tra xem khiếu nại của sp đã đc xem xét hay chưa
                     Boolean daxem = dataSnapshot.child("daxem").getValue(Boolean.class);
-                    String status = daxem ? "Đóng" : "Tiếp Nhận";
-                    builder.setNegativeButton(status, (dialog, which) -> {
-                        if (!daxem) {
+                    if (!daxem) {
+                        builder.setNeutralButton("Tiếp Nhận", (dialog, which) -> {
                             dbKhieuNai_LyDo.child("daxem").setValue(true);
                             Snackbar.make(binding.getRoot(), "Admin Đã Xem Và Ghi Nhận Khiếu Nại", Snackbar.LENGTH_SHORT).show();
-                        }
-                    });
-                    builder.show();
+                        });
+                    }
+
+                    builder.setNegativeButton("Đóng", null).show();
+
                 } else {
                     binding.btnDatHangNgay.setText("Không Có Khiếu Nại");
                     Snackbar.make(binding.getRoot(), "Sản Phẩm Hiện Không có khiếu nại nào.", Snackbar.LENGTH_SHORT).show();
@@ -677,46 +525,226 @@ public class ProdDetailCustomerFragment extends Fragment {
     private void KH_ShowDialogKhieuNai() {
         // Tạo EditText để nhập lý do
         EditText input = new EditText(getContext());
-        input.setHint("Nhập lý do khiếu nại");
+        input.setHint("Sản Phẩm Có Dấu Hiệu Vi Phạm");
         input.setPadding(20, 20, 20, 20);
 
         AlertDialog.Builder builder = new AlertDialog.Builder(getContext());
-        builder.setTitle("Khiếu Nại").setView(input).setPositiveButton("Gửi", new DialogInterface.OnClickListener() {
+        builder.setTitle("Khiếu Nại").setMessage("Nhập Lý Do Khiếu Nại").setView(input).setPositiveButton("Gửi", new DialogInterface.OnClickListener() {
             @Override
             public void onClick(DialogInterface dialog, int which) {
-                String reason = input.getText().toString().trim();
-                if (!reason.isEmpty()) {
-                    String lydo = input.getText().toString().trim();
+                DatabaseReference dbRef = FirebaseDatabase.getInstance().getReference("khieunai/" + idProd);
+                dbRef.addListenerForSingleValueEvent(new ValueEventListener() {
+                    @Override
+                    public void onDataChange(DataSnapshot dataSnapshot) {
+                        String lydo = "Sản Phẩm Có Dấu Hiệu Vi Phạm";
+                        lydo = input.getText().toString().trim();
 
-                    DatabaseReference dbRef = FirebaseDatabase.getInstance().getReference("khieunai/" + idProd);
-                    dbRef.addListenerForSingleValueEvent(new ValueEventListener() {
-                        @Override
-                        public void onDataChange(DataSnapshot dataSnapshot) {
-                            if (dataSnapshot.exists()) {
-                                int solan = dataSnapshot.child("solan").getValue(Integer.class);
-                                dbRef.child("solan").setValue(solan + 1);
-                            } else {
-                                String date = new SimpleDateFormat("dd-MM-yyyy", Locale.getDefault()).format(new Date());
-                                dbRef.child("idchu").setValue(prod.getIdChu());
-                                dbRef.child("idsp").setValue(prod.getId());
-                                dbRef.child("lydo/" + idKhach).setValue(date + ": " + lydo);
-                                dbRef.child("solan").setValue(1);
-                                dbRef.child("daxem").setValue(false);
-                            }
-
-                            Snackbar.make(binding.getRoot(), "Đã gửi khiếu nại: " + reason, Snackbar.LENGTH_SHORT).show();
+                        if (dataSnapshot.child("lydo/" + idKhach).exists()) {
+                            int solan = dataSnapshot.child("solan").getValue(Integer.class);
+                            dbRef.child("solan").setValue(solan + 1);
+                        } else {
+                            String date = new SimpleDateFormat("dd-MM-yyyy", Locale.getDefault()).format(new Date());
+                            dbRef.child("idchu").setValue(prod.getIdChu());
+                            dbRef.child("idsp").setValue(prod.getId());
+                            dbRef.child("lydo/" + idKhach).setValue(date + ": " + lydo);
+                            dbRef.child("solan").setValue(1);
+                            dbRef.child("daxem").setValue(false);
                         }
 
-                        @Override
-                        public void onCancelled(DatabaseError databaseError) {
-                            Log.e("FirebaseComplaint", "Lỗi khi đọc dữ liệu: " + databaseError.getMessage());
-                        }
-                    });
-                } else {
-                    Toast.makeText(getContext(), "Vui lòng nhập lý do khiếu nại!", Toast.LENGTH_SHORT).show();
-                }
+                        Snackbar.make(binding.getRoot(), "Đã gửi khiếu nại: " + lydo, Snackbar.LENGTH_SHORT).show();
+                    }
+
+                    @Override
+                    public void onCancelled(DatabaseError databaseError) {
+                        Log.e("FirebaseComplaint", "Lỗi khi đọc dữ liệu: " + databaseError.getMessage());
+                    }
+                });
             }
         }).setNegativeButton("Hủy", null).create().show();
+    }
+
+    private void ShowWar() {
+        androidx.appcompat.app.AlertDialog.Builder builder = new androidx.appcompat.app.AlertDialog.Builder(getActivity());
+        builder.setTitle("Thông Báo!").setMessage("Sản Phẩm Bạn Chọn Đã Bị Xóa!");
+
+        builder.setPositiveButton(android.R.string.yes, new DialogInterface.OnClickListener() {
+            @Override
+            public void onClick(DialogInterface dialog, int which) {
+                dialog.cancel();
+            }
+        });
+
+        Drawable drawableIcon = getResources().getDrawable(android.R.drawable.ic_delete);
+        drawableIcon.setTint(Color.RED);
+        builder.setIcon(drawableIcon);
+        Drawable drawableBg = getResources().getDrawable(R.drawable.bg_item_lg);
+        drawableBg.setTint(Color.rgb(100, 220, 255));
+        androidx.appcompat.app.AlertDialog alertDialog = builder.create();
+        alertDialog.getWindow().setBackgroundDrawable(drawableBg);
+        alertDialog.show();
+    }
+
+    private void HienThiThongTinCuaHang() {
+        String idChu = prod.getIdChu();
+        referDetailProd = FirebaseDatabase.getInstance().getReference();
+        referDetailProd.child("thongtinchu").child(idChu).addValueEventListener(new ValueEventListener() {
+            @Override
+            public void onDataChange(DataSnapshot snapshot) {
+                try {
+                    if (snapshot.exists()) {
+                        String tenChu = snapshot.child("ten").getValue(String.class);
+                        String diaChi = snapshot.child("diaChi").getValue(String.class);
+                        String email = snapshot.child("email").getValue(String.class);
+                        String sdt = snapshot.child("sdt").getValue(String.class);
+
+                        Dialog dialog = new Dialog(getContext(), android.R.style.Theme_DeviceDefault_Light_NoActionBar_Fullscreen);
+                        dialog.requestWindowFeature(Window.FEATURE_NO_TITLE);
+
+                        ScrollView scrollView = new ScrollView(getContext());
+                        LinearLayout layout = new LinearLayout(getContext());
+                        layout.setOrientation(LinearLayout.VERTICAL);
+                        layout.setPadding(20, 20, 20, 20);
+
+                        Button btnClose = new Button(getContext());
+                        btnClose.setText("Đóng");
+                        btnClose.setTextSize(16);
+                        btnClose.setOnClickListener(new View.OnClickListener() {
+                            @Override
+                            public void onClick(View v) {
+                                dialog.dismiss();
+                            }
+                        });
+                        layout.addView(btnClose);
+
+                        // Tạo các TextView và cho phép chọn để copy với kiểu chữ đậm
+                        TextView tvTenChu = new TextView(getContext());
+                        tvTenChu.setText("Tên: " + tenChu);
+                        tvTenChu.setTextSize(16);
+                        tvTenChu.setPadding(0, 10, 0, 10);
+                        tvTenChu.setTextIsSelectable(true);
+                        tvTenChu.setTypeface(null, Typeface.BOLD);  // Đặt kiểu chữ đậm
+                        layout.addView(tvTenChu);
+
+                        TextView tvDiaChi = new TextView(getContext());
+                        tvDiaChi.setText("Địa chỉ: " + diaChi);
+                        tvDiaChi.setTextSize(16);
+                        tvDiaChi.setPadding(0, 10, 0, 10);
+                        tvDiaChi.setTextIsSelectable(true);
+                        tvDiaChi.setTypeface(null, Typeface.BOLD);  // Đặt kiểu chữ đậm
+                        layout.addView(tvDiaChi);
+
+                        TextView tvEmail = new TextView(getContext());
+                        tvEmail.setText("Email: " + email);
+                        tvEmail.setTextSize(16);
+                        tvEmail.setPadding(0, 10, 0, 10);
+                        tvEmail.setTextIsSelectable(true);
+                        tvEmail.setTypeface(null, Typeface.BOLD);  // Đặt kiểu chữ đậm
+                        layout.addView(tvEmail);
+
+                        TextView tvSdt = new TextView(getContext());
+                        tvSdt.setText("Số điện thoại: " + sdt);
+                        tvSdt.setTextSize(16);
+                        tvSdt.setPadding(0, 10, 0, 10);
+                        tvSdt.setTextIsSelectable(true);
+                        tvSdt.setTypeface(null, Typeface.BOLD);  // Đặt kiểu chữ đậm
+                        layout.addView(tvSdt);
+
+                        referDetailProd.child("thongtinchusdc").child(idChu).addValueEventListener(new ValueEventListener() {
+                            @Override
+                            public void onDataChange(DataSnapshot dataSnapshot) {
+                                try {
+                                    if (dataSnapshot.exists()) {
+                                        TextView tvCuaHang = new TextView(getContext());
+                                        tvCuaHang.setText("Danh sách cửa hàng:");
+                                        tvCuaHang.setTextSize(18);
+                                        tvCuaHang.setTypeface(null, Typeface.BOLD);
+                                        tvCuaHang.setPadding(0, 15, 0, 10);
+                                        tvCuaHang.setTextIsSelectable(true);
+                                        layout.addView(tvCuaHang);
+
+                                        for (DataSnapshot cuaHangSnapshot : dataSnapshot.child("cuahang").getChildren()) {
+                                            String diaChiCuaHang = cuaHangSnapshot.getValue(String.class);
+                                            TextView tvCuaHangItem = new TextView(getContext());
+                                            tvCuaHangItem.setText("- " + diaChiCuaHang);
+                                            tvCuaHangItem.setTextSize(16);
+                                            tvCuaHangItem.setPadding(0, 5, 0, 5);
+                                            tvCuaHangItem.setTextIsSelectable(true);
+                                            layout.addView(tvCuaHangItem);
+                                        }
+
+                                        TextView tvKho = new TextView(getContext());
+                                        tvKho.setText("Danh sách kho:");
+                                        tvKho.setTypeface(null, Typeface.BOLD);
+                                        tvKho.setTextSize(18);
+                                        tvKho.setPadding(0, 15, 0, 10);
+                                        tvKho.setTextIsSelectable(true);
+                                        layout.addView(tvKho);
+
+                                        for (DataSnapshot khoSnapshot : dataSnapshot.child("kho").getChildren()) {
+                                            String diaChiKho = khoSnapshot.getValue(String.class);
+                                            TextView tvKhoItem = new TextView(getContext());
+                                            tvKhoItem.setText("- " + diaChiKho);
+                                            tvKhoItem.setTextSize(16);
+                                            tvKhoItem.setPadding(0, 5, 0, 5);
+                                            tvKhoItem.setTextIsSelectable(true);
+                                            layout.addView(tvKhoItem);
+                                        }
+                                    }
+                                } catch (Exception e) {
+                                }
+                            }
+
+                            @Override
+                            public void onCancelled(DatabaseError databaseError) {
+                            }
+                        });
+
+                        referDetailProd.child("thongtinchustk").child(idChu).addValueEventListener(new ValueEventListener() {
+                            @Override
+                            public void onDataChange(DataSnapshot dataSnapshot) {
+                                try {
+                                    if (dataSnapshot.exists()) {
+                                        TextView tvTaiKhoan = new TextView(getContext());
+                                        tvTaiKhoan.setText("Danh sách tài khoản:");
+                                        tvTaiKhoan.setTextSize(18);
+                                        tvTaiKhoan.setTypeface(null, Typeface.BOLD);
+                                        tvTaiKhoan.setPadding(0, 15, 0, 10);
+                                        tvTaiKhoan.setTextIsSelectable(true);
+                                        layout.addView(tvTaiKhoan);
+
+                                        for (DataSnapshot taiKhoanSnapshot : dataSnapshot.getChildren()) {
+                                            String thongTinTaiKhoan = taiKhoanSnapshot.getValue(String.class);
+                                            if (thongTinTaiKhoan != null) {
+                                                TextView tvTaiKhoanItem = new TextView(getContext());
+                                                tvTaiKhoanItem.setText("- " + thongTinTaiKhoan.toUpperCase());
+                                                tvTaiKhoanItem.setTextSize(16);
+                                                tvTaiKhoanItem.setPadding(0, 5, 0, 5);
+                                                tvTaiKhoanItem.setTextIsSelectable(true);
+                                                layout.addView(tvTaiKhoanItem);
+                                            }
+                                        }
+                                    }
+                                } catch (Exception e) {
+                                }
+                            }
+
+                            @Override
+                            public void onCancelled(DatabaseError databaseError) {
+                            }
+                        });
+
+                        scrollView.addView(layout);
+                        dialog.setContentView(scrollView);
+                        dialog.show();
+                    }
+                } catch (Exception e) {
+                }
+            }
+
+            @Override
+            public void onCancelled(DatabaseError error) {
+            }
+        });
     }
 
     @Override

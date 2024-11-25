@@ -175,7 +175,12 @@ public class DanhSachDonHangFragment extends Fragment {
             public void onItemClick(int position) {
                 DonHang donHang = data.get(position);
                 if (donHang.getPhiTraGop() > 0) {
-
+                    if (LoginActivity.typeUser == 0)
+                        ((Owner_HomeActivity) getActivity()).ReplaceFragment(new ChiTietDonTraGopFragment(donHang.getId(), 0));
+                    if (LoginActivity.typeUser == 1)
+                        ((Customer_HomeActivity) getActivity()).ReplaceFragment(new ChiTietDonTraGopFragment(donHang.getId(), 1));
+                    if (LoginActivity.typeUser == 2)
+                        ((Warehouse_HomeActivity) getActivity()).ReplaceFragment(new ChiTietDonFragment(donHang.getId()));
                 } else {
                     if (LoginActivity.typeUser == 0)
                         ((Owner_HomeActivity) getActivity()).ReplaceFragment(new ChiTietDonFragment(donHang.getId()));

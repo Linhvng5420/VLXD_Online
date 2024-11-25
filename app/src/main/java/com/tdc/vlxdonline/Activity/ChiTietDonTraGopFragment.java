@@ -22,6 +22,7 @@ import com.tdc.vlxdonline.Adapter.ChiTietDonHangAdapter;
 import com.tdc.vlxdonline.Model.ChiTietDon;
 import com.tdc.vlxdonline.Model.DonHang;
 import com.tdc.vlxdonline.Model.KhachHang;
+import com.tdc.vlxdonline.Model.Products;
 import com.tdc.vlxdonline.Model.ThongTinChu;
 import com.tdc.vlxdonline.Model.TraGop;
 import com.tdc.vlxdonline.R;
@@ -40,7 +41,7 @@ public class ChiTietDonTraGopFragment extends Fragment {
     DonHang donHang;
     DatabaseReference reference;
     // Kieu hien thi, chu hay khach hang | 0 chu, 1 khach
-    int type = 0;
+    int type;
     ValueEventListener eventDon, eventTraGop;
 
     public ChiTietDonTraGopFragment(long idDon, int type) {
@@ -68,7 +69,16 @@ public class ChiTietDonTraGopFragment extends Fragment {
     @Override
     public void onViewCreated(@NonNull View view, @Nullable Bundle savedInstanceState) {
         super.onViewCreated(view, savedInstanceState);
-
+        binding.btnTraGop.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                if (type == 0) {
+                    XacNhanDaNhanTraGop();
+                } else {
+                    ChuyenTrangThaiGiaoHang(donHang.getTrangThai());
+                }
+            }
+        });
     }
 
     private void readDataFireBase() {
@@ -101,10 +111,13 @@ public class ChiTietDonTraGopFragment extends Fragment {
                 @Override
                 public void onDataChange(@NonNull DataSnapshot dataSnapshot) {
                     dataGop.clear();
+                    int tempNo = 0;
                     for (DataSnapshot snapshot : dataSnapshot.getChildren()) {
                         TraGop temp = snapshot.getValue(TraGop.class);
                         dataGop.add(temp);
+                        if (!temp.isDaTra()) tempNo = tempNo + temp.getSoTien();
                     }
+                    binding.tvTongNo.setText(getChuoiTong(tempNo) + " VND");
                     adapterTraGop.notifyDataSetChanged();
                 }
 
@@ -132,7 +145,7 @@ public class ChiTietDonTraGopFragment extends Fragment {
                             binding.tvDiaChiNhan.setText(donHang.getDiaChi());
                             binding.tvNgayTao.setText("Ngày Tạo: " + donHang.getNgayTao());
                             binding.btnTraGop.setEnabled(false);
-                            binding.tvTongTien.setText(getChuoiTong(donHang.getTongTien()));
+                            binding.tvTongTien.setText(getChuoiTong(donHang.getTongTien()) + " VND");
                             // Check và hiển thị các nút dựa theo người dùng
                             int trangThaiVc = donHang.getTrangThai();
                             int trangThaiTt = donHang.getTrangThaiTT();
@@ -160,7 +173,6 @@ public class ChiTietDonTraGopFragment extends Fragment {
                                 } else if (trangThaiVc == 5) {
                                     binding.btnTraGop.setText("Chờ Lấy Hàng");
                                 }
-
                             }
                         } else {
                             Toast.makeText(getActivity(), "Đơn Hàng Đã Bị Xóa!", Toast.LENGTH_SHORT).show();
@@ -178,7 +190,7 @@ public class ChiTietDonTraGopFragment extends Fragment {
         }
     }
 
-    private void docThongTinUser(String id){
+    private void docThongTinUser(String id) {
         String bang = "customers";
         if (type == 1) {
             bang = "thongtinchu";
@@ -224,14 +236,53 @@ public class ChiTietDonTraGopFragment extends Fragment {
         adapterChiTiet.setOnChiTietDonClick(new ChiTietDonHangAdapter.OnChiTietDonClick() {
             @Override
             public void onItemClick(int position) {
-                ((Customer_HomeActivity) getActivity()).ReplaceFragment(new ProdDetailCustomerFragment(dataChiTiet.get(position).getIdSanPham()));
+                if (type == 1) ((Customer_HomeActivity) getActivity()).ReplaceFragment(new ProdDetailCustomerFragment(dataChiTiet.get(position).getIdSanPham()));
             }
         });
         binding.rcChiTietDon.setLayoutManager(new LinearLayoutManager(getActivity(), LinearLayoutManager.VERTICAL, false));
         binding.rcChiTietDon.setAdapter(adapterChiTiet);
         // Dot Tra Gop
-        adapterTraGop = new AdapterTraGop(getActivity(), R.layout.item_tra_gop, dataGop);
-        binding.lvTraGop.setAdapter(adapterTraGop);
+        adapterTraGop = new AdapterTraGop(getActivity(), dataGop);
+        binding.rcTraGop.setLayoutManager(new LinearLayoutManager(getActivity(), LinearLayoutManager.VERTICAL, false));
+        binding.rcTraGop.setAdapter(adapterTraGop);
+    }
+
+    private void ChuyenTrangThaiGiaoHang(int trangThaiHienTai) {
+        int update = trangThaiHienTai + 1;
+        if (update == 4) {
+            for (int i = 0; i < dataChiTiet.size(); i++) {
+                ChiTietDon tempCTD = dataChiTiet.get(i);
+                DatabaseReference referChange = FirebaseDatabase.getInstance().getReference("products").child(tempCTD.getIdSanPham());
+                referChange.addListenerForSingleValueEvent(new ValueEventListener() {
+                    @Override
+                    public void onDataChange(@NonNull DataSnapshot snapshot) {
+                        Products tempP = snapshot.getValue(Products.class);
+                        if (tempP != null) {
+                            int tempBan = Integer.parseInt(tempP.getDaBan()) + tempCTD.getSoLuong();
+                            referChange.child("daBan").setValue(tempBan + "");
+                        }
+                    }
+
+                    @Override
+                    public void onCancelled(@NonNull DatabaseError error) {
+
+                    }
+                });
+            }
+        }
+        reference.child("bills").child(idDon + "").child("trangThai").setValue(update);
+    }
+
+    private void XacNhanDaNhanTraGop() {
+        for (int i = 0; i < dataGop.size(); i++) {
+            TraGop temp = dataGop.get(i);
+            if (!temp.isDaTra()) {
+                reference.child("tragop").child(idDon + "").child(temp.getThuTu() + "").child("daTra").setValue(true);
+                if (temp.getThuTu() == 4)
+                    reference.child("bills").child(idDon + "").child("trangThaiTT").setValue(2);
+                break;
+            }
+        }
     }
 
     @Override

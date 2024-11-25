@@ -91,7 +91,7 @@ public class DatHangNgayFragment extends Fragment {
                 thanhToan = position;
                 if (position == 0) {
                     binding.tWarn.setVisibility(View.GONE);
-                }else {
+                } else {
                     binding.tWarn.setVisibility(View.VISIBLE);
                 }
             }
@@ -180,7 +180,7 @@ public class DatHangNgayFragment extends Fragment {
                 if (!binding.edtSlDat.getText().toString().isEmpty()) {
                     soLuong = Integer.parseInt(binding.edtSlDat.getText().toString());
                     changeSoLuong();
-                }else{
+                } else {
                     binding.edtSlDat.setText("1");
                 }
             }
@@ -195,14 +195,14 @@ public class DatHangNgayFragment extends Fragment {
             public void onClick(View v) {
                 if (!donHang.getTenKhach().isEmpty() && !donHang.getSdt().isEmpty() && !donHang.getDiaChi().isEmpty()) {
                     addDataToFirebase();
-                }else{
+                } else {
                     Toast.makeText(getActivity(), "Hãy Nhập Đủ Thông Tin!", Toast.LENGTH_SHORT).show();
                 }
             }
         });
     }
 
-    private void changeSoLuong(){
+    private void changeSoLuong() {
         int kho = Integer.parseInt(prod.getTonKho());
         if (soLuong > kho) {
             Toast.makeText(getActivity(), "Số Lượng Bạn Nhập Lớn Hơn Tồn Kho!", Toast.LENGTH_SHORT).show();
@@ -234,6 +234,7 @@ public class DatHangNgayFragment extends Fragment {
 
     private void KhoiTao() {
         // Xu ly phuong thuc thanh toan
+        dataThanhT.clear();
         dataThanhT.add("Thanh Toán Trực Tiếp");
         dataThanhT.add("Trả Góp Một Tháng");
         dataThanhT.add("Trả Góp Hai Tháng");
@@ -263,7 +264,7 @@ public class DatHangNgayFragment extends Fragment {
                         binding.tvNameDatHangNgay.setText(product.getTen());
                         binding.tvGiaDatHangNgay.setText(chuyenChuoi(Integer.parseInt(product.getGiaBan())) + " đ");
                         binding.tvDesDatNgay.setText(product.getMoTa());
-                        if (product.getTonKho().equals("0")){
+                        if (product.getTonKho().equals("0")) {
                             Toast.makeText(getActivity(), "Sản Phẩm Này Đã Hết Hàng!", Toast.LENGTH_SHORT).show();
                             getActivity().getSupportFragmentManager().popBackStack();
                         }
@@ -283,7 +284,7 @@ public class DatHangNgayFragment extends Fragment {
         });
     }
 
-    private void addDataToFirebase(){
+    private void addDataToFirebase() {
         if (!prod.getTonKho().equals("0")) {
             AlertDialog.Builder builder = new AlertDialog.Builder(getActivity());
             builder.setTitle("Xác Nhận Đơn Hàng!").setMessage("Hãy Chắc Chắn Bạn Sẽ Xác Nhận Đặt Mua Hàng!");
@@ -291,24 +292,60 @@ public class DatHangNgayFragment extends Fragment {
             builder.setPositiveButton(android.R.string.yes, new DialogInterface.OnClickListener() {
                 @Override
                 public void onClick(DialogInterface dialog, int which) {
+                    boolean checkTraGop = false;
                     if (thanhToan == 1) {
-                        donHang.setPhiTraGop(donHang.getTongTien() * 2 / 100);
-                        donHang.setTongTien(donHang.getTongTien() + donHang.getPhiTraGop());
-                        LocalDate nowDate = LocalDate.now();
-                        DateTimeFormatter formatter = DateTimeFormatter.ofPattern("dd-MM-yyyy");
-                        for (int i = 0; i < 4; i++) {
-                            TraGop tempTG = new TraGop(donHang.getId(), nowDate.format(formatter), i+1, donHang.getTongTien()/4);
-                            referDatHangNgay.child("tragop").child(donHang.getId()+"").child((i+1)+"").setValue(tempTG);
-                        }
+                        checkTraGop = true;
+                        DaDuocDuyet(new DuyetCallback() {
+                            @Override
+                            public void onCallback(boolean isDuyet) {
+                                if (isDuyet) {
+                                    // Được duyệt
+                                    donHang.setTrangThaiTT(1);
+                                    donHang.setPhiTraGop(donHang.getTongTien() * 2 / 100);
+                                    donHang.setTongTien(donHang.getTongTien() + donHang.getPhiTraGop());
+                                    LocalDate nowDate = LocalDate.now();
+                                    DateTimeFormatter formatter = DateTimeFormatter.ofPattern("dd-MM-yyyy");
+                                    for (int i = 0; i < 4; i++) {
+                                        nowDate = nowDate.plusDays(7);
+                                        TraGop tempTG = new TraGop(donHang.getId(), nowDate.format(formatter), (i + 1), donHang.getTongTien() / 4);
+                                        referDatHangNgay.child("tragop").child(donHang.getId() + "").child((i + 1) + "").setValue(tempTG);
+                                    }
+                                    AddToFireBase();
+                                } else {
+                                    // Không được duyệt
+                                    ShowWar();
+                                }
+                            }
+                        });
                     } else if (thanhToan == 2) {
-                        donHang.setPhiTraGop(donHang.getTongTien()*5/100);
-                        donHang.setTongTien(donHang.getTongTien()+ donHang.getPhiTraGop());
+                        checkTraGop = true;
+                        DaDuocDuyet(new DuyetCallback() {
+                            @Override
+                            public void onCallback(boolean isDuyet) {
+                                if (isDuyet) {
+                                    // Được duyệt
+                                    donHang.setTrangThaiTT(1);
+                                    donHang.setPhiTraGop(donHang.getTongTien() * 5 / 100);
+                                    donHang.setTongTien(donHang.getTongTien() + donHang.getPhiTraGop());
+                                    LocalDate nowDate = LocalDate.now();
+                                    DateTimeFormatter formatter = DateTimeFormatter.ofPattern("dd-MM-yyyy");
+                                    for (int i = 0; i < 4; i++) {
+                                        nowDate = nowDate.plusDays(15);
+                                        TraGop tempTG = new TraGop(donHang.getId(), nowDate.format(formatter), (i + 1), donHang.getTongTien() / 4);
+                                        referDatHangNgay.child("tragop").child(donHang.getId() + "").child((i + 1) + "").setValue(tempTG);
+                                    }
+                                    AddToFireBase();
+                                } else {
+                                    // Không được duyệt
+                                    ShowWar();
+                                }
+                            }
+                        });
                     }
-                    referDatHangNgay.child("bills").child(donHang.getId()+"").setValue(donHang);
-                    referDatHangNgay.child("BillDetails").child(donHang.getId()+"").child(idProd).setValue(chiTietDon);
-                    referDatHangNgay.child("products").child(idProd).child("tonKho").setValue((Integer.parseInt(prod.getTonKho()) - soLuong) + "");
-                    Toast.makeText(getActivity(), "Hoàn Tất Đặt Hàng, Kiểm Tra Đơn Tại 'Đơn Hàng'", Toast.LENGTH_LONG).show();
-                    getActivity().getSupportFragmentManager().popBackStack();
+                    if (!checkTraGop) {
+                        AddToFireBase();
+                    }
+
                 }
             });
             builder.setNegativeButton(R.string.quay_lai, new DialogInterface.OnClickListener() {
@@ -326,9 +363,58 @@ public class DatHangNgayFragment extends Fragment {
             AlertDialog alertDialog = builder.create();
             alertDialog.getWindow().setBackgroundDrawable(drawableBg);
             alertDialog.show();
-        }else{
+        } else {
             Toast.makeText(getActivity(), "Hiện Tại Sản Phẩm Này Đã Bán Hết!", Toast.LENGTH_SHORT).show();
         }
+    }
+
+    private void AddToFireBase(){
+        referDatHangNgay.child("bills").child(donHang.getId() + "").setValue(donHang);
+        referDatHangNgay.child("BillDetails").child(donHang.getId() + "").child(idProd).setValue(chiTietDon);
+        referDatHangNgay.child("products").child(idProd).child("tonKho").setValue((Integer.parseInt(prod.getTonKho()) - soLuong) + "");
+        Toast.makeText(getActivity(), "Hoàn Tất Đặt Hàng, Kiểm Tra Đơn Tại 'Đơn Hàng'", Toast.LENGTH_LONG).show();
+        getActivity().getSupportFragmentManager().popBackStack();
+    }
+
+    private void DaDuocDuyet(DuyetCallback callback) {
+        referDatHangNgay.child("duyetkhachhang").child(prod.getIdChu()).child(Customer_HomeActivity.info.getID()).child("trangthai").addListenerForSingleValueEvent(new ValueEventListener() {
+            @Override
+            public void onDataChange(@NonNull DataSnapshot snapshot) {
+                String tempCheck = snapshot.getValue(String.class);
+                boolean isDuyet = tempCheck != null && tempCheck.equals("1");
+                callback.onCallback(isDuyet);
+            }
+
+            @Override
+            public void onCancelled(@NonNull DatabaseError error) {
+                callback.onCallback(false); // Hoặc xử lý lỗi theo cách của bạn
+            }
+        });
+    }
+
+    public interface DuyetCallback {
+        void onCallback(boolean isDuyet);
+    }
+
+    private void ShowWar() {
+        AlertDialog.Builder builder = new AlertDialog.Builder(getActivity());
+        builder.setTitle("Thông Báo!").setMessage("Bạn Chưa Được Cửa Hàng Cho Phép Trả Góp!");
+
+        builder.setPositiveButton(android.R.string.yes, new DialogInterface.OnClickListener() {
+            @Override
+            public void onClick(DialogInterface dialog, int which) {
+                dialog.cancel();
+            }
+        });
+
+        Drawable drawableIcon = getResources().getDrawable(android.R.drawable.ic_dialog_alert);
+        drawableIcon.setTint(Color.RED);
+        builder.setIcon(drawableIcon);
+        Drawable drawableBg = getResources().getDrawable(R.drawable.bg_item_lg);
+        drawableBg.setTint(Color.rgb(100, 220, 255));
+        AlertDialog alertDialog = builder.create();
+        alertDialog.getWindow().setBackgroundDrawable(drawableBg);
+        alertDialog.show();
     }
 
     @Override

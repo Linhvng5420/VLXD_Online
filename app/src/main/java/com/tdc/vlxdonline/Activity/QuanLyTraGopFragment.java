@@ -28,7 +28,13 @@ public class QuanLyTraGopFragment extends Fragment {
     DonHangAdapter adapter;
     DatabaseReference reference;
     ValueEventListener event;
-    String idKhach = Customer_HomeActivity.info.getID();
+    String idKhach;
+    String idChu;
+
+    public QuanLyTraGopFragment(String idKhach, String idChu) {
+        this.idKhach = idKhach;
+        this.idChu = idChu;
+    }
 
     @Override
     public void onCreate(Bundle savedInstanceState) {
@@ -55,6 +61,7 @@ public class QuanLyTraGopFragment extends Fragment {
                         data.clear();
                         for (DataSnapshot snapshot : dataSnapshot.getChildren()) {
                             DonHang temp = snapshot.getValue(DonHang.class);
+                            if (idChu != null && !idChu.equals(temp.getIdChu())) continue;
                             if (temp.getIdKhach().equals(idKhach) && temp.getTrangThaiTT() == 1) {
                                 data.add(temp);
                             }
@@ -77,7 +84,8 @@ public class QuanLyTraGopFragment extends Fragment {
         adapter.setOnItemDonHangClick(new DonHangAdapter.OnItemDonHangClick() {
             @Override
             public void onItemClick(int position) {
-                ((Customer_HomeActivity) getActivity()).ReplaceFragment(new ChiTietDonTraGopFragment(data.get(position).getId(), 1));
+                if (idChu != null) ((Owner_HomeActivity) getActivity()).ReplaceFragment(new ChiTietDonTraGopFragment(data.get(position).getId(), 0));
+                else ((Customer_HomeActivity) getActivity()).ReplaceFragment(new ChiTietDonTraGopFragment(data.get(position).getId(), 1));
             }
         });
         binding.rcDonTraGop.setLayoutManager(new LinearLayoutManager(getActivity(), LinearLayoutManager.VERTICAL, false));

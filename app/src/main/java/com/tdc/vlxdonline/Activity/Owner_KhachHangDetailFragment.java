@@ -198,7 +198,7 @@ public class Owner_KhachHangDetailFragment extends Fragment {
 
     }
 
-    // ẢNH: HÀM ĐỂ HIỂN THỊ ẢNH CC
+    // ẢNH: HÀM ĐỂ HIỂN THỊ ẢNH
     private void hienthiAnhCCCD() {
         // Lấy dữ liệu của nhân viên từ Firebase
         DatabaseReference db = FirebaseDatabase.getInstance().getReference("customers");
@@ -214,18 +214,21 @@ public class Owner_KhachHangDetailFragment extends Fragment {
 
                     // Hiển thị hình ảnh
                     if (!anhAvata.equals("N/A")) {
+                        binding.ivAvata.setImageDrawable(getResources().getDrawable(R.drawable.baseline_downloading_24));
                         Glide.with(getContext()).load(anhAvata) // Tải ảnh từ URL
                                 .into(binding.ivAvata); // imageViewCC là ID của ImageView trong layout
                     } else
                         binding.ivAvata.setImageDrawable(getResources().getDrawable(android.R.drawable.ic_menu_report_image));
 
                     if (!anhCC1.equals("N/A")) {
+                        binding.ivCCCD1.setImageDrawable(getResources().getDrawable(R.drawable.baseline_downloading_24));
                         Glide.with(getContext()).load(anhCC1) // Tải ảnh từ URL
                                 .into(binding.ivCCCD1); // imageViewCC là ID của ImageView trong layout
                     } else
                         binding.ivCCCD1.setImageDrawable(getResources().getDrawable(android.R.drawable.ic_menu_report_image));
 
                     if (!anhCC2.equals("N/A")) {
+                        binding.ivCCCD2.setImageDrawable(getResources().getDrawable(R.drawable.baseline_downloading_24));
                         Glide.with(getContext()).load(anhCC2) // Tải ảnh từ URL
                                 .into(binding.ivCCCD2); // imageViewCC2 là ID của ImageView trong layout
                     } else
@@ -485,47 +488,6 @@ public class Owner_KhachHangDetailFragment extends Fragment {
             binding.btnEdit.setVisibility(View.GONE);
         }
     }
-
-/*
-    // ẢNH: HÀM ĐỂ HIỂN THỊ ẢNH CC
-    private void hienThiAnhCCCD() {
-        // Lấy dữ liệu của nhân viên từ Firebase
-        DatabaseReference dbNhanVien = FirebaseDatabase.getInstance().getReference("nhanvien");
-        dbNhanVien.child(idKH).addListenerForSingleValueEvent(new ValueEventListener() {
-            @Override
-            public void onDataChange(@NonNull DataSnapshot dataSnapshot) {
-                // Kiểm tra nếu có dữ liệu
-                if (dataSnapshot.exists()) {
-                    // Lấy dữ liệu của nhân viên
-                    // Nếu trong csdl mất trường fiel thì sẽ gây crash app, phải fix lỗi này
-                    String anhCC1 = dataSnapshot.child("anhcc1").getValue(String.class);
-                    anhCC1 = anhCC1 == null ? "" : anhCC1;
-                    String anhCC2 = dataSnapshot.child("anhcc2").getValue(String.class);
-                    anhCC2 = anhCC2 == null ? "" : anhCC2;
-
-                    // Hiển thị hình ảnh
-                    if (!anhCC1.equals("N/A") && !anhCC1.equals("")) {
-                        Glide.with(getContext()).load(anhCC1) // Tải ảnh từ URL
-                                .into(binding.ivCCCD1); // imageViewCC là ID của ImageView trong layout
-                    } else
-                        binding.ivCCCD1.setImageDrawable(getResources().getDrawable(android.R.drawable.ic_menu_report_image));
-
-                    if (!anhCC2.equals("N/A") && !anhCC2.equals("")) {
-                        Glide.with(getContext()).load(anhCC2) // Tải ảnh từ URL
-                                .into(binding.ivCCCD2); // imageViewCC2 là ID của ImageView trong layout
-                    } else
-                        binding.ivCCCD2.setImageDrawable(getResources().getDrawable(android.R.drawable.ic_menu_report_image));
-                }
-            }
-
-            @Override
-            public void onCancelled(@NonNull DatabaseError databaseError) {
-                // Xử lý lỗi nếu có
-                Log.e("Owner_NhanVienDetail", "Database error: " + databaseError.getMessage());
-            }
-        });
-    }
-*/
 
     private void checkPermissions() {
         // Kiểm tra xem ứng dụng có quyền truy cập vào bộ nhớ ngoài hay không

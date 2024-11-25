@@ -39,8 +39,6 @@ public class GiaoDienKho_Fragment extends Fragment {
     ProductAdapter adapter; // Adapter cho danh sách sản phẩm
     ArrayList<ChiTietNhap> dsChiTiet = new ArrayList<>(); // Danh sách chi tiết nhập
     Products products = new Products(); // Thông tin sản phẩm hiện tại
-    RecyclerView recyclerView; // RecyclerView cho sản phẩm
-    ArrayList<Products> list = new ArrayList<>(); // Danh sách tất cả sản phẩm
     DatabaseReference reference; // Tham chiếu đến Firebase
     ValueEventListener listener; // Listener cho Firebase
     CategoryAdapter adapterCate; // Adapter cho danh mục
@@ -106,7 +104,7 @@ public class GiaoDienKho_Fragment extends Fragment {
                         Products product = snapshot.getValue(Products.class);
                         product.setId(snapshot.getKey());
                         // Kiem tra id chu
-                        if (!product.getIdChu().equals(emailChu.substring(0, emailChu.indexOf("@")))) continue;
+                        if (!product.getIdChu().equals(emailChu)) continue;
                         // Kiểm tra danh mục và từ khóa tìm kiếm
                         if (!category.isEmpty() && !category.equals(product.getDanhMuc())) continue;
                         if (!tuKhoa.isEmpty() && !product.getTen().contains(tuKhoa) && !product.getMoTa().contains(tuKhoa))
