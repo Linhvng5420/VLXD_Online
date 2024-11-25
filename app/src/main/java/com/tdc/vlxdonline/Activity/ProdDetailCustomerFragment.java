@@ -5,6 +5,7 @@ import android.app.Dialog;
 import android.content.DialogInterface;
 import android.graphics.Color;
 import android.graphics.Typeface;
+import android.graphics.drawable.Drawable;
 import android.os.Bundle;
 import android.text.Editable;
 import android.text.TextWatcher;
@@ -74,7 +75,6 @@ public class ProdDetailCustomerFragment extends Fragment {
             // Khách hàng đang đăng nhập
             idKhach = Customer_HomeActivity.info.getID();
     }
-
 
     @Override
     public void onCreate(Bundle savedInstanceState) {
@@ -479,7 +479,8 @@ public class ProdDetailCustomerFragment extends Fragment {
                             binding.tvMoTaDetail.setText(product.getMoTa());
                         } else {
                             // Hiển thị thông báo khi sản phẩm đã bị xóa
-                            Toast.makeText(getActivity(), "Sản Phẩm Đã Bị Xóa!", Toast.LENGTH_SHORT).show();
+                            ShowWar();
+                            getActivity().getSupportFragmentManager().popBackStack();
                         }
                     } catch (Exception e) {
                         // Bắt lỗi và hiển thị thông báo khi xảy ra vấn đề
@@ -717,6 +718,27 @@ public class ProdDetailCustomerFragment extends Fragment {
                 }
             }
         }).setNegativeButton("Hủy", null).create().show();
+    }
+
+    private void ShowWar() {
+        androidx.appcompat.app.AlertDialog.Builder builder = new androidx.appcompat.app.AlertDialog.Builder(getActivity());
+        builder.setTitle("Thông Báo!").setMessage("Sản Phẩm Bạn Chọn Đã Bị Xóa!");
+
+        builder.setPositiveButton(android.R.string.yes, new DialogInterface.OnClickListener() {
+            @Override
+            public void onClick(DialogInterface dialog, int which) {
+                dialog.cancel();
+            }
+        });
+
+        Drawable drawableIcon = getResources().getDrawable(android.R.drawable.ic_delete);
+        drawableIcon.setTint(Color.RED);
+        builder.setIcon(drawableIcon);
+        Drawable drawableBg = getResources().getDrawable(R.drawable.bg_item_lg);
+        drawableBg.setTint(Color.rgb(100, 220, 255));
+        androidx.appcompat.app.AlertDialog alertDialog = builder.create();
+        alertDialog.getWindow().setBackgroundDrawable(drawableBg);
+        alertDialog.show();
     }
 
     @Override

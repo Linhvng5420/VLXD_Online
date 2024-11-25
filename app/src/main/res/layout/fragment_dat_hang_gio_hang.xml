@@ -183,14 +183,6 @@
             android:text="Xác Nhận Đặt Hàng"
             android:textSize="21dp"
             android:textStyle="bold" />
-        <Button
-            android:id="@+id/btn_dat_hang_tra_gop"
-            android:layout_width="match_parent"
-            android:layout_height="50dp"
-            android:backgroundTint="#5000FF"
-            android:text="Đặt Hàng Trả Góp"
-            android:textSize="21dp"
-            android:textStyle="bold" />
     </LinearLayout>
 
 </FrameLayout>

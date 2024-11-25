@@ -44,6 +44,9 @@ public class ChiTietDonHangAdapter extends RecyclerView.Adapter<ChiTietDonHangAd
         holder.binding.tvSlDetailDon.setText(String.format("Số Lượng: %d", chiTiet.getSoLuong()));
         int tong = chiTiet.getSoLuong() * chiTiet.getGia();
         holder.binding.tvTongDetailDon.setText("Thành Tiền: " + getChuoiTong(tong) + " đ");
+
+        final int pos = position;
+        holder.position = pos;
     }
 
     @Override
