@@ -478,7 +478,7 @@ public class Admin_CuaHangDetailFragment extends Fragment {
                         countLock++;
                     } else countUnLock++;
                 }
-                binding.tvLichSuKhoa.setText("Lịch Sử Khóa (Lock " + countLock + " lần, UnLock " + countUnLock + " lần)");
+                binding.tvLichSuKhoa.setText("Lịch Sử Vi Phạm " + countLock + " lần, Tha " + countUnLock + " lần");
                 Log.d("LyDoKhoa", "Số lượng item: " + lyDoKhoaList.size() + lyDoKhoaList.toString());
 
                 // cập nhật listview
@@ -616,8 +616,6 @@ public class Admin_CuaHangDetailFragment extends Fragment {
                     public void onDataChange(@NonNull DataSnapshot snapshot) {
                         if (snapshot.exists()) {
                             soluongSP[0] = snapshot.getChildrenCount();
-                            Toast.makeText(getContext(), "Cửa hàng hiện có " + soluongSP[0] + " sản phẩm", Toast.LENGTH_SHORT).show();
-
                             // chuyển sang fragment danh sách sản phẩm
                             Bundle bundle = new Bundle();
                             bundle.putString("idCH", cuahangID);

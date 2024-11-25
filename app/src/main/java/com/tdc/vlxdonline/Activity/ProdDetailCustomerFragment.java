@@ -30,7 +30,6 @@ import androidx.recyclerview.widget.LinearLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
 
 import com.bumptech.glide.Glide;
-import com.google.android.material.snackbar.BaseTransientBottomBar;
 import com.google.android.material.snackbar.Snackbar;
 import com.google.firebase.database.DataSnapshot;
 import com.google.firebase.database.DatabaseError;
@@ -475,8 +474,6 @@ public class ProdDetailCustomerFragment extends Fragment {
                             db.child(key).setValue(lydo).addOnCompleteListener(task -> {
                                 if (!task.isSuccessful()) {
                                     Toast.makeText(getContext(), "Lỗi khi xử lý Firebase!", Toast.LENGTH_SHORT).show();
-                                } else {
-                                    Snackbar.make(getView(), "Đã lưu lý do!", Toast.LENGTH_SHORT).setAnimationMode(BaseTransientBottomBar.ANIMATION_MODE_FADE).show();
                                 }
                             });
 
@@ -491,8 +488,8 @@ public class ProdDetailCustomerFragment extends Fragment {
                                     dbKhieuNai_LyDo.removeValue();
 
                                     // Quay lại màn hình trước và thông báo xóa thành công
-                                    getActivity().getSupportFragmentManager().popBackStack();
-                                    Snackbar.make(getView(), "Xóa sản phẩm thành công", Snackbar.LENGTH_SHORT).show();
+//                                    getActivity().getSupportFragmentManager().popBackStack();
+//                                    Snackbar.make(getView(), "Xóa sản phẩm thành công", Snackbar.LENGTH_SHORT).show();
                                 } else {
                                     Toast.makeText(getActivity(), "Xóa sản phẩm thất bại", Toast.LENGTH_SHORT).show();
                                 }
