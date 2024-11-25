@@ -33,7 +33,7 @@ public class DaDanhGiaFragment extends Fragment {
     private int type;
     // id truy cập, id khách hoặc id sản phẩm
     String id;
-    DatabaseReference reference = FirebaseDatabase.getInstance().getReference();
+    DatabaseReference reference;
     // data danh gia
     ArrayList<DanhGia> data = new ArrayList<>();
     DanhGiaAdapter adapter;
@@ -52,6 +52,7 @@ public class DaDanhGiaFragment extends Fragment {
     public View onCreateView(LayoutInflater inflater, ViewGroup container,
                              Bundle savedInstanceState) {
         binding = FragmentDaDanhGiaBinding.inflate(inflater, container, false);
+        reference = FirebaseDatabase.getInstance().getReference();
         setAdapterDG();
         DocDataDanhSach();
         if (type == 1) binding.tvTitleDg.setText("DANH SÁCH ĐÁNH GIÁ");
@@ -86,8 +87,9 @@ public class DaDanhGiaFragment extends Fragment {
                         if (type == 0) {
                             idRead = tempDG.getIdSp();
                         }
+                        String finalRead = idRead;
                         DatabaseReference tempRefer = FirebaseDatabase.getInstance().getReference();
-                        tempRefer.child(fBang).child(idRead).addListenerForSingleValueEvent(new ValueEventListener() {
+                        tempRefer.child(fBang).child(finalRead).addListenerForSingleValueEvent(new ValueEventListener() {
                             @Override
                             public void onDataChange(@NonNull DataSnapshot snapshot) {
                                 if (type == 0) {
@@ -95,12 +97,17 @@ public class DaDanhGiaFragment extends Fragment {
                                     if (p != null) {
                                         tempDG.setAnh(p.getAnh());
                                         tempDG.setTen(p.getTen());
+                                    } else {
+                                        tempRefer.child("danhgia").child(id).child(finalRead).removeValue();
                                     }
                                 } else {
                                     KhachHang k = snapshot.getValue(KhachHang.class);
                                     if (k != null) {
                                         tempDG.setAnh(k.getAvata());
                                         tempDG.setTen(k.getTen());
+                                    } else {
+                                        tempDG.setAnh("");
+                                        tempDG.setTen("Tài Khoản Đã Bị Xóa!");
                                     }
                                 }
                                 if (count.incrementAndGet() == itemCount) {

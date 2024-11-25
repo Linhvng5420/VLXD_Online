@@ -16,7 +16,7 @@ import com.tdc.vlxdonline.databinding.FragmentAccountCustomerBinding;
 
 public class AccountCustomerFragment extends Fragment {
     FragmentAccountCustomerBinding binding;
-    String idKH = LoginActivity.idUser.substring(0, LoginActivity.idUser.indexOf("@"));
+    String idKH = Customer_HomeActivity.info.getID();
 
     @Override
     public void onCreate(Bundle savedInstanceState) {
@@ -115,7 +115,7 @@ public class AccountCustomerFragment extends Fragment {
         binding.btnTraGop.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                ((Customer_HomeActivity) getActivity()).ReplaceFragment(new QuanLyTraGopFragment());
+                ((Customer_HomeActivity) getActivity()).ReplaceFragment(new QuanLyTraGopFragment(idKH, null));
             }
         });
     }

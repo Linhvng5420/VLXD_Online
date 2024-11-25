@@ -198,7 +198,27 @@ public class ChiTietDonFragment extends Fragment {
 
     private void ChuyenTrangThaiGiaoHang(int trangThaiHienTai) {
         int update = trangThaiHienTai + 1;
-        if (trangThaiHienTai == 5) update = 2;
+        if (update == 4) {
+            for (int i = 0; i < dataChiTietDon.size(); i++) {
+                ChiTietDon tempCTD = dataChiTietDon.get(i);
+                DatabaseReference referChange = FirebaseDatabase.getInstance().getReference("products").child(tempCTD.getIdSanPham());
+                referChange.addListenerForSingleValueEvent(new ValueEventListener() {
+                    @Override
+                    public void onDataChange(@NonNull DataSnapshot snapshot) {
+                        Products tempP = snapshot.getValue(Products.class);
+                        if (tempP != null) {
+                            int tempBan = Integer.parseInt(tempP.getDaBan()) + tempCTD.getSoLuong();
+                            referChange.child("daBan").setValue(tempBan + "");
+                        }
+                    }
+
+                    @Override
+                    public void onCancelled(@NonNull DatabaseError error) {
+
+                    }
+                });
+            }
+        }
         referDetailDon.child("bills").child(idDon + "").child("trangThai").setValue(update);
     }
 

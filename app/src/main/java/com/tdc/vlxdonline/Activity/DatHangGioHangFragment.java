@@ -28,9 +28,13 @@ import com.tdc.vlxdonline.Model.ChiTietDon;
 import com.tdc.vlxdonline.Model.DonHang;
 import com.tdc.vlxdonline.Model.KhachHang;
 import com.tdc.vlxdonline.Model.Products;
+import com.tdc.vlxdonline.Model.TraGop;
 import com.tdc.vlxdonline.R;
 import com.tdc.vlxdonline.databinding.FragmentDatHangGioHangBinding;
 
+import java.lang.reflect.Array;
+import java.time.LocalDate;
+import java.time.format.DateTimeFormatter;
 import java.util.ArrayList;
 import java.util.concurrent.atomic.AtomicInteger;
 
@@ -49,6 +53,8 @@ public class DatHangGioHangFragment extends Fragment {
     ArrayList<String> dataThanhT = new ArrayList<>();
     ArrayAdapter adapterTT;
     int thanhToan = 0;
+    // Danh sach chua duoc duyet
+    ArrayList<Long> dataChuaDuyet = new ArrayList<>();
 
     public DatHangGioHangFragment(ArrayList<ChiTietDon> data) {
         dataChiTiet = data;
@@ -85,7 +91,7 @@ public class DatHangGioHangFragment extends Fragment {
                 thanhToan = position;
                 if (position == 0) {
                     binding.tWarn.setVisibility(View.GONE);
-                }else {
+                } else {
                     binding.tWarn.setVisibility(View.VISIBLE);
                 }
             }
@@ -100,16 +106,6 @@ public class DatHangGioHangFragment extends Fragment {
             public void onClick(View v) {
                 if (dataDon.size() > 1) thongBaoNhieuDon();
                 XacNhanTaoDonHang();
-            }
-        });
-        binding.btnDatHangTraGop.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View view) {
-                // Thực hiện chuyển đổi sang Fragment chi tiết, thay thế Fragment hiện tại
-                getParentFragmentManager().beginTransaction()
-                        .replace(R.id.frm_customer, new KhachHangTraGopFragment()) // Thay thế fragment_container hiện tại bằng fragment chi tiết
-                        .addToBackStack(null) // Cho phép quay lại màn hình trước khi nhấn nút Back
-                        .commit(); // Thực hiện chuyển đổi
             }
         });
     }
@@ -132,7 +128,8 @@ public class DatHangGioHangFragment extends Fragment {
                         int tonKho = Integer.parseInt(product.getTonKho());
                         if (tonKho > 0) {
                             // Bien check đã có đơn hàng chủ sở hữu của sản phẩm đang duyệt chưa
-                            if (tonKho < temp.getSoLuong()) dataChiTiet.get(position).setSoLuong(tonKho);
+                            if (tonKho < temp.getSoLuong())
+                                dataChiTiet.get(position).setSoLuong(tonKho);
                             boolean check = false;
                             for (int j = 0; j < dataDon.size(); j++) {
                                 if (product.getIdChu().equals(dataDon.get(j).getIdChu())) {
@@ -174,7 +171,8 @@ public class DatHangGioHangFragment extends Fragment {
                         }
                         binding.tvTongDatCart.setText(chuyenChuoi(tong));
                         adapter.notifyDataSetChanged();
-                        if (dataChiTiet.size() == 0) getActivity().getSupportFragmentManager().popBackStack();
+                        if (dataChiTiet.size() == 0)
+                            getActivity().getSupportFragmentManager().popBackStack();
                     }
                 }
 
@@ -212,32 +210,6 @@ public class DatHangGioHangFragment extends Fragment {
     }
 
     // Ham thong bao xac nhan mua hang cho khach hang
-//    private void XacNhanTaoDonHang() {
-//        AlertDialog.Builder builder = new AlertDialog.Builder(getActivity());
-//        builder.setTitle("Xác Nhận Mua Hàng!").setMessage("Hãy Chắc Chắn Rằng Bạn Sẽ Đặt Mua Các Sản Phẩm Đã Chọn!");
-//
-//        builder.setPositiveButton(android.R.string.yes, new DialogInterface.OnClickListener() {
-//            @Override
-//            public void onClick(DialogInterface dialog, int which) {
-//                TaoDonHang();
-//            }
-//        });
-//        builder.setNegativeButton(R.string.quay_lai, new DialogInterface.OnClickListener() {
-//            @Override
-//            public void onClick(DialogInterface dialog, int which) {
-//                dialog.cancel();
-//            }
-//        });
-//
-//        Drawable drawableIcon = getResources().getDrawable(android.R.drawable.ic_dialog_alert);
-//        drawableIcon.setTint(Color.RED);
-//        builder.setIcon(drawableIcon);
-//        Drawable drawableBg = getResources().getDrawable(R.drawable.bg_item_lg);
-//        drawableBg.setTint(Color.rgb(100, 220, 255));
-//        AlertDialog alertDialog = builder.create();
-//        alertDialog.getWindow().setBackgroundDrawable(drawableBg);
-//        alertDialog.show();
-//    }
     private void XacNhanTaoDonHang() {
         AlertDialog.Builder builder = new AlertDialog.Builder(getActivity());
         builder.setTitle("Xác Nhận Mua Hàng!").setMessage("Hãy Chắc Chắn Rằng Bạn Sẽ Đặt Mua Các Sản Phẩm Đã Chọn!");
@@ -245,25 +217,7 @@ public class DatHangGioHangFragment extends Fragment {
         builder.setPositiveButton(android.R.string.yes, new DialogInterface.OnClickListener() {
             @Override
             public void onClick(DialogInterface dialog, int which) {
-                // Tính tổng tiền của đơn hàng
-                int tongTien = 0;
-                for (ChiTietDon chiTiet : dataChiTiet) {
-                    tongTien += chiTiet.getGia() * chiTiet.getSoLuong();
-                }
-
-                // Tạo Bundle để truyền tổng tiền sang KhachHangTraGopFragment
-                Bundle bundle = new Bundle();
-                bundle.putInt("tongTien", tongTien);  // Truyền tổng tiền
-
-                // Chuyển sang KhachHangTraGopFragment
-                KhachHangTraGopFragment fragment = new KhachHangTraGopFragment();
-                fragment.setArguments(bundle);
-
-                // Thực hiện chuyển Fragment
-                getParentFragmentManager().beginTransaction()
-                        .replace(R.id.frm_customer, fragment)  // Thay thế fragment hiện tại
-                        .addToBackStack(null)  // Cho phép quay lại màn hình trước
-                        .commit();
+                TaoDonHang();
             }
         });
         builder.setNegativeButton(R.string.quay_lai, new DialogInterface.OnClickListener() {
@@ -283,39 +237,97 @@ public class DatHangGioHangFragment extends Fragment {
         alertDialog.show();
     }
 
-
     // Ham them cac don hang va chi tiet vao firebase
     private void TaoDonHang() {
         referDatHangGio.child("products").removeEventListener(prodEvent);
+        // Dong bo
+        int itemCount = dataDon.size();
+        AtomicInteger tempA = new AtomicInteger(0);
+
         for (int i = 0; i < dataDon.size(); i++) {
             DonHang tempDon = dataDon.get(i);
-            if (thanhToan == 1) {
-                tempDon.setPhiTraGop(tempDon.getTongTien()*2/100);
-                tempDon.setTongTien(tempDon.getTongTien()+ tempDon.getPhiTraGop());
-            } else if (thanhToan == 2) {
-                tempDon.setPhiTraGop(tempDon.getTongTien()*5/100);
-                tempDon.setTongTien(tempDon.getTongTien()+ tempDon.getPhiTraGop());
+            if (thanhToan != 0) {
+                DaDuocDuyet(tempDon.getIdChu(), new DuyetCallback() {
+                    @Override
+                    public void onCallback(boolean isDuyet) {
+                        if (isDuyet) {
+                            DatabaseReference tempReferDat = FirebaseDatabase.getInstance().getReference();
+                            if (thanhToan == 1) {
+                                tempDon.setTrangThaiTT(1);
+                                tempDon.setPhiTraGop(tempDon.getTongTien() * 2 / 100);
+                                tempDon.setTongTien(tempDon.getTongTien() + tempDon.getPhiTraGop());
+                                LocalDate nowDate = LocalDate.now();
+                                DateTimeFormatter formatter = DateTimeFormatter.ofPattern("dd-MM-yyyy");
+                                for (int j = 0; j < 4; j++) {
+                                    nowDate = nowDate.plusDays(7);
+                                    TraGop tempTG = new TraGop(tempDon.getId(), nowDate.format(formatter), (j + 1), tempDon.getTongTien() / 4);
+                                    tempReferDat.child("tragop").child(tempDon.getId() + "").child((j + 1) + "").setValue(tempTG);
+                                }
+                            } else if (thanhToan == 2) {
+                                tempDon.setTrangThaiTT(1);
+                                tempDon.setPhiTraGop(tempDon.getTongTien() * 5 / 100);
+                                tempDon.setTongTien(tempDon.getTongTien() + tempDon.getPhiTraGop());
+                                LocalDate nowDate = LocalDate.now();
+                                DateTimeFormatter formatter = DateTimeFormatter.ofPattern("dd-MM-yyyy");
+                                for (int j = 0; j < 4; j++) {
+                                    nowDate = nowDate.plusDays(15);
+                                    TraGop tempTG = new TraGop(tempDon.getId(), nowDate.format(formatter), (j + 1), tempDon.getTongTien() / 4);
+                                    tempReferDat.child("tragop").child(tempDon.getId() + "").child((j + 1) + "").setValue(tempTG);
+                                }
+                            }
+                            tempReferDat.child("bills").child(tempDon.getId() + "").setValue(tempDon);
+                        } else {
+                            ShowWar(tempDon.getIdChu());
+                            dataChuaDuyet.add(tempDon.getId());
+                        }
+                        if (tempA.incrementAndGet() == itemCount) AddChiTietToFireBase();
+                    }
+                });
+            } else {
+                referDatHangGio.child("bills").child(tempDon.getId() + "").setValue(tempDon);
+                if (tempA.incrementAndGet() == itemCount) AddChiTietToFireBase();
             }
-            referDatHangGio.child("bills").child(tempDon.getId() + "").setValue(tempDon);
         }
+    }
+
+    // Ham them chi tiet don vao firebase
+    private void AddChiTietToFireBase(){
+        DatabaseReference tempReferAdd = FirebaseDatabase.getInstance().getReference();
         for (int i = 0; i < dataChiTiet.size(); i++) {
             ChiTietDon tempChiTiet = dataChiTiet.get(i);
-            referDatHangGio.child("BillDetails").child(tempChiTiet.getIdDon() + "").child(tempChiTiet.getIdSanPham()).setValue(tempChiTiet);
-            referDatHangGio.child("carts").child(khach.getID()).child(tempChiTiet.getIdSanPham()).removeValue();
-            // Giam ton kho cua san pham
-            referDatHangGio.child("products").child(tempChiTiet.getIdSanPham()).addListenerForSingleValueEvent(new ValueEventListener() {
-                @Override
-                public void onDataChange(@NonNull DataSnapshot snapshot) {
-                    Products product = snapshot.getValue(Products.class);
-                    DatabaseReference tempRefer = FirebaseDatabase.getInstance().getReference("products");
-                    tempRefer.child(tempChiTiet.getIdSanPham()).child("tonKho").setValue((Integer.parseInt(product.getTonKho()) - tempChiTiet.getSoLuong()) + "");
+            boolean check = true;
+            for (int j = 0; j < dataChuaDuyet.size(); j++) {
+                if (dataChuaDuyet.get(j) == tempChiTiet.getIdDon()) {
+                    check = false;
+                    break;
                 }
+            }
+            if (check) {
+                tempReferAdd.child("BillDetails").child(tempChiTiet.getIdDon() + "").child(tempChiTiet.getIdSanPham()).setValue(tempChiTiet);
+                tempReferAdd.child("carts").child(khach.getID()).child(tempChiTiet.getIdSanPham()).removeValue();
+                // Giam ton kho cua san pham
+                tempReferAdd.child("products").child(tempChiTiet.getIdSanPham()).addListenerForSingleValueEvent(new ValueEventListener() {
+                    @Override
+                    public void onDataChange(@NonNull DataSnapshot snapshot) {
+                        Products product = snapshot.getValue(Products.class);
+                        DatabaseReference tempRefer = FirebaseDatabase.getInstance().getReference("products");
+                        tempRefer.child(tempChiTiet.getIdSanPham()).child("tonKho").setValue((Integer.parseInt(product.getTonKho()) - tempChiTiet.getSoLuong()) + "");
+                    }
 
-                @Override
-                public void onCancelled(@NonNull DatabaseError error) {
+                    @Override
+                    public void onCancelled(@NonNull DatabaseError error) {
 
+                    }
+                });
+            }
+        }
+        for (int i = dataDon.size() - 1; i >= 0; i--) {
+            for (int j = 0; j < dataChuaDuyet.size(); j++) {
+                if (dataDon.get(i).getId() == dataChuaDuyet.get(j)) {
+                    dataDon.remove(i);
+                    break;
                 }
-            });
+            }
         }
         ((Customer_HomeActivity) getActivity()).ReplaceFragment(new CacDonDaTaoFragment(dataDon));
         daTaoDon = true;
@@ -391,13 +403,68 @@ public class DatHangGioHangFragment extends Fragment {
         alertDialog.show();
     }
 
-    private void setThanhToan(){
+    private void setThanhToan() {
         // Xu ly phuong thuc thanh toan
+        dataThanhT.clear();
         dataThanhT.add("Thanh Toán Trực Tiếp");
         dataThanhT.add("Trả Góp Một Tháng");
         dataThanhT.add("Trả Góp Hai Tháng");
         adapterTT = new ArrayAdapter(getActivity(), android.R.layout.simple_dropdown_item_1line, dataThanhT);
         binding.spThanhToan.setAdapter(adapterTT);
+    }
+
+    private void DaDuocDuyet(String idChuP, DuyetCallback callback) {
+        referDatHangGio.child("duyetkhachhang").child(idChuP).child(Customer_HomeActivity.info.getID()).child("trangthai").addListenerForSingleValueEvent(new ValueEventListener() {
+            @Override
+            public void onDataChange(@NonNull DataSnapshot snapshot) {
+                String tempCheck = snapshot.getValue(String.class);
+                boolean isDuyet = tempCheck != null && tempCheck.equals("1");
+                callback.onCallback(isDuyet);
+            }
+
+            @Override
+            public void onCancelled(@NonNull DatabaseError error) {
+                callback.onCallback(false); // Hoặc xử lý lỗi theo cách của bạn
+            }
+        });
+    }
+
+    public interface DuyetCallback {
+        void onCallback(boolean isDuyet);
+    }
+
+    private void ShowWar(String id) {
+        referDatHangGio.child("thongtinchu").child(id).child("cuahang").addListenerForSingleValueEvent(new ValueEventListener() {
+            @Override
+            public void onDataChange(@NonNull DataSnapshot snapshot) {
+                String ten = snapshot.getValue(String.class);
+                if (ten != null) {
+                    AlertDialog.Builder builder = new AlertDialog.Builder(getActivity());
+                    builder.setTitle("Thông Báo!").setMessage("Bạn Chưa Được Cửa Hàng " + ten + " Cho Phép Trả Góp!");
+
+                    builder.setPositiveButton(android.R.string.yes, new DialogInterface.OnClickListener() {
+                        @Override
+                        public void onClick(DialogInterface dialog, int which) {
+                            dialog.cancel();
+                        }
+                    });
+
+                    Drawable drawableIcon = getResources().getDrawable(android.R.drawable.ic_dialog_alert);
+                    drawableIcon.setTint(Color.RED);
+                    builder.setIcon(drawableIcon);
+                    Drawable drawableBg = getResources().getDrawable(R.drawable.bg_item_lg);
+                    drawableBg.setTint(Color.rgb(100, 220, 255));
+                    AlertDialog alertDialog = builder.create();
+                    alertDialog.getWindow().setBackgroundDrawable(drawableBg);
+                    alertDialog.show();
+                }
+            }
+
+            @Override
+            public void onCancelled(@NonNull DatabaseError error) {
+
+            }
+        });
     }
 
     private StringBuilder chuyenChuoi(int soTien) {
