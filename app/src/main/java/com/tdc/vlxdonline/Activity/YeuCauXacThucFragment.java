@@ -58,7 +58,9 @@ public class YeuCauXacThucFragment extends Fragment {
         binding.svYeuCau.setOnQueryTextListener(new SearchView.OnQueryTextListener() {
             @Override
             public boolean onQueryTextSubmit(String query) {
+                // Gán từ khóa tìm kiếm
                 tuKhoa = query;
+                // Yêu cầu đọc lại danh sách
                 reference.child("thongtinchu").addListenerForSingleValueEvent(eventListener);
                 return false;
             }
@@ -117,13 +119,16 @@ public class YeuCauXacThucFragment extends Fragment {
             eventListener = new ValueEventListener() {
                 @Override
                 public void onDataChange(@NonNull DataSnapshot dataSnapshot) {
+                    // Danh sách thông tin chủ cửa hàng
                     dataChu.clear();
+                    // Danh sách phụ để hiển thị thông tin lên RecyclerView dạng String
                     dataHienThi.clear();
 
                     for (DataSnapshot snapshot : dataSnapshot.getChildren()) {
                         ThongTinChu tt = snapshot.getValue(ThongTinChu.class);
                         tt.setId(snapshot.getKey());
-                        if (tuKhoa.equals("") || tt.getTen().contains(tuKhoa) || tt.getEmail().contains(tuKhoa)) {
+                        // Duyệt từ khóa lấy từ thanh tìm kiếm
+                        if (tuKhoa.equals("") || tt.getTen().contains(tuKhoa) || tt.getEmail().contains(tuKhoa) || tt.getSdt().contains(tuKhoa)) {
                             dataChu.add(tt);
                             dataHienThi.add("Tên Chủ: " + tt.getTen() + "\n" + "Email: " + tt.getEmail() + "\n" + "Số Điện Thoại: " + tt.getSdt());
                         }
