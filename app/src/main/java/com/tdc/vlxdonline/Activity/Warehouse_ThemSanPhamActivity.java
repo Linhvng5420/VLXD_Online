@@ -368,6 +368,7 @@ public class Warehouse_ThemSanPhamActivity extends AppCompatActivity {
             });
             
         } else {
+            imagesUrl = sanPhamModel.getAnh();
             saveDate();
             clearSelection();
         }
