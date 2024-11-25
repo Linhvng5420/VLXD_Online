@@ -120,7 +120,7 @@ public class ProdDetailCustomerFragment extends Fragment {
                         bundle.putString("idCH", prod.getIdChu());
                         Admin_CuaHangSanPhamFragment fragment = new Admin_CuaHangSanPhamFragment();
                         fragment.setArguments(bundle);
-                        getParentFragmentManager().beginTransaction().replace(R.id.fragment_container, fragment).addToBackStack(null).commit();
+                        getParentFragmentManager().beginTransaction().replace(R.id.fragment_container, fragment).addToBackStack("tempTag").commit();
                     }
                 }).setIcon(R.drawable.baseline_store_24).show();
             }
@@ -207,7 +207,7 @@ public class ProdDetailCustomerFragment extends Fragment {
                     ((Customer_HomeActivity) getActivity()).ReplaceFragment(new DaDanhGiaFragment(1, idProd));
                 } else {
                     DaDanhGiaFragment fragment = new DaDanhGiaFragment(1, idProd);
-                    getParentFragmentManager().beginTransaction().replace(R.id.fragment_container, fragment).addToBackStack(null).commit();
+                    getParentFragmentManager().beginTransaction().replace(R.id.fragment_container, fragment).addToBackStack("tempTag").commit();
                 }
             }
         });
@@ -446,7 +446,7 @@ public class ProdDetailCustomerFragment extends Fragment {
                             // Mở fragment chi tiết và tắt thanh điều hướng của fragment đó
                             FragmentTransaction transaction = getActivity().getSupportFragmentManager().beginTransaction();
                             transaction.replace(R.id.fragment_container, fragment);
-                            transaction.addToBackStack(null);
+                            transaction.addToBackStack("tempTag");
                             transaction.commit();
                         }
                     });
