@@ -23,6 +23,7 @@ import com.tdc.vlxdonline.Adapter.DonHangAdapter;
 import com.tdc.vlxdonline.Model.ChiTietDon;
 import com.tdc.vlxdonline.Model.DanhGia;
 import com.tdc.vlxdonline.Model.DonHang;
+import com.tdc.vlxdonline.Model.Products;
 import com.tdc.vlxdonline.R;
 import com.tdc.vlxdonline.databinding.FragmentDonChuaDanhGiaBinding;
 
@@ -104,9 +105,22 @@ public class DonChuaDanhGiaFragment extends Fragment {
                 AtomicInteger count = new AtomicInteger(0);
                 for (DataSnapshot snapshot : dataSnapshot.getChildren()) {
                     ChiTietDon chiTiet = snapshot.getValue(ChiTietDon.class);
-                    DanhGia tempDg = new DanhGia(idKH, chiTiet.getIdSanPham(), chiTiet.getAnh(), chiTiet.getTen(), "", 0, idDon);
-                    temp.add(tempDg);
-                    if (count.incrementAndGet() == itemCount) ChuyenTrang(idDon, temp);
+                    reference.child("products").child(chiTiet.getIdSanPham()).addListenerForSingleValueEvent(new ValueEventListener() {
+                        @Override
+                        public void onDataChange(@NonNull DataSnapshot snapshot) {
+                            Products tempP = snapshot.getValue(Products.class);
+                            if (tempP != null) {
+                                DanhGia tempDg = new DanhGia(idKH, chiTiet.getIdSanPham(), chiTiet.getAnh(), chiTiet.getTen(), "", 0, idDon);
+                                temp.add(tempDg);
+                            }
+                            if (count.incrementAndGet() == itemCount) ChuyenTrang(idDon, temp);
+                        }
+
+                        @Override
+                        public void onCancelled(@NonNull DatabaseError error) {
+
+                        }
+                    });
                 }
             }
 
