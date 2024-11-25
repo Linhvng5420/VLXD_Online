@@ -28,6 +28,8 @@ import android.widget.Toast;
 import androidx.annotation.NonNull;
 import androidx.appcompat.app.AppCompatActivity;
 import androidx.fragment.app.Fragment;
+import androidx.recyclerview.widget.LinearLayoutManager;
+import androidx.recyclerview.widget.RecyclerView;
 
 import com.bumptech.glide.Glide;
 import com.google.android.material.snackbar.BaseTransientBottomBar;
@@ -74,10 +76,42 @@ public class Admin_CuaHangDetailFragment extends Fragment {
         setTopNavBarTitle();
         getData();
 
-        // Lấy lý do khóa nếu có
-        adapter = new ArrayAdapter<>(getContext(), android.R.layout.simple_list_item_1, lyDoKhoaList);
-        binding.lvLyDoKhoa.setAdapter(adapter);
+        binding.rvLyDoKhoa.setLayoutManager(new LinearLayoutManager(getContext()));
+
+        // Thêm dữ liệu vào danh sách
         layLyDoBiKhoa();
+
+        // Tạo RecyclerView.Adapter đơn giản
+        RecyclerView.Adapter<RecyclerView.ViewHolder> adapter = new RecyclerView.Adapter<RecyclerView.ViewHolder>() {
+            // Tạo ViewHolder
+            @NonNull
+            @Override
+            public RecyclerView.ViewHolder onCreateViewHolder(@NonNull ViewGroup parent, int viewType) {
+                View view = LayoutInflater.from(parent.getContext())
+                        .inflate(android.R.layout.simple_list_item_1, parent, false);
+                return new RecyclerView.ViewHolder(view) {
+                };
+            }
+
+            // Gắn dữ liệu vào ViewHolder
+            @Override
+            public void onBindViewHolder(@NonNull RecyclerView.ViewHolder holder, int position) {
+                TextView textView = (TextView) holder.itemView;
+                textView.setText(lyDoKhoaList.get(position).toString()); // Hiển thị dữ liệu
+            }
+
+            @Override
+            public int getItemCount() {
+                return lyDoKhoaList.size(); // Số lượng phần tử trong danh sách
+            }
+        };
+
+        // Gắn Adapter vào RecyclerView
+        binding.rvLyDoKhoa.setAdapter(adapter);
+
+//        adapter = new ArrayAdapter<>(getContext(), android.R.layout.simple_list_item_1, lyDoKhoaList);
+//        binding.lvLyDoKhoa.setAdapter(adapter);
+//        layLyDoBiKhoa();
 
         setupAuthentButton();
         setupDSSanPhamButton();
@@ -482,7 +516,7 @@ public class Admin_CuaHangDetailFragment extends Fragment {
                 Log.d("LyDoKhoa", "Số lượng item: " + lyDoKhoaList.size() + lyDoKhoaList.toString());
 
                 // cập nhật listview
-                adapter.notifyDataSetChanged();
+                binding.rvLyDoKhoa.getAdapter().notifyDataSetChanged();
             }
 
             @Override
