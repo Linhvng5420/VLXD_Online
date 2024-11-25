@@ -3,6 +3,12 @@ package com.tdc.vlxdonline.Activity;
 import android.graphics.Color;
 import android.graphics.drawable.Drawable;
 import android.os.Bundle;
+import android.view.LayoutInflater;
+import android.view.View;
+import android.view.ViewGroup;
+import android.widget.AdapterView;
+import android.widget.SearchView;
+import android.widget.Toast;
 
 import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
@@ -11,14 +17,6 @@ import androidx.recyclerview.widget.GridLayoutManager;
 import androidx.recyclerview.widget.LinearLayoutManager;
 import androidx.recyclerview.widget.LinearSnapHelper;
 import androidx.recyclerview.widget.RecyclerView;
-
-import android.view.LayoutInflater;
-import android.view.View;
-import android.view.ViewGroup;
-import android.widget.AdapterView;
-import android.widget.ArrayAdapter;
-import android.widget.SearchView;
-import android.widget.Toast;
 
 import com.google.firebase.database.DataSnapshot;
 import com.google.firebase.database.DatabaseError;
@@ -35,7 +33,6 @@ import com.tdc.vlxdonline.Model.Products;
 import com.tdc.vlxdonline.R;
 import com.tdc.vlxdonline.databinding.FragmentCustomerHomeBinding;
 
-import java.sql.SQLException;
 import java.util.ArrayList;
 import java.util.Collections;
 import java.util.Comparator;
@@ -79,7 +76,7 @@ public class CustomerHomeFragment extends Fragment {
         binding = FragmentCustomerHomeBinding.inflate(inflater, container, false);
         mDatabase = FirebaseDatabase.getInstance().getReference();
         Drawable draw = getActivity().getDrawable(R.drawable.bg_detail);
-        draw.setTint(Color.rgb(215,215,215));
+        draw.setTint(Color.rgb(215, 215, 215));
         binding.svCustomerHome.setBackground(draw);
         setAdapterProduct();
         setAdapterCategory();
@@ -167,23 +164,27 @@ public class CustomerHomeFragment extends Fragment {
         eventDocDanhSach = new ValueEventListener() {
             @Override
             public void onDataChange(DataSnapshot dataSnapshot) {
-                try{
+                try {
                     dataProds.clear(); // Xóa danh sách cũ trước khi cập nhật
                     // Duyệt qua từng prod trong DataSnapshot
                     for (DataSnapshot snapshot : dataSnapshot.getChildren()) {
                         Products product = snapshot.getValue(Products.class);
                         product.setId(snapshot.getKey());
                         if (!category.isEmpty() && !category.equals(product.getDanhMuc())) continue;
-                        if (!tuKhoa.isEmpty() && !product.getTen().contains(tuKhoa) && !product.getMoTa().contains(tuKhoa)) continue;
-                        if (binding.spLoc.getSelectedItemPosition() == 1 && Double.parseDouble(product.getSoSao()) > 3) continue;
-                        if (binding.spLoc.getSelectedItemPosition() == 2 && Double.parseDouble(product.getSoSao()) < 4) continue;
+                        if (!tuKhoa.isEmpty() && !product.getTen().contains(tuKhoa) && !product.getMoTa().contains(tuKhoa))
+                            continue;
+                        if (binding.spLoc.getSelectedItemPosition() == 1 && Double.parseDouble(product.getSoSao()) > 3)
+                            continue;
+                        if (binding.spLoc.getSelectedItemPosition() == 2 && Double.parseDouble(product.getSoSao()) < 4)
+                            continue;
                         dataProds.add(product); // Thêm prod vào danh sách
                     }
 
                     SapXepDanhSach();
 
                     productAdapter.notifyDataSetChanged();
-                }catch (Exception e) {}
+                } catch (Exception e) {
+                }
             }
 
             @Override
@@ -205,15 +206,17 @@ public class CustomerHomeFragment extends Fragment {
 
             @Override
             public void OnBtnBuyClick(View view, int position) {
-                if (!dataProds.get(position).getTonKho().equals("0")) ((Customer_HomeActivity) getActivity()).ReplaceFragment(new DatHangNgayFragment(dataProds.get(position).getId(), 1));
-                else Toast.makeText(getActivity(), "Hiện Tại Sản Phẩm Đã Bán Hết!", Toast.LENGTH_SHORT).show();
+                if (!dataProds.get(position).getTonKho().equals("0"))
+                    ((Customer_HomeActivity) getActivity()).ReplaceFragment(new DatHangNgayFragment(dataProds.get(position).getId(), 1));
+                else
+                    Toast.makeText(getActivity(), "Hiện Tại Sản Phẩm Đã Bán Hết!", Toast.LENGTH_SHORT).show();
             }
         });
         binding.rcProdCustomerHome.setLayoutManager(new GridLayoutManager(getActivity(), 2));
         binding.rcProdCustomerHome.setAdapter(productAdapter);
     }
 
-    private void setAdapterCategory(){
+    private void setAdapterCategory() {
         // Category Adapter
         categoryAdapter = new CategoryAdapter(getActivity(), dataCategorys);
         categoryAdapter.setOnItemCategoryClickListener(new CategoryAdapter.OnItemCategoryClickListener() {
@@ -223,8 +226,7 @@ public class CustomerHomeFragment extends Fragment {
                     category = "";
                     view.setBackgroundColor(Color.TRANSPARENT);
                     preView = null;
-                }
-                else {
+                } else {
                     category = dataCategorys.get(position).getId();
                     Drawable drawable = getActivity().getDrawable(R.drawable.bg_detail);
                     view.setBackground(drawable);
@@ -244,7 +246,7 @@ public class CustomerHomeFragment extends Fragment {
         mDatabase.child("banners").addValueEventListener(new ValueEventListener() {
             @Override
             public void onDataChange(DataSnapshot dataSnapshot) {
-                try{
+                try {
                     dataBanner.clear(); // Xóa danh sách cũ trước khi cập nhật
 
                     // Duyệt qua từng User trong DataSnapshot
@@ -253,7 +255,7 @@ public class CustomerHomeFragment extends Fragment {
                         dataBanner.add(banner); // Thêm User vào danh sách
                     }
                     bannerAdapter.notifyDataSetChanged();
-                }catch (Exception e){
+                } catch (Exception e) {
 
                 }
             }
@@ -296,7 +298,7 @@ public class CustomerHomeFragment extends Fragment {
         mDatabase.child("categorys").addValueEventListener(new ValueEventListener() {
             @Override
             public void onDataChange(DataSnapshot dataSnapshot) {
-                try{
+                try {
                     dataCategorys.clear(); // Xóa danh sách cũ trước khi cập nhật
 
                     // Duyệt qua từng User trong DataSnapshot
@@ -307,7 +309,7 @@ public class CustomerHomeFragment extends Fragment {
                     }
 
                     categoryAdapter.notifyDataSetChanged();
-                }catch (Exception e){
+                } catch (Exception e) {
 
                 }
             }
@@ -319,7 +321,7 @@ public class CustomerHomeFragment extends Fragment {
         });
     }
 
-    private void SapXepDanhSach(){
+    private void SapXepDanhSach() {
         Collections.sort(dataProds, new Comparator<Products>() {
             @Override
             public int compare(Products p1, Products p2) {

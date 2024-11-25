@@ -25,6 +25,7 @@
                     android:id="@+id/img_detail"
                     android:layout_width="match_parent"
                     android:layout_height="250dp"
+                    android:background="@color/white"
                     android:padding="10dp"
                     android:scaleType="fitCenter"
                     android:src="@drawable/baseline_offline_24" />
@@ -168,7 +169,7 @@
                                 android:layout_marginBottom="-2dp"
                                 android:paddingHorizontal="5dp"
                                 android:text="Mô tả:"
-                                android:textColor="#FF1000"
+                                android:textColor="@color/black"
                                 android:textSize="16dp"
                                 android:textStyle="bold" />
 
@@ -181,7 +182,7 @@
                                 android:paddingHorizontal="5dp"
                                 android:paddingBottom="5dp"
                                 android:text="Thép cuộn CB240 chất lượng cao, độ dày 1mm, đàn hồi tốt, cứng cáp, chắc chắn."
-                                android:textColor="#FF1000"
+                                android:textColor="@color/black"
                                 android:textSize="15dp"
                                 android:textStyle="bold" />
                         </LinearLayout>
