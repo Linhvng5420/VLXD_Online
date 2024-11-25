@@ -142,15 +142,17 @@ public class Customer_HomeActivity extends AppCompatActivity {
 
     // Hàm đổi icon navbar khi quay lại fragment trước
     private void ChangeNavItem() {
-        // TODO Linh: Phải bỏ vì gây xung đột tái xử dụng màn hình
-/*        if (currentTag.equals(CustomerHomeFragment.class.getName())) {
-            customerHomeBinding.navCustomer.setSelectedItemId(R.id.nav_customer_sanpham);
-        } else if (currentTag.equals(CartFragment.class.getName())) {
-            customerHomeBinding.navCustomer.setSelectedItemId(R.id.nav_customer_giohang);
-        } else if (currentTag.equals(DanhSachDonHangFragment.class.getName())) {
-            customerHomeBinding.navCustomer.setSelectedItemId(R.id.nav_customer_donhang);
-        } else if (currentTag.equals(AccountCustomerFragment.class.getName())) {
-            customerHomeBinding.navCustomer.setSelectedItemId(R.id.nav_customer_taikhoan);
-        }*/
+        // TODO Linh: Phải bỏ vì gây xung đột tái sử dụng màn hình
+        if (info != null) {
+            if (currentTag.equals(CustomerHomeFragment.class.getName())) {
+                customerHomeBinding.navCustomer.setSelectedItemId(R.id.nav_customer_sanpham);
+            } else if (currentTag.equals(CartFragment.class.getName())) {
+                customerHomeBinding.navCustomer.setSelectedItemId(R.id.nav_customer_giohang);
+            } else if (currentTag.equals(DanhSachDonHangFragment.class.getName())) {
+                customerHomeBinding.navCustomer.setSelectedItemId(R.id.nav_customer_donhang);
+            } else if (currentTag.equals(AccountCustomerFragment.class.getName())) {
+                customerHomeBinding.navCustomer.setSelectedItemId(R.id.nav_customer_taikhoan);
+            }
+        }
     }
 }
