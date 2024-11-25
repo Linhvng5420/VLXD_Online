@@ -79,6 +79,7 @@ public class ProdDetailCustomerFragment extends Fragment {
     @Override
     public void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
+        // Admin đọc ds Khách Hàng Khiếu Nại về sản phẩm hiện tại
         if (Customer_HomeActivity.info == null)
             Admin_KhachHangKhieuNai();
     }
@@ -127,7 +128,7 @@ public class ProdDetailCustomerFragment extends Fragment {
             }
         });
 
-        // TODO 3 NGVLinh: Đặt Hàng Ngay(KH) / Xóa SP Vi Phạm(Admin)
+        // TODO 3 NGVLinh: Đặt Hàng Ngay(KH) / Admin đọc ds Khách Hàng Khiếu Nại về sản phẩm hiện tại
         binding.btnDatHangNgay.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
@@ -511,14 +512,15 @@ public class ProdDetailCustomerFragment extends Fragment {
 
                     // Kiểm tra xem khiếu nại của sp đã đc xem xét hay chưa
                     Boolean daxem = dataSnapshot.child("daxem").getValue(Boolean.class);
-                    String status = daxem ? "Đóng" : "Tiếp Nhận";
-                    builder.setNegativeButton(status, (dialog, which) -> {
-                        if (!daxem) {
+                    if (!daxem) {
+                        builder.setNeutralButton("Tiếp Nhận Khiếu Nại", (dialog, which) -> {
                             dbKhieuNai_LyDo.child("daxem").setValue(true);
                             Snackbar.make(binding.getRoot(), "Admin Đã Xem Và Ghi Nhận Khiếu Nại", Snackbar.LENGTH_SHORT).show();
-                        }
-                    });
-                    builder.show();
+                        });
+                    }
+
+                    builder.setPositiveButton("Đóng", null).show();
+
                 } else {
                     binding.btnDatHangNgay.setText("Không Có Khiếu Nại");
                     Snackbar.make(binding.getRoot(), "Sản Phẩm Hiện Không có khiếu nại nào.", Snackbar.LENGTH_SHORT).show();
