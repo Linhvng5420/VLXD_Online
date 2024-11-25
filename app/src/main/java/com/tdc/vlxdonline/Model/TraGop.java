@@ -4,7 +4,7 @@ public class TraGop {
     private long idDon;
     private String hanTra;
     private int thuTu, soTien;
-    private boolean trangThai = false;
+    private boolean daTra = false;
 
     public TraGop(long idDon, String hanTra, int thuTu, int soTien) {
         this.idDon = idDon;
@@ -49,10 +49,10 @@ public class TraGop {
     }
 
     public boolean isDaTra() {
-        return trangThai;
+        return daTra;
     }
 
-    public void setTrangThai(boolean trangThai) {
-        this.trangThai = trangThai;
+    public void setDaTra(boolean daTra) {
+        this.daTra = daTra;
     }
 }

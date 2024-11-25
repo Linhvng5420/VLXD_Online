@@ -230,8 +230,9 @@ public class ChiTietDonTraGopFragment extends Fragment {
         binding.rcChiTietDon.setLayoutManager(new LinearLayoutManager(getActivity(), LinearLayoutManager.VERTICAL, false));
         binding.rcChiTietDon.setAdapter(adapterChiTiet);
         // Dot Tra Gop
-        adapterTraGop = new AdapterTraGop(getActivity(), R.layout.item_tra_gop, dataGop);
-        binding.lvTraGop.setAdapter(adapterTraGop);
+        adapterTraGop = new AdapterTraGop(getActivity(), dataGop);
+        binding.rcTraGop.setLayoutManager(new LinearLayoutManager(getActivity(), LinearLayoutManager.VERTICAL, false));
+        binding.rcTraGop.setAdapter(adapterTraGop);
     }
 
     @Override
