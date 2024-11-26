@@ -429,7 +429,7 @@ public class ProdDetailCustomerFragment extends Fragment {
 
                     // Hiển thị dialog với ListView
                     AlertDialog.Builder builder = new AlertDialog.Builder(getContext());
-                    builder.setTitle("Sản Phẩm Đã Bị Khiếu Nại " + dataSnapshot.child("solan").getValue(Integer.class) + " Lần");
+                    builder.setTitle("Sản Phẩm Đã Bị Khiếu Nại " + dataSnapshot.child("solan").getValue(Integer.class) + " Lần").setIcon(R.drawable.baseline_report_24);
                     ArrayAdapter<String> adapter = new ArrayAdapter<>(getContext(), android.R.layout.simple_list_item_1, complaintList);
 
                     builder.setAdapter(adapter, (dialog, which) -> {
@@ -536,14 +536,17 @@ public class ProdDetailCustomerFragment extends Fragment {
                 dbRef.addListenerForSingleValueEvent(new ValueEventListener() {
                     @Override
                     public void onDataChange(DataSnapshot dataSnapshot) {
-                        String lydo = "Sản Phẩm Có Dấu Hiệu Vi Phạm";
-                        lydo = input.getText().toString().trim();
+                        String lydo = input.getText().toString().trim();
+                        if (lydo.isBlank()) {
+                            lydo = "Sản Phẩm Có Dấu Hiệu Vi Phạm";
+                        }
 
+                        String date = new SimpleDateFormat("dd-MM-yyyy", Locale.getDefault()).format(new Date());
                         if (dataSnapshot.child("lydo/" + idKhach).exists()) {
                             int solan = dataSnapshot.child("solan").getValue(Integer.class);
+                            dbRef.child("lydo/" + idKhach).setValue(date + ": " + lydo);
                             dbRef.child("solan").setValue(solan + 1);
                         } else {
-                            String date = new SimpleDateFormat("dd-MM-yyyy", Locale.getDefault()).format(new Date());
                             dbRef.child("idchu").setValue(prod.getIdChu());
                             dbRef.child("idsp").setValue(prod.getId());
                             dbRef.child("lydo/" + idKhach).setValue(date + ": " + lydo);

@@ -46,7 +46,6 @@ public class Owner_HomeActivity extends AppCompatActivity {
         emailUser = getIntent().getStringExtra("emailUser");
         Log.d("l.e", "onCreate: emailUser = " + emailUser);
 
-        // TODO: Gọi phương thức bắt sự kiện khi nhấn các nút trên thanh điều hướng (Bottom Navigation Bar)
         EventNavigationBottom();
 
         // Sử dụng OnBackPressedDispatcher để tùy chỉnh hành vi khi nhấn nút back

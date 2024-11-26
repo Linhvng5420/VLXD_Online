@@ -179,7 +179,7 @@ public class Owner_DashboardFragment extends Fragment {
                     String emailchu = nhanvienSnapshot.child("emailchu").getValue(String.class);
 
                     // Kiểm tra xem emailchu có khớp với idOwnerLogin hay không
-                    if (emailchu != null && emailchu.equals(emailOwnerLogin)) {
+                    if (emailchu != null && emailchu.equals(idOwnerLogin)) {
                         totalEmployees++;
 
                         // Lấy chức vụ của nhân viên

@@ -65,7 +65,6 @@ public class Owner_KhachHangFragment extends Fragment {
         return binding.getRoot();
     }
 
-    // TODO: HÀM XỬ LÝ CHỨC NĂNG CỦA VIEW APP
     @Override
     public void onViewCreated(@NonNull View view, @Nullable Bundle savedInstanceState) {
         super.onViewCreated(view, savedInstanceState);

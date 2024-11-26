@@ -72,7 +72,6 @@ public class Owner_KhachHangDetailFragment extends Fragment {
         return binding.getRoot();
     }
 
-    //TODO: Hien thi thong tin khach hang
     @Override
     public void onViewCreated(@NonNull View view, @Nullable Bundle savedInstanceState) {
         super.onViewCreated(view, savedInstanceState);

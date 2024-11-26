@@ -51,7 +51,6 @@ public class Owner_NhanVienFragment extends Fragment {
         return binding.getRoot();
     }
 
-    // TODO: HÀM XỬ LÝ CHỨC NĂNG CỦA VIEW APP
     @Override
     public void onViewCreated(@NonNull View view, @Nullable Bundle savedInstanceState) {
         super.onViewCreated(view, savedInstanceState);
@@ -85,7 +84,6 @@ public class Owner_NhanVienFragment extends Fragment {
     }
 
     private void getDataNhanVien() {
-        // TODO: Thoát ứng dụng khi chưa đăng nhập mà vào được trang quản lý
         if (emailLogin == null) {
             Snackbar.make(getView(), "Bạn không có quyền truy cập \nQuản lý Nhân Viên", Toast.LENGTH_SHORT).show();
             requireActivity().finishAffinity();

@@ -93,7 +93,6 @@ public class Owner_NhanVienAddFragment extends Fragment {
         return binding.getRoot();
     }
 
-    //TODO: THỰC HIỆN KHAI BÁO, KHỞI TẠO VÀ XỬ LÝ LOGIC TẠI ĐÂY
     @Override
     public void onViewCreated(@NonNull View view, @Nullable Bundle savedInstanceState) {
         super.onViewCreated(view, savedInstanceState);

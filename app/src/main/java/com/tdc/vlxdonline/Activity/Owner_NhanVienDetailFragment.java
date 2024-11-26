@@ -94,7 +94,6 @@ public class Owner_NhanVienDetailFragment extends Fragment {
         return binding.getRoot(); // Trả về toàn bộ giao diện của fragment
     }
 
-    //TODO: HÀM XỬ LÝ CHỨC NĂNG CỦA VIEW APP
     @Override
     public void onViewCreated(@NonNull View view, @Nullable Bundle savedInstanceState) {
         super.onViewCreated(view, savedInstanceState);

@@ -66,7 +66,6 @@ public class Admin_CuaHangSanPhamFragment extends Fragment {
 
         //TODO: hiển thị tên cửa hàng
 
-
         // hiển thị products
         db.child("products").addValueEventListener(new ValueEventListener() {
             @Override
