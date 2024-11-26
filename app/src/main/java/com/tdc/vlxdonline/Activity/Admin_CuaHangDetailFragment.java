@@ -83,35 +83,31 @@ public class Admin_CuaHangDetailFragment extends Fragment {
 
         // Tạo RecyclerView.Adapter đơn giản
         RecyclerView.Adapter<RecyclerView.ViewHolder> adapter = new RecyclerView.Adapter<RecyclerView.ViewHolder>() {
-            // Tạo ViewHolder
             @NonNull
             @Override
             public RecyclerView.ViewHolder onCreateViewHolder(@NonNull ViewGroup parent, int viewType) {
-                View view = LayoutInflater.from(parent.getContext())
-                        .inflate(android.R.layout.simple_list_item_1, parent, false);
+                View view = LayoutInflater.from(parent.getContext()).inflate(R.layout.item_owner_khachhang_tragop_rcv, parent, false);
                 return new RecyclerView.ViewHolder(view) {
                 };
             }
 
-            // Gắn dữ liệu vào ViewHolder
             @Override
             public void onBindViewHolder(@NonNull RecyclerView.ViewHolder holder, int position) {
-                TextView textView = (TextView) holder.itemView;
-                textView.setText(lyDoKhoaList.get(position).toString()); // Hiển thị dữ liệu
+                LyDoKhoaTK lyDoKhoa = lyDoKhoaList.get(position);
+                TextView tvLyDo = holder.itemView.findViewById(R.id.tvLyDo);
+                TextView tvNgay = holder.itemView.findViewById(R.id.tvNgay);
+                tvNgay.setText(lyDoKhoa.getNgay());
+                tvLyDo.setText(lyDoKhoa.getLyDo());
             }
 
             @Override
             public int getItemCount() {
-                return lyDoKhoaList.size(); // Số lượng phần tử trong danh sách
+                return lyDoKhoaList.size();
             }
         };
 
         // Gắn Adapter vào RecyclerView
         binding.rvLyDoKhoa.setAdapter(adapter);
-
-//        adapter = new ArrayAdapter<>(getContext(), android.R.layout.simple_list_item_1, lyDoKhoaList);
-//        binding.lvLyDoKhoa.setAdapter(adapter);
-//        layLyDoBiKhoa();
 
         setupAuthentButton();
         setupDSSanPhamButton();
@@ -567,53 +563,46 @@ public class Admin_CuaHangDetailFragment extends Fragment {
         // Tạo EditText để nhập lý do khóa/mở
         EditText input = new EditText(getContext());
         input.setHint("Cửa Hàng Vi Phạm Chính Sách CTY");
-        if (messenger.equals("UL"))
-            input.setHint("Cửa Hàng Đã Cam Kết Không Tái Phạm");
+        if (messenger.equals("UL")) input.setHint("Cửa Hàng Đã Cam Kết Không Tái Phạm");
 
 
         // Hiển thị hộp thoại yêu cầu nhập lý do khóa
-        new AlertDialog.Builder(getContext()).setTitle("Nhập Lý Do")
-                .setMessage("Vui lòng nhập lý do khóa/mở cửa hàng:")
-                .setView(input)
-                .setPositiveButton("Tiếp Tục", (dialog, which) -> {
-                    String lydo = input.getText().toString().trim();
+        new AlertDialog.Builder(getContext()).setTitle("Nhập Lý Do").setMessage("Vui lòng nhập lý do khóa/mở cửa hàng:").setView(input).setPositiveButton("Tiếp Tục", (dialog, which) -> {
+            String lydo = input.getText().toString().trim();
 
-                    if (lydo.isBlank())
-                        lydo = LoginUserID + " - Cửa Hàng Vi Phạm Chính Sách CTY";
+            if (lydo.isBlank()) lydo = LoginUserID + " - Cửa Hàng Vi Phạm Chính Sách CTY";
 
-                    if (messenger.equals("UL"))
-                        lydo = LoginUserID + " - Cửa Hàng Đã Cam Kết Không Tái Phạm";
+            if (messenger.equals("UL"))
+                lydo = LoginUserID + " - Cửa Hàng Đã Cam Kết Không Tái Phạm";
 
-                    // Lấy thời gian hiện tại làm key
-                    String key = new SimpleDateFormat("HH:mm:ss-ddMMyy", Locale.getDefault()).format(new Date());
-                    key += " " + messenger;
+            // Lấy thời gian hiện tại làm key
+            String key = new SimpleDateFormat("yyMMdd-HH:mm:ss", Locale.getDefault()).format(new Date());
+            key += " " + messenger;
 
-                    // Tạo reference tới đúng vị trí trong Firebase
-                    DatabaseReference db = FirebaseDatabase.getInstance().getReference("lydokhoatk/" + cuahangID);
-                    db.child(key).setValue(lydo).addOnCompleteListener(task -> {
-                        if (!task.isSuccessful()) {
-                            Toast.makeText(getContext(), "Lỗi khi xửa lý firebase!", Toast.LENGTH_SHORT).show();
-                        } else
-                            Snackbar.make(getView(), "Đã lưu lý do!", Toast.LENGTH_SHORT).setAnimationMode(BaseTransientBottomBar.ANIMATION_MODE_FADE).show();
-                    });
-                }).show();
+            // Tạo reference tới đúng vị trí trong Firebase
+            DatabaseReference db = FirebaseDatabase.getInstance().getReference("lydokhoatk/" + cuahangID);
+            db.child(key).setValue(lydo).addOnCompleteListener(task -> {
+                if (!task.isSuccessful()) {
+                    Toast.makeText(getContext(), "Lỗi khi xửa lý firebase!", Toast.LENGTH_SHORT).show();
+                } else
+                    Snackbar.make(getView(), "Đã lưu lý do!", Toast.LENGTH_SHORT).setAnimationMode(BaseTransientBottomBar.ANIMATION_MODE_FADE).show();
+            });
+        }).show();
     }
 
     // Hiển thị dialog mở khóa
     private void showUnlockDialog(DatabaseReference dbRef) {
-        new AlertDialog.Builder(getContext()).setTitle("Mở Khóa Cửa Hàng")
-                .setMessage("Bạn có chắc muốn mở khóa cửa hàng này không?")
-                .setPositiveButton("Mở Khóa", (dialog, which) -> {
-                    showLyDoDialog("UL");
+        new AlertDialog.Builder(getContext()).setTitle("Mở Khóa Cửa Hàng").setMessage("Bạn có chắc muốn mở khóa cửa hàng này không?").setPositiveButton("Mở Khóa", (dialog, which) -> {
+            showLyDoDialog("UL");
 
-                    dbRef.child("trangthai").child("lock").setValue(false);
-                    dbRef.child("trangthai").child("locktype").setValue("");
-                    dbRef.child("trangthai").child("locktime").setValue("");
-                    dbRef.child("trangthai").child("online").setValue(true);
+            dbRef.child("trangthai").child("lock").setValue(false);
+            dbRef.child("trangthai").child("locktype").setValue("");
+            dbRef.child("trangthai").child("locktime").setValue("");
+            dbRef.child("trangthai").child("online").setValue(true);
 
-                    binding.ivAuthenticated.setImageResource(android.R.drawable.ic_lock_lock);
-                    Log.d("l.d", "showUnlockDialog: Mở khóa cửa hàng");
-                }).setNegativeButton("Hủy", null).show();
+            binding.ivAuthenticated.setImageResource(android.R.drawable.ic_lock_lock);
+            Log.d("l.d", "showUnlockDialog: Mở khóa cửa hàng");
+        }).setNegativeButton("Hủy", null).show();
     }
 
     // Hàm khóa cửa hàng vĩnh viễn

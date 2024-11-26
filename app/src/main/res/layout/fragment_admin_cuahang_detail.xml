@@ -256,13 +256,13 @@
                     android:id="@+id/etDiaChi"
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
+                    android:autoSizeMaxTextSize="16sp"
                     android:autoSizeMinTextSize="12sp"
                     android:autoSizeTextType="uniform"
                     android:enabled="false"
                     android:hint="Địa Chỉ"
                     android:text="Ha Noi"
-                    android:textColor="@color/black"
-                    android:textSize="12sp" />
+                    android:textColor="@color/black" />
 
             </com.google.android.material.textfield.TextInputLayout>
 
