@@ -354,9 +354,9 @@ public class ProdDetailCustomerFragment extends Fragment {
                                     // Kiểm tra nếu binding và dữ liệu tồn tại
                                     if (binding != null && snapshot.exists()) {
                                         // Lấy tên chủ cửa hàng từ snapshot
-                                        String tenChu = snapshot.child("ten").getValue(String.class);
+                                        String tenCH = snapshot.child("cuahang").getValue(String.class);
                                         // Hiển thị tên cửa hàng trên giao diện
-                                        binding.tvCuaHang.setText("Cửa Hàng " + tenChu);
+                                        binding.tvCuaHang.setText("Cửa Hàng " + tenCH);
                                         binding.tvCuaHang.setVisibility(View.VISIBLE);
                                     }
                                 } catch (Exception e) {
@@ -691,6 +691,24 @@ public class ProdDetailCustomerFragment extends Fragment {
                                             tvKhoItem.setPadding(0, 5, 0, 5);
                                             tvKhoItem.setTextIsSelectable(true);
                                             layout.addView(tvKhoItem);
+                                        }
+
+                                        TextView tvCSKH = new TextView(getContext());
+                                        tvCSKH.setText("Danh sách kho:");
+                                        tvCSKH.setTypeface(null, Typeface.BOLD);
+                                        tvCSKH.setTextSize(18);
+                                        tvCSKH.setPadding(0, 15, 0, 10);
+                                        tvCSKH.setTextIsSelectable(true);
+                                        layout.addView(tvCSKH);
+
+                                        for (DataSnapshot khoSnapshot : dataSnapshot.child("cskh").getChildren()) {
+                                            String diaChiKho = khoSnapshot.getValue(String.class);
+                                            TextView tvCSKHItem = new TextView(getContext());
+                                            tvCSKHItem.setText("- " + diaChiKho);
+                                            tvCSKHItem.setTextSize(16);
+                                            tvCSKHItem.setPadding(0, 5, 0, 5);
+                                            tvCSKHItem.setTextIsSelectable(true);
+                                            layout.addView(tvCSKHItem);
                                         }
                                     }
                                 } catch (Exception e) {

@@ -104,7 +104,7 @@ public class Owner_SettingFragment extends Fragment {
                             db.addListenerForSingleValueEvent(new ValueEventListener() {
                                 @Override
                                 public void onDataChange(@NonNull DataSnapshot snapshot) {
-                                    /*// Duyệt qua tất cả các sản phẩm
+                                    // Duyệt qua tất cả các sản phẩm
                                     for (DataSnapshot productSnapshot : snapshot.getChildren()) {
                                         // Lấy idChu của mỗi sản phẩm
                                         String idChu = productSnapshot.child("idChu").getValue(String.class);
@@ -118,7 +118,7 @@ public class Owner_SettingFragment extends Fragment {
                                                 db.child(idProduct).child("id").setValue("@" + idProduct);
                                             }
                                         }
-                                    }*/
+                                    }
 
                                     // Thông báo sau khi cập nhật
                                     binding.tvDongCuaHang.setVisibility(View.GONE);
@@ -154,7 +154,7 @@ public class Owner_SettingFragment extends Fragment {
                             db.addListenerForSingleValueEvent(new ValueEventListener() {
                                 @Override
                                 public void onDataChange(@NonNull DataSnapshot snapshot) {
-                                    /*// Duyệt qua tất cả các sản phẩm
+                                    // Duyệt qua tất cả các sản phẩm
                                     for (DataSnapshot productSnapshot : snapshot.getChildren()) {
                                         // Lấy idChu của mỗi sản phẩm
                                         String idChu = productSnapshot.child("idChu").getValue(String.class);
@@ -171,7 +171,7 @@ public class Owner_SettingFragment extends Fragment {
                                                 db.child(key).child("id").setValue(key);
                                             }
                                         }
-                                    }*/
+                                    }
 
                                     // Thông báo sau khi cập nhật
                                     binding.tvDongCuaHang.setVisibility(View.VISIBLE);

@@ -10,12 +10,6 @@ import android.view.ViewGroup;
 
 import com.tdc.vlxdonline.R;
 
-/**
- * A simple {@link Fragment} subclass.
- * Use the {@link Owner_SettingAboutFragment#newInstance} factory method to
- * create an instance of this fragment.
- *
- */
 public class Owner_SettingAboutFragment extends Fragment {
     @Override
     public void onCreate(Bundle savedInstanceState) {

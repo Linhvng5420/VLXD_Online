@@ -62,9 +62,9 @@ public class AccountCustomerFragment extends Fragment {
                     Intent intent = new Intent(getActivity(), LoginActivity.class);
                     // Đóng hết các màn hình hiện có hoặc ẩn để quay lại màn hình đăng nhập
                     intent.addFlags(Intent.FLAG_ACTIVITY_CLEAR_TOP | Intent.FLAG_ACTIVITY_NEW_TASK);
+                    getActivity().finish(); // Đóng Owner_HomeActivity để quay lại màn hình đăng nhập
 
                     startActivity(intent);
-                    getActivity().finish(); // Đóng Owner_HomeActivity để quay lại màn hình đăng nhập
                 }).setNegativeButton("Không", null).show();
             }
         });
