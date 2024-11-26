@@ -81,7 +81,7 @@ public class YeuCauXacThucFragment extends Fragment {
             }
         });
     }
-
+    // Hàm xác nhận gửi yêu cầu xác minh cho chủ cửa hàng đã chọn
     private void XacNhanYeuCau(int position) {
         ThongTinChu tt = dataChu.get(position);
         AlertDialog.Builder builder = new AlertDialog.Builder(getActivity());
@@ -90,7 +90,9 @@ public class YeuCauXacThucFragment extends Fragment {
         builder.setPositiveButton(android.R.string.yes, new DialogInterface.OnClickListener() {
             @Override
             public void onClick(DialogInterface dialog, int which) {
+                // Thêm thông tin vào bảng thông báo yêu cầu xác thực
                 reference.child("thongbaochu").child(tt.getId()).child(Customer_HomeActivity.info.getID()).child("xacthuc").setValue("1");
+                // Thêm thông tin vào bảng duyệt khách hàng để chờ được duyệt
                 reference.child("duyetkhachhang").child(tt.getId()).child(Customer_HomeActivity.info.getID()).child("trangthai").setValue("0");
             }
         });
@@ -110,7 +112,7 @@ public class YeuCauXacThucFragment extends Fragment {
         alertDialog.getWindow().setBackgroundDrawable(drawableBg);
         alertDialog.show();
     }
-
+    // Hàm đọc danh sách chủ cửa hàng chưa xác nhận duyệt
     private void DocThongTin() {
         if (eventListener == null) {
             eventListener = new ValueEventListener() {
@@ -138,6 +140,7 @@ public class YeuCauXacThucFragment extends Fragment {
                                         dataChu.add(tt);
                                         dataHienThi.add("Tên Chủ: " + tt.getTen() + "\n" + "Email: " + tt.getEmail() + "\n" + "Số Điện Thoại: " + tt.getSdt());
                                     }
+                                    // Nếu đã hoàn thành duyệt dữ liệu và thêm vào danh sách thì thông báo thay đổi data danh sách
                                     if (atomicInteger.incrementAndGet() == itemCount) adapter.notifyDataSetChanged();
                                 }
 
@@ -147,6 +150,7 @@ public class YeuCauXacThucFragment extends Fragment {
                                 }
                             });
                         }else {
+                            // Nếu đã hoàn thành duyệt dữ liệu và thêm vào danh sách thì thông báo thay đổi data danh sách
                             if (atomicInteger.incrementAndGet() == itemCount) adapter.notifyDataSetChanged();
                         }
                     }
