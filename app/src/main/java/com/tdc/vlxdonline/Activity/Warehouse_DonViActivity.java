@@ -15,7 +15,6 @@ import androidx.appcompat.app.AppCompatActivity;
 import androidx.recyclerview.widget.GridLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
 
-import com.bumptech.glide.Glide;
 import com.google.android.gms.tasks.OnCompleteListener;
 import com.google.android.gms.tasks.Task;
 import com.google.firebase.database.DataSnapshot;
@@ -24,12 +23,7 @@ import com.google.firebase.database.DatabaseReference;
 import com.google.firebase.database.FirebaseDatabase;
 import com.google.firebase.database.ValueEventListener;
 import com.tdc.vlxdonline.Adapter.DonVi_Adapter;
-
-import com.tdc.vlxdonline.Adapter.SanPham_Adapter;
-import com.tdc.vlxdonline.Model.Categorys;
 import com.tdc.vlxdonline.Model.DonVi;
-
-import com.tdc.vlxdonline.Model.SanPham_Model;
 import com.tdc.vlxdonline.R;
 
 import java.util.ArrayList;
@@ -59,31 +53,6 @@ public class Warehouse_DonViActivity extends AppCompatActivity {
         setEvent();
     }
 
-    //        private void saveDate() {
-//        try {
-//            if (!edtNhapDV.getText().toString().isEmpty()) {
-//                donVi.setId(Long.parseLong(System.currentTimeMillis() + ""));
-//                donVi.setTen(edtNhapDV.getText().toString());
-//
-//                reference.child("DonVi").child(String.valueOf(donVi.getId())).setValue(donVi)
-//                        .addOnCompleteListener(new OnCompleteListener<Void>() {
-//                            @Override
-//                            public void onComplete(@NonNull Task<Void> task) {
-//                                if (task.isSuccessful()) {
-//                                    Toast.makeText(Warehouse_DonViActivity.this, "Thêm đơn vị thành công", Toast.LENGTH_SHORT).show();
-//                                    resetSelection();  // Reset selection after successful addition
-//                                } else {
-//                                    Toast.makeText(Warehouse_DonViActivity.this, "Thêm đơn vị thất bại", Toast.LENGTH_SHORT).show();
-//                                }
-//                            }
-//                        });
-//            } else {
-//                Toast.makeText(this, "Chưa Nhập đủ thông tin", Toast.LENGTH_SHORT).show();
-//            }
-//        } catch (Exception e) {
-//            e.printStackTrace(); // Log the exception for debugging
-//        }
-//    }
     private void saveDate() {
         try {
             String tenDonVi = edtNhapDV.getText().toString();

@@ -54,7 +54,7 @@ public class ProductAdapter extends RecyclerView.Adapter<ProductAdapter.ProductH
                 }
             }
         }
-        holder.binding.tvPriceItem.setText(chuoi);
+        holder.binding.tvPriceItem.setText(chuoi + "đ");
         // SetUp lai danh gia truoc khi hien thi theo san pham
         holder.binding.tvChuaDg.setVisibility(View.VISIBLE);
         holder.binding.lnSoSao.setVisibility(View.VISIBLE);
@@ -80,7 +80,7 @@ public class ProductAdapter extends RecyclerView.Adapter<ProductAdapter.ProductH
             if (sao > 4.7) {
                 holder.binding.star5.setImageResource(R.drawable.star);
             }
-        }else{
+        } else {
             holder.binding.lnSoSao.setVisibility(View.GONE);
         }
 
@@ -97,6 +97,7 @@ public class ProductAdapter extends RecyclerView.Adapter<ProductAdapter.ProductH
     public class ProductHolder extends RecyclerView.ViewHolder {
         ItemProductBinding binding;
         int position;
+
         public ProductHolder(@NonNull ItemProductBinding itemView) {
             super(itemView.getRoot());
             binding = itemView;
@@ -119,8 +120,9 @@ public class ProductAdapter extends RecyclerView.Adapter<ProductAdapter.ProductH
         }
     }
 
-    public interface OnItemProductClickListener{
+    public interface OnItemProductClickListener {
         void OnItemClick(View view, int position);
+
         void OnBtnBuyClick(View view, int position);
     }
 }

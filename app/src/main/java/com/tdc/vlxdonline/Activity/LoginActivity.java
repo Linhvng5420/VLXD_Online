@@ -1,16 +1,20 @@
 package com.tdc.vlxdonline.Activity;
 
 import android.app.ProgressDialog;
+import android.content.Context;
 import android.content.Intent;
 import android.graphics.Paint;
 import android.os.Bundle;
 import android.text.InputType;
 import android.view.View;
+import android.view.inputmethod.InputMethodManager;
 import android.widget.Toast;
 
 import androidx.annotation.NonNull;
 import androidx.appcompat.app.AppCompatActivity;
 
+import com.google.android.material.snackbar.BaseTransientBottomBar;
+import com.google.android.material.snackbar.Snackbar;
 import com.google.firebase.database.DataSnapshot;
 import com.google.firebase.database.DatabaseError;
 import com.google.firebase.database.DatabaseReference;
@@ -34,6 +38,7 @@ public class LoginActivity extends AppCompatActivity {
 
     // Hàm khởi tạo ProgressDialog
     private ProgressDialog progressDialog;
+
     private void initProgressDialog() {
         progressDialog = new ProgressDialog(this);
         progressDialog.setMessage("Đang đăng nhập...");
@@ -98,11 +103,14 @@ public class LoginActivity extends AppCompatActivity {
                     }
                     return false;
                 });
+
             }
         });
 
         // Sự kiện nhấn nút đăng nhập
-        binding.btnLg.setOnClickListener(v -> performLogin());
+        binding.btnLg.setOnClickListener(v -> {
+            performLogin();
+        });
 
         // Hiển thị/Ẩn mật khẩu
         binding.cbDisPass.setOnClickListener(v -> {
@@ -145,6 +153,10 @@ public class LoginActivity extends AppCompatActivity {
 
     // Tách logic đăng nhập vào hàm riêng
     private void performLogin() {
+        // Ẩn bàn phím
+        InputMethodManager imm = (InputMethodManager) getSystemService(Context.INPUT_METHOD_SERVICE);
+        imm.hideSoftInputFromWindow(binding.getRoot().getWindowToken(), 0); // Ẩn bàn phím
+
         String email = binding.edtEmailLg.getText().toString();
         String pass = binding.edtPassLg.getText().toString();
 
@@ -200,10 +212,17 @@ public class LoginActivity extends AppCompatActivity {
 
                 if (isValid) {
                     if (typeUser == 0) {
-                        Toast.makeText(LoginActivity.this, "Hello [ User: " + idUser + " ]", Toast.LENGTH_LONG).show();
-                        Intent intent = new Intent(LoginActivity.this, Owner_HomeActivity.class);
-                        intent.putExtra("emailUser", idUser);
-                        startActivity(intent);
+                        if (dataSnapshot.child(accountID + "/trangthai/lock").getValue(Boolean.class) == true) {
+                            if (dataSnapshot.child(accountID + "/trangthai/locktype/").getValue(String.class).equals("vinhvien"))
+                                Snackbar.make(binding.getRoot(), "Tài khoản đã bị khóa vĩnh viễn", Snackbar.LENGTH_LONG).setAnimationMode(BaseTransientBottomBar.ANIMATION_MODE_SLIDE).show();
+                            else
+                                Snackbar.make(binding.getRoot(), "Tài khoản đã bị khóa tới " + dataSnapshot.child(accountID + "/trangthai/locktime").getValue(String.class), Snackbar.LENGTH_LONG).setAnimationMode(BaseTransientBottomBar.ANIMATION_MODE_SLIDE).show();
+                        } else {
+                            Toast.makeText(LoginActivity.this, "Hello [ User: " + idUser + " ]", Toast.LENGTH_LONG).show();
+                            Intent intent = new Intent(LoginActivity.this, Owner_HomeActivity.class);
+                            intent.putExtra("emailUser", idUser);
+                            startActivity(intent);
+                        }
                     } else if (typeUser == 1) {
                         Intent intent = new Intent(LoginActivity.this, Customer_HomeActivity.class);
                         intent.putExtra("emailUser", idUser);

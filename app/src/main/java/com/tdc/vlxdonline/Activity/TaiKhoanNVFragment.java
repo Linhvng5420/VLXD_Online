@@ -3,15 +3,14 @@ package com.tdc.vlxdonline.Activity;
 import android.app.AlertDialog;
 import android.content.Intent;
 import android.os.Bundle;
-
-import androidx.annotation.NonNull;
-import androidx.annotation.Nullable;
-import androidx.fragment.app.Fragment;
-
 import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
+
+import androidx.annotation.NonNull;
+import androidx.annotation.Nullable;
+import androidx.fragment.app.Fragment;
 
 import com.google.firebase.database.DataSnapshot;
 import com.google.firebase.database.DatabaseError;
@@ -96,7 +95,6 @@ public class TaiKhoanNVFragment extends Fragment {
                         .commit();
             }
         });
-
         binding.lnAbout.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
@@ -106,7 +104,6 @@ public class TaiKhoanNVFragment extends Fragment {
                         .commit();
             }
         });
-// Sự kiện khi nhấn nút logout
         binding.btnDangxua.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
@@ -114,6 +111,8 @@ public class TaiKhoanNVFragment extends Fragment {
                     // Xóa thông tin đăng nhập
                     LoginActivity.idUser = null;
                     LoginActivity.typeUser = -1;
+                    LoginActivity.accountID = null;
+                    LoginActivity.typeEmployee = null;
 
                     // Quay về màn hình LoginActivity
                     Intent intent = new Intent(getActivity(), LoginActivity.class);
