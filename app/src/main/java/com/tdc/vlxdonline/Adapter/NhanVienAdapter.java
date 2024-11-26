@@ -15,8 +15,6 @@ import com.google.firebase.database.ValueEventListener;
 import com.tdc.vlxdonline.Model.NhanVien;
 import com.tdc.vlxdonline.databinding.ItemOwnerRecycleviewBinding;
 
-import java.util.Collections;
-import java.util.Comparator;
 import java.util.List;
 
 public class NhanVienAdapter extends RecyclerView.Adapter<NhanVienAdapter.NhanVienViewHolder> {
@@ -89,16 +87,25 @@ public class NhanVienAdapter extends RecyclerView.Adapter<NhanVienAdapter.NhanVi
 
         // Phương thức bind để gán dữ liệu nhân viên vào các view trong item
         public void bind(NhanVien nhanVien) {
-            // Hiển thị tt của nhân viên
+            // Đặt trạng thái mặc định
+            binding.tvID.setTextColor(Color.rgb(153, 0, 0));
+            binding.tvTen.setTextColor(Color.BLACK);
+            binding.tvSDT.setTextColor(Color.BLACK);
+            binding.tvPhu.setTextColor(Color.rgb(51, 153, 51));
+            binding.lnItem.setBackgroundResource(0);
+
+            // Gán dữ liệu nhân viên
             binding.tvID.setText(nhanVien.getCccd());
             binding.tvTen.setText(nhanVien.getTennv());
             binding.tvSDT.setText(nhanVien.getSdt());
 
             // Kiểm tra nếu mã CCCD bắt đầu bằng ký tự '@'
             if (nhanVien.getCccd() != null && nhanVien.getCccd().startsWith("@")) {
-                binding.tvTen.setTextColor(Color.RED); // Đặt background đặc biệt
-                binding.tvID.setTextColor(Color.RED); // Đặt background đặc biệt\
-                binding.tvID.setText(nhanVien.getCccd().substring(1));
+                binding.tvTen.setTextColor(Color.RED);
+                binding.tvID.setTextColor(Color.RED);
+                binding.tvSDT.setTextColor(Color.RED);
+                binding.tvPhu.setTextColor(Color.RED);
+                binding.lnItem.setBackgroundResource(com.google.android.gms.base.R.drawable.common_google_signin_btn_icon_dark_normal_background); // Đặt background mặc định
             } else {
                 binding.lnItem.setBackgroundResource(com.google.android.gms.base.R.drawable.common_google_signin_btn_icon_dark_normal_background); // Đặt background mặc định
             }

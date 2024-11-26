@@ -59,8 +59,6 @@ public class Owner_KhachHangFragment extends Fragment {
         binding.ownerRcvKhachHang.setLayoutManager(new LinearLayoutManager(getContext()));
         adapter = new KhachHangAdapter(dsKhachHang);
         binding.ownerRcvKhachHang.setAdapter(adapter);
-        adapter.getKhachHangList().clear();
-        dsKhachHang.clear();
 
         return binding.getRoot();
     }
