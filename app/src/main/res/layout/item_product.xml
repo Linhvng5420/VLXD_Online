@@ -17,9 +17,9 @@
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:layout_marginBottom="-2dp"
+            android:elevation="5dp"
             app:cardCornerRadius="8dp"
-            app:cardUseCompatPadding="true"
-            android:elevation="5dp">
+            app:cardUseCompatPadding="true">
 
             <ImageView
                 android:id="@+id/imgItem"
@@ -29,91 +29,93 @@
                 android:src="@drawable/tc" />
         </androidx.cardview.widget.CardView>
 
-            <TextView
-                android:id="@+id/tvNameItem"
-                android:layout_width="120dp"
+        <TextView
+            android:id="@+id/tvNameItem"
+            android:layout_width="120dp"
+            android:layout_height="18dp"
+            android:autoSizeMaxTextSize="16sp"
+            android:autoSizeMinTextSize="8sp"
+            android:autoSizeTextType="uniform"
+            android:gravity="center"
+            android:paddingLeft="2dp"
+            android:paddingRight="2dp"
+            android:text="Tên Demo - gạch Đá Tổ Ong"
+            android:textAlignment="center"
+            android:textColor="@color/black"
+            android:textStyle="bold" />
+
+        <TextView
+            android:id="@+id/tv_chua_dg"
+            android:layout_width="120dp"
+            android:layout_height="18dp"
+            android:gravity="center"
+            android:text="Chưa Có Đánh Giá"
+            android:textColor="#FD0"
+            android:textSize="13dp"
+            android:textStyle="bold"
+            android:visibility="gone" />
+
+        <LinearLayout
+            android:id="@+id/ln_so_sao"
+            android:layout_width="120dp"
+            android:layout_height="wrap_content"
+            android:gravity="center"
+            android:paddingLeft="2dp"
+            android:paddingRight="2dp">
+
+            <ImageView
+                android:id="@+id/star_1"
+                android:layout_width="18dp"
                 android:layout_height="18dp"
-                android:autoSizeMaxTextSize="16sp"
-                android:autoSizeMinTextSize="13sp"
-                android:autoSizeTextType="uniform"
-                android:gravity="center"
-                android:text="Tên SP"
-                android:textAlignment="gravity"
-                android:textColor="@color/black"
-                android:textStyle="bold" />
+                android:src="@drawable/star" />
 
-            <TextView
-                android:id="@+id/tv_chua_dg"
-                android:layout_width="120dp"
+            <ImageView
+                android:id="@+id/star_2"
+                android:layout_width="18dp"
                 android:layout_height="18dp"
-                android:gravity="center"
-                android:text="Chưa Có Đánh Giá"
-                android:textSize="13dp"
-                android:textColor="#FD0"
-                android:textStyle="bold"
-                android:visibility="gone" />
+                android:src="@drawable/star" />
 
-            <LinearLayout
-                android:id="@+id/ln_so_sao"
-                android:layout_width="120dp"
-                android:layout_height="wrap_content"
-                android:gravity="center"
-                android:paddingLeft="2dp"
-                android:paddingRight="2dp">
-
-                <ImageView
-                    android:id="@+id/star_1"
-                    android:layout_width="18dp"
-                    android:layout_height="18dp"
-                    android:src="@drawable/star" />
-
-                <ImageView
-                    android:id="@+id/star_2"
-                    android:layout_width="18dp"
-                    android:layout_height="18dp"
-                    android:src="@drawable/star" />
-
-                <ImageView
-                    android:id="@+id/star_3"
-                    android:layout_width="18dp"
-                    android:layout_height="18dp"
-                    android:src="@drawable/star" />
-
-                <ImageView
-                    android:id="@+id/star_4"
-                    android:layout_width="18dp"
-                    android:layout_height="18dp"
-                    android:src="@drawable/star" />
-
-                <ImageView
-                    android:id="@+id/star_5"
-                    android:layout_width="18dp"
-                    android:layout_height="18dp"
-                    android:src="@drawable/star" />
-            </LinearLayout>
-
-            <TextView
-                android:id="@+id/tvPriceItem"
-                android:layout_width="120dp"
+            <ImageView
+                android:id="@+id/star_3"
+                android:layout_width="18dp"
                 android:layout_height="18dp"
-                android:layout_marginBottom="2dp"
-                android:autoSizeMaxTextSize="18sp"
-                android:autoSizeMinTextSize="14sp"
-                android:autoSizeTextType="uniform"
-                android:text="100.000.000.000"
-                android:textAlignment="center"
-                android:textColor="#CA1304"
-                android:textStyle="bold" />
+                android:src="@drawable/star" />
 
-            <TextView
-                android:id="@+id/btn_buy"
-                android:layout_width="120dp"
-                android:layout_height="match_parent"
-                android:background="#CE291D"
-                android:gravity="center"
-                android:paddingVertical="1.4dp"
-                android:text="ĐẶT NGAY"
-                android:textColor="#FFF"
-                android:textStyle="bold" />
+            <ImageView
+                android:id="@+id/star_4"
+                android:layout_width="18dp"
+                android:layout_height="18dp"
+                android:src="@drawable/star" />
+
+            <ImageView
+                android:id="@+id/star_5"
+                android:layout_width="18dp"
+                android:layout_height="18dp"
+                android:src="@drawable/star" />
+        </LinearLayout>
+
+        <TextView
+            android:id="@+id/tvPriceItem"
+            android:layout_width="120dp"
+            android:layout_height="18dp"
+            android:layout_marginBottom="2dp"
+            android:autoSizeMaxTextSize="18sp"
+            android:autoSizeMinTextSize="14sp"
+            android:autoSizeTextType="uniform"
+            android:text="100.000.000.000"
+            android:textAlignment="center"
+            android:textColor="#CA1304"
+            android:textStyle="bold" />
+
+        <TextView
+            android:id="@+id/btn_buy"
+            android:layout_width="120dp"
+            android:layout_height="match_parent"
+            android:background="#CE291D"
+            android:gravity="center"
+            android:paddingVertical="1.4dp"
+            android:text="ĐẶT NGAY"
+            android:textColor="#FFF"
+            android:textStyle="bold" />
     </LinearLayout>
 </androidx.cardview.widget.CardView>
