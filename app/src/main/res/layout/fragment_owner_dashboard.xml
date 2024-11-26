@@ -40,270 +40,144 @@
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toBottomOf="@+id/tvThongBao" />
 
-    <!-- Layout chứa các ô thống kê -->
-    <LinearLayout
-        android:id="@+id/linearLayout2"
+    <ScrollView
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:layout_marginStart="5dp"
-        android:layout_marginEnd="5dp"
-        android:gravity="center"
-        android:orientation="vertical"
-        android:padding="16dp"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toBottomOf="@+id/textView">
 
-        <!-- Tổng số lượng nhân viên -->
         <LinearLayout
             android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            android:layout_marginBottom="8dp"
-            android:background="@drawable/common_google_signin_btn_icon_dark_normal_background"
-            android:orientation="horizontal"
-            android:padding="16dp">
-
-            <ImageView
-                android:layout_width="wrap_content"
-                android:layout_height="match_parent"
-                android:background="@drawable/common_google_signin_btn_icon_light_normal_background"
-                android:contentDescription="Total Staff Icon"
-                android:src="@android:drawable/ic_menu_myplaces" />
+            android:layout_height="match_parent"
+            android:orientation="vertical">
 
             <LinearLayout
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
-                android:layout_gravity="center_vertical"
-                android:orientation="vertical"
-                android:paddingStart="16dp">
+                android:orientation="vertical">
 
                 <TextView
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
-                    android:text="TỔNG SỐ LƯỢNG NHÂN VIÊN"
-                    android:textColor="@android:color/black"
-                    android:textSize="16sp"
-                    android:textStyle="bold" />
-
-                <TextView
-                    android:id="@+id/tvSLNV1"
-                    android:layout_width="wrap_content"
-                    android:layout_height="wrap_content"
-                    android:text="10"
-                    android:textColor="@android:color/black"
+                    android:layout_gravity="right"
+                    android:layout_marginTop="20dp"
+                    android:layout_marginRight="-10dp"
+                    android:layout_marginBottom="-5dp"
+                    android:background="@drawable/common_google_signin_btn_icon_light_normal_background"
+                    android:gravity="center"
+                    android:paddingLeft="10dp"
+                    android:paddingRight="50dp"
+                    android:text="Nhân Viên"
+                    android:textAlignment="center"
+                    android:textColor="#FF1102"
                     android:textSize="20sp"
                     android:textStyle="bold" />
 
-                <TextView
-                    android:id="@+id/tvSLNV2"
-                    android:layout_width="wrap_content"
-                    android:layout_height="wrap_content"
-                    android:text="Nhân viên kho: 5 \nNhân viên giao hàng: 5 \nNhân viên khác: 0"
-                    android:textColor="@android:color/black"
-                    android:textSize="14sp" />
+                <com.github.mikephil.charting.charts.BarChart
+                    android:id="@+id/barChartNhanVien"
+                    android:layout_width="match_parent"
+                    android:layout_height="300dp"
+                    android:layout_margin="10dp"
+                    android:background="@color/material_dynamic_neutral95" />
             </LinearLayout>
-        </LinearLayout>
-
-        <!-- Số lượng khách hàng và khách hàng đã xác thực -->
-        <LinearLayout
-            android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            android:layout_marginBottom="8dp"
-            android:background="@drawable/common_google_signin_btn_icon_dark_normal_background"
-            android:orientation="horizontal"
-            android:padding="10dp">
-
-            <ImageView
-                android:layout_width="wrap_content"
-                android:layout_height="match_parent"
-                android:background="@drawable/common_google_signin_btn_icon_light_normal_background"
-                android:contentDescription="Customer Icon"
-                android:src="@android:drawable/ic_menu_my_calendar" />
 
             <LinearLayout
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
-                android:layout_gravity="center_vertical"
-                android:orientation="vertical"
-                android:paddingStart="16dp">
+                android:orientation="vertical">
 
                 <TextView
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
-                    android:text="TỔNG SỐ LƯỢNG KHÁCH HÀNG"
-                    android:textColor="@android:color/black"
-                    android:textSize="16sp"
-                    android:textStyle="bold" />
-
-                <TextView
-                    android:id="@+id/tvSLKH1"
-                    android:layout_width="wrap_content"
-                    android:layout_height="wrap_content"
-                    android:text="11"
-                    android:textColor="@android:color/black"
+                    android:layout_gravity="right"
+                    android:layout_marginTop="50dp"
+                    android:layout_marginRight="-10dp"
+                    android:layout_marginBottom="-5dp"
+                    android:background="@drawable/common_google_signin_btn_icon_light_normal_background"
+                    android:gravity="center"
+                    android:paddingLeft="10dp"
+                    android:paddingRight="50dp"
+                    android:text="Khách Hàng"
+                    android:textAlignment="center"
+                    android:textColor="#FF1102"
                     android:textSize="20sp"
                     android:textStyle="bold" />
 
-                <TextView
-                    android:id="@+id/tvSLKH2"
-                    android:layout_width="wrap_content"
-                    android:layout_height="wrap_content"
-                    android:text="Khách hàng đã xác thực: 20"
-                    android:textColor="@android:color/black"
-                    android:textSize="14sp" />
+                <com.github.mikephil.charting.charts.PieChart
+                    android:id="@+id/pieChartKhachHang"
+                    android:layout_width="match_parent"
+                    android:layout_height="300dp"
+                    android:layout_margin="10dp"
+                    android:background="@color/material_dynamic_neutral95" />
             </LinearLayout>
-        </LinearLayout>
-
-        <!-- Số lượng sản phẩm trong kho -->
-        <LinearLayout
-            android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            android:layout_marginBottom="8dp"
-            android:background="@drawable/common_google_signin_btn_icon_dark_normal_background"
-            android:orientation="horizontal"
-            android:padding="16dp">
-
-            <ImageView
-                android:layout_width="wrap_content"
-                android:layout_height="match_parent"
-                android:background="@drawable/common_google_signin_btn_icon_light_normal_background"
-                android:contentDescription="Inventory Icon"
-                android:src="@android:drawable/ic_menu_today" />
 
             <LinearLayout
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
-                android:layout_gravity="center_vertical"
-                android:orientation="vertical"
-                android:paddingStart="16dp">
+                android:orientation="vertical">
 
                 <TextView
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
-                    android:text="SẢN PHẨM TRONG KHO"
-                    android:textColor="@android:color/black"
-                    android:textSize="16sp"
-                    android:textStyle="bold" />
-
-                <TextView
-                    android:id="@+id/tvSLSP1"
-                    android:layout_width="wrap_content"
-                    android:layout_height="wrap_content"
-                    android:text="13"
-                    android:textColor="@android:color/black"
+                    android:layout_gravity="right"
+                    android:layout_marginTop="50dp"
+                    android:layout_marginRight="-10dp"
+                    android:layout_marginBottom="-5dp"
+                    android:background="@drawable/common_google_signin_btn_icon_light_normal_background"
+                    android:gravity="center"
+                    android:paddingLeft="10dp"
+                    android:paddingRight="50dp"
+                    android:text="Kho Hàng"
+                    android:textAlignment="center"
+                    android:textColor="#FF1102"
                     android:textSize="20sp"
                     android:textStyle="bold" />
 
-                <TextView
-                    android:id="@+id/tvSLSP2"
-                    android:layout_width="wrap_content"
-                    android:layout_height="wrap_content"
-                    android:text="Giá trị sản phẩm: 100,325,756 vnđ \nGiá nhập kho: 100,325,756 vnđ"
-                    android:textColor="@android:color/black" />
+                <com.github.mikephil.charting.charts.LineChart
+                    android:id="@+id/lineChartKho"
+                    android:layout_width="match_parent"
+                    android:layout_height="250dp"
+                    android:layout_margin="10dp"
+                    android:layout_marginTop="16dp"
+                    android:background="@color/material_dynamic_neutral95" />
             </LinearLayout>
-        </LinearLayout>
-
-        <!-- Thống kê đơn hàng -->
-        <LinearLayout
-            android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            android:layout_marginBottom="8dp"
-            android:background="@drawable/common_google_signin_btn_icon_dark_normal_background"
-            android:orientation="horizontal"
-            android:padding="16dp">
-
-            <ImageView
-                android:layout_width="wrap_content"
-                android:layout_height="match_parent"
-                android:background="@drawable/common_google_signin_btn_icon_light_normal_background"
-                android:contentDescription="Order Icon"
-                android:src="@android:drawable/ic_menu_sort_by_size" />
 
             <LinearLayout
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
-                android:layout_gravity="center_vertical"
-                android:orientation="vertical"
-                android:paddingStart="16dp">
+                android:layout_marginBottom="300dp"
+                android:orientation="vertical">
 
                 <TextView
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
-                    android:text="THỐNG KÊ ĐƠN HÀNG"
-                    android:textColor="@android:color/black"
-                    android:textSize="16sp"
-                    android:textStyle="bold" />
-
-                <TextView
-                    android:id="@+id/tvSLDH1"
-                    android:layout_width="wrap_content"
-                    android:layout_height="wrap_content"
-                    android:text="35"
-                    android:textColor="@android:color/black"
+                    android:layout_gravity="right"
+                    android:layout_marginTop="50dp"
+                    android:layout_marginRight="-10dp"
+                    android:layout_marginBottom="-5dp"
+                    android:background="@drawable/common_google_signin_btn_icon_light_normal_background"
+                    android:gravity="center"
+                    android:paddingLeft="10dp"
+                    android:paddingRight="50dp"
+                    android:text="Doanh Thu"
+                    android:textAlignment="center"
+                    android:textColor="#FF1102"
                     android:textSize="20sp"
                     android:textStyle="bold" />
 
-                <TextView
-                    android:id="@+id/tvSLDH2"
-                    android:layout_width="wrap_content"
-                    android:layout_height="wrap_content"
-                    android:text="Đơn đã giao: 20 \nĐơn đang giao: 10 \nĐơn bị hủy: 10 \nĐơn trả góp: 8"
-                    android:textColor="@android:color/black"
-                    android:textSize="14sp" />
+                <!-- Biểu đồ đường - Thống kê doanh thu -->
+                <com.github.mikephil.charting.charts.LineChart
+                    android:id="@+id/lineChartDoanhThu"
+                    android:layout_width="match_parent"
+                    android:layout_height="300dp"
+                    android:layout_margin="10dp"
+                    android:layout_marginTop="16dp"
+                    android:layout_marginBottom="300dp"
+                    android:background="@color/material_dynamic_neutral95" />
             </LinearLayout>
         </LinearLayout>
-
-        <LinearLayout
-            android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            android:background="@drawable/common_google_signin_btn_icon_dark_normal_background"
-            android:orientation="horizontal"
-            android:padding="16dp">
-
-            <ImageView
-                android:layout_width="wrap_content"
-                android:layout_height="match_parent"
-                android:background="@drawable/common_google_signin_btn_icon_light_normal_background"
-                android:contentDescription="Order Icon"
-                android:src="@android:drawable/ic_menu_week" />
-
-            <LinearLayout
-                android:layout_width="match_parent"
-                android:layout_height="wrap_content"
-                android:layout_gravity="center_vertical"
-                android:orientation="vertical"
-                android:paddingStart="16dp">
-
-                <TextView
-                    android:layout_width="wrap_content"
-                    android:layout_height="wrap_content"
-                    android:text="THỐNG KÊ DOANH THU"
-                    android:textColor="@android:color/black"
-                    android:textSize="16sp"
-                    android:textStyle="bold" />
-
-                <TextView
-                    android:id="@+id/tvDoanhThu1"
-                    android:layout_width="wrap_content"
-                    android:layout_height="wrap_content"
-                    android:text="100,325,756 vnđ"
-                    android:textColor="@android:color/black"
-                    android:textSize="20sp"
-                    android:textStyle="bold" />
-
-                <TextView
-                    android:id="@+id/tvDoanhThu2"
-                    android:layout_width="wrap_content"
-                    android:layout_height="wrap_content"
-                    android:text="Đơn đã giao: 80,775,587 vnđ \nĐơn đang giao: 10,576,477 vnđ \nĐơn trả góp: 9,774,464 vnđ"
-                    android:textColor="@android:color/black"
-                    android:textSize="14sp" />
-            </LinearLayout>
-
-        </LinearLayout>
-
-    </LinearLayout>
-
+    </ScrollView>
 
     <!-- Nút nổi với biểu tượng tài khoản -->
     <com.google.android.material.floatingactionbutton.FloatingActionButton

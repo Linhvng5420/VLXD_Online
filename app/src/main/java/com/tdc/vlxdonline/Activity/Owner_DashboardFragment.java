@@ -12,6 +12,18 @@ import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
 import androidx.fragment.app.Fragment;
 
+import com.github.mikephil.charting.charts.BarChart;
+import com.github.mikephil.charting.charts.LineChart;
+import com.github.mikephil.charting.charts.PieChart;
+import com.github.mikephil.charting.data.BarData;
+import com.github.mikephil.charting.data.BarDataSet;
+import com.github.mikephil.charting.data.BarEntry;
+import com.github.mikephil.charting.data.Entry;
+import com.github.mikephil.charting.data.LineData;
+import com.github.mikephil.charting.data.LineDataSet;
+import com.github.mikephil.charting.data.PieData;
+import com.github.mikephil.charting.data.PieDataSet;
+import com.github.mikephil.charting.data.PieEntry;
 import com.google.android.material.snackbar.Snackbar;
 import com.google.firebase.database.DataSnapshot;
 import com.google.firebase.database.DatabaseError;
@@ -21,12 +33,20 @@ import com.google.firebase.database.ValueEventListener;
 import com.tdc.vlxdonline.R;
 import com.tdc.vlxdonline.databinding.FragmentOwnerDashboardBinding;
 
+import java.util.ArrayList;
+import java.util.List;
+
 public class Owner_DashboardFragment extends Fragment {
     FragmentOwnerDashboardBinding binding;
     String emailOwnerLogin = LoginActivity.idUser;
     String idOwnerLogin = emailOwnerLogin.substring(0, LoginActivity.idUser.indexOf("@")); //Mã ID
     boolean statusShop;
     DatabaseReference dbThongBaoChu;
+
+    BarChart barChartNhanVien;
+    PieChart pieChartKhachHang;
+    LineChart lineChartKho;
+    LineChart lineChartDoanhThu;
 
     @Override
     public void onCreate(Bundle savedInstanceState) {
@@ -66,6 +86,12 @@ public class Owner_DashboardFragment extends Fragment {
                 Snackbar.make(view, "Lỗi: Không thể đọc trạng thái gian hàng", Snackbar.LENGTH_LONG).show();
             }
         });
+
+        // CHART
+        barChartNhanVien = binding.barChartNhanVien;
+        pieChartKhachHang = binding.pieChartKhachHang;
+        lineChartKho = binding.lineChartKho;
+        lineChartDoanhThu = binding.lineChartDoanhThu;
 
         // Đọc data
         getDataNhanVien();
@@ -109,10 +135,9 @@ public class Owner_DashboardFragment extends Fragment {
                 }
 
                 // Cập nhật giao diện với số lượng sản phẩm
-                binding.tvSLSP1.setText(String.valueOf(totalProducts));
-
-                // Hiển thị giá nhập - giá bán cho sản phẩm cuối cùng khớp
-                binding.tvSLSP2.setText("Giá nhập: " + giaNhap + "VND \nGiá bán: " + giaBan + " VND \nTiền lợi: " + (giaBan - giaNhap) + " VND");
+                updateLineChart(giaNhap, giaBan, giaBan - giaNhap);
+                /*binding.tvSLSP1.setText(String.valueOf(totalProducts));
+                binding.tvSLSP2.setText("Giá nhập: " + giaNhap + "VND \nGiá bán: " + giaBan + " VND \nTiền lợi: " + (giaBan - giaNhap) + " VND");*/
             }
 
             @Override
@@ -149,8 +174,9 @@ public class Owner_DashboardFragment extends Fragment {
                 }
 
                 // Cập nhật giao diện với số lượng khách hàng
-                binding.tvSLKH1.setText(String.valueOf(totalCustomer));
-                binding.tvSLKH2.setText("Khách hàng đã xác thực: " + totalCustomerAuthen);
+                updatePieChart(totalCustomerAuthen, totalCustomer);
+                /*binding.tvSLKH1.setText(String.valueOf(totalCustomer));
+                binding.tvSLKH2.setText("Khách hàng đã xác thực: " + totalCustomerAuthen);*/
             }
 
             @Override
@@ -197,8 +223,9 @@ public class Owner_DashboardFragment extends Fragment {
                 }
 
                 // Cập nhật UI với số lượng nhân viên
-                binding.tvSLNV1.setText(String.valueOf(totalEmployees));
-                binding.tvSLNV2.setText("Kho: " + khoEmployees + " \nGiao Hàng: " + giaoHangEmployees + " \nKhác: " + otherEmployees);
+                updateBarChart(khoEmployees, giaoHangEmployees, otherEmployees);
+                /*binding.tvSLNV1.setText(String.valueOf(totalEmployees));
+                binding.tvSLNV2.setText("Kho: " + khoEmployees + " \nGiao Hàng: " + giaoHangEmployees + " \nKhác: " + otherEmployees);*/
             }
 
             @Override
@@ -207,5 +234,62 @@ public class Owner_DashboardFragment extends Fragment {
                 Toast.makeText(getContext(), "Không thể tải dữ liệu nhân viên", Toast.LENGTH_SHORT).show();
             }
         });
+    }
+
+    private void updateBarChart(int khoEmployees, int giaoHangEmployees, int otherEmployees) {
+        List<BarEntry> entries = new ArrayList<>();
+        entries.add(new BarEntry(0, khoEmployees));
+        entries.add(new BarEntry(1, giaoHangEmployees));
+        entries.add(new BarEntry(2, otherEmployees));
+
+        BarDataSet dataSet = new BarDataSet(entries, "Nhân Viên");
+        dataSet.setColors(Color.BLUE, Color.GREEN, Color.RED);
+
+        BarData data = new BarData(dataSet);
+        data.setBarWidth(0.9f);
+
+        barChartNhanVien.setData(data);
+        barChartNhanVien.setFitBars(true);
+        barChartNhanVien.invalidate();  // Làm mới biểu đồ
+    }
+
+    private void updatePieChart(int totalCustomerAuthen, int totalCustomer) {
+        List<PieEntry> entries = new ArrayList<>();
+        entries.add(new PieEntry(totalCustomerAuthen, "Đã xác thực"));
+        entries.add(new PieEntry(totalCustomer - totalCustomerAuthen, "Chưa xác thực"));
+
+        PieDataSet dataSet = new PieDataSet(entries, "Khách Hàng");
+        dataSet.setColors(Color.rgb(0, 153, 51), Color.rgb(230, 0, 0));
+        dataSet.setSliceSpace(3f);
+
+        PieData data = new PieData(dataSet);
+        pieChartKhachHang.setData(data);
+        pieChartKhachHang.invalidate();  // Làm mới biểu đồ
+    }
+
+    private void updateLineChart(long giaNhap, long giaBan, long tienLoi) {
+        List<Entry> entries = new ArrayList<>();
+        entries.add(new Entry(0, giaNhap));
+        entries.add(new Entry(1, giaBan));
+        entries.add(new Entry(2, tienLoi));
+
+        LineDataSet dataSet = new LineDataSet(entries, "Sản Phẩm");
+        dataSet.setColor(Color.BLUE);
+        dataSet.setValueTextColor(Color.BLACK);
+        LineData data = new LineData(dataSet);
+        lineChartKho.setData(data);
+        lineChartKho.invalidate();  // Làm mới biểu đồ
+
+        List<Entry> entries2 = new ArrayList<>();
+        entries2.add(new Entry(0, giaNhap * 9));
+        entries2.add(new Entry(1, giaBan * 32));
+        entries2.add(new Entry(2, tienLoi * 28));
+
+        LineDataSet dataSet2 = new LineDataSet(entries2, "Doanh Thu Hàng Năm");
+        dataSet2.setColor(Color.RED);
+        dataSet2.setValueTextColor(Color.BLUE);
+        LineData data2 = new LineData(dataSet2);
+        lineChartDoanhThu.setData(data2);
+        lineChartDoanhThu.invalidate();  // Làm mới biểu đồ
     }
 }

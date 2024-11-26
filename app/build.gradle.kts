@@ -52,4 +52,6 @@ dependencies {
     // Import the Firebase
     implementation("com.google.firebase:firebase-database:21.0.0")
     implementation("com.google.firebase:firebase-storage:21.0.1")
+
+    implementation("com.github.PhilJay:MPAndroidChart:v3.1.0")
 }

@@ -113,9 +113,6 @@ public class Warehouse_AnhSPActivity extends AppCompatActivity {
         btnThemASP.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                // TODO: Ông Thiện? - Tại sao lại bug ở đây
-                // if (uri == null || edtChonASP.getText().toString().trim().isEmpty())
-                // "edtChonASP" đâu có được ánh xạ tới view nào
                 if (uri == null) {
                     Toast.makeText(Warehouse_AnhSPActivity.this, "Vui lòng chọn hình ảnh sản phẩm!", Toast.LENGTH_SHORT).show();
                 } else {
