@@ -118,8 +118,7 @@ public class Warehouse_AnhSPActivity extends AppCompatActivity {
             public void onClick(View v) {
                 // TODO: Loading
                 if (
-                        uri == null || edtChonASP.getText().toString().trim().isEmpty()){
-
+                        uri == null ){
                     Toast.makeText(Warehouse_AnhSPActivity.this,
                             "Vui lòng chọn hình ảnh sản phẩm!", Toast.LENGTH_SHORT).show();
                 } else {
