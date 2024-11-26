@@ -53,7 +53,7 @@ import java.util.List;
 import SanPham_Model.SanPham_Model;*/
 
 public class Warehouse_ThemSanPhamActivity extends AppCompatActivity {
-    EditText edtNhapten, edtNhapgiaban,edtgiaNhap, edtNhapsoluong, edtDaban, edtMoTa;
+    EditText edtNhapten, edtNhapgiaban, edtgiaNhap, edtNhapsoluong, edtDaban, edtMoTa;
     Button btnThem, btnXoa, btnSua;
     ImageView ivImages;
     Uri uri;
@@ -82,7 +82,7 @@ public class Warehouse_ThemSanPhamActivity extends AppCompatActivity {
 
     private void initProgressDialog() {
         progressDialog = new ProgressDialog(this);
-        progressDialog.setMessage ("Đang thêm ảnh...");
+        progressDialog.setMessage("Đang thêm ảnh...");
         progressDialog.setCancelable(false);
     }
 
@@ -105,6 +105,7 @@ public class Warehouse_ThemSanPhamActivity extends AppCompatActivity {
             public void onDataChange(@NonNull DataSnapshot snapshot) {
                 try {
                     list_DM.clear();
+                    list_DM.add(new Categorys("Chọn danh mục", "", ""));
                     for (DataSnapshot items : snapshot.getChildren()) {
                         Categorys category = items.getValue(Categorys.class);
                         list_DM.add(category);
@@ -143,6 +144,7 @@ public class Warehouse_ThemSanPhamActivity extends AppCompatActivity {
             public void onDataChange(@NonNull DataSnapshot snapshot) {
                 try {
                     list_DV.clear();
+                    list_DV.add("Chọn đơn vị");
                     for (DataSnapshot items : snapshot.getChildren()) {
                         DonVi donviModel = items.getValue(DonVi.class);
                         list_DV.add(donviModel.getTen());
@@ -186,7 +188,8 @@ public class Warehouse_ThemSanPhamActivity extends AppCompatActivity {
                 for (DataSnapshot items : snapshot.getChildren()) {
                     SanPham_Model sanPhamModel = items.getValue(SanPham_Model.class);
                     sanPhamModel.setId(items.getKey());
-                    if (sanPhamModel.getIdChu().equals(Owner_HomeActivity.infoChu.getId())) list_SP.add(sanPhamModel);
+                    if (sanPhamModel.getIdChu().equals(Owner_HomeActivity.infoChu.getId()))
+                        list_SP.add(sanPhamModel);
                 }
                 // Notify adapter sau khi có dữ liệu
                 adapter.notifyDataSetChanged();
@@ -225,6 +228,39 @@ public class Warehouse_ThemSanPhamActivity extends AppCompatActivity {
             }
         });
 
+//        btnThem.setOnClickListener(new View.OnClickListener() {
+//            @Override
+//            public void onClick(View v) {
+//                if (
+//                        uri == null ||
+//                                edtNhapten.getText().toString().trim().isEmpty() ||
+//                                edtNhapgiaban.getText().toString().trim().isEmpty() ||
+//                                edtgiaNhap.getText().toString().trim().isEmpty() ||
+//                                edtNhapsoluong.getText().toString().trim().isEmpty() ||
+//                                donVi.equals("Chọn đơn vị") ||
+//                                danhMuc.equals("Chọn danh mục"));{
+//
+//                    Toast.makeText(Warehouse_ThemSanPhamActivity.this,
+//                            "Vui lòng điền đầy đủ thông tin sản phẩm!", Toast.LENGTH_SHORT).show();
+//                } else{
+//                    String newProductName = edtNhapten.getText().toString().trim();
+//                    boolean isDuplicate = false;
+//                    for (SanPham_Model sp : list_SP) {
+//                        if (sp.getTen().equalsIgnoreCase(newProductName) && sp.getDanhMuc().equals(danhMuc)) {
+//                            isDuplicate = true;
+//                            break;
+//                        }
+//                    }
+//                    if (isDuplicate) {
+//                        Toast.makeText(Warehouse_ThemSanPhamActivity.this,
+//                                "Sản phẩm đã tồn tại trong danh mục này!", Toast.LENGTH_SHORT).show();
+//                    } else {
+//                        uploadData();
+//                        hideKeyboard();
+//                    }
+//                }
+//            }
+//        });
         btnThem.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
@@ -233,25 +269,39 @@ public class Warehouse_ThemSanPhamActivity extends AppCompatActivity {
                                 edtNhapten.getText().toString().trim().isEmpty() ||
                                 edtNhapgiaban.getText().toString().trim().isEmpty() ||
                                 edtgiaNhap.getText().toString().trim().isEmpty() ||
-                                edtNhapsoluong.getText().toString().trim().isEmpty()) {
-
+                                edtNhapsoluong.getText().toString().trim().isEmpty() ||
+                                donVi.equals("Chọn đơn vị") ||  // Kiểm tra đơn vị
+                                danhMuc.equals("Chọn danh mục") // Kiểm tra danh mục
+                ) {
                     Toast.makeText(Warehouse_ThemSanPhamActivity.this,
-                            "Vui lòng điền đầy đủ thông tin sản phẩm!", Toast.LENGTH_SHORT).show();
+                            "Vui lòng điền đầy đủ thông tin và chọn đơn vị, danh mục!", Toast.LENGTH_SHORT).show();
                 } else {
-                    uploadData();
-                    hideKeyboard();
+                    String newProductName = edtNhapten.getText().toString().trim();
+                    boolean isDuplicate = false;
+                    for (SanPham_Model sp : list_SP) {
+                        if (sp.getTen().equalsIgnoreCase(newProductName) && sp.getDanhMuc().equals(danhMuc)) {
+                            isDuplicate = true;
+                            break;
+                        }
+                    }
+
+                    if (isDuplicate) {
+                        Toast.makeText(Warehouse_ThemSanPhamActivity.this,
+                                "Sản phẩm đã tồn tại trong danh mục này!", Toast.LENGTH_SHORT).show();
+                    } else {
+                        uploadData();
+                        hideKeyboard();
+                    }
                 }
             }
         });
         btnXoa.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                // Kiểm tra xem có sản phẩm nào đã được chọn chưa
+
                 if (sanPhamModel == null || sanPhamModel.getId() == null || sanPhamModel.getId().isEmpty()) {
                     Toast.makeText(Warehouse_ThemSanPhamActivity.this, "Vui lòng chọn sản phẩm để xóa", Toast.LENGTH_SHORT).show();
                 } else {
-                    // Thực hiện xóa sản phẩm nếu đã chọn
-//                    deleteProduct(sanPhamModel.getId());
                     showConfirmDialogXoa(sanPhamModel.getId());
                     hideKeyboard();
                 }
@@ -263,9 +313,25 @@ public class Warehouse_ThemSanPhamActivity extends AppCompatActivity {
                 if (edtNhapten.getText().toString().isEmpty()) {
                     Toast.makeText(Warehouse_ThemSanPhamActivity.this, "Vui lòng chọn sản phẩm để sửa!", Toast.LENGTH_SHORT).show();
                 } else {
-                    showConfirmDialogSua();
-                    //uploadData();  // Gọi phương thức để cập nhật dữ liệu
-                    hideKeyboard();
+                    String updatedName = edtNhapten.getText().toString().trim();
+                    String updatedDanhMuc = danhMuc;
+
+                    boolean isDuplicate = false;
+                    for (SanPham_Model sp : list_SP) {
+                        if (!sp.getId().equals(sanPhamModel.getId()) &&  // Không kiểm tra chính sản phẩm đang sửa
+                                sp.getTen().equalsIgnoreCase(updatedName) &&
+                                sp.getDanhMuc().equals(updatedDanhMuc)) {
+                            isDuplicate = true;
+                            break;
+                        }
+                    }
+                    if (isDuplicate) {
+                        Toast.makeText(Warehouse_ThemSanPhamActivity.this,
+                                "Tên sản phẩm đã tồn tại trong danh mục này!", Toast.LENGTH_SHORT).show();
+                    } else {
+                        showConfirmDialogSua();
+                        hideKeyboard();
+                    }
                 }
             }
         });
@@ -289,7 +355,6 @@ public class Warehouse_ThemSanPhamActivity extends AppCompatActivity {
                             sanPhamModel = list_SP.get(position);
 
                             // Hiển thị thông tin sản phẩm lên các EditText
-
                             edtNhapten.setText(sanPhamModel.getTen());
                             edtNhapgiaban.setText(sanPhamModel.getGia());
                             edtgiaNhap.setText(sanPhamModel.getGiaNhap());
@@ -349,6 +414,7 @@ public class Warehouse_ThemSanPhamActivity extends AppCompatActivity {
                 });
         uri = null;
     }
+
     public void uploadData() {
         if (uri != null) {
             progressDialog.show();
@@ -366,7 +432,7 @@ public class Warehouse_ThemSanPhamActivity extends AppCompatActivity {
                     progressDialog.dismiss();
                 }
             });
-            
+
         } else {
             imagesUrl = sanPhamModel.getAnh();
             saveDate();
@@ -406,6 +472,7 @@ public class Warehouse_ThemSanPhamActivity extends AppCompatActivity {
         btnSua.setEnabled(false);
         btnThem.setEnabled(true);
     }
+
     private void showConfirmDialogXoa(String id) {
         AlertDialog.Builder builder = new AlertDialog.Builder(Warehouse_ThemSanPhamActivity.this);
         builder.setTitle("Xác nhận xóa");
@@ -449,12 +516,14 @@ public class Warehouse_ThemSanPhamActivity extends AppCompatActivity {
         AlertDialog dialog = builder.create();
         dialog.show();
     }
+
     private void hideKeyboard() {
         InputMethodManager inputMethodManager = (InputMethodManager) getSystemService(Context.INPUT_METHOD_SERVICE);
         if (inputMethodManager != null && getCurrentFocus() != null) {
             inputMethodManager.hideSoftInputFromWindow(getCurrentFocus().getWindowToken(), 0);
         }
     }
+
     private void setControl() {
         edtNhapten = findViewById(R.id.edtNhapTen);
         edtNhapgiaban = findViewById(R.id.edtNhapgiaban);
