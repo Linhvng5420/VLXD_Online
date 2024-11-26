@@ -225,6 +225,16 @@ public class Owner_SettingFragment extends Fragment {
             }
         });
 
+        binding.lnTraGop.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                getParentFragmentManager().beginTransaction()
+                        .replace(R.id.fragment_container, new ChuQuanLyTraGopFragment(idUser)) // Thay thế fragment_container hiện tại bằng fragment chi tiết
+                        .addToBackStack("tempTag") // Cho phép quay lại màn hình trước khi nhấn nút Back
+                        .commit(); // Thực hiện chuyển đổi
+            }
+        });
+
         binding.lnAbout.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {

@@ -26,6 +26,7 @@ import com.tdc.vlxdonline.R;
 import com.tdc.vlxdonline.databinding.FragmentYeuCauXacThucBinding;
 
 import java.util.ArrayList;
+import java.util.concurrent.atomic.AtomicInteger;
 
 public class YeuCauXacThucFragment extends Fragment {
 
@@ -123,18 +124,34 @@ public class YeuCauXacThucFragment extends Fragment {
                     dataChu.clear();
                     // Danh sách phụ để hiển thị thông tin lên RecyclerView dạng String
                     dataHienThi.clear();
+                    // Đồng bộ để không bị lỗi hiển thị khi chưa đọc xong dữ liệu
+                    int itemCount = (int) dataSnapshot.getChildrenCount();
+                    AtomicInteger atomicInteger = new AtomicInteger(0);
 
                     for (DataSnapshot snapshot : dataSnapshot.getChildren()) {
                         ThongTinChu tt = snapshot.getValue(ThongTinChu.class);
                         tt.setId(snapshot.getKey());
                         // Duyệt từ khóa lấy từ thanh tìm kiếm
                         if (tuKhoa.equals("") || tt.getTen().contains(tuKhoa) || tt.getEmail().contains(tuKhoa) || tt.getSdt().contains(tuKhoa)) {
-                            dataChu.add(tt);
-                            dataHienThi.add("Tên Chủ: " + tt.getTen() + "\n" + "Email: " + tt.getEmail() + "\n" + "Số Điện Thoại: " + tt.getSdt());
+                            DatabaseReference tempR = FirebaseDatabase.getInstance().getReference("duyetkhachhang").child(tt.getId()).child(Customer_HomeActivity.info.getID()).child("trangthai");
+                            tempR.addListenerForSingleValueEvent(new ValueEventListener() {
+                                @Override
+                                public void onDataChange(@NonNull DataSnapshot snapshot) {
+                                    String duyet = snapshot.getValue(String.class);
+                                    if (duyet == null || duyet.equals("0")) {
+                                        dataChu.add(tt);
+                                        dataHienThi.add("Tên Chủ: " + tt.getTen() + "\n" + "Email: " + tt.getEmail() + "\n" + "Số Điện Thoại: " + tt.getSdt());
+                                    }
+                                    if (atomicInteger.incrementAndGet() == itemCount) adapter.notifyDataSetChanged();
+                                }
+
+                                @Override
+                                public void onCancelled(@NonNull DatabaseError error) {
+
+                                }
+                            });
                         }
                     }
-
-                    adapter.notifyDataSetChanged();
                 }
 
                 @Override

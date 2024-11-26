@@ -33,6 +33,10 @@ public class ChuQuanLyTraGopFragment extends Fragment {
     ValueEventListener event;
     String idChu;
 
+    public ChuQuanLyTraGopFragment(String idChu) {
+        this.idChu = idChu;
+    }
+
     @Override
     public void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -54,10 +58,7 @@ public class ChuQuanLyTraGopFragment extends Fragment {
             event = new ValueEventListener() {
                 @Override
                 public void onDataChange(@NonNull DataSnapshot dataSnapshot) {
-                    // Dong bo
                     dataNo.clear();
-                    int itemCount = (int) dataSnapshot.getChildrenCount();
-                    AtomicInteger tempA = new AtomicInteger(0);
 
                     for (DataSnapshot snapshot : dataSnapshot.getChildren()) {
                         DonHang temp = snapshot.getValue(DonHang.class);
@@ -75,10 +76,11 @@ public class ChuQuanLyTraGopFragment extends Fragment {
                                                 checkE = true;
                                             }
                                         }
-                                        if (!checkE) dataNo.add(tempKH);
+                                        if (!checkE) {
+                                            dataNo.add(tempKH);
+                                            adapterConNo.notifyDataSetChanged();
+                                        }
                                     }
-
-                                    if (tempA.incrementAndGet() == itemCount) adapterConNo.notifyDataSetChanged();
                                 }
 
                                 @Override
