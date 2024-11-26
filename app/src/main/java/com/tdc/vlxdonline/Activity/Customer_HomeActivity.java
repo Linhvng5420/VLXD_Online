@@ -13,14 +13,12 @@ import androidx.fragment.app.Fragment;
 import androidx.fragment.app.FragmentManager;
 import androidx.fragment.app.FragmentTransaction;
 
-import com.bumptech.glide.Glide;
 import com.google.firebase.database.DataSnapshot;
 import com.google.firebase.database.DatabaseError;
 import com.google.firebase.database.DatabaseReference;
 import com.google.firebase.database.FirebaseDatabase;
 import com.google.firebase.database.ValueEventListener;
 import com.tdc.vlxdonline.Model.KhachHang;
-import com.tdc.vlxdonline.Model.Products;
 import com.tdc.vlxdonline.R;
 import com.tdc.vlxdonline.databinding.ActivityCustomerHomeBinding;
 
@@ -145,14 +143,18 @@ public class Customer_HomeActivity extends AppCompatActivity {
     // Hàm đổi icon navbar khi quay lại fragment trước
     private void ChangeNavItem() {
         if (info != null) {
-            if (currentTag.equals(CustomerHomeFragment.class.getName())) {
-                customerHomeBinding.navCustomer.setSelectedItemId(R.id.nav_customer_sanpham);
-            } else if (currentTag.equals(CartFragment.class.getName())) {
-                customerHomeBinding.navCustomer.setSelectedItemId(R.id.nav_customer_giohang);
-            } else if (currentTag.equals(DanhSachDonHangFragment.class.getName())) {
-                customerHomeBinding.navCustomer.setSelectedItemId(R.id.nav_customer_donhang);
-            } else if (currentTag.equals(AccountCustomerFragment.class.getName())) {
-                customerHomeBinding.navCustomer.setSelectedItemId(R.id.nav_customer_taikhoan);
+            try {
+                if (currentTag.equals(CustomerHomeFragment.class.getName())) {
+                    customerHomeBinding.navCustomer.setSelectedItemId(R.id.nav_customer_sanpham);
+                } else if (currentTag.equals(CartFragment.class.getName())) {
+                    customerHomeBinding.navCustomer.setSelectedItemId(R.id.nav_customer_giohang);
+                } else if (currentTag.equals(DanhSachDonHangFragment.class.getName())) {
+                    customerHomeBinding.navCustomer.setSelectedItemId(R.id.nav_customer_donhang);
+                } else if (currentTag.equals(AccountCustomerFragment.class.getName())) {
+                    customerHomeBinding.navCustomer.setSelectedItemId(R.id.nav_customer_taikhoan);
+                }
+            } catch (Exception e) {
+                throw new RuntimeException(e);
             }
         }
     }
