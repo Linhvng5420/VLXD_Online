@@ -107,21 +107,28 @@ public class TaiKhoanNVFragment extends Fragment {
         binding.btnDangxua.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                new AlertDialog.Builder(getContext()).setTitle("Đăng Xuất").setMessage("Đăng Xuất Khỏi Ứng Dụng").setPositiveButton("Có", (dialog, which) -> {
-                    // Xóa thông tin đăng nhập
-                    LoginActivity.idUser = null;
-                    LoginActivity.typeUser = -1;
-                    LoginActivity.accountID = null;
-                    LoginActivity.typeEmployee = null;
+                new AlertDialog.Builder(getContext())
+                        .setTitle("Đăng Xuất")
+                        .setMessage("Đăng Xuất Khỏi Ứng Dụng")
+                        .setPositiveButton("Có", (dialog, which) -> {
+                            // Xóa thông tin đăng nhập
+                            LoginActivity.idUser = null;
+                            LoginActivity.typeEmployee = null;
+                            LoginActivity.typeUser = -1;
+                            LoginActivity.accountID = null;
 
-                    // Quay về màn hình LoginActivity
-                    Intent intent = new Intent(getActivity(), LoginActivity.class);
-                    // Đóng hết các màn hình hiện có hoặc ẩn để quay lại màn hình đăng nhập
-                    intent.addFlags(Intent.FLAG_ACTIVITY_CLEAR_TOP | Intent.FLAG_ACTIVITY_NEW_TASK);
+                            // Quay về màn hình LoginActivity
+                            Intent intent = new Intent(getActivity(), LoginActivity.class);
+                            // Đặt cờ để đóng tất cả Activity trước đó và tạo một Task mới
+                            intent.addFlags(Intent.FLAG_ACTIVITY_CLEAR_TOP | Intent.FLAG_ACTIVITY_NEW_TASK);
 
-                    startActivity(intent);
-                    getActivity().finish(); // Đóng Owner_HomeActivity để quay lại màn hình đăng nhập
-                }).setNegativeButton("Không", null).show();
+                            // Đảm bảo rằng không thể quay lại các màn hình trước đó sau khi đăng xuất
+                            getActivity().finishAffinity(); // Đóng hết các màn hình hiện tại trong stack
+
+                            startActivity(intent); // Mở LoginActivity
+                        })
+                        .setNegativeButton("Không", null)
+                        .show();
             }
         });
     }

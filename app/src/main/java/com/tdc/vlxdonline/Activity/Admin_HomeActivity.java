@@ -123,15 +123,21 @@ public class Admin_HomeActivity extends AppCompatActivity {
 
     // Xử lý logout và chuyển về màn hình login
     private void logoutAndRedirectToLogin() {
+        // Xóa thông tin đăng nhập
         LoginActivity.idUser = null;
+        LoginActivity.typeEmployee = null;
         LoginActivity.typeUser = -1;
-        LoginActivity.typeEmployee = "";
-        LoginActivity.accountID = "";
+        LoginActivity.accountID = null;
 
+        // Quay về màn hình LoginActivity
         Intent intent = new Intent(this, LoginActivity.class);
+        // Đặt cờ để đóng tất cả Activity trước đó và tạo một Task mới
         intent.addFlags(Intent.FLAG_ACTIVITY_CLEAR_TOP | Intent.FLAG_ACTIVITY_NEW_TASK);
-        startActivity(intent);
-        finish();
+
+        // Đảm bảo rằng không thể quay lại các màn hình trước đó sau khi đăng xuất
+        this.finishAffinity(); // Đóng hết các màn hình hiện tại trong stack
+
+        startActivity(intent); // Mở LoginActivity
     }
 
     // Thiết lập sự kiện nút back
