@@ -79,8 +79,12 @@ public class AdminSanPhamAdapter extends RecyclerView.Adapter<AdminSanPhamAdapte
         }
 
         public void bind(Products sanPham) {
-            binding.tvID.setText(sanPham.getId());
-            binding.tvTen.setText(sanPham.getTen());
+            String idSP = sanPham.getId();
+            if (idSP.startsWith("@")) {
+                sanPham.setId(idSP.substring(1));
+            }
+            binding.tvID.setText(idSP);
+            binding.tvTen.setText(sanPham.getId());
             binding.tvTonKho.setText("Tồn Kho: " + sanPham.getTonKho() + " " + sanPham.getDonVi());
             binding.tvGia.setText("Giá Bán: " + sanPham.getGiaBan() + "VND");
             binding.tvGiaNhap.setText("Giá Nhập: " + sanPham.getGiaNhap() + "VND");
