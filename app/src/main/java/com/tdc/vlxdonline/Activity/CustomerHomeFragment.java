@@ -173,6 +173,7 @@ public class CustomerHomeFragment extends Fragment {
                     for (DataSnapshot snapshot : dataSnapshot.getChildren()) {
                         Products product = snapshot.getValue(Products.class);
                         product.setId(snapshot.getKey());
+                        if (product.getId().contains("@")) continue;
                         if (!category.isEmpty() && !category.equals(product.getDanhMuc())) continue;
                         if (!tuKhoa.isEmpty() && !product.getTen().contains(tuKhoa) && !product.getMoTa().contains(tuKhoa))
                             continue;
