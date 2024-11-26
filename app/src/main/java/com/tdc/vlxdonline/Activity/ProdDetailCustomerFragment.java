@@ -355,8 +355,23 @@ public class ProdDetailCustomerFragment extends Fragment {
                                     if (binding != null && snapshot.exists()) {
                                         // Lấy tên chủ cửa hàng từ snapshot
                                         String tenCH = snapshot.child("cuahang").getValue(String.class);
-                                        // Hiển thị tên cửa hàng trên giao diện
                                         binding.tvCuaHang.setText("Cửa Hàng " + tenCH);
+
+                                        // Lấy trạng thái online của cửa hàng
+                                        referDetailProd.child("account").child(idChu).child("trangthai/online").addValueEventListener(new ValueEventListener() {
+                                            @Override
+                                            public void onDataChange(@NonNull DataSnapshot snapshot) {
+                                                Boolean trangThai = snapshot.getValue(Boolean.class);
+                                                if (!trangThai)
+                                                    binding.tvCuaHang.setText(tenCH + " -OFFLINE-");
+                                            }
+
+                                            @Override
+                                            public void onCancelled(@NonNull DatabaseError error) {
+                                            }
+                                        });
+
+                                        // Hiển thị tên cửa hàng trên giao diện
                                         binding.tvCuaHang.setVisibility(View.VISIBLE);
                                     }
                                 } catch (Exception e) {

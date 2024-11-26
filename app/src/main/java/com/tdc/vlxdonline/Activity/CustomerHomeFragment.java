@@ -3,6 +3,12 @@ package com.tdc.vlxdonline.Activity;
 import android.graphics.Color;
 import android.graphics.drawable.Drawable;
 import android.os.Bundle;
+import android.view.LayoutInflater;
+import android.view.View;
+import android.view.ViewGroup;
+import android.widget.AdapterView;
+import android.widget.SearchView;
+import android.widget.Toast;
 
 import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
@@ -11,14 +17,6 @@ import androidx.recyclerview.widget.GridLayoutManager;
 import androidx.recyclerview.widget.LinearLayoutManager;
 import androidx.recyclerview.widget.LinearSnapHelper;
 import androidx.recyclerview.widget.RecyclerView;
-
-import android.view.LayoutInflater;
-import android.view.View;
-import android.view.ViewGroup;
-import android.widget.AdapterView;
-import android.widget.ArrayAdapter;
-import android.widget.SearchView;
-import android.widget.Toast;
 
 import com.google.firebase.database.DataSnapshot;
 import com.google.firebase.database.DatabaseError;
@@ -35,7 +33,6 @@ import com.tdc.vlxdonline.Model.Products;
 import com.tdc.vlxdonline.R;
 import com.tdc.vlxdonline.databinding.FragmentCustomerHomeBinding;
 
-import java.sql.SQLException;
 import java.util.ArrayList;
 import java.util.Collections;
 import java.util.Comparator;
@@ -172,22 +169,25 @@ public class CustomerHomeFragment extends Fragment {
                     // Duyệt qua từng prod trong DataSnapshot
                     for (DataSnapshot snapshot : dataSnapshot.getChildren()) {
                         Products product = snapshot.getValue(Products.class);
-                        product.setId(snapshot.getKey());
-                        if (product.getId().contains("@")) continue;
-                        if (!category.isEmpty() && !category.equals(product.getDanhMuc())) continue;
-                        if (!tuKhoa.isEmpty() && !product.getTen().contains(tuKhoa) && !product.getMoTa().contains(tuKhoa))
-                            continue;
-                        if (binding.spLoc.getSelectedItemPosition() == 1 && Double.parseDouble(product.getSoSao()) > 3)
-                            continue;
-                        if (binding.spLoc.getSelectedItemPosition() == 2 && Double.parseDouble(product.getSoSao()) < 4)
-                            continue;
-                        dataProds.add(product); // Thêm prod vào danh sách
+                        if (!product.getId().startsWith("@")) {
+                            product.setId(snapshot.getKey());
+                            if (!category.isEmpty() && !category.equals(product.getDanhMuc()))
+                                continue;
+                            if (!tuKhoa.isEmpty() && !product.getTen().contains(tuKhoa) && !product.getMoTa().contains(tuKhoa))
+                                continue;
+                            if (binding.spLoc.getSelectedItemPosition() == 1 && Double.parseDouble(product.getSoSao()) > 3)
+                                continue;
+                            if (binding.spLoc.getSelectedItemPosition() == 2 && Double.parseDouble(product.getSoSao()) < 4)
+                                continue;
+                            dataProds.add(product); // Thêm prod vào danh sách
+                        }
                     }
 
                     SapXepDanhSach();
 
                     productAdapter.notifyDataSetChanged();
-                } catch (Exception e) {
+                } catch (
+                        Exception e) {
                 }
             }
 
@@ -195,7 +195,9 @@ public class CustomerHomeFragment extends Fragment {
             public void onCancelled(DatabaseError databaseError) {
                 Toast.makeText(getActivity(), "Lỗi Rồi Nè Má!", Toast.LENGTH_SHORT).show();
             }
-        };
+        }
+
+        ;
     }
 
     private void setAdapterProduct() {
