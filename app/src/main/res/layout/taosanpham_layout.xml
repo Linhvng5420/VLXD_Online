@@ -57,7 +57,7 @@
                 android:backgroundTint="@color/white"
                 android:elevation="2dp"
                 android:orientation="horizontal"
-                android:paddingTop="10dp">
+                android:paddingTop="5dp">
 
                 <LinearLayout
                     android:layout_width="wrap_content"
@@ -93,7 +93,9 @@
                         android:layout_height="wrap_content"
                         android:layout_marginBottom="3dp"
                         android:background="@drawable/edit_text_border"
-                        android:hint="Nhập Tên Sản Phẩm" />
+                        android:gravity="center_vertical"
+                        android:hint="Nhập Tên Sản Phẩm"
+                        android:paddingLeft="5dp" />
 
                     <EditText
                         android:id="@+id/edtNhapgiaban"
@@ -101,8 +103,10 @@
                         android:layout_height="wrap_content"
                         android:layout_marginBottom="3dp"
                         android:background="@drawable/edit_text_border"
+                        android:gravity="center_vertical"
                         android:hint="Nhập Giá Bán"
-                        android:inputType="number" />
+                        android:inputType="number"
+                        android:paddingLeft="5dp" />
 
                     <EditText
                         android:id="@+id/edtNhapgiaNhap"
@@ -110,8 +114,10 @@
                         android:layout_height="wrap_content"
                         android:layout_marginBottom="3dp"
                         android:background="@drawable/edit_text_border"
+                        android:gravity="center_vertical"
                         android:hint="Nhập Giá Nhập"
-                        android:inputType="number" />
+                        android:inputType="number"
+                        android:paddingLeft="5dp" />
 
                     <EditText
                         android:id="@+id/edtNhapsoluong"
@@ -119,8 +125,10 @@
                         android:layout_height="wrap_content"
                         android:layout_marginBottom="3dp"
                         android:background="@drawable/edit_text_border"
+                        android:gravity="center_vertical"
                         android:hint="Nhập Số Lượng"
-                        android:inputType="number" />
+                        android:inputType="number"
+                        android:paddingLeft="5dp" />
 
                     <EditText
                         android:id="@+id/edtDaban"
@@ -128,7 +136,9 @@
                         android:layout_height="wrap_content"
                         android:layout_marginBottom="3dp"
                         android:background="@drawable/edit_text_border"
-                        android:hint="Sản Phẩm Đã Bán" />
+                        android:gravity="center_vertical"
+                        android:hint="Số Lượng Đã Bán"
+                        android:paddingLeft="5dp" />
                 </LinearLayout>
 
             </LinearLayout>
@@ -144,6 +154,7 @@
                     android:id="@+id/spdonVi"
                     android:layout_width="150dp"
                     android:layout_height="30dp"
+                    android:layout_margin="5dp"
                     android:background="@drawable/edit_text_border"
                     android:gravity="center" />
 
@@ -151,6 +162,7 @@
                     android:id="@+id/spdanhMuc"
                     android:layout_width="match_parent"
                     android:layout_height="30dp"
+                    android:layout_margin="5dp"
                     android:background="@drawable/edit_text_border"
                     android:gravity="center" />
 
@@ -161,6 +173,7 @@
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
                 android:layout_gravity="center"
+                android:layout_margin="5dp"
                 android:background="@drawable/edit_text_border"
                 android:elevation="10dp"
                 android:hint="Thêm Mô Tả Sản Phẩm"
@@ -179,24 +192,24 @@
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:layout_weight="1"
-                android:background="@drawable/edit_text_border"
                 android:text="Thêm" />
+
+            <Button
+                android:id="@+id/btnXoa"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_marginLeft="5dp"
+                android:layout_marginRight="5dp"
+                android:layout_weight="1"
+                android:text="Xoá" />
 
             <Button
                 android:id="@+id/btnSua"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:layout_weight="1"
-                android:background="@drawable/edit_text_border"
                 android:text="Sửa" />
 
-            <Button
-                android:id="@+id/btnXoa"
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:layout_weight="1"
-                android:background="@drawable/edit_text_border"
-                android:text="Xoá" />
         </LinearLayout>
 
         <androidx.recyclerview.widget.RecyclerView
@@ -206,10 +219,9 @@
             android:layout_gravity="center"
             android:layout_marginTop="5dp"
             android:layout_marginBottom="5dp"
-            android:background="@drawable/back3"
             android:elevation="10dp"
             android:gravity="center"
-            android:padding="8dp" />
+            android:padding="2dp" />
     </LinearLayout>
 
 </LinearLayout>

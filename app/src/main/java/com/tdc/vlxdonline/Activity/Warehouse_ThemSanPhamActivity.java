@@ -176,7 +176,7 @@ public class Warehouse_ThemSanPhamActivity extends AppCompatActivity {
     }
 
     private void getDate() {
-        GridLayoutManager gridLayoutManager = new GridLayoutManager(this, 2);
+        GridLayoutManager gridLayoutManager = new GridLayoutManager(this, 3);
         recyclerView.setLayoutManager(gridLayoutManager);
         adapter = new SanPham_Adapter(Warehouse_ThemSanPhamActivity.this, list_SP);
         recyclerView.setAdapter(adapter);

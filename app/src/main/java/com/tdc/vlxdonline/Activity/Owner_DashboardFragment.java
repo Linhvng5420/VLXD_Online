@@ -24,6 +24,7 @@ import com.github.mikephil.charting.data.LineDataSet;
 import com.github.mikephil.charting.data.PieData;
 import com.github.mikephil.charting.data.PieDataSet;
 import com.github.mikephil.charting.data.PieEntry;
+import com.github.mikephil.charting.utils.ColorTemplate;
 import com.google.android.material.snackbar.Snackbar;
 import com.google.firebase.database.DataSnapshot;
 import com.google.firebase.database.DatabaseError;
@@ -35,6 +36,7 @@ import com.tdc.vlxdonline.databinding.FragmentOwnerDashboardBinding;
 
 import java.util.ArrayList;
 import java.util.List;
+import java.util.Random;
 
 public class Owner_DashboardFragment extends Fragment {
     FragmentOwnerDashboardBinding binding;
@@ -45,12 +47,20 @@ public class Owner_DashboardFragment extends Fragment {
 
     BarChart barChartNhanVien;
     PieChart pieChartKhachHang;
-    LineChart lineChartKho;
+    BarChart chartKho;
     LineChart lineChartDoanhThu;
+
+    long doanhThu[] = new long[12];
 
     @Override
     public void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
+        Random random = new Random();
+        // random từ 100.000 đến 10.000.000
+        for (int i = 0; i < 12; i++) {
+            long m = random.nextInt(900000) + 100000;
+            doanhThu[i] = m;
+        }
     }
 
     @Override
@@ -90,7 +100,7 @@ public class Owner_DashboardFragment extends Fragment {
         // CHART
         barChartNhanVien = binding.barChartNhanVien;
         pieChartKhachHang = binding.pieChartKhachHang;
-        lineChartKho = binding.lineChartKho;
+        chartKho = binding.lineChartKho;
         lineChartDoanhThu = binding.lineChartDoanhThu;
 
         // Đọc data
@@ -114,10 +124,9 @@ public class Owner_DashboardFragment extends Fragment {
         db.addValueEventListener(new ValueEventListener() {
             @Override
             public void onDataChange(@NonNull DataSnapshot snapshot) {
-                int totalProducts = 0;
+                long totalProducts = 0;
                 long giaNhap = 0;
                 long giaBan = 0;
-                long tienLoi = 0;
 
                 // Duyệt qua từng sản phẩm
                 for (DataSnapshot productSnapshot : snapshot.getChildren()) {
@@ -135,7 +144,7 @@ public class Owner_DashboardFragment extends Fragment {
                 }
 
                 // Cập nhật giao diện với số lượng sản phẩm
-                updateLineChart(giaNhap, giaBan, giaBan - giaNhap);
+                updateLineChart(giaNhap, giaBan, giaBan - giaNhap, totalProducts);
                 /*binding.tvSLSP1.setText(String.valueOf(totalProducts));
                 binding.tvSLSP2.setText("Giá nhập: " + giaNhap + "VND \nGiá bán: " + giaBan + " VND \nTiền lợi: " + (giaBan - giaNhap) + " VND");*/
             }
@@ -223,7 +232,7 @@ public class Owner_DashboardFragment extends Fragment {
                 }
 
                 // Cập nhật UI với số lượng nhân viên
-                updateBarChart(khoEmployees, giaoHangEmployees, otherEmployees);
+                updateBarChart(khoEmployees, giaoHangEmployees, totalEmployees);
                 /*binding.tvSLNV1.setText(String.valueOf(totalEmployees));
                 binding.tvSLNV2.setText("Kho: " + khoEmployees + " \nGiao Hàng: " + giaoHangEmployees + " \nKhác: " + otherEmployees);*/
             }
@@ -267,28 +276,36 @@ public class Owner_DashboardFragment extends Fragment {
         pieChartKhachHang.invalidate();  // Làm mới biểu đồ
     }
 
-    private void updateLineChart(long giaNhap, long giaBan, long tienLoi) {
-        List<Entry> entries = new ArrayList<>();
-        entries.add(new Entry(0, giaNhap));
-        entries.add(new Entry(1, giaBan));
-        entries.add(new Entry(2, tienLoi));
+    private void updateLineChart(long giaNhap, long giaBan, long tienLoi, long totalProducts) {
+        // Kho PieChart
+        List<BarEntry> entries = new ArrayList<>();
+        entries.add(new BarEntry(0, giaNhap));
+        entries.add(new BarEntry(1, giaBan));
+        entries.add(new BarEntry(2, tienLoi));
+        entries.add(new BarEntry(3, totalProducts));
 
-        LineDataSet dataSet = new LineDataSet(entries, "Sản Phẩm");
+        BarDataSet dataSet = new BarDataSet(entries, "Kho Hàng");
         dataSet.setColor(Color.BLUE);
         dataSet.setValueTextColor(Color.BLACK);
-        LineData data = new LineData(dataSet);
-        lineChartKho.setData(data);
-        lineChartKho.invalidate();  // Làm mới biểu đồ
+        dataSet.setValueTextSize(12f);
 
-        List<Entry> entries2 = new ArrayList<>();
-        entries2.add(new Entry(0, giaNhap * 9));
-        entries2.add(new Entry(1, giaBan * 32));
-        entries2.add(new Entry(2, tienLoi * 28));
+        BarData data = new BarData(dataSet);
+        chartKho.setData(data);
+        chartKho.getDescription().setEnabled(false);
+        chartKho.invalidate();
 
-        LineDataSet dataSet2 = new LineDataSet(entries2, "Doanh Thu Hàng Năm");
-        dataSet2.setColor(Color.RED);
-        dataSet2.setValueTextColor(Color.BLUE);
-        LineData data2 = new LineData(dataSet2);
+
+        // Doanh Thu
+        List<Entry> entriesDT = new ArrayList<>();
+        for (int i = 0; i < doanhThu.length; i++) {
+            entriesDT.add(new Entry(i, doanhThu[i]));
+        }
+
+        LineDataSet dataSetDoanhThu = new LineDataSet(entriesDT, "Doanh Thu Hàng Tháng");
+        dataSetDoanhThu.setColor(Color.RED);
+        dataSetDoanhThu.setValueTextColor(Color.BLUE);
+        LineData data2 = new LineData(dataSetDoanhThu);
+        lineChartDoanhThu.getDescription().setEnabled(false);
         lineChartDoanhThu.setData(data2);
         lineChartDoanhThu.invalidate();  // Làm mới biểu đồ
     }
