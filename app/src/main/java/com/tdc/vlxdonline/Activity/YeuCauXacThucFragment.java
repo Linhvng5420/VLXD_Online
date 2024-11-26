@@ -59,10 +59,6 @@ public class YeuCauXacThucFragment extends Fragment {
         binding.svYeuCau.setOnQueryTextListener(new SearchView.OnQueryTextListener() {
             @Override
             public boolean onQueryTextSubmit(String query) {
-                // Gán từ khóa tìm kiếm
-                tuKhoa = query;
-                // Yêu cầu đọc lại danh sách
-                reference.child("thongtinchu").addListenerForSingleValueEvent(eventListener);
                 return false;
             }
 
@@ -150,6 +146,8 @@ public class YeuCauXacThucFragment extends Fragment {
 
                                 }
                             });
+                        }else {
+                            if (atomicInteger.incrementAndGet() == itemCount) adapter.notifyDataSetChanged();
                         }
                     }
                 }
