@@ -346,7 +346,7 @@
                     android:layout_width="match_parent"
                     android:layout_height="200dp"
                     android:minHeight="300dp"
-                    tools:listitem="@layout/item_owner_khachhang_tragop_rcv" />
+                    tools:listitem="@layout/item_admin_lydo_rcv" />
             </LinearLayout>
 
         </LinearLayout>
