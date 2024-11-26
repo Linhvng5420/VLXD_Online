@@ -128,7 +128,7 @@ public class Warehouse_DanhMucActivity extends AppCompatActivity {
                 String id = category.getId();
                 if (!id.isEmpty()) {
                     // Gọi phương thức xóa sản phẩm
-                   // deleteProduct(id);
+                    // deleteProduct(id);
                     showConfirmDialogXoa(id);
                 } else {
                     Toast.makeText(Warehouse_DanhMucActivity.this, "Vui lòng chọn sản phẩm để xóa", Toast.LENGTH_SHORT).show();

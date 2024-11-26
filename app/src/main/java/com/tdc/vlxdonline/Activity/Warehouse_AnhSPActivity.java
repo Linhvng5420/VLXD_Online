@@ -38,7 +38,10 @@ import com.google.firebase.storage.FirebaseStorage;
 import com.google.firebase.storage.StorageReference;
 import com.google.firebase.storage.UploadTask;
 import com.tdc.vlxdonline.Adapter.AnhSP_Adapter;
+import com.tdc.vlxdonline.Adapter.SanPham_Adapter;
 import com.tdc.vlxdonline.Model.AnhSanPham;
+import com.tdc.vlxdonline.Model.Categorys;
+import com.tdc.vlxdonline.Model.DonVi;
 import com.tdc.vlxdonline.Model.SanPham_Model;
 import com.tdc.vlxdonline.R;
 
@@ -113,8 +116,10 @@ public class Warehouse_AnhSPActivity extends AppCompatActivity {
         btnThemASP.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                if (uri == null) {
-                    Toast.makeText(Warehouse_AnhSPActivity.this, "Vui lòng chọn hình ảnh sản phẩm!", Toast.LENGTH_SHORT).show();
+                if (
+                        uri == null ){
+                    Toast.makeText(Warehouse_AnhSPActivity.this,
+                            "Vui lòng chọn hình ảnh sản phẩm!", Toast.LENGTH_SHORT).show();
                 } else {
                     uploadData();
                 }
@@ -165,8 +170,6 @@ public class Warehouse_AnhSPActivity extends AppCompatActivity {
         }
 
     }
-
-
     private void setASpinner() {
         adapterSP = new ArrayAdapter(this, android.R.layout.simple_spinner_dropdown_item, data);
         spAnhSP.setAdapter(adapterSP);
@@ -192,14 +195,15 @@ public class Warehouse_AnhSPActivity extends AppCompatActivity {
         });
         GridLayoutManager gridLayoutManager = new GridLayoutManager(this, 2);
         recyclerView.setLayoutManager(gridLayoutManager);
+
         adapter = new AnhSP_Adapter(Warehouse_AnhSPActivity.this, list_ASP) {
             @Override
             public void onItemClick(int position) {
             }
         };
         recyclerView.setAdapter(adapter);
-    }
 
+    }
     private void getDate(String idSP) {
         reference = FirebaseDatabase.getInstance().getReference();
         listener = reference.child("ProdImages").child(idSP).addValueEventListener(new ValueEventListener() {
@@ -230,8 +234,7 @@ public class Warehouse_AnhSPActivity extends AppCompatActivity {
                     SanPham_Model sanPhamModel = items.getValue(SanPham_Model.class);
                     sanPhamModel.setId(items.getKey());
 
-                    if (sanPhamModel.getIdChu().equals(Owner_HomeActivity.infoChu.getId()))
-                        data.add(sanPhamModel);
+                    if (sanPhamModel.getIdChu().equals(Owner_HomeActivity.infoChu.getId())) data.add(sanPhamModel);
                 }
                 // Cập nhật adapter sau khi có dữ liệu
                 adapterSP.notifyDataSetChanged();
