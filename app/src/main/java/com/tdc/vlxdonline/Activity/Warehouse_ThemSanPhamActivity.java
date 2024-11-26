@@ -105,6 +105,7 @@ public class Warehouse_ThemSanPhamActivity extends AppCompatActivity {
             public void onDataChange(@NonNull DataSnapshot snapshot) {
                 try {
                     list_DM.clear();
+                    list_DM.add(new Categorys("Chọn danh mục", "", ""));
                     for (DataSnapshot items : snapshot.getChildren()) {
                         Categorys category = items.getValue(Categorys.class);
                         list_DM.add(category);
@@ -143,6 +144,7 @@ public class Warehouse_ThemSanPhamActivity extends AppCompatActivity {
             public void onDataChange(@NonNull DataSnapshot snapshot) {
                 try {
                     list_DV.clear();
+                    list_DV.add("Chọn đơn vị");
                     for (DataSnapshot items : snapshot.getChildren()) {
                         DonVi donviModel = items.getValue(DonVi.class);
                         list_DV.add(donviModel.getTen());
@@ -226,6 +228,39 @@ public class Warehouse_ThemSanPhamActivity extends AppCompatActivity {
             }
         });
 
+//        btnThem.setOnClickListener(new View.OnClickListener() {
+//            @Override
+//            public void onClick(View v) {
+//                if (
+//                        uri == null ||
+//                                edtNhapten.getText().toString().trim().isEmpty() ||
+//                                edtNhapgiaban.getText().toString().trim().isEmpty() ||
+//                                edtgiaNhap.getText().toString().trim().isEmpty() ||
+//                                edtNhapsoluong.getText().toString().trim().isEmpty() ||
+//                                donVi.equals("Chọn đơn vị") ||
+//                                danhMuc.equals("Chọn danh mục"));{
+//
+//                    Toast.makeText(Warehouse_ThemSanPhamActivity.this,
+//                            "Vui lòng điền đầy đủ thông tin sản phẩm!", Toast.LENGTH_SHORT).show();
+//                } else{
+//                    String newProductName = edtNhapten.getText().toString().trim();
+//                    boolean isDuplicate = false;
+//                    for (SanPham_Model sp : list_SP) {
+//                        if (sp.getTen().equalsIgnoreCase(newProductName) && sp.getDanhMuc().equals(danhMuc)) {
+//                            isDuplicate = true;
+//                            break;
+//                        }
+//                    }
+//                    if (isDuplicate) {
+//                        Toast.makeText(Warehouse_ThemSanPhamActivity.this,
+//                                "Sản phẩm đã tồn tại trong danh mục này!", Toast.LENGTH_SHORT).show();
+//                    } else {
+//                        uploadData();
+//                        hideKeyboard();
+//                    }
+//                }
+//            }
+//        });
         btnThem.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
@@ -234,10 +269,12 @@ public class Warehouse_ThemSanPhamActivity extends AppCompatActivity {
                                 edtNhapten.getText().toString().trim().isEmpty() ||
                                 edtNhapgiaban.getText().toString().trim().isEmpty() ||
                                 edtgiaNhap.getText().toString().trim().isEmpty() ||
-                                edtNhapsoluong.getText().toString().trim().isEmpty()) {
-
+                                edtNhapsoluong.getText().toString().trim().isEmpty() ||
+                                donVi.equals("Chọn đơn vị") ||  // Kiểm tra đơn vị
+                                danhMuc.equals("Chọn danh mục") // Kiểm tra danh mục
+                ) {
                     Toast.makeText(Warehouse_ThemSanPhamActivity.this,
-                            "Vui lòng điền đầy đủ thông tin sản phẩm!", Toast.LENGTH_SHORT).show();
+                            "Vui lòng điền đầy đủ thông tin và chọn đơn vị, danh mục!", Toast.LENGTH_SHORT).show();
                 } else {
                     String newProductName = edtNhapten.getText().toString().trim();
                     boolean isDuplicate = false;
