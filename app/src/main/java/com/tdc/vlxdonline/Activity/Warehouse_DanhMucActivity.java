@@ -209,22 +209,6 @@ public class Warehouse_DanhMucActivity extends AppCompatActivity {
 
     public void uploadData() {
         if (!edtNhapDM.getText().toString().isEmpty()) {
-            String tenDanhMucMoi = edtNhapDM.getText().toString().trim();
-
-            boolean isDuplicate = false;
-            for (Categorys dm : list_DM) {
-                if (dm.getTen().equalsIgnoreCase(tenDanhMucMoi)) {
-                    isDuplicate = true;
-                    break;
-                }
-            }
-
-            if (isDuplicate) {
-                Toast.makeText(this, "Tên danh mục đã tồn tại. Vui lòng chọn tên khác.", Toast.LENGTH_SHORT).show();
-                return;
-            }
-        }
-        if (!edtNhapDM.getText().toString().isEmpty()) {
             if (uri != null) {
                 progressDialog.show();
                 StorageReference storageReference = FirebaseStorage.getInstance().getReference().child("categorys Images")
