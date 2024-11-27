@@ -31,8 +31,8 @@
         android:id="@+id/edt_email_lg"
         style="@style/item_lg"
         android:hint="Nhập Email ....."
-        android:inputType="text|textEmailAddress"
-        android:text="admin1@m.c" />
+        android:inputType="text|textEmailAddress" />
+
 
     <TextView
         android:layout_width="match_parent"
@@ -47,8 +47,7 @@
         style="@style/item_lg"
         android:hint="Nhập Mật khẩu ....."
         android:imeOptions="actionDone"
-        android:inputType="textPassword"
-        android:text="1" />
+        android:inputType="textPassword" />
 
     <CheckBox
         android:id="@+id/cb_dis_pass"

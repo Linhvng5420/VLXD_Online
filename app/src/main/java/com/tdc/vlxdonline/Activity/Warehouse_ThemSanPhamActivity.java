@@ -313,28 +313,13 @@ public class Warehouse_ThemSanPhamActivity extends AppCompatActivity {
                 if (edtNhapten.getText().toString().isEmpty()) {
                     Toast.makeText(Warehouse_ThemSanPhamActivity.this, "Vui lòng chọn sản phẩm để sửa!", Toast.LENGTH_SHORT).show();
                 } else {
-                    String updatedName = edtNhapten.getText().toString().trim();
-                    String updatedDanhMuc = danhMuc;
-
-                    boolean isDuplicate = false;
-                    for (SanPham_Model sp : list_SP) {
-                        if (!sp.getId().equals(sanPhamModel.getId()) &&  // Không kiểm tra chính sản phẩm đang sửa
-                                sp.getTen().equalsIgnoreCase(updatedName) &&
-                                sp.getDanhMuc().equals(updatedDanhMuc)) {
-                            isDuplicate = true;
-                            break;
-                        }
-                    }
-                    if (isDuplicate) {
-                        Toast.makeText(Warehouse_ThemSanPhamActivity.this,
-                                "Tên sản phẩm đã tồn tại trong danh mục này!", Toast.LENGTH_SHORT).show();
-                    } else {
-                        showConfirmDialogSua();
-                        hideKeyboard();
-                    }
+                    showConfirmDialogSua();
+                    //uploadData();  // Gọi phương thức để cập nhật dữ liệu
+                    hideKeyboard();
                 }
             }
         });
+
         btnSua.setEnabled(false);
         btnXoa.setEnabled(false);
         btnThem.setEnabled(true);
