@@ -37,18 +37,23 @@
                 android:id="@+id/tvNameItem"
                 android:layout_width="150dp"
                 android:layout_height="25dp"
+                android:autoSizeMaxTextSize="16sp"
+                android:autoSizeMinTextSize="10sp"
+                android:autoSizeTextType="uniform"
                 android:gravity="center"
                 android:paddingHorizontal="5dp"
-                android:text="Tên Sản Phẩm"
-                android:textSize="18dp"
+                android:text="Tên Sản Phẩm Hoi ai cpsfgdfs "
                 android:textStyle="bold" />
 
             <TextView
                 android:id="@+id/tv_chua_dg"
                 android:layout_width="150dp"
                 android:layout_height="25dp"
+                android:autoSizeMaxTextSize="16sp"
+                android:autoSizeMinTextSize="10sp"
+                android:autoSizeTextType="uniform"
                 android:gravity="center"
-                android:text="Chưa Có Đánh Giá"
+                android:text="Chưa Có Đánh Giá hdja jasohfw adsjjsdf"
                 android:textColor="#FA0"
                 android:textStyle="bold" />
 
