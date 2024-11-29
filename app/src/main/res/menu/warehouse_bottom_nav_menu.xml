@@ -1,0 +1,27 @@
+<?xml version="1.0" encoding="utf-8"?>
+<menu xmlns:android="http://schemas.android.com/apk/res/android">
+    <item
+        android:id="@+id/nav_warehouse_kho"
+        android:icon="@drawable/nav_warehouse"
+        android:orderInCategory="1"
+        android:title="Kho" />
+
+    <item
+            android:id="@+id/nav_warehouse_donhang"
+        android:icon="@drawable/nav_donhang"
+        android:orderInCategory="2"
+        android:title="Đơn Hàng" />
+
+    <item
+        android:id="@+id/nav_warehouse_daxuat"
+        android:icon="@drawable/nav_dagiao"
+        android:orderInCategory="3"
+        android:title="Đã Xuất" />
+
+    <item
+        android:id="@+id/nav_warehouse_taikhoan"
+        android:icon="@drawable/nav_taikhoan"
+        android:orderInCategory="4"
+        android:title="Tài Khoản" />
+
+</menu>

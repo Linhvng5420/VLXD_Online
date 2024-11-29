@@ -1,0 +1,28 @@
+<resources xmlns:tools="http://schemas.android.com/tools">
+    <!-- Base application theme. -->
+    <style name="Base.Theme.VLXDOnline" parent="Theme.Material3.DayNight.NoActionBar">
+        <!-- Customize your light theme here. -->
+        <!-- <item name="colorPrimary">@color/my_light_primary</item> -->
+    </style>
+
+    <style name="Theme.VLXDOnline" parent="Base.Theme.VLXDOnline" />
+
+    <style name="ThemeStar">
+        <item name="android:layout_width">25dp</item>
+        <item name="android:layout_height">25dp</item>
+        <item name="android:layout_marginLeft">5dp</item>
+    </style>
+    <style name="StyleDropdownSearch">
+        <item name="android:layout_width">200dp</item>
+        <item name="android:layout_height">34dp</item>
+        <item name="android:background">@drawable/bg_img_item</item>
+        <item name="android:textAlignment">center</item>
+    </style>
+    <style name="item_lg">
+        <item name="android:layout_width">320dp</item>
+        <item name="android:layout_height">45dp</item>
+        <item name="android:background">@drawable/bg_item_lg</item>
+        <item name="android:elevation">5dp</item>
+        <item name="android:paddingHorizontal">6dp</item>
+    </style>
+</resources>

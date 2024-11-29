@@ -1,0 +1,26 @@
+<?xml version="1.0" encoding="utf-8"?>
+<menu xmlns:android="http://schemas.android.com/apk/res/android">
+    <item
+        android:id="@+id/nav_shipper_donhang"
+        android:icon="@drawable/nav_donhang"
+        android:orderInCategory="1"
+        android:title="Đơn Hàng" />
+
+    <item
+        android:id="@+id/nav_shipper_DangGiao"
+        android:icon="@drawable/nav_danggiao"
+        android:orderInCategory="2"
+        android:title="Đang Giao" />
+
+    <item
+        android:id="@+id/nav_shipper_dagiao"
+        android:icon="@drawable/nav_dagiao"
+        android:orderInCategory="3"
+        android:title="Đã Giao" />
+
+    <item
+        android:id="@+id/nav_shipper_taikhoan"
+        android:icon="@drawable/nav_taikhoan"
+        android:orderInCategory="4"
+        android:title="Tài Khoản" />
+</menu>

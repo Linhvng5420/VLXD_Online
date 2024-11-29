@@ -1,0 +1,32 @@
+<?xml version="1.0" encoding="utf-8"?>
+<menu xmlns:android="http://schemas.android.com/apk/res/android">
+    <item
+        android:id="@+id/nav_owner_dashboard"
+        android:icon="@drawable/nav_dashboard"
+        android:orderInCategory="1"
+        android:title="DashBoard" />
+
+    <item
+        android:id="@+id/nav_owner_nhanvien"
+        android:icon="@drawable/nav_nhanvien"
+        android:orderInCategory="2"
+        android:title="Nhân Viên" />
+
+    <item
+        android:id="@+id/nav_owner_khachhang"
+        android:icon="@drawable/nav_khachhang"
+        android:orderInCategory="3"
+        android:title="Khách Hàng" />
+
+    <item
+        android:id="@+id/nav_owner_donhang"
+        android:icon="@drawable/nav_donhang"
+        android:orderInCategory="4"
+        android:title="Đơn Hàng" />
+
+    <item
+        android:id="@+id/nav_owner_kho"
+        android:icon="@drawable/nav_warehouse"
+        android:orderInCategory="5"
+        android:title="Kho" />
+</menu>
